@@ -45,9 +45,10 @@ async function boot({ storage = memoryStorage(), seed = 1, search = '' } = {}) {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   const src = html.match(/<script>([\s\S]*?)<\/script>/)[1];
   const els = new Map(), byId = id => els.get(id) || (els.set(id, element(id === 'film' ? 'canvas' : 'div', id)), els.get(id));
+  for (const m of html.matchAll(/<script type="application\/json" id="([^"]+)">([\s\S]*?)<\/script>/g)) byId(m[1]).textContent = m[2];
   const timeout = (f, ms) => { const t = setTimeout(f, ms); t.unref && t.unref(); return t; };
   const win = {
-    console, URLSearchParams, Promise, setTimeout: timeout, clearTimeout, setInterval: noop, clearInterval: noop, performance: { now: () => 0 },
+    console, URLSearchParams, Promise, btoa, atob, TextEncoder, TextDecoder, setTimeout: timeout, clearTimeout, setInterval: noop, clearInterval: noop, performance: { now: () => 0 },
     ISSEN_DEBUG: true, isSecureContext: false, location: { search, href: 'file:///index.html' + search },
     localStorage: storage, navigator: { userAgent: 'node', platform: 'node', maxTouchPoints: 0, vibrate: noop },
     matchMedia: () => ({ matches: false, addEventListener: noop }), requestAnimationFrame: noop, addEventListener: noop, confirm: () => true,

@@ -5,7 +5,7 @@ const fs = require('fs'), path = require('path'), assert = require('assert');
 const { boot } = require('../tools/harness');
 const FILE = path.join(__dirname, 'golden', 'baseline.json');
 
-const snapshot = game => JSON.parse(JSON.stringify({ MV: game.MV, BOSSES: game.BOSSES, ARENAS: game.ARENAS, HERO_D: game.HERO_D },
+const snapshot = game => JSON.parse(JSON.stringify({ MV: game.MV, BOSSES: game.BOSSES, ARENAS: game.ARENAS, HERO_D: game.HERO_D, HERO_MV: game.HERO_MV },
   (k, v) => typeof v === 'function' ? 'fn ' + v.toString() : v));
 
 module.exports = {

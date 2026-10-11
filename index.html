@@ -71,6 +71,10 @@ canvas{display:block;width:100%;height:100%}
 .keys{font-size:max(1.25cqw,11px)!important}.panel p,.tag{font-size:max(1.45cqw,12px)}
 body.touch .kb,body:not(.touch) .tc{display:none}
 .install{font:italic 500 max(1.05cqw,12px)/1.5 'Cormorant Garamond',serif;color:rgba(21,19,15,.78);background:rgba(236,229,214,.75);padding:.35em 1em;border-radius:999px;display:flex;gap:.9em;align-items:center;flex-wrap:wrap;justify-content:center}
+.panel .rw{font-style:normal;font-weight:500;font-size:max(1.2cqw,11px);margin:0;max-width:70cqw}
+.xpbar{width:36cqw;height:max(.6cqw,5px);background:rgba(21,19,15,.15);border-radius:99px;overflow:hidden}.xpbar i{display:block;height:100%;width:0;background:var(--ink)}
+.card.pcard{width:27cqw;cursor:default}.card.pcard .ti{font-size:max(1cqw,10px);line-height:1.3}.card.pcard.locked>*{opacity:.5}
+.code{width:52cqw;font:max(1cqw,11px)/1.3 ui-monospace,monospace;background:rgba(255,255,255,.6);border:1px solid rgba(21,19,15,.4);padding:.5em;color:var(--ink);word-break:break-all}.code.off{display:none}
 .install[hidden]{display:none}.install svg{width:1.1em;height:1.1em;vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:2}.install a,.install .lnk{color:var(--red);font-size:inherit}
 /* touch controls: floating joystick (left) + brush-ink buttons (right); --u scales them to the phone */
 #touch{--u:clamp(.72px,.27vmin,1.3px);position:fixed;inset:0;z-index:20;pointer-events:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
@@ -90,6 +94,7 @@ body.touch .kb,body:not(.touch) .tc{display:none}
 .tb[data-a=block]{width:calc(70*var(--u));height:calc(70*var(--u));right:calc(230*var(--u) + env(safe-area-inset-right));bottom:calc(28*var(--u) + env(safe-area-inset-bottom))}
 .tb[data-a=jump]{width:calc(74*var(--u));height:calc(74*var(--u));right:calc(32*var(--u) + env(safe-area-inset-right));bottom:calc(136*var(--u) + env(safe-area-inset-bottom))}
 .tb[data-a=ink]{width:calc(64*var(--u));height:calc(64*var(--u));right:calc(132*var(--u) + env(safe-area-inset-right));bottom:calc(118*var(--u) + env(safe-area-inset-bottom))}
+.tb[data-a=power1]{width:calc(64*var(--u));height:calc(64*var(--u));right:calc(222*var(--u) + env(safe-area-inset-right));bottom:calc(112*var(--u) + env(safe-area-inset-bottom))}.tb.off{display:none}
 .tb[data-a=issen]{width:calc(68*var(--u));height:calc(68*var(--u));right:calc(84*var(--u) + env(safe-area-inset-right));bottom:calc(210*var(--u) + env(safe-area-inset-bottom))}
 .tpause{all:unset;position:fixed;z-index:21;top:calc(10px + env(safe-area-inset-top));right:calc(12px + env(safe-area-inset-right));width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(12,11,10,.5);color:var(--paper);font:700 15px/1 sans-serif;letter-spacing:2px;cursor:pointer;touch-action:none}
 .tpause.off{display:none}.tpause:focus-visible{outline:2px solid var(--red)}
@@ -117,17 +122,24 @@ body.touch .kb,body:not(.touch) .tc{display:none}
     <div class="mt"><span class="kj">一閃</span><span class="en">Five Shadows</span></div>
     <p class="tag">The warlord has fallen, yet five shadows still haunt the land. Walk the path of the single stroke — defeat each to reach the next.</p>
     <div class="levels" id="levels"></div>
-    <div class="row"><button class="lnk" id="mHelp">Controls</button><button class="lnk" id="mFilm">Watch the intro film</button><button class="lnk" id="mReset">Reset progress</button></div>
+    <div class="row"><button class="lnk" id="mChar">Character</button><button class="lnk" id="mHelp">Controls</button><button class="lnk" id="mFilm">Watch the intro film</button><button class="lnk" id="mReset">Reset progress</button></div>
   </div>
-  <div class="panel dim off" id="result" role="dialog" aria-labelledby="rTitle"><div class="rk" id="rKanji">勝</div><h2 id="rTitle">Victory</h2><p id="rText"></p><div class="row" id="rBtns"></div></div>
+  <div class="panel dim off" id="result" role="dialog" aria-labelledby="rTitle"><div class="rk" id="rKanji">勝</div><h2 id="rTitle">Victory</h2><p id="rText"></p><p class="rw" id="rRewards"></p><div class="row" id="rBtns"></div></div>
+  <div class="panel dim off" id="char" role="dialog" aria-labelledby="cTitle"><h2 id="cTitle">Issen · level <span id="cLvl">1</span></h2>
+    <div class="xpbar" aria-hidden="true"><i id="cXp"></i></div><p class="rw" id="cXpT"></p><p class="rw" id="cStat"></p>
+    <div class="levels" id="cPowers"></div><p class="rw" id="cMore"></p>
+    <div class="row"><button class="lnk" id="cExport">Export save code</button><button class="lnk" id="cImport">Import save code</button></div>
+    <textarea id="cCode" class="code off" rows="2" spellcheck="false" aria-label="Save code"></textarea><div class="row"><span id="cCodeBtns" class="row"></span><span class="rw" id="cMsg" role="status"></span></div>
+    <button class="big" id="cClose">Back to the map</button></div>
+  <div class="panel dim off" id="notice" role="dialog" aria-labelledby="nTitle"><div class="rk" id="nKanji">墨</div><h2 id="nTitle"></h2><p id="nText"></p><div class="row" id="nBtns"></div></div>
   <div class="panel dim off" id="pause" role="dialog" aria-label="Paused"><div class="rk">止</div><h2>Paused</h2><div class="row col"><button class="big" id="pResume">Resume</button><button class="lnk" id="pRestart">Restart this fight</button><button class="lnk" id="pHelp">Controls</button><button class="lnk" id="pQuit">Quit to the map</button></div></div>
   <div class="panel dim off" id="help" role="dialog" aria-labelledby="hTitle"><h2 id="hTitle">The Way of the Stroke</h2>
     <div class="keys tc"><b>Joystick</b><span>Drag left or right to move — pulling away from the enemy blocks</span><b>Joystick up · down</b><span>Up jumps over low attacks · down crouches under high ones</span>
     <b>斬 Slash</b><span>Tap three times to combo · with joystick forward: lunge · down: low cut · in the air: overhead</span><b>蹴 Kick</b><span>Pushes away · forward: roundhouse (knockdown) · down: sweep</span>
-    <b>守 Block</b><span>Hold to stand your ground · hold with joystick down to block low attacks</span><b>跳 Jump</b><span>Same as pushing the joystick up</span><b>墨 Ink · 閃 Issen</b><span>Ink wave costs one bar · Issen needs all three — it glows red when ready</span></div>
+    <b>守 Block</b><span>Hold to stand your ground · hold with joystick down to block low attacks</span><b>跳 Jump</b><span>Same as pushing the joystick up</span><b>墨 Ink · 閃 Issen</b><span>Ink wave costs one bar · Issen needs all three — it glows red when ready</span><b>Power (e.g. 月)</b><span>Appears once you absorb a shadow’s power · costs ink, then cools down</span></div>
     <div class="keys kb"><b>← →  /  A D</b><span>Move — walking away from the enemy blocks</span><b>↑  /  W</b><span>Jump — leaps over low attacks</span><b>↓  /  S</b><span>Crouch — ducks high attacks; crouch + back blocks low ones</span>
     <b>J  /  Z</b><span>Slash — tap three times to combo · → J lunge · ↓ J low cut · in the air: overhead</span><b>K  /  X</b><span>Kick — pushes away · → K roundhouse (knockdown) · ↓ K sweep</span>
-    <b>L  /  C</b><span>Ink wave — a thrown brushstroke, costs one ink bar</span><b>I  /  V</b><span>Issen — all three ink bars: an unblockable single stroke</span><b>Esc · F · M</b><span>Pause · fullscreen · sound</span></div>
+    <b>L  /  C</b><span>Ink wave — a thrown brushstroke, costs one ink bar</span><b>I  /  V</b><span>Issen — all three ink bars: an unblockable single stroke</span><b>U  /  O</b><span>Absorbed powers in slots 1 and 2 — each costs ink, then cools down</span><b>Esc · F · M</b><span>Pause · fullscreen · sound</span></div>
     <p>Hits and blocks fill your ink. Win two rounds to defeat a shadow.</p><button class="big" id="hClose">Understood</button></div>
   <div id="bar" class="off">
     <button id="pp" aria-label="Play or pause"><svg viewBox="0 0 24 24"><path id="ppi" d="M7 4.5v15l12.5-7.5z"/></svg></button>
@@ -146,8 +158,36 @@ body.touch .kb,body:not(.touch) .tc{display:none}
   <button class="tb" data-a="jump" aria-label="Jump"><b>跳</b><i>Jump</i></button>
   <button class="tb dis" data-a="ink" id="tbInk" aria-label="Ink wave"><b>墨</b><i>Ink</i></button>
   <button class="tb dis" data-a="issen" id="tbIssen" aria-label="Issen"><b>閃</b><i>Issen</i></button>
+  <button class="tb dis off" data-a="power1" id="tbP1" aria-label="Power"><b>月</b><i>Moon</i></button>
 </div>
 <button id="tPause" class="tpause off" aria-label="Pause">❚❚</button>
+<!-- engine-neutral game data (JSON, read at boot; see docs/conventions.md). XP and reward arithmetic: docs/balance.md -->
+<script type="application/json" id="data-progression">
+{"schema_version":1,
+ "xp":{"base":100,"exponent":1.5,"level_cap":25,"repeat_share":0.25},
+ "level_up":{"attr_points":2},
+ "power_slots":{"unlock_levels":[1,6]},
+ "rewards":{
+  "gekko":{"xp":600,"skill_points":1,"mon":100,"power":"red_moon"},
+  "kasumi":{"xp":900,"skill_points":1,"mon":150,"power":"miststep"},
+  "tetsugoro":{"xp":1300,"skill_points":1,"mon":200,"power":"iron_resolve"},
+  "shirasagi":{"xp":1700,"skill_points":1,"mon":250,"power":"phantom_edge"},
+  "akuma":{"xp":2200,"skill_points":2,"mon":400,"power":"demon_sovereignty"}}}
+</script>
+<script type="application/json" id="data-powers">
+{"schema_version":1,
+ "powers":{
+  "red_moon":{"name":"Spear of the Red Moon","short":"Moon","jp":"月","boss":"gekko","ready":true,"move":"p_red_moon","tags":["reach","pierce"],
+   "desc":"Gekkō’s thrust, in your hands: step in and pierce with a red crescent at long reach. One ink bar, 4 s cooldown."},
+  "miststep":{"name":"Miststep","short":"Mist","jp":"霞","boss":"kasumi","ready":false,"move":null,"tags":["mobility","crossup"],
+   "desc":"Kasumi’s vanishing step."},
+  "iron_resolve":{"name":"Iron Resolve","short":"Iron","jp":"鉄","boss":"tetsugoro","ready":false,"move":null,"tags":["defence","counter"],
+   "desc":"Tetsugorō’s unbreakable stance."},
+  "phantom_edge":{"name":"Phantom Edge","short":"Pale","jp":"白","boss":"shirasagi","ready":false,"move":null,"tags":["ranged","area"],
+   "desc":"Shirasagi’s spectral wave."},
+  "demon_sovereignty":{"name":"Demon Sovereignty","short":"Oni","jp":"鬼","boss":"akuma","ready":false,"move":null,"tags":["burst"],
+   "desc":"Akuma’s fury, worn as your own."}}}
+</script>
 <div id="rotate"><svg viewBox="0 0 64 64" width="76" height="76" aria-hidden="true"><rect x="20" y="6" width="24" height="44" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="44" r="2" fill="currentColor"/><path d="M52 34a20 20 0 0 1-18 22" fill="none" stroke="#b5301c" stroke-width="3"/><path d="M30 52l5 8 3-8z" fill="#b5301c"/></svg>Turn your phone sideways to fight.</div>
 <script>
 (()=>{'use strict';
@@ -745,17 +785,24 @@ const MV={
  a_leap:{dur:1.25,hit:[[.8,.95]],reach:175,dmg:17,zone:'high',kd:1,push:300,cd:6,ai:[260,950],w:3,fr:g=>[[0,g],[.15,P(g,{tl:.4,th1:1.0,sh1:.2,th2:-.4,sh2:-1.0})],[.3,P(PS.high,{th1:1.5,sh1:-.4,th2:.8,sh2:-1})],[.78,P(PS.high,{th1:.8,sh1:0,th2:-.5,sh2:-.6})],[.86,P(PS.cutLow,{sw:1.2}),'o5'],[1.25,g]],
   start(F,O){F.d.x0=F.x;F.d.tx=clamp(O.x-F.f*110*F.def.s,-ARENA,ARENA);F.manual=true;snd('whoosh',.6)},
   tick(F,O,a,b){if(!F.manual)return;const u=ss(.18,.82,b);F.x=lerp(F.d.x0,F.d.tx,u);F.y=-Math.sin(u*Math.PI)*300;if(b>=.82){F.y=0;F.manual=false;fxAdd({k:'ring',x:F.x+F.f*80,y:0});fxAdd({k:'splash',x:F.x+F.f*90,y:-4,sz:60,persist:1});G.shake=22;snd('boom',.7);snd('drum',1)}}}};
+// hero-only moves granted by absorbed powers. Never added to MV (shared with every boss): each hero fighter
+// resolves moves through F.moves, an object whose prototype is MV, so bosses stay byte-identical to the baseline.
+const HERO_MV={
+ // Spear of the Red Moon (Gekkō): 0.24 s startup with the red glint, 0.12 s active, 0.34 s recovery; ~260 px step-in, reach 300
+ p_red_moon:{dur:.7,hit:[[.24,.36]],reach:300,dmg:14,zone:'mid',push:220,cost:1,cd:4,lunge:[.12,.3,1450],tell:[.02,.22],snd:'slash',sndT:.24,
+  fr:g=>[[0,g],[.2,P(PS.guard,{tl:-.05,hd:-.2,ua1:.15,fa1:1.45,sw:1.57,th1:.25,sh1:.05,th2:-.75,sh2:-.55})],[.27,P(PS.cutSide,{tl:.55,hd:-.38,sw:1.57,th1:1.3,sh1:.15,th2:-1.15,sh2:-1.45}),'o5'],[.36,P(PS.cutSide,{tl:.5,hd:-.34,sw:1.57,th1:1.25,sh1:.15,th2:-1.1,sh2:-1.4})],[.7,g]],
+  tick(F,O,a,b){if(a<.24&&b>=.24)fxAdd({k:'moon',x:F.x+F.f*40,y:-135,f:F.f})}}};
 const HERO_D={name:'Issen',jp:'一閃',kind:K.hero,s:1,hp:100,speed:340,guard:PS.guard,win:PS.stand,wk:{}};
 const BOSSES=[
- {name:'Gekkō',title:'the Red Spear',jp:'月光',kind:K.gekko,s:1.1,hp:100,speed:240,guard:SPG,wk:{gl:45,sheath:0},moves:['g_thrust','g_low','g_spin','g_dragon','b_kick'],ai:{think:.75,aggr:.55,block:.22,range:235},arena:0,win:P(SPG,{tl:-.1,hd:-.3}),
+ {id:'gekko',name:'Gekkō',title:'the Red Spear',jp:'月光',kind:K.gekko,s:1.1,hp:100,speed:240,guard:SPG,wk:{gl:45,sheath:0},moves:['g_thrust','g_low','g_spin','g_dragon','b_kick'],ai:{think:.75,aggr:.55,block:.22,range:235},arena:0,win:P(SPG,{tl:-.1,hd:-.3}),
   tip:'Long reach, slow recovery. When the spear glints, jump or block.'},
- {name:'Kasumi',title:'the Mist Shinobi',jp:'霞',kind:K.kasumi,s:1,hp:95,speed:400,guard:KG,wk:{sheath:0},moves:['k_flurry','k_stab','k_low','k_star','k_vanish'],ai:{think:.45,aggr:.66,block:.3,range:145,jump:.2},arena:1,win:P(KG,{tl:0,hd:-.2}),
+ {id:'kasumi',name:'Kasumi',title:'the Mist Shinobi',jp:'霞',kind:K.kasumi,s:1,hp:95,speed:400,guard:KG,wk:{sheath:0},moves:['k_flurry','k_stab','k_low','k_star','k_vanish'],ai:{think:.45,aggr:.66,block:.3,range:145,jump:.2},arena:1,win:P(KG,{tl:0,hd:-.2}),
   tip:'Fast blades and throwing stars — duck the stars. She vanishes and strikes from behind.'},
- {name:'Tetsugorō',title:'the Iron Monk',jp:'鉄五郎',kind:K.monk,s:1.32,hp:150,speed:185,guard:P(PS.guard,{sw:2.6,tl:.06,hd:-.05}),wk:{gl:20,sheath:0},moves:['m_smash','m_swing','m_low','m_slam','b_kick'],ai:{think:.85,aggr:.6,block:.15,range:200},arena:2,win:P(PS.high,{tl:-.1}),
+ {id:'tetsugoro',name:'Tetsugorō',title:'the Iron Monk',jp:'鉄五郎',kind:K.monk,s:1.32,hp:150,speed:185,guard:P(PS.guard,{sw:2.6,tl:.06,hd:-.05}),wk:{gl:20,sheath:0},moves:['m_smash','m_swing','m_low','m_slam','b_kick'],ai:{think:.85,aggr:.6,block:.15,range:200},arena:2,win:P(PS.high,{tl:-.1}),
   tip:'Iron skin: light blows will not stagger him. Jump the earthquake, punish the long swings.'},
- {name:'Shirasagi',title:'the Pale Ronin',jp:'白鷺',kind:K.ghost,s:1.08,hp:120,speed:290,guard:P(SPG,{sw:1.8,tl:.1}),wk:{gl:45,sheath:0},moves:['y_thrust','y_sweep','y_rise','y_wisp','y_phase'],ai:{think:.55,aggr:.66,block:.4,range:235},arena:3,win:P(SPG,{tl:-.05,hd:-.25}),
+ {id:'shirasagi',name:'Shirasagi',title:'the Pale Ronin',jp:'白鷺',kind:K.ghost,s:1.08,hp:120,speed:290,guard:P(SPG,{sw:1.8,tl:.1}),wk:{gl:45,sheath:0},moves:['y_thrust','y_sweep','y_rise','y_wisp','y_phase'],ai:{think:.55,aggr:.66,block:.4,range:235},arena:3,win:P(SPG,{tl:-.05,hd:-.25}),
   tip:'A drowned duelist. She fades and reappears beside you; ghost-fire drifts slowly — block it.'},
- {name:'Akuma',title:'the Horned Warlord',jp:'鬼将軍',kind:K.lord,s:1.28,hp:170,speed:265,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_cut','a_crush','a_sweep','a_wave','a_leap','b_kick'],ai:{think:.45,aggr:.7,block:.45,range:225,rage:1},arena:4,win:P(PS.high,{tl:-.2,hd:-.4}),
+ {id:'akuma',name:'Akuma',title:'the Horned Warlord',jp:'鬼将軍',kind:K.lord,s:1.28,hp:170,speed:265,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_cut','a_crush','a_sweep','a_wave','a_leap','b_kick'],ai:{think:.45,aggr:.7,block:.45,range:225,rage:1},arena:4,win:P(PS.high,{tl:-.2,hd:-.4}),
   tip:'The warlord returns from the ink. At half strength his fury awakens. Save your Issen.'}];
 /* --- arenas --- */
 function shrineBG(c,t){WIND={x:-1,y:.06,s:.35};screen(c);c.fillStyle=PAPER;c.fillRect(0,0,W,H);camT(c,.06);c.globalAlpha=.6;c.drawImage(CLOUDL,-1800+t*5,-1450);c.globalAlpha=1;
@@ -787,12 +834,13 @@ const G={P:null,B:null,def:null,lv:0,proj:[],fx:[],t:0,rt:0,mt:0,rdt:0,st:0,stat
 const NOIN={mx:0,up:false,down:false,atk:null};
 const snd=(n,v)=>{if(AU.ctx&&AU.ctx.state==='running')try{S[n](AU.ctx.currentTime+.01,v)}catch(e){}};
 function amb(w,r,ru){if(!AU.ctx)return;const now=AU.ctx.currentTime;AU.wind.gain.setTargetAtTime(w*.5,now,.4);AU.rain.gain.setTargetAtTime(r*.35,now,.4);AU.rumb.gain.setTargetAtTime(ru,now,.4);AU.lp.frequency.setTargetAtTime(16000,now,.1)}
-function mkF(def,isP){return{def,isP,maxHp:def.hp,hp:def.hp,lag:def.hp,lagHold:0,ink:0,wins:0,x:0,y:0,vx:0,vy:0,f:1,st:'idle',stT:0,mv:null,mvT:0,mvId:0,mask:0,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},ai:{t:1,pt:0,blk:0,plan:'hold'},hitFlash:0,d:{}}}
+function mkF(def,isP){const moves=Object.create(MV);for(const id of def.powers||[])if(id)moves[POWERS[id].move]=HERO_MV[POWERS[id].move];
+ return{def,isP,moves,maxHp:def.hp,hp:def.hp,lag:def.hp,lagHold:0,ink:0,wins:0,x:0,y:0,vx:0,vy:0,f:1,st:'idle',stT:0,mv:null,mvT:0,mvId:0,mask:0,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},ai:{t:1,pt:0,blk:0,plan:'hold'},hitFlash:0,d:{}}}
 const setSt=(F,s)=>{F.st=s;F.stT=0};
 const isFree=F=>F.st==='idle'||F.st==='walk'||F.st==='crouch';
 function fxAdd(o){o.t0=G.t;o.seed=Math.random()*1000;G.fx.push(o);if(o.persist){const ps=G.fx.filter(f=>f.persist);if(ps.length>16)G.fx.splice(G.fx.indexOf(ps[0]),1)}}
-function heroMove(F,a,inp){const fwd=inp.mx===F.f;if(a==='slash')return F.air?'air':inp.down?'low':fwd?'lunge':'slash';if(a==='kick')return F.air?'airKick':inp.down?'sweepK':fwd?'round':'kick';if(a==='ink')return F.ink>=33.3?'wave':null;return F.ink>=99.5?'issen':null}
-function startMove(F,n){const m=MV[n];if(!m)return false;const O=F===G.P?G.B:G.P;
+function heroMove(F,a,inp){const fwd=inp.mx===F.f;if(a==='power1'||a==='power2'){const id=(F.def.powers||[])[a==='power1'?0:1];return id?POWERS[id].move:null}if(a==='slash')return F.air?'air':inp.down?'low':fwd?'lunge':'slash';if(a==='kick')return F.air?'airKick':inp.down?'sweepK':fwd?'round':'kick';if(a==='ink')return F.ink>=33.3?'wave':null;return F.ink>=99.5?'issen':null}
+function startMove(F,n){const m=F.moves[n];if(!m||m.cd&&(F.cd[n]||0)>G.t)return false;const O=F===G.P?G.B:G.P;
  if(m.cost){if(F.ink<m.cost*33.3-.5)return false;F.ink=Math.max(0,F.ink-m.cost*33.34)}
  F.mv=m;F.mvT=0;F.mask=0;F.mvId=++G.mvId;F.next=null;F.d={};setSt(F,'move');F.block=false;F.crouch=!!m.crouch;
  if(m.cd)F.cd[n]=G.t+m.cd*(F.rage?.6:1);
@@ -836,7 +884,7 @@ function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;if(F.hitFlash>0)F.hitFlash-=
   case 'down':F.vx*=Math.pow(.04,dt);if(F.stT>.95&&!F.air&&F.hp>0)setSt(F,'getup');break;
   case 'getup':F.inv=.15;F.vx=0;if(F.stT>.42)setSt(F,'idle');break;
   case 'dead':case 'win':F.vx*=Math.pow(.04,dt);break;
-  case 'jump':if(inp.atk){const n=F.isP?heroMove(F,inp.atk,inp):inp.atk;if(F.isP)G.buf=null;if(n&&MV[n].air)startMove(F,n)}break;
+  case 'jump':if(inp.atk){const n=F.isP?heroMove(F,inp.atk,inp):inp.atk;if(F.isP)G.buf=null;if(n&&F.moves[n]&&F.moves[n].air)startMove(F,n)}break;
   default:{F.f=O.x>=F.x?1:-1;F.crouch=inp.down;F.block=inp.mx===-F.f||!!inp.block;
    if(inp.atk){const n=F.isP?heroMove(F,inp.atk,inp):inp.atk;if(F.isP)G.buf=null;if(n&&startMove(F,n))break}
    if(inp.up){F.vy=-1000;F.vx=inp.mx*sp*.95;F.air=true;F.crouch=false;F.block=false;setSt(F,'jump');snd('whoosh',.25);if(F.isP)G.jb=-9;break}
@@ -851,9 +899,9 @@ function ai(B,Pl,dt){const A=B.def.ai,d=Math.abs(Pl.x-B.x),inp={mx:0,up:false,do
  if(B.ai.blk>0){B.ai.blk-=dt;inp.mx=-toward;inp.down=B.ai.low;return inp}
  B.ai.t-=dt;
  if(B.ai.t<=0&&isFree(B)){B.ai.t=A.think*R*(.6+Math.random()*.8);
-  const opts=B.def.moves.filter(n=>{const m=MV[n];return(!m.cd||(B.cd[n]||0)<=G.t)&&d>=m.ai[0]*s&&d<=m.ai[1]*s});
-  if(Pl.air&&d<280){const aa=opts.find(n=>MV[n].zone==='high');if(aa){inp.atk=aa;return inp}}
-  if(opts.length&&Math.random()<A.aggr+(B.rage?.15:0)){let tw=0;for(const n of opts)tw+=MV[n].w;let r=Math.random()*tw;for(const n of opts){r-=MV[n].w;if(r<=0){inp.atk=n;break}}return inp}
+  const opts=B.def.moves.filter(n=>{const m=B.moves[n];return(!m.cd||(B.cd[n]||0)<=G.t)&&d>=m.ai[0]*s&&d<=m.ai[1]*s});
+  if(Pl.air&&d<280){const aa=opts.find(n=>B.moves[n].zone==='high');if(aa){inp.atk=aa;return inp}}
+  if(opts.length&&Math.random()<A.aggr+(B.rage?.15:0)){let tw=0;for(const n of opts)tw+=B.moves[n].w;let r=Math.random()*tw;for(const n of opts){r-=B.moves[n].w;if(r<=0){inp.atk=n;break}}return inp}
   const r=Math.random();B.ai.plan=d>A.range*s*1.1?'in':d<A.range*s*.55?'out':r<(A.jump||.06)?'jump':r<.45?'hold':r<.72?'in':'out';B.ai.pt=.25+Math.random()*.5}
  if(B.ai.pt>0){B.ai.pt-=dt;if(B.ai.plan==='in')inp.mx=toward;else if(B.ai.plan==='out')inp.mx=-toward;else if(B.ai.plan==='jump'){inp.up=true;inp.mx=toward;B.ai.plan='hold'}}
  return inp}
@@ -875,6 +923,7 @@ function updGame(dt){if(G.paused||G.state==='over')return;G.shake*=Math.pow(.004
   if(pk||bk||to){const pw=bk||!pk&&to&&pl.hp/pl.maxHp>=bo.hp/bo.maxHp,L=pw?bo:pl;G.rw=pw?pl:bo;G.state='ko';G.st=0;if(L.hp<=0){L.mv=null;L.manual=false;L.alpha=1;if(L.st!=='down')setSt(L,'dead');else L.st='dead'}
    G.slow=.3;G.slowT=.9;const timeUp=to&&!pk&&!bk;G.ban={k:timeUp?'時':pw?'勝':'敗',sub:timeUp?(pw?'Time — you lead':'Time — you trail'):pw?'Victory':'Defeat',t0:G.rt,dur:2.2,seal:pw};snd('boom',.8);snd(pw?'gong':'drum',.6)}}
  else if(G.state==='ko'){if(G.st>1.1&&isFree(G.rw))setSt(G.rw,'win');if(G.st>2.9)endRound()}
+ else if(G.state==='absorb'){bo.alpha=1-ss(.6,2.8,G.st);if(!G.rv&&G.st>2.9){const p=POWERS[G.res.r.power];G.rv=1;G.ban={k:p.jp,sub:p.name,t0:G.rt,dur:2.4,size:300,seal:true};fxAdd({k:'ring',x:pl.x,y:0});snd('gong',.8);snd('drum',.9)}if(G.st>=ABSORB)absorbDone()}
  music(dt)}
 function music(dt){if(!AU.ctx||G.state==='ko')return;const ar=ARENAS[G.def.arena];G.nb-=dt;if(G.nb>0)return;G.nb+=60/ar.bpm/2;const s=G.step++%16,w=AU.ctx.currentTime+.02;
  try{if(s===0||s===6||s===8||s===11||s===14)S.drum(w,s===0?.55:.3);if(s%4===2&&hash(G.step*1.7)<.7)S.pluck(w,ar.notes[hash(G.step*3.1)*ar.notes.length|0],.18);if(s===0&&G.step%64===1)S.flute(w,ar.notes[0]*2,2.2,.22)}catch(e){}}
@@ -903,7 +952,10 @@ function drawFx(c){camT(c,1);for(const f of G.fx){const age=G.t-f.t0;
  else if(f.k==='clash')clash(c,f.x,f.y,age,f.sz||1);
  else if(f.k==='dust'&&age<.5){c.globalAlpha=.22*(1-age/.5);c.drawImage(PUFF,f.x-60-age*80,f.y-30,120+age*160,40);c.globalAlpha=1}
  else if(f.k==='smoke'&&age<.9){for(let i=0;i<7;i++){const r=(40+age*140)*(.6+hash(f.seed+i)*.6);c.globalAlpha=.6*(1-age/.9);c.drawImage(f.pale?MIST:PUFF,f.x+(hash(f.seed+i*3)-.5)*120-r,f.y-hash(f.seed+i*7)*220-r,r*2,r*2)}c.globalAlpha=1}
- else if(f.k==='ring'&&age<.6){c.strokeStyle=ink(.8,1-age/.6);c.lineWidth=6*(1-age/.6)+1;c.beginPath();c.ellipse(f.x,f.y,40+age*600,(40+age*600)*.16,0,0,6.3);c.stroke()}}}
+ else if(f.k==='ring'&&age<.6){c.strokeStyle=ink(.8,1-age/.6);c.lineWidth=6*(1-age/.6)+1;c.beginPath();c.ellipse(f.x,f.y,40+age*600,(40+age*600)*.16,0,0,6.3);c.stroke()}
+ else if(f.k==='moon'&&age<.4){const u=age/.4;c.save();c.translate(f.x,f.y);c.scale(f.f,1);c.fillStyle=RED; // Red Moon: a crescent at full reach + the thrust streak
+  c.globalAlpha=(1-u)*.85;c.beginPath();c.arc(150+u*30,0,120,-1.25,1.25);c.arc(120+u*30,0,108,1.18,-1.18,true);c.fill();
+  c.globalAlpha=1-u;brush(c,[[0,0],[140,-3],[265+u*40,0]],12*(1-u*.6),{taper:x=>1-x*.85});c.restore();c.globalAlpha=1}}}
 function drawProj(c){camT(c,1);for(const p of G.proj){const d=Math.sign(p.vx);
  if(p.type==='wave'){const s=p.big?1.35:1,pts=[];for(let i=0;i<=14;i++){const u=i/14;pts.push([p.x+d*Math.sin(u*Math.PI)*34*s-d*20*s,p.y+(u-.5)*170*s])}c.fillStyle=INK;brush(c,pts,26*s,{taper:u=>Math.sin(Math.PI*u)});c.strokeStyle=INK;dry(c,pts.map(q=>[q[0]-d*40*s,q[1]]),34*s,p.t*9|0,{dry:.9,alpha:.5});if(p.big){c.strokeStyle=RED;c.lineWidth=3;c.beginPath();pts.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]));c.stroke()}}
  else if(p.type==='star'){c.save();c.translate(p.x,p.y);c.rotate(p.t*30);c.fillStyle=INK;for(let k=0;k<4;k++){c.rotate(Math.PI/2);tri(c,[-4,0],[4,0],[0,-16])}circ(c,0,0,5);c.restore();c.strokeStyle=ink(.6,.6);c.lineWidth=2;line(c,[p.x-d*14,p.y],[p.x-d*70,p.y])}
@@ -919,10 +971,15 @@ function hud(c){screen(c);const pl=G.P,bo=G.B;c.globalAlpha=.85;c.drawImage(MIST
  for(let i=0;i<2;i++)for(const[F,x]of[[pl,300+i*42],[bo,W-100-nw-62-i*42]]){if(F.wins>i)c.drawImage(SEAL,x,114,32,32);else{c.strokeStyle=ink(.45);c.lineWidth=2;c.strokeRect(x+3,117,26,26)}}
  const full=pl.ink>=99.5;for(let i=0;i<3;i++){const x=100+i*112,f=clamp((pl.ink-i*33.34)/33.34),sp=[[x,186],[x+50,184],[x+100,186]];c.fillStyle=ink(.16);brush(c,sp,16,{taper:()=>1});if(f>0){c.save();c.beginPath();c.rect(x-6,166,112*f,40);c.clip();c.fillStyle=full?RED:INK;brush(c,sp,16,{taper:()=>1});c.restore()}}
  c.textAlign='left';c.font='italic 24px "Cormorant Garamond", serif';c.fillStyle=full?RED:ink(.62);c.fillText(full?'I · ISSEN ready':pl.ink>=33.3?'L · ink wave':'ink',446,194);
+ (pl.def.powers||[]).forEach((id,i)=>{if(!id)return;const pw=POWERS[id],n=pw.move,m=pl.moves[n],x=690+i*70,y=186,cd=clamp(((pl.cd[n]||0)-G.t)/m.cd),ok=cd<=0&&pl.ink>=m.cost*33.3-.5; // equipped powers: red when usable, grey sweep while cooling down
+  c.globalAlpha=ok?1:.5;c.strokeStyle=ok?RED:ink(.5);c.lineWidth=3;c.beginPath();c.arc(x,y,26,0,6.2832);c.stroke();
+  if(cd>0){c.fillStyle=ink(.22);c.beginPath();c.moveTo(x,y);c.arc(x,y,24,-1.5708,-1.5708+cd*6.2832);c.closePath();c.fill()}
+  c.fillStyle=ok?RED:INK;c.textAlign='center';c.textBaseline='middle';c.font='30px "Yuji Boku", serif';c.fillText(pw.jp,x,y+1);
+  if(!TOUCH.on){c.font='600 16px "Cormorant Garamond", serif';c.fillStyle=ink(.6);c.fillText(['U','O'][i],x,y+40)}c.globalAlpha=1;c.textBaseline='alphabetic'});
  const cx=W/2,cy=102,pts=[];for(let i=0;i<=40;i++){const a=-1.4+i/40*5.9;pts.push([cx+Math.cos(a)*52,cy+Math.sin(a)*52])}c.strokeStyle=INK;dry(c,pts,11,7,{dry:.6});
  c.fillStyle=INK;c.textAlign='center';c.textBaseline='middle';c.font='600 50px "Cormorant Garamond", serif';c.fillText(Math.max(0,Math.ceil(G.timer)),cx,cy+2);
  c.font='500 20px "Cormorant Garamond", serif';c.fillStyle=ink(.6);c.fillText(['FIRST','SECOND','THIRD','FOURTH','FIFTH'][G.lv]+' SHADOW · '+ARENAS[G.def.arena].name.toUpperCase(),cx,184);
- if(G.hint>0&&G.state!=='ko'){const a=clamp(G.hint);c.globalAlpha=a*.86;c.fillStyle=PAPER;c.beginPath();c.roundRect(W/2-850,H-112,1700,96,48);c.fill();c.globalAlpha=a;c.fillStyle=INK;c.font='500 25px "Cormorant Garamond", "Yuji Boku", serif';
+ if(G.hint>0&&G.state!=='ko'&&G.state!=='absorb'){const a=clamp(G.hint);c.globalAlpha=a*.86;c.fillStyle=PAPER;c.beginPath();c.roundRect(W/2-850,H-112,1700,96,48);c.fill();c.globalAlpha=a;c.fillStyle=INK;c.font='500 25px "Cormorant Garamond", "Yuji Boku", serif';
   c.fillText(TOUCH.on?'Joystick  move  ·  pull back or 守  block  ·  up  jump  ·  down  crouch  ·  斬  slash  ·  蹴  kick  ·  墨  ink wave  ·  閃  issen':'← →  move  ·  hold back  block  ·  ↑  jump  ·  ↓  crouch  ·  J  slash  ·  K  kick  ·  L  ink wave  ·  I  issen  ·  Esc  pause',W/2,H-72);c.font='italic 23px "Cormorant Garamond", serif';c.fillStyle=ink(.7,a);c.fillText(G.def.tip,W/2,H-38);c.globalAlpha=1}
  c.textBaseline='alphabetic'}
 const BANB={}; // banner glyph + its blurred shadow, built once (a blur filter every frame is slow on phones)
@@ -938,35 +995,154 @@ function renderGame(){const ar=ARENAS[G.def.arena],pl=G.P,bo=G.B,t=G.t,dt=Math.m
  const hw=W/2/G.cam.z,lo=-ARENA-160+hw,hi=ARENA+160-hw;G.cam.x+=((lo>hi?0:clamp(mid,lo,hi))-G.cam.x)*Math.min(1,dt*4);G.cam.y=-330/G.cam.z+Math.min(0,pl.y,bo.y)*.35;
  setCam(G.cam,G.shake,G.rt);ar.bg(X,t);
  const iss=pl.st==='move'&&pl.mv.issen?pl.mvT:-1;if(iss>=0){screen(X);X.globalAlpha=ss(0,.18,iss)*(1-ss(.85,1.2,iss))*.88;X.fillStyle='#f6f1e6';X.fillRect(0,0,W,H);X.globalAlpha=1}
- figLayer(X,g=>{drawF(g,bo);drawF(g,pl)});drawFx(X);drawProj(X);ar.fg(X,t);
+ figLayer(X,g=>{drawF(g,bo);drawF(g,pl)});drawFx(X);drawProj(X);ar.fg(X,t);if(G.state==='absorb')drawAbsorb(X);
  if(iss>=.4&&iss<1.25){const pr=clamp((iss-.4)/.22),al=1-ss(.85,1.25,iss),y=scr(0,-150*bo.def.s)[1];screen(X);const pts=[];for(let i=0;i<=50;i++){const u=i/50;pts.push([lerp(120,lerp(120,W-120,E.out(pr)),u),y+Math.sin(u*3)*10+40-u*90])}
   X.fillStyle=INK;X.globalAlpha=al;brush(X,pts,34,{taper:u=>Math.pow(Math.sin(Math.PI*clamp(u*.96+.02)),.45)});X.strokeStyle=INK;dry(X,pts,60,7,{dry:.9,alpha:al*.8});X.globalAlpha=1}
- grain(X);hud(X);banner(X)}
+ grain(X);hud(X);banner(X);if(G.state==='absorb')absorbText(X)}
+// victory ceremony: the defeated boss's ink streams into the hero, then the power is named (ABSORB s; a key or tap skips after 0.8 s)
+const ABSORB=5.4;
+function drawAbsorb(c){const pl=G.P,bo=G.B,a=[bo.x,-150*bo.def.s],b=[pl.x,-150],m=[(a[0]+b[0])/2,-420],q=e=>[(1-e)*(1-e)*a[0]+2*(1-e)*e*m[0]+e*e*b[0],(1-e)*(1-e)*a[1]+2*(1-e)*e*m[1]+e*e*b[1]];camT(c,1);
+ const head=E.io(clamp((G.st-.5)/1.25)),tail=E.io(clamp((G.st-1.6)/1.25)),fade=1-ss(2.6,3.1,G.st); // a brush stroke of ink flows from the boss into the hero
+ if(head>tail&&fade>0){const pts=[];for(let k=0;k<=24;k++)pts.push(q(lerp(tail,head,k/24)));c.globalAlpha=.8*fade;c.fillStyle=INK;brush(c,pts,16,{taper:u=>Math.sin(Math.PI*u)});c.strokeStyle=RED;c.globalAlpha=.5*fade;dry(c,pts,8,3,{dry:.7})}
+ for(let i=0;i<28;i++){const u=clamp((G.st-.5-i*.075)/1.25);if(u<=0||u>=1)continue;const e=E.io(u),r=(i%4?34:44)*(1-e*.55),p=q(e);
+  c.globalAlpha=Math.sin(u*Math.PI)*.9;c.drawImage(i%4?PUFF:GLOW,p[0]+Math.sin(i*2.1+G.st*3)*30*(1-e)-r,p[1]-r,r*2,r*2)}c.globalAlpha=1}
+function absorbText(c){const p=POWERS[G.res.r.power],a=ss(3.2,3.7,G.st);screen(c);c.textAlign='center';c.textBaseline='middle';
+ if(a>0){c.globalAlpha=a*.9;c.drawImage(MIST,W/2-1000,H*.44+170,2000,160);c.globalAlpha=a;c.fillStyle=ink(.85);c.font='italic 30px "Cormorant Garamond", serif';c.fillText(p.desc+(p.ready?'':' It awakens in a later update.'),W/2,H*.44+250)}
+ if(G.st>.8){c.globalAlpha=.55+.2*Math.sin(G.rt*3);c.fillStyle=ink(.7);c.font='500 22px "Cormorant Garamond", serif';c.fillText(TOUCH.on?'tap to continue':'press any key to continue',W/2,H-60)}
+ c.globalAlpha=1;c.textBaseline='alphabetic'}
 function renderMenu(t){setCam({x:-60+Math.sin(t*.05)*60,y:-270,z:1.05},0,t);cliffWorld(X,t,{bloom:.55,sun:.85,wind:.5,petals:26,figs:g=>fig(g,P(PS.stand,{x:-210,f:-1}),K.hero,t)});grain(X)}
+/* --- progression: save v2, XP and levels, boss rewards, absorbed powers. Pure logic (no DOM); storage goes through `store`.
+   Save format: docs/save-format.md · numbers: docs/balance.md --- */
+const DATA=id=>JSON.parse(document.getElementById(id).textContent);
+const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,BOSS_IDS=BOSSES.map(b=>b.id);
+function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
+ ok(PROG.schema_version===1,'progression.schema_version');ok(DATA('data-powers').schema_version===1,'powers.schema_version');
+ ok(PROG.xp.base>0&&PROG.xp.exponent>0&&PROG.xp.level_cap>=2&&PROG.xp.repeat_share>=0&&PROG.xp.repeat_share<=1,'xp curve');
+ ok(PROG.power_slots.unlock_levels.length===2&&PROG.level_up.attr_points>=0,'slots / level-up');
+ for(const id of BOSS_IDS){const r=PROG.rewards[id];ok(r&&r.xp>=0&&r.skill_points>=0&&r.mon>=0&&POWERS[r.power],'reward '+id)}
+ for(const[id,p]of Object.entries(POWERS)){ok(/^[a-z_]+$/.test(id)&&BOSS_IDS.includes(p.boss)&&p.name&&p.jp&&p.short,'power '+id);if(p.ready)ok(HERO_MV[p.move]&&HERO_MV[p.move].cost>=0&&HERO_MV[p.move].cd>0,'power move '+id)}
+ return e}
+{const e=validateData();if(e.length)console.error('Issen data invalid:',e)}
+// XP is a running total; going from level L to L+1 costs round(base·L^exponent)
+const xpNeed=L=>Math.round(PROG.xp.base*Math.pow(L,PROG.xp.exponent));
+function levelOf(xp){let L=1,c=0;while(L<PROG.xp.level_cap&&xp>=c+xpNeed(L)){c+=xpNeed(L);L++}return{level:L,into:xp-c,need:L<PROG.xp.level_cap?xpNeed(L):0}}
+const SKEY='issen-five-shadows',SLOTS=[SKEY+'.v2.a',SKEY+'.v2.b'],QKEY=SKEY+'.quarantine';
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}};
+const newSave=()=>({v:2,rev:0,savedAt:0,profile:{level:1,xp:0,attrPts:0,skillPts:0,attrs:{assault:0,survival:0,shadowcraft:0},mon:0,materials:0},
+ progress:{beaten:0,defeated:[],ladder:{},regionsUnlocked:1,trialsDone:[],lastWin:null},powers:{},loadout:{powers:[null,null],echoes:[null,null]},
+ gear:{owned:[],equipped:{}},settings:{},rewardsClaimed:{},story:{pending:[]},legacy:null});
+// every field is re-validated and clamped on load, so bad data never reaches the game (in v1, {"beaten":"abc"} locked every boss)
+const int=(v,lo,hi,d=lo)=>(typeof v==='number'||typeof v==='string'&&v.trim()!=='')&&Number.isFinite(+v)?clamp(Math.floor(+v),lo,hi):d;
+const obj=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{},strs=(v,only)=>Array.isArray(v)?[...new Set(v.filter(x=>typeof x==='string'&&(!only||only.includes(x))))]:[];
+function cleanSave(r){r=obj(r);const s=newSave(),p=obj(r.profile),a=obj(p.attrs),g=obj(r.progress),lo=obj(r.loadout),lw=obj(g.lastWin),lg=obj(r.legacy),sto=obj(r.story);
+ s.rev=int(r.rev,0,1e12);s.savedAt=int(r.savedAt,0,1e15);
+ Object.assign(s.profile,{xp:int(p.xp,0,1e9),attrPts:int(p.attrPts,0,999),skillPts:int(p.skillPts,0,999),mon:int(p.mon,0,1e9),materials:int(p.materials,0,1e9),
+  attrs:{assault:int(a.assault,0,99),survival:int(a.survival,0,99),shadowcraft:int(a.shadowcraft,0,99)}});
+ s.profile.level=levelOf(s.profile.xp).level; // the level always follows the XP
+ Object.assign(s.progress,{beaten:int(g.beaten,0,BOSSES.length),defeated:strs(g.defeated,BOSS_IDS),ladder:obj(g.ladder),trialsDone:strs(g.trialsDone),
+  regionsUnlocked:int(g.regionsUnlocked,1,BOSSES.length,1),lastWin:typeof lw.id==='string'?{id:lw.id,result:obj(lw.result)}:null});
+ for(const[id,v]of Object.entries(obj(r.powers)))if(POWERS[id]&&obj(v).unlocked===true)s.powers[id]={unlocked:true,tier:int(v.tier,1,5,1)};
+ s.loadout.powers=[0,1].map(i=>{const id=Array.isArray(lo.powers)?lo.powers[i]:null;return s.powers[id]&&POWERS[id].ready&&s.profile.level>=PROG.power_slots.unlock_levels[i]?id:null});
+ if(s.loadout.powers[1]===s.loadout.powers[0])s.loadout.powers[1]=null;
+ s.gear={owned:strs(obj(r.gear).owned),equipped:obj(obj(r.gear).equipped)};s.settings=obj(r.settings);
+ for(const[k,v]of Object.entries(obj(r.rewardsClaimed)))if(v)s.rewardsClaimed[k]=typeof v==='number'?v:1;
+ s.story=Object.assign({},sto,{pending:(Array.isArray(sto.pending)?sto.pending:[]).filter(n=>obj(n).kind==='power'?!!POWERS[n.id]:['migrated','corrupt'].includes(obj(n).kind)&&typeof n.text==='string').slice(0,8)});
+ s.legacy=typeof lg.raw==='string'?{raw:lg.raw.slice(0,200),migratedAt:int(lg.migratedAt,0,1e15)}:null;
+ return s}
+// a slot holds {sum,doc}: the checksum catches truncated or hand-edited saves
+const fnv=t=>{let h=0x811c9dc5;for(let i=0;i<t.length;i++)h=Math.imul(h^t.charCodeAt(i),0x01000193);return(h>>>0).toString(36)};
+const seal=d=>JSON.stringify({sum:fnv(JSON.stringify(d)),doc:d});
+function unseal(t){try{const w=JSON.parse(t);if(w&&w.doc&&w.doc.v===2&&w.sum===fnv(JSON.stringify(w.doc)))return w.doc}catch(e){}return null}
+// full-document writes alternate between two slots, so a write cut short always leaves the previous save intact
+function writeSave(s){s.rev++;s.savedAt=Date.now();const ok=store.set(SLOTS[s.rev%2],seal(s));
+ store.set(SKEY,JSON.stringify({beaten:s.progress.beaten})); // keep the v1 key current: rolling back to v1.x still finds its progress
+ return ok}
+function loadSave(){const texts=SLOTS.map(k=>store.get(k)),best=texts.map(t=>t&&unseal(t)).filter(Boolean).sort((a,b)=>b.rev-a.rev)[0];
+ if(best)return{save:cleanSave(best),write:false};
+ const bad=texts.filter(Boolean),r=migrate(store.get(SKEY));
+ if(bad.length){let q=[];try{q=JSON.parse(store.get(QKEY)||'[]')}catch(e){}if(!Array.isArray(q))q=[]; // keep the unreadable text aside (last 3), never just drop it
+  store.set(QKEY,JSON.stringify(q.concat(bad.map(raw=>({at:Date.now(),raw}))).slice(-3)));
+  r.save.story.pending.unshift({kind:'corrupt',text:`Your saved game was damaged and could not be read; a copy was kept aside. Your progress was rebuilt from the backup record: ${r.save.progress.beaten} of 5 shadows defeated. If you exported a save code, you can import it now.`})}
+ return Object.assign(r,{write:true})}
+// v1 saved only {beaten:N}: replay those victories through the same claims as live play (never twice), so XP, level and powers follow
+function migrate(raw){const s=newSave();if(raw==null)return{save:s,granted:[]};let v=null;try{v=JSON.parse(raw)}catch(e){}
+ const n=int(obj(v).beaten,0,BOSSES.length,0),granted=[];s.legacy={raw:String(raw).slice(0,200),migratedAt:Date.now()};
+ for(let i=0;i<n;i++)granted.push(grantClear(s,i));
+ if(n)s.story.pending.push({kind:'migrated',text:`Your journey carries over: ${n} of 5 shadows defeated. ${rewardText(granted)}.`});
+ return{save:s,granted}}
+// one boss victory. The first clear (claim "boss:<id>") pays in full, once; later wins pay repeat_share of the XP only.
+// winId identifies the match: the same victory reported twice replays its stored result and grants nothing again.
+function grantClear(s,i,winId){const g=s.progress,p=s.profile;if(winId&&g.lastWin&&g.lastWin.id===winId)return g.lastWin.result;
+ const id=BOSS_IDS[i],rw=PROG.rewards[id],claim='boss:'+id,first=!s.rewardsClaimed[claim],L0=p.level;
+ g.beaten=Math.max(g.beaten,i+1);if(!g.defeated.includes(id))g.defeated.push(id);g.regionsUnlocked=Math.max(g.regionsUnlocked,Math.min(BOSSES.length,i+2));
+ const r={boss:id,first,xp:first?rw.xp:Math.round(rw.xp*PROG.xp.repeat_share),sp:0,mon:0,power:null,slot:-1};
+ if(first){s.rewardsClaimed[claim]=Date.now();r.sp=rw.skill_points;r.mon=rw.mon;p.skillPts+=r.sp;p.mon+=r.mon;if(!s.powers[rw.power]){s.powers[rw.power]={unlocked:true,tier:1};r.power=rw.power}}
+ p.xp=Math.min(1e9,p.xp+r.xp);p.level=levelOf(p.xp).level;p.attrPts+=(p.level-L0)*PROG.level_up.attr_points;r.levelFrom=L0;r.levelTo=p.level;
+ if(r.power&&POWERS[r.power].ready){const k=s.loadout.powers.findIndex((x,j)=>!x&&p.level>=PROG.power_slots.unlock_levels[j]);if(k>=0){s.loadout.powers[k]=r.power;r.slot=k}}
+ if(winId)g.lastWin={id:winId,result:r};return r}
+const plural=(n,w)=>`${n} ${w}${n===1?'':'s'}`;
+function rewardText(list){if(!list.length)return'';const sum=k=>list.reduce((a,r)=>a+(r[k]||0),0),L0=list[0].levelFrom,L1=list[list.length-1].levelTo,a=[`+${sum('xp')} XP${list.every(r=>!r.first)?' (repeat victory)':''}`];
+ if(L1>L0)a.push(`level ${L1} (+${plural((L1-L0)*PROG.level_up.attr_points,'attribute point')})`);if(sum('sp'))a.push('+'+plural(sum('sp'),'skill point'));if(sum('mon'))a.push(`+${sum('mon')} mon`);
+ const pw=list.filter(r=>r.power).map(r=>`${POWERS[r.power].jp} ${POWERS[r.power].name}${POWERS[r.power].ready?'':' (awakens in a later update)'}`);if(pw.length)a.push('absorbed '+pw.join(', '));
+ return a.join(' · ')}
+const exportCode=()=>'ISSEN2-'+btoa(String.fromCharCode(...new TextEncoder().encode(seal(SV))));
+function importCode(code){try{const d=unseal(new TextDecoder().decode(Uint8Array.from(atob(String(code).trim().replace(/^ISSEN2-/,'')),c=>c.charCodeAt(0))));return d?cleanSave(d):null}catch(e){return null}}
+// the hero for the next fight comes from the profile: playable powers by slot. A new profile gives exactly HERO_D (no powers).
+const heroDef=()=>Object.assign({},HERO_D,{powers:SV.loadout.powers.map(id=>id&&SV.powers[id]&&POWERS[id].ready?id:null)});
+let SV;{const L=loadSave();SV=L.save;if(L.write)writeSave(SV)}
 /* --- flow & menus --- */
-const prog={beaten:0};try{Object.assign(prog,JSON.parse(localStorage.getItem('issen-five-shadows')||'{}'))}catch(e){}
-const saveProg=()=>{try{localStorage.setItem('issen-five-shadows',JSON.stringify(prog))}catch(e){}};
 let MODE='film',helpBack='menu';
-const PANELS=['menu','result','pause','help'];
+const PANELS=['menu','result','pause','help','char','notice'];
 const show=id=>{for(const p of PANELS)document.getElementById(p).classList.toggle('off',p!==id)};
-function buildMenu(){const box=document.getElementById('levels');box.innerHTML='';BOSSES.forEach((b,i)=>{const done=prog.beaten>i,open=prog.beaten>=i,el=document.createElement('button');
+function buildMenu(){const box=document.getElementById('levels');box.innerHTML='';$('mChar').textContent=`Character · level ${SV.profile.level}`;BOSSES.forEach((b,i)=>{const done=SV.progress.beaten>i,open=SV.progress.beaten>=i,el=document.createElement('button');
  el.className='card'+(open?'':' locked');el.disabled=!open;el.setAttribute('aria-label',`${b.name}, ${b.title}. ${done?'Defeated':open?'Challenge':'Locked'}`);
  el.innerHTML=`<span class="n">${['First','Second','Third','Fourth','Fifth'][i]} shadow</span><span class="kj">${b.jp}</span><span class="nm">${b.name}</span><span class="ti">${b.title}</span><span class="ar">${ARENAS[b.arena].name}</span><span class="stt">${done?'Defeated · fight again':open?'Challenge':'Locked'}</span>${done?'<span class="seal">討</span>':''}`;
  el.onclick=()=>startFight(i);box.appendChild(el)})}
-function startFight(lv){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.lv=lv;G.def=BOSSES[lv];G.P=mkF(HERO_D,true);G.B=mkF(G.def,false);G.round=1;G.t=0;G.mvId=0;G.hint=lv===0?14:7;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2};
+function startFight(lv){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.lv=lv;G.def=BOSSES[lv];G.P=mkF(heroDef(),true);G.B=mkF(G.def,false);G.matchId=BOSS_IDS[lv]+':'+Date.now();G.res=null;G.rv=0;
+ const p1=G.P.def.powers[0];tEls.p1.classList.toggle('off',!p1);if(p1)tEls.p1.innerHTML=`<b>${POWERS[p1].jp}</b><i>${POWERS[p1].short}</i>`;G.round=1;G.t=0;G.mvId=0;G.hint=lv===0?14:7;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2};
  MODE='game';show(null);const ar=ARENAS[G.def.arena];amb(ar.wind,ar.rain,ar.rumb||0);newRound()}
-function matchEnd(win){G.state='over';const lv=G.lv,last=lv===BOSSES.length-1;if(win){prog.beaten=Math.max(prog.beaten,lv+1);saveProg()}
+// victory: rewards are computed and SAVED first, then the (skippable) absorption ceremony, then the result panel
+function matchEnd(win){G.state='over';G.res={win,r:null};
+ if(win){const r=G.res.r=grantClear(SV,G.lv,G.matchId);if(r.power)SV.story.pending.push({kind:'power',id:r.power});writeSave(SV);
+  if(r.power){G.state='absorb';G.st=0;G.rv=0;G.ban=null;return}}
+ showResult()}
+function absorbDone(){if(G.state!=='absorb')return;G.state='over';const id=G.res.r.power;SV.story.pending=SV.story.pending.filter(n=>!(n.kind==='power'&&n.id===id));writeSave(SV);showResult()}
+function showResult(){const{win,r}=G.res,lv=G.lv,last=lv===BOSSES.length-1;
+ $('rRewards').textContent=r?rewardText([r])+(r.slot>=0?` — ready in power slot ${r.slot+1} (${TOUCH.on?'the '+POWERS[r.power].jp+' button':['U','O'][r.slot]+' key'})`:''):'';
  document.getElementById('rKanji').textContent=win?(last?'終':'勝'):'敗';document.getElementById('rTitle').textContent=win?(last?'The Five Shadows are no more':'Victory'):'Defeat';
  document.getElementById('rText').textContent=win?(last?'The ink remembers. Beneath the blossoms, the village sleeps in peace.':`${G.def.name} falls. ${BOSSES[lv+1].name}, ${BOSSES[lv+1].title}, waits at ${ARENAS[BOSSES[lv+1].arena].name}.`):`${G.def.name} still stands. Breathe — then strike once more.`;
  const bt=document.getElementById('rBtns');bt.innerHTML='';const mkb=(txt,fn,big)=>{const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=txt;e.onclick=fn;bt.appendChild(e)};
  if(win&&!last)mkb(`Next · ${BOSSES[lv+1].name}`,()=>startFight(lv+1),1);if(win&&last)mkb('Watch the film again',watchFilm,1);if(!win)mkb('Retry',()=>startFight(lv),1);mkb('Return to the map',toMenu);
  show('result');amb(.08,0,0);bt.firstChild.focus()}
-function toMenu(){MODE='menu';G.paused=false;buildMenu();show('menu');amb(.1,0,0)}
-function togglePause(){if(MODE!=='game'||G.state==='over')return;G.paused=!G.paused;show(G.paused?'pause':null);G.keys={}}
-const KMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',Escape:'pause',KeyP:'pause'};
+function toMenu(){MODE='menu';G.paused=false;buildMenu();show('menu');amb(.1,0,0);nextNotice()}
+// one-time messages queued in the save (migration, a damaged save, a ceremony cut short): shown on the map, cleared once read
+function nextNotice(){const n=SV.story.pending[0];if(!n||MODE!=='menu')return;
+ const done=()=>{SV.story.pending.shift();writeSave(SV);buildMenu();show('menu');nextNotice()};
+ if(n.kind==='power'){const p=POWERS[n.id];notice(p.jp,'Absorbed: '+p.name,p.desc+(p.ready?'':' It awakens in a later update.'),[['Continue',done,1]])}
+ else notice('墨',n.kind==='corrupt'?'Your save was damaged':'Welcome back',n.text,[['Continue',done,1]].concat(n.kind==='corrupt'?[['Import a save code',()=>{done();openChar('import')}]]:[]))}
+function notice(k,title,text,btns){$('nKanji').textContent=k;$('nTitle').textContent=title;$('nText').textContent=text;const b=$('nBtns');b.innerHTML='';
+ for(const[t,fn,big]of btns){const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=t;e.onclick=fn;b.appendChild(e)}show('notice');b.firstChild.focus()}
+function openChar(mode){const p=SV.profile,l=levelOf(p.xp),rom=['I','II','III','IV','V'];$('cLvl').textContent=l.level;$('cXp').style.width=(l.need?l.into/l.need*100:100)+'%';
+ $('cXpT').textContent=l.need?`${l.into} / ${l.need} XP to level ${l.level+1} · ${p.xp} XP in all`:`Level cap · ${p.xp} XP in all`;
+ $('cStat').textContent=`${SV.progress.beaten} of 5 shadows defeated · ${plural(p.skillPts,'skill point')} · ${plural(p.attrPts,'attribute point')} (spent in a later update) · ${p.mon} mon`;
+ const box=$('cPowers');box.innerHTML='';PROG.power_slots.unlock_levels.forEach((need,i)=>{const id=SV.loadout.powers[i],pw=id&&POWERS[id],m=pw&&HERO_MV[pw.move],el=document.createElement('div');el.className='card pcard'+(pw?'':' locked');
+  el.innerHTML=pw?`<span class="n">Power slot ${i+1} · ${TOUCH.on?pw.jp+' button':['U','O'][i]+' key'}</span><span class="kj">${pw.jp}</span><span class="nm">${pw.name}</span><span class="ti">${pw.desc}</span><span class="stt">Tier ${rom[SV.powers[id].tier-1]} · ${plural(m.cost,'ink bar')} · ${m.cd} s cooldown</span>`
+   :`<span class="n">Power slot ${i+1}</span><span class="kj">—</span><span class="ti">${l.level<need?`Opens at level ${need}`:'Empty: defeat a shadow and absorb its power'}</span>`;box.appendChild(el)});
+ const more=Object.keys(SV.powers).filter(id=>!SV.loadout.powers.includes(id)).map(id=>`${POWERS[id].jp} ${POWERS[id].name}`);
+ $('cMore').textContent=more.length?`Also absorbed: ${more.join(', ')} — awakening in a later update.`:'';
+ const code=$('cCode'),cb=$('cCodeBtns');cb.innerHTML='';$('cMsg').textContent='';code.classList.toggle('off',!mode);code.readOnly=mode==='export';code.value=mode==='export'?exportCode():'';
+ const mk=(t,fn)=>{const e=document.createElement('button');e.className='lnk';e.textContent=t;e.onclick=fn;cb.appendChild(e)};
+ if(mode==='export')mk('Copy',()=>{code.select();try{navigator.clipboard.writeText(code.value).then(()=>$('cMsg').textContent='Copied.',()=>{})}catch(e){}});
+ if(mode==='import')mk('Load this code',()=>{const d=importCode(code.value);if(!d){$('cMsg').textContent='That code could not be read. Check that it was copied in full.';return}
+  notice('墨','Load this save?',`Replace your progress (level ${p.level}, ${SV.progress.beaten} of 5 shadows) with the save code (level ${d.profile.level}, ${d.progress.beaten} of 5 shadows)?`,
+   [['Load it',()=>{d.rev=Math.max(d.rev,SV.rev);SV=d;writeSave(SV);openChar()},1],['Cancel',()=>openChar('import')]])});
+ show('char');if(mode)code.focus()}
+function togglePause(){if(MODE!=='game'||G.state==='over')return;if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;show(G.paused?'pause':null);G.keys={}}
+const KMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',Escape:'pause',KeyP:'pause'};
 function gameKey(e,down){if(e.code==='KeyF'&&down){document.getElementById('fs').click();return}if(e.code==='KeyM'&&down){document.getElementById('snd').click();return}
+ if(MODE==='game'&&G.state==='absorb'){if(down&&!e.repeat&&G.st>.8){e.preventDefault();absorbDone()}return}
  const a=KMAP[e.code];if(!a||MODE!=='game')return;e.preventDefault();if(a==='pause'){if(down&&!e.repeat)togglePause();return}if(G.paused)return;
- if(a==='slash'||a==='kick'||a==='ink'||a==='issen'){if(down&&!e.repeat)G.buf={a,t:G.t};return}
+ if(a==='slash'||a==='kick'||a==='ink'||a==='issen'||a==='power1'||a==='power2'){if(down&&!e.repeat)G.buf={a,t:G.t};return}
  if(a==='up'&&down&&!e.repeat)G.jb=G.t;G.keys[a]=down}
 addEventListener('blur',()=>{G.keys={}});
 
@@ -992,11 +1168,12 @@ function frame(now){const raw=(now-st.last)/1000||0,dt=Math.min(.1,raw);st.last=
  if(st.playing){adapt(raw);const a=st.t;st.t=Math.min(DUR,st.t+dt);audioTick(a,st.t);if(st.t>=DUR){st.playing=false;audioSilence();setPP();endc.classList.remove('off');$('skip').classList.add('off');poke();$('enterGame').focus()}st.dirty=true}
  if(st.dirty&&st.ready){render(st.t);st.dirty=false;fill.style.width=(st.t/DUR*100)+'%';tm.textContent=`${fmt(st.t)} / ${fmt(DUR)}`;$('prog').setAttribute('aria-valuenow',st.t.toFixed(1))}requestAnimationFrame(frame)}
 $('playBig').onclick=play;$('replayBig').onclick=replay;$('enterGame').onclick=enterGame;$('toGame').onclick=enterGame;$('skip').onclick=enterGame;
-$('mFilm').onclick=watchFilm;$('mReset').onclick=()=>{if(confirm('Reset your progress through the Five Shadows?')){prog.beaten=0;saveProg();buildMenu()}};
+$('mFilm').onclick=watchFilm;$('mReset').onclick=()=>{if(confirm('Reset your progress through the Five Shadows? Your level, powers and victories will be lost.')){const rev=SV.rev;SV=newSave();SV.rev=rev;writeSave(SV);buildMenu()}};
+$('mChar').onclick=()=>openChar();$('cExport').onclick=()=>openChar('export');$('cImport').onclick=()=>openChar('import');$('cClose').onclick=()=>{buildMenu();show('menu')};
 $('mHelp').onclick=()=>{helpBack='menu';show('help')};$('pHelp').onclick=()=>{helpBack='pause';show('help')};$('hClose').onclick=()=>show(helpBack);
 $('pResume').onclick=togglePause;$('pRestart').onclick=()=>startFight(G.lv);$('pQuit').onclick=toMenu;
 /* --- touch controls: floating joystick + multi-touch buttons feed the same G.keys / G.buf as the keyboard --- */
-const tEls={touch:$('touch'),pause:$('tPause'),ink:$('tbInk'),issen:$('tbIssen')},capture=(el,id)=>{try{el.setPointerCapture(id)}catch(e){}};
+const tEls={touch:$('touch'),pause:$('tPause'),ink:$('tbInk'),issen:$('tbIssen'),p1:$('tbP1')},capture=(el,id)=>{try{el.setPointerCapture(id)}catch(e){}};
 const setTouch=v=>{TOUCH.on=v;document.body.classList.toggle('touch',v)};setTouch(TOUCH.on);
 addEventListener('pointerdown',e=>{if(e.pointerType==='touch'&&!TOUCH.on)setTouch(true)},true);
 {const zone=$('stickZone'),stk=$('stick'),knob=$('knob');let id=null,sx=0,sy=0,up=false;
@@ -1009,10 +1186,11 @@ addEventListener('pointerdown',e=>{if(e.pointerType==='touch'&&!TOUCH.on)setTouc
   b.addEventListener('pointerdown',e=>{e.preventDefault();capture(b,e.pointerId);b.classList.add('down');if(MODE!=='game'||G.paused)return;if(a==='jump')G.jb=G.t;else if(a==='block')G.keys.block=true;else G.buf={a,t:G.t}});
   b.addEventListener('pointerup',rel);b.addEventListener('pointercancel',rel);b.addEventListener('contextmenu',e=>e.preventDefault())}}
 tEls.pause.onclick=togglePause;
-function syncTouch(){const fight=MODE==='game'&&G.state!=='over'&&!G.paused;tEls.touch.classList.toggle('off',!(TOUCH.on&&fight));tEls.pause.classList.toggle('off',!fight);document.body.classList.toggle('gm',MODE!=='film');
- if(fight&&TOUCH.on){tEls.ink.classList.toggle('dis',G.P.ink<33.3);tEls.issen.classList.toggle('dis',G.P.ink<99.5);tEls.issen.classList.toggle('ready',G.P.ink>=99.5)}}
+function syncTouch(){const fight=MODE==='game'&&G.state!=='over'&&G.state!=='absorb'&&!G.paused;tEls.touch.classList.toggle('off',!(TOUCH.on&&fight));tEls.pause.classList.toggle('off',!fight);document.body.classList.toggle('gm',MODE!=='film');
+ if(fight&&TOUCH.on){tEls.ink.classList.toggle('dis',G.P.ink<33.3);tEls.issen.classList.toggle('dis',G.P.ink<99.5);tEls.issen.classList.toggle('ready',G.P.ink>=99.5);
+  const id=G.P.def.powers[0];if(id){const n=POWERS[id].move,m=G.P.moves[n];tEls.p1.classList.toggle('dis',G.P.ink<m.cost*33.3-.5||(G.P.cd[n]||0)>G.t)}}}
 function goFull(){const el=document.documentElement,o=window.screen.orientation;if(document.fullscreenElement||!el.requestFullscreen)return;el.requestFullscreen({navigationUI:'hide'}).then(()=>o&&o.lock&&o.lock('landscape').catch(()=>{})).catch(()=>{})}
-stage.addEventListener('pointerdown',poke);
+stage.addEventListener('pointerdown',poke);stage.addEventListener('pointerdown',()=>{if(MODE==='game'&&G.state==='absorb'&&G.st>.8)absorbDone()});
 // leaving the tab/app pauses the fight and silences audio; the Android shell calls these too (Back = pause toggle)
 function bgPause(){if(MODE==='game'&&!G.paused&&G.state!=='over')togglePause();else if(MODE==='film'&&st.playing)pause();try{AU.ctx&&AU.ctx.suspend()}catch(e){}}
 function bgResume(){try{AU.ctx&&AU.ctx.resume()}catch(e){}}
@@ -1027,7 +1205,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 // debug hooks (tests, console scrubbing) exist only with ?debug in the URL or when a test harness sets ISSEN_DEBUG: never in normal play or the APK
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search);
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
- window.game={G,MV,BOSSES,ARENAS,HERO_D,startFight,toMenu,enterGame,updGame,renderGame,syncTouch,get mode(){return MODE}}}
+ window.game={G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,renderGame,syncTouch,get mode(){return MODE}}}
 (async()=>{try{await Promise.race([Promise.all([document.fonts.load('380px "Yuji Boku"','一閃終師'),document.fonts.load('46px "Cormorant Garamond"')]),new Promise(r=>setTimeout(r,3500))])}catch(e){}
  build();st.ready=true;const q=new URLSearchParams(location.search);
  if(q.has('t')){seek(+q.get('t'));cover.classList.add('off')}else{render(3.4);st.dirty=false} // poster = finished title card; playback still starts at 0

@@ -722,6 +722,7 @@
  },
  "BOSSES": [
   {
+   "id": "gekko",
    "name": "Gekkō",
    "title": "the Red Spear",
    "jp": "月光",
@@ -823,6 +824,7 @@
    "tip": "Long reach, slow recovery. When the spear glints, jump or block."
   },
   {
+   "id": "kasumi",
    "name": "Kasumi",
    "title": "the Mist Shinobi",
    "jp": "霞",
@@ -925,6 +927,7 @@
    "tip": "Fast blades and throwing stars — duck the stars. She vanishes and strikes from behind."
   },
   {
+   "id": "tetsugoro",
    "name": "Tetsugorō",
    "title": "the Iron Monk",
    "jp": "鉄五郎",
@@ -1026,6 +1029,7 @@
    "tip": "Iron skin: light blows will not stagger him. Jump the earthquake, punish the long swings."
   },
   {
+   "id": "shirasagi",
    "name": "Shirasagi",
    "title": "the Pale Ronin",
    "jp": "白鷺",
@@ -1127,6 +1131,7 @@
    "tip": "A drowned duelist. She fades and reappears beside you; ghost-fire drifts slowly — block it."
   },
   {
+   "id": "akuma",
    "name": "Akuma",
    "title": "the Horned Warlord",
    "jp": "鬼将軍",
@@ -1396,5 +1401,35 @@
    "rage": 0
   },
   "wk": {}
+ },
+ "HERO_MV": {
+  "p_red_moon": {
+   "dur": 0.7,
+   "hit": [
+    [
+     0.24,
+     0.36
+    ]
+   ],
+   "reach": 300,
+   "dmg": 14,
+   "zone": "mid",
+   "push": 220,
+   "cost": 1,
+   "cd": 4,
+   "lunge": [
+    0.12,
+    0.3,
+    1450
+   ],
+   "tell": [
+    0.02,
+    0.22
+   ],
+   "snd": "slash",
+   "sndT": 0.24,
+   "fr": "fn g=>[[0,g],[.2,P(PS.guard,{tl:-.05,hd:-.2,ua1:.15,fa1:1.45,sw:1.57,th1:.25,sh1:.05,th2:-.75,sh2:-.55})],[.27,P(PS.cutSide,{tl:.55,hd:-.38,sw:1.57,th1:1.3,sh1:.15,th2:-1.15,sh2:-1.45}),'o5'],[.36,P(PS.cutSide,{tl:.5,hd:-.34,sw:1.57,th1:1.25,sh1:.15,th2:-1.1,sh2:-1.4})],[.7,g]]",
+   "tick": "fn tick(F,O,a,b){if(a<.24&&b>=.24)fxAdd({k:'moon',x:F.x+F.f*40,y:-135,f:F.f})}"
+  }
  }
 }
