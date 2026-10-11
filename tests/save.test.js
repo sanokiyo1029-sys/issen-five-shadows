@@ -18,7 +18,8 @@ module.exports = {
     const { game, storage } = await boot();
     const S = game.SV;
     assert.strictEqual(S.profile.level, 1); assert.strictEqual(S.profile.xp, 0); eq(S.loadout.powers, [null, null]);
-    eq(game.heroDef(), Object.assign({}, game.HERO_D, { powers: [null, null] }));
+    const d = game.heroDef(); // M4: the hero is derived from the profile; at level 1 every number is HERO_D's and every modifier neutral
+    assert.strictEqual(d.hp, game.HERO_D.hp); assert.strictEqual(d.speed, game.HERO_D.speed); eq(d.mod, game.NEUTRAL); eq(d.ov, {}); eq(d.powers, [null, null]); eq(d.echoes, [null, null]);
     game.startFight(0);
     eq(Object.keys(game.G.P.moves), [], 'level-1 hero has no move overrides');
     assert.strictEqual(slotDocs(storage).length, 1, 'v2 save written on first boot');
@@ -31,7 +32,8 @@ module.exports = {
       const st = legacy(JSON.stringify({ beaten: n })), { game } = await boot({ storage: st }), S = game.SV;
       const xp = ids.slice(0, n).reduce((a, id) => a + R[id].xp, 0), sp = ids.slice(0, n).reduce((a, id) => a + R[id].skill_points, 0);
       assert.strictEqual(S.progress.beaten, n); eq(S.progress.defeated, ids.slice(0, n));
-      assert.strictEqual(S.profile.xp, xp, `N=${n} xp`); assert.strictEqual(S.profile.skillPts, sp);
+      const milestones = game.PROG.level_up.skill_point_levels.filter(L => game.levelOf(xp).level >= L).length; // M4: milestone levels pay a skill point too
+      assert.strictEqual(S.profile.xp, xp, `N=${n} xp`); assert.strictEqual(S.profile.skillPts, sp + milestones);
       assert.strictEqual(S.profile.level, game.levelOf(xp).level);
       eq(Object.keys(S.powers), ids.slice(0, n).map(id => R[id].power));
       assert.strictEqual(S.loadout.powers[0], n ? 'red_moon' : null);
@@ -62,8 +64,8 @@ module.exports = {
     const j = JSON.stringify(doc); let h = 0x811c9dc5; for (let i = 0; i < j.length; i++) h = Math.imul(h ^ j.charCodeAt(i), 0x01000193);
     st.setItem(SLOTS[1], JSON.stringify({ sum: (h >>> 0).toString(36), doc }));
     const S = (await boot({ storage: st })).game.SV;
-    assert.strictEqual(S.profile.xp, 0); assert.strictEqual(S.profile.level, 1); assert.strictEqual(S.profile.skillPts, 0); assert.strictEqual(S.profile.attrs.assault, 99);
-    assert.strictEqual(S.progress.beaten, 0); eq(S.powers, { red_moon: { unlocked: true, tier: 5 } });
+    assert.strictEqual(S.profile.xp, 0); assert.strictEqual(S.profile.level, 1); assert.strictEqual(S.profile.skillPts, 0); assert.strictEqual(S.profile.attrs.assault, 0, 'ranks beyond the points a level-1 profile has earned are reset (M4)'); assert.strictEqual(S.profile.attrPts, 0);
+    assert.strictEqual(S.progress.beaten, 0); eq(S.powers, { red_moon: { unlocked: true, tier: 1 } }, 'tier capped at III without the Ink Trial, then reset: no skill points were earned (M4)');
     eq(S.loadout.powers, [null, null], 'slot 2 needs level 6; unknown ids dropped'); eq(S.story.pending, []);
   },
 

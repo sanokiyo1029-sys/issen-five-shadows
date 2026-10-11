@@ -61,13 +61,13 @@ module.exports = {
     P.x = -150; B.x = 200; P.f = 1; B.st = 'hit'; B.stT = 0; B.stun = 9; // a stunned boss 350 px away cannot block
     P.ink = 20; use(); assert.notStrictEqual(P.st, 'move', 'needs one ink bar');
     P.ink = 50; const hp = B.hp; use();
-    assert.strictEqual(P.mv, game.HERO_MV.p_red_moon); assert.ok(Math.abs(P.ink - (50 - 33.34)) < 1e-6, 'one bar spent');
+    assert.strictEqual(P.mv && P.mvn, 'p_red_moon'); assert.ok(Math.abs(P.ink - (50 - 33.34)) < 1e-6, 'one bar spent');
     step(game, 30); assert.strictEqual(hp - B.hp, 14, 'lands 14 at a 350 px start distance');
     B.st = 'hit'; B.stT = 0; B.stun = 20; // keep the boss out of the way while the cooldown runs
-    step(game, 30); P.ink = 100; use(); assert.notStrictEqual(P.mv, game.HERO_MV.p_red_moon, 'cooldown blocks a second use');
-    step(game, 60 * 2); assert.ok(G.t < P.cd.p_red_moon); use(); assert.notStrictEqual(P.mv, game.HERO_MV.p_red_moon, 'still cooling down');
+    step(game, 30); P.ink = 100; use(); assert.notStrictEqual(P.mv && P.mvn, 'p_red_moon', 'cooldown blocks a second use');
+    step(game, 60 * 2); assert.ok(G.t < P.cd.p_red_moon); use(); assert.notStrictEqual(P.mv && P.mvn, 'p_red_moon', 'still cooling down');
     while (G.t < P.cd.p_red_moon) step(game); // game time (hit-stop pauses it), not frames
-    use(); assert.strictEqual(P.mv, game.HERO_MV.p_red_moon, 'usable again after 4 s');
+    use(); assert.strictEqual(P.mv && P.mvn, 'p_red_moon', 'usable again after 4 s'); // the hero's copy of the move (per-fighter, M4)
     // per-fighter moves: the boss never sees the hero's power, and the shared tables match the golden baseline
     assert.strictEqual(B.moves.p_red_moon, undefined); assert.strictEqual(game.MV.p_red_moon, undefined);
     const gold = JSON.parse(fs.readFileSync(path.join(__dirname, 'golden', 'baseline.json'), 'utf8')), ser = v => JSON.stringify(v, (k, x) => typeof x === 'function' ? 'fn ' + x.toString() : x);

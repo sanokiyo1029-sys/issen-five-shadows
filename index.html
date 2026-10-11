@@ -171,10 +171,17 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
 <button id="tPause" class="tpause off" aria-label="Pause">❚❚</button>
 <!-- engine-neutral game data (JSON, read at boot; see docs/conventions.md). XP and reward arithmetic: docs/balance.md -->
 <script type="application/json" id="data-progression">
-{"schema_version":1,
+{"schema_version":2,
  "xp":{"base":100,"exponent":1.5,"level_cap":25,"repeat_share":0.25},
- "level_up":{"attr_points":2},
+ "level_up":{"attr_points":2,"skill_point_levels":[5,10,15,20,25]},
  "power_slots":{"unlock_levels":[1,6]},
+ "echo_slots":{"unlock_levels":[8,14]},
+ "attributes":{"rank_cap":20,"k":0.1,"crit_damage":1.5,
+  "assault":{"damage":0.2,"combo":0.06,"crit_chance":0.1},
+  "survival":{"hp":0.15,"mitigation":0.06},
+  "shadowcraft":{"power":0.25,"cooldown":0.2,"ink":0.2,"roll":0.2,"speed":0.05}},
+ "power_tiers":[{"sp":1,"mon":50},{"sp":2,"mon":150},{"sp":3,"mon":300,"trial":true},{"sp":4,"mon":500}],
+ "power_budget":{"max":2.0,"attributes_and_echoes":1.75,"iron_skin_share":0.4},
  "rewards":{
   "gekko":{"xp":600,"skill_points":1,"mon":100,"power":"red_moon"},
   "kasumi":{"xp":900,"skill_points":1,"mon":150,"power":"miststep"},
@@ -188,18 +195,34 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
  "blend":{"state":0.07,"move":0.05,"hit":0.05,"fall":0.1,"turn":0.07,"land":0.14,"step_px":45}}
 </script>
 <script type="application/json" id="data-powers">
-{"schema_version":1,
+{"schema_version":2,
  "powers":{
   "red_moon":{"name":"Spear of the Red Moon","short":"Moon","jp":"月","boss":"gekko","ready":true,"move":"p_red_moon","tags":["reach","pierce"],
-   "desc":"Gekkō’s thrust, in your hands: step in and pierce with a red crescent at long reach. One ink bar, 4 s cooldown."},
+   "desc":"Gekkō’s thrust, in your hands: step in and pierce with a red crescent at long reach. One ink bar, 4 s cooldown.",
+   "tiers":[{"desc":"14 damage at 300 reach; one ink bar, 4 s cooldown."},{"desc":"Longer and harder: +20 reach, +2 damage.","reach":20,"dmg":2},
+    {"desc":"Armor-piercing: breaks hyper-armor and doubles block pushback.","armor_pierce":true,"block_push":2},
+    {"desc":"Moon Pierce: a lance of light that destroys projectiles and passes a share of its damage through a block."},{"desc":"A shorter cooldown and part of the ink back on a hit."}],
+   "echo":{"name":"Red Moon Reach","desc":"Lunges and thrusts reach 8% further.","reach":0.08,"moves":["lunge","slash3","p_red_moon"]}},
   "miststep":{"name":"Miststep","short":"Mist","jp":"霞","boss":"kasumi","ready":false,"move":null,"tags":["mobility","crossup"],
-   "desc":"Kasumi’s vanishing step."},
+   "desc":"Kasumi’s vanishing step.",
+   "tiers":[{"desc":"Retreat, or pass behind the opponent, through a short evasion window."},{"desc":"Further, and a shorter cooldown."},{"desc":"A stronger afterimage, and ink back when it dodges a live attack."},
+    {"desc":"Shadow Clone: a clone stays to repeat your next attack once."},{"desc":"A shorter cooldown and a longer-lived clone."}],
+   "echo":{"name":"Light Step","desc":"Roll cooldown 15% shorter; walk 4% faster.","roll":0.15,"speed":0.04}},
   "iron_resolve":{"name":"Iron Resolve","short":"Iron","jp":"鉄","boss":"tetsugoro","ready":false,"move":null,"tags":["defence","counter"],
-   "desc":"Tetsugorō’s unbreakable stance."},
+   "desc":"Tetsugorō’s unbreakable stance.",
+   "tiers":[{"desc":"A stance that takes less damage and answers an absorbed hit with a counter."},{"desc":"Takes even less damage."},{"desc":"The counter heals a little."},
+    {"desc":"Reflects projectiles that strike the stance."},{"desc":"A longer stance and a harder counter."}],
+   "echo":{"name":"Iron Skin","desc":"Every 6 s, the first hit you take is 25% weaker and cannot stagger you.","every":6,"reduce":0.25}},
   "phantom_edge":{"name":"Phantom Edge","short":"Pale","jp":"白","boss":"shirasagi","ready":false,"move":null,"tags":["ranged","area"],
-   "desc":"Shirasagi’s spectral wave."},
+   "desc":"Shirasagi’s spectral wave.",
+   "tiers":[{"desc":"A tall, slow spectral wave that hits standing and crouching foes."},{"desc":"More damage, a wider wave."},{"desc":"It travels faster."},
+    {"desc":"A second strike returns from behind the target."},{"desc":"A shorter cooldown; the wave splits in two."}],
+   "echo":{"name":"Pale Reflection","desc":"Ink Wave flies 25% faster and pierces through foes and their projectiles.","wave_speed":0.25,"pierce":true}},
   "demon_sovereignty":{"name":"Demon Sovereignty","short":"Oni","jp":"鬼","boss":"akuma","ready":false,"move":null,"tags":["burst"],
-   "desc":"Akuma’s fury, worn as your own."}}}
+   "desc":"Akuma’s fury, worn as your own.",
+   "tiers":[{"desc":"A short transformation: harder, faster, and a Sovereign Cut."},{"desc":"It lasts longer."},{"desc":"More damage, and a bleed."},
+    {"desc":"A larger Sovereign Cut."},{"desc":"A shorter burnout."}],
+   "echo":{"name":"Ember of Rage","desc":"Below half health, ink fills 50% faster.","below":0.5,"ink":0.5}}}}
 </script>
 <div id="rotate"><svg viewBox="0 0 64 64" width="76" height="76" aria-hidden="true"><rect x="20" y="6" width="24" height="44" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="44" r="2" fill="currentColor"/><path d="M52 34a20 20 0 0 1-18 22" fill="none" stroke="#b5301c" stroke-width="3"/><path d="M30 52l5 8 3-8z" fill="#b5301c"/></svg>Turn your phone sideways to fight.</div>
 <script>
@@ -854,20 +877,22 @@ const G={P:null,B:null,def:null,lv:0,proj:[],fx:[],t:0,rt:0,mt:0,rdt:0,st:0,stat
 const NOIN={mx:0,up:false,down:false,atk:null};
 const snd=(n,v)=>{if(AU.ctx&&AU.ctx.state==='running')try{S[n](AU.ctx.currentTime+.01,v)}catch(e){}};
 function amb(w,r,ru){if(!AU.ctx)return;const now=AU.ctx.currentTime;AU.wind.gain.setTargetAtTime(w*.5,now,.4);AU.rain.gain.setTargetAtTime(r*.35,now,.4);AU.rumb.gain.setTargetAtTime(ru,now,.4);AU.lp.frequency.setTargetAtTime(16000,now,.1)}
-function mkF(def,isP){const moves=Object.create(MV);for(const id of def.powers||[])if(id)moves[POWERS[id].move]=HERO_MV[POWERS[id].move];
- return{def,isP,moves,maxHp:def.hp,hp:def.hp,lag:def.hp,lagHold:0,ink:0,wins:0,x:0,y:0,vx:0,vy:0,f:1,st:'idle',stT:0,mv:null,mvT:0,mvId:0,mask:0,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},ai:{t:1,pt:0,blk:0,plan:'hold'},hitFlash:0,d:{}}}
+// combat modifiers of a fighter: bosses (and a new hero) use NEUTRAL, so their numbers are exactly the v1.2 ones
+const NEUTRAL={dmg:1,combo:1,crit:0,critDmg:1.5,mit:0,cd:1,ink:1,roll:1,pe:0};
+function mkF(def,isP){const moves=Object.create(MV);for(const id of def.powers||[])if(id)moves[POWERS[id].move]=HERO_MV[POWERS[id].move];Object.assign(moves,def.ov); /* per-fighter copies: MV is never touched */
+ return{def,isP,moves,maxHp:def.hp,hp:def.hp,lag:def.hp,lagHold:0,mod:def.mod||NEUTRAL,ink:0,wins:0,x:0,y:0,vx:0,vy:0,f:1,st:'idle',stT:0,mv:null,mvT:0,mvId:0,mask:0,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},ai:{t:1,pt:0,blk:0,plan:'hold'},hitFlash:0,d:{}}}
 const setSt=(F,s)=>{F.st=s;F.stT=0};
 // dodge roll (data-movement.roll): invulnerable only inside inv, then a vulnerable rise; ends facing the opponent
 const rollInv=F=>F.st==='roll'&&F.stT>=MOVE.roll.inv[0]&&F.stT<MOVE.roll.inv[1];
 function startRoll(F,O,inp){if((F.rollCd||0)>G.t)return false;const dir=inp.mx||-F.f;
- F.roll={x0:F.x,dir};F.rollCd=G.t+MOVE.roll.cd;F.block=F.crouch=false;F.vx=0;setSt(F,'roll');fxAdd({k:'dust',x:F.x,y:0});snd('whoosh',.35);return true}
+ F.roll={x0:F.x,dir};F.rollCd=G.t+MOVE.roll.cd*F.mod.roll;F.block=F.crouch=false;F.vx=0;setSt(F,'roll');fxAdd({k:'dust',x:F.x,y:0});snd('whoosh',.35);return true}
 const isFree=F=>F.st==='idle'||F.st==='walk'||F.st==='crouch';
 function fxAdd(o){o.t0=G.t;o.seed=Math.random()*1000;G.fx.push(o);if(o.persist){const ps=G.fx.filter(f=>f.persist);if(ps.length>16)G.fx.splice(G.fx.indexOf(ps[0]),1)}}
 function heroMove(F,a,inp){const fwd=inp.mx===F.f;if(a==='power1'||a==='power2'){const id=(F.def.powers||[])[a==='power1'?0:1];return id?POWERS[id].move:null}if(a==='slash')return F.air?'air':inp.down?'low':fwd?'lunge':'slash';if(a==='kick')return F.air?'airKick':inp.down?'sweepK':fwd?'round':'kick';if(a==='ink')return F.ink>=33.3?'wave':null;return a==='issen'&&F.ink>=99.5?'issen':null}
 function startMove(F,n){const m=F.moves[n];if(!m||m.cd&&(F.cd[n]||0)>G.t)return false;const O=F===G.P?G.B:G.P;
  if(m.cost){if(F.ink<m.cost*33.3-.5)return false;F.ink=Math.max(0,F.ink-m.cost*33.34)}
- F.mv=m;F.mvT=0;F.mask=0;F.mvId=++G.mvId;F.next=null;F.d={};setSt(F,'move');F.block=false;F.crouch=!!m.crouch;
- if(m.cd)F.cd[n]=G.t+m.cd*(F.rage?.6:1);
+ F.mv=m;F.mvn=n;F.mvT=0;F.mask=0;F.mvId=++G.mvId;F.next=null;F.d={};setSt(F,'move');F.block=false;F.crouch=!!m.crouch;
+ if(m.cd)F.cd[n]=G.t+m.cd*(F.rage?.6:1)*F.mod.cd;
  if(m.snd&&AU.ctx)try{S[m.snd](AU.ctx.currentTime+.01+(m.sndT??(m.hit?m.hit[0][0]:0)),.5)}catch(e){}
  if(m.start)m.start(F,O);return true}
 function stepMove(F,O,dt){const m=F.mv,a=F.mvT,b=a+dt;F.mvT=b;
@@ -885,21 +910,26 @@ function tryHit(A,Dd,m,proj){if(Dd.inv>0||rollInv(Dd)||Dd.st==='dead'||Dd.st==='
  if(!proj&&(m.zone==='high'&&Dd.crouch&&!dAir||m.zone==='low'&&dAir))return false;
  const hx=Dd.x-dir*14*Dd.def.s,hy=Dd.y+ZY[m.zone||'mid']*Dd.def.s*(Dd.crouch&&m.zone!=='low'?.7:1);
  const facing=Dd.f===-dir,canBlock=!m.unblock&&Dd.block&&facing&&!dAir&&(isFree(Dd)||Dd.st==='bstun')&&(m.zone==='low'?Dd.crouch:m.zone==='high'?!Dd.crouch:true);
- if(canBlock){setSt(Dd,'bstun');Dd.stun=.2;Dd.vx=dir*(m.push||90)*.9;fxAdd({k:'clash',x:hx,y:hy,sz:.7});snd('clang',.55);A.ink=Math.min(100,A.ink+3);Dd.ink=Math.min(100,Dd.ink+5);G.freeze=.04;G.shake=Math.max(G.shake,5);return true}
- Dd.hp=Math.max(0,Dd.hp-m.dmg*(A.rage?1.2:1));Dd.lagHold=.6;Dd.hitFlash=.14;
- const armored=Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.kd&&Dd.hp>0;
+ if(canBlock){setSt(Dd,'bstun');Dd.stun=.2;Dd.vx=dir*(m.push||90)*.9*(m.blockPush||1);fxAdd({k:'clash',x:hx,y:hy,sz:.7});snd('clang',.55);inkUp(A,3);inkUp(Dd,5);G.freeze=.04;G.shake=Math.max(G.shake,5);return true}
+ // damage: rage, then the attacker's modifiers (attack, chain hits 2-3, a crit drawn from the fight RNG only if crit > 0), then the defender's
+ let dmg=m.dmg*(A.rage?1.2:1)*A.mod.dmg*(!proj&&(A.mvn==='slash2'||A.mvn==='slash3')?A.mod.combo:1);const crit=A.mod.crit>0&&G.rand()<A.mod.crit;if(crit)dmg*=A.mod.critDmg;
+ const skin=Dd.mod.skin&&G.t>=Dd.skinT;if(skin){dmg*=1-Dd.mod.skin.reduce;Dd.skinT=G.t+Dd.mod.skin.every;fxAdd({k:'clash',x:hx,y:hy,sz:.5})} /* Iron Skin echo */
+ Dd.hp=Math.max(0,Dd.hp-dmg*(1-Dd.mod.mit));Dd.lagHold=.6;Dd.hitFlash=.14;
+ const armored=(Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.pierceArmor||skin)&&!m.kd&&Dd.hp>0;
  if(!armored){Dd.mv=null;Dd.manual=false;Dd.alpha=1;Dd.next=null;Dd.crouch=false;Dd.block=false;
   if(m.kd||Dd.hp<=0){setSt(Dd,'down');Dd.vx=dir*(m.push||220)*1.2;Dd.vy=-520;Dd.air=true;fxAdd({k:'splash',x:Dd.x+dir*40,y:-2,sz:46,dir:0,persist:1})}
   else{setSt(Dd,'hit');Dd.stun=m.stun||.3;Dd.vx=dir*(m.push||90);Dd.hz=m.zone||'mid';Dd.hk=m.dmg>=10;Dd.hn=(Dd.hn||0)+1}}
- fxAdd({k:'slash',x:hx,y:hy,a:m.zone==='high'?-.75:m.zone==='low'?.35:(Math.random()-.5)*.5});fxAdd({k:'splash',x:hx,y:hy,sz:m.kd?70:46,dir:dir>0?0:Math.PI});
+ fxAdd({k:'slash',x:hx,y:hy,a:m.zone==='high'?-.75:m.zone==='low'?.35:(Math.random()-.5)*.5});if(crit)fxAdd({k:'slash',x:hx,y:hy,a:.9}); /* a crit crosses the mark */fxAdd({k:'splash',x:hx,y:hy,sz:m.kd?70:46,dir:dir>0?0:Math.PI});
  G.freeze=m.kd?.09:.055;G.shake=Math.max(G.shake,m.kd?18:9);snd('drum',m.kd?.9:.55);if(m.kd)snd('boom',.3);if(Dd.isP&&navigator.vibrate)navigator.vibrate(m.kd?45:18);
- A.ink=Math.min(100,A.ink+9);Dd.ink=Math.min(100,Dd.ink+5);
+ inkUp(A,9);inkUp(Dd,5);
  if(Dd.def.ai&&Dd.def.ai.rage&&!Dd.rage&&Dd.hp<Dd.maxHp*.5&&Dd.hp>0){Dd.rage=true;G.ban={k:'怒',sub:'The warlord’s fury awakens',t0:G.rt,dur:1.6};snd('growl',1)}
  return true}
-function spawnProj(F,pd){G.proj.push({o:F,x:F.x+F.f*80*F.def.s,y:pd.y*F.def.s,vx:pd.v*F.f,type:pd.type,dmg:pd.dmg,zone:pd.zone,kd:pd.kd,push:140,t:0,big:F.def.s>1.2});snd(pd.type==='star'||pd.type==='wisp'?'whoosh':'slash',.5)}
+// ink gain: the fighter's ink modifier, faster below half health with the Ember of Rage echo
+const inkUp=(F,v)=>{F.ink=Math.min(100,F.ink+v*F.mod.ink*(F.mod.ember&&F.hp<F.maxHp*F.mod.ember.below?1+F.mod.ember.ink:1))};
+function spawnProj(F,pd){const wave=pd.type==='wave';G.proj.push({o:F,x:F.x+F.f*80*F.def.s,y:pd.y*F.def.s,vx:pd.v*F.f*(wave&&F.mod.waveV||1),pierce:wave&&!!F.mod.pierce,type:pd.type,dmg:pd.dmg,zone:pd.zone,kd:pd.kd,push:140,t:0,big:F.def.s>1.2});snd(pd.type==='star'||pd.type==='wisp'?'whoosh':'slash',.5)}
 function updProj(dt){for(const p of G.proj){p.t+=dt;p.x+=p.vx*dt;const Dd=p.o===G.P?G.B:G.P,top=Dd.y-246*Dd.def.s*(Dd.crouch?.62:1);
-  if(Math.abs(p.x-Dd.x)<46*Dd.def.s+20&&p.y>top&&p.y<Dd.y+10&&tryHit(p.o,Dd,p,true))p.dead=1;if(Math.abs(p.x)>ARENA+500)p.dead=1}
- for(const a of G.proj)for(const b of G.proj)if(a.o!==b.o&&!a.dead&&!b.dead&&Math.abs(a.x-b.x)<40&&Math.abs(a.y-b.y)<90){a.dead=b.dead=1;fxAdd({k:'clash',x:(a.x+b.x)/2,y:(a.y+b.y)/2,sz:1});snd('clang',.6)}
+  if(!p.done&&Math.abs(p.x-Dd.x)<46*Dd.def.s+20&&p.y>top&&p.y<Dd.y+10&&tryHit(p.o,Dd,p,true)){if(p.pierce)p.done=1;else p.dead=1} /* a piercing wave hits once and flies on */if(Math.abs(p.x)>ARENA+500)p.dead=1}
+ for(const a of G.proj)for(const b of G.proj)if(a.o!==b.o&&!a.dead&&!b.dead&&Math.abs(a.x-b.x)<40&&Math.abs(a.y-b.y)<90){a.dead=!a.pierce;b.dead=!b.pierce;fxAdd({k:'clash',x:(a.x+b.x)/2,y:(a.y+b.y)/2,sz:1});snd('clang',.6)}
  G.proj=G.proj.filter(p=>!p.dead)}
 function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;if(F.hitFlash>0)F.hitFlash-=dt;if(F.lagHold>0)F.lagHold-=dt;else F.lag=Math.max(F.hp,F.lag-dt*30);
  const inp=F.in,sp=F.def.speed*(F.rage?1.25:1);
@@ -940,7 +970,7 @@ const STEP=1/60;
 function stepGame(dt){G.acc=Math.min(G.acc+dt,.1);while(G.acc>=STEP-1e-9){G.acc-=STEP;for(const F of[G.P,G.B]){F.px=F.x;F.py=F.y}for(const p of G.proj)p.px=p.x;updGame(STEP)}G.ia=clamp(G.acc/STEP)}
 const ip=(v,pv)=>pv==null||Math.abs(v-pv)>150?v:lerp(pv,v,G.ia);
 function readIn(){const k=G.keys;return{mx:(k.right?1:0)-(k.left?1:0),up:fresh(G.jb,.15),down:!!k.down,block:!!k.block,atk:G.buf&&fresh(G.buf.t,.28)?G.buf.a:null}}
-function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},rollCd:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
+function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
  G.proj=[];G.fx=[];G.timer=60;G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
  G.ban=G.round===1?{k:G.def.jp,sub:`${G.def.name}, ${G.def.title}`,t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
 function endRound(){G.rw.wins++;if(G.rw.wins>=2)matchEnd(G.rw===G.P);else{G.round++;newRound()}}
@@ -1068,13 +1098,15 @@ function renderMenu(t){setCam({x:-60+Math.sin(t*.05)*60,y:-270,z:1.05},0,t);clif
 const DATA=id=>JSON.parse(document.getElementById(id).textContent);
 const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,MOVE=DATA('data-movement'),BOSS_IDS=BOSSES.map(b=>b.id);
 function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
- ok(PROG.schema_version===1,'progression.schema_version');ok(DATA('data-powers').schema_version===1,'powers.schema_version');
+ ok(PROG.schema_version===2,'progression.schema_version');ok(DATA('data-powers').schema_version===2,'powers.schema_version');
+ {const A=PROG.attributes;ok(A.rank_cap>0&&A.k>0&&A.crit_damage>=1&&['assault','survival','shadowcraft'].every(p=>Object.values(A[p]).every(v=>v>=0&&v<1)),'attributes')}
+ ok(PROG.echo_slots.unlock_levels.length===2&&PROG.power_tiers.length===4&&PROG.power_tiers.every(t=>t.sp>0&&t.mon>=0),'echo slots / power tiers');
  ok(PROG.xp.base>0&&PROG.xp.exponent>0&&PROG.xp.level_cap>=2&&PROG.xp.repeat_share>=0&&PROG.xp.repeat_share<=1,'xp curve');
  ok(PROG.power_slots.unlock_levels.length===2&&PROG.level_up.attr_points>=0,'slots / level-up');
  ok(['state','move','hit','fall','turn','land'].every(k=>MOVE.blend[k]>0&&MOVE.blend[k]<=.2)&&MOVE.blend.step_px>0,'movement.blend');
  {const r=MOVE.roll;ok(MOVE.schema_version===1&&r.dur>0&&r.dist>0&&r.travel>0&&r.travel<=r.dur&&r.inv[0]>=0&&r.inv[0]<r.inv[1]&&r.inv[1]<=r.dur&&r.cd>=r.dur,'movement.roll')}
  for(const id of BOSS_IDS){const r=PROG.rewards[id];ok(r&&r.xp>=0&&r.skill_points>=0&&r.mon>=0&&POWERS[r.power],'reward '+id)}
- for(const[id,p]of Object.entries(POWERS)){ok(/^[a-z_]+$/.test(id)&&BOSS_IDS.includes(p.boss)&&p.name&&p.jp&&p.short,'power '+id);if(p.ready)ok(HERO_MV[p.move]&&HERO_MV[p.move].cost>=0&&HERO_MV[p.move].cd>0,'power move '+id)}
+ for(const[id,p]of Object.entries(POWERS)){ok(/^[a-z_]+$/.test(id)&&BOSS_IDS.includes(p.boss)&&p.name&&p.jp&&p.short&&p.tiers&&p.tiers.length===5&&p.echo&&p.echo.name&&p.echo.desc,'power '+id);if(p.ready)ok(HERO_MV[p.move]&&HERO_MV[p.move].cost>=0&&HERO_MV[p.move].cd>0,'power move '+id)}
  return e}
 {const e=validateData();if(e.length)console.error('Issen data invalid:',e)}
 // XP is a running total; going from level L to L+1 costs round(base·L^exponent)
@@ -1091,18 +1123,39 @@ const obj=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{},strs=(v,only)=>Array
 function cleanSave(r){r=obj(r);const s=newSave(),p=obj(r.profile),a=obj(p.attrs),g=obj(r.progress),lo=obj(r.loadout),lw=obj(g.lastWin),lg=obj(r.legacy),sto=obj(r.story);
  s.rev=int(r.rev,0,1e12);s.savedAt=int(r.savedAt,0,1e15);
  Object.assign(s.profile,{xp:int(p.xp,0,1e9),attrPts:int(p.attrPts,0,999),skillPts:int(p.skillPts,0,999),mon:int(p.mon,0,1e9),materials:int(p.materials,0,1e9),
-  attrs:{assault:int(a.assault,0,99),survival:int(a.survival,0,99),shadowcraft:int(a.shadowcraft,0,99)}});
+  attrs:{assault:int(a.assault,0,PROG.attributes.rank_cap),survival:int(a.survival,0,PROG.attributes.rank_cap),shadowcraft:int(a.shadowcraft,0,PROG.attributes.rank_cap)}});
  s.profile.level=levelOf(s.profile.xp).level; // the level always follows the XP
  Object.assign(s.progress,{beaten:int(g.beaten,0,BOSSES.length),defeated:strs(g.defeated,BOSS_IDS),ladder:obj(g.ladder),trialsDone:strs(g.trialsDone),
   regionsUnlocked:int(g.regionsUnlocked,1,BOSSES.length,1),lastWin:typeof lw.id==='string'?{id:lw.id,result:obj(lw.result)}:null});
- for(const[id,v]of Object.entries(obj(r.powers)))if(POWERS[id]&&obj(v).unlocked===true)s.powers[id]={unlocked:true,tier:int(v.tier,1,5,1)};
+ for(const[id,v]of Object.entries(obj(r.powers)))if(POWERS[id]&&obj(v).unlocked===true)s.powers[id]={unlocked:true,tier:int(v.tier,1,maxTier(s,id),1)};
  s.loadout.powers=[0,1].map(i=>{const id=Array.isArray(lo.powers)?lo.powers[i]:null;return s.powers[id]&&POWERS[id].ready&&s.profile.level>=PROG.power_slots.unlock_levels[i]?id:null});
  if(s.loadout.powers[1]===s.loadout.powers[0])s.loadout.powers[1]=null;
+ s.loadout.echoes=[0,1].map(i=>{const id=Array.isArray(lo.echoes)?lo.echoes[i]:null;return s.powers[id]&&s.profile.level>=PROG.echo_slots.unlock_levels[i]&&!s.loadout.powers.includes(id)?id:null});
+ if(s.loadout.echoes[1]===s.loadout.echoes[0])s.loadout.echoes[1]=null;
  s.gear={owned:strs(obj(r.gear).owned),equipped:obj(obj(r.gear).equipped)};s.settings=obj(r.settings);
  for(const[k,v]of Object.entries(obj(r.rewardsClaimed)))if(v)s.rewardsClaimed[k]=typeof v==='number'?v:1;
  s.story=Object.assign({},sto,{pending:(Array.isArray(sto.pending)?sto.pending:[]).filter(n=>obj(n).kind==='power'?!!POWERS[n.id]:['migrated','corrupt'].includes(obj(n).kind)&&typeof n.text==='string').slice(0,8)});
  s.legacy=typeof lg.raw==='string'?{raw:lg.raw.slice(0,200),migratedAt:int(lg.migratedAt,0,1e15)}:null;
- return s}
+ points(s);return s}
+// attribute and skill points are derived, never trusted: earned (levels, first-clear claims, milestone levels) minus spent (ranks, tiers)
+const tierCost=t=>PROG.power_tiers[t-2]; /* the price of reaching tier t (2-5) */
+const maxTier=(s,id)=>!POWERS[id].ready?1:s.progress.trialsDone.includes(POWERS[id].boss)?5:3; /* tier IV needs that boss's Ink Trial (M6) */
+function points(s){const p=s.profile,A=p.attrs,earned=(p.level-1)*PROG.level_up.attr_points;if(A.assault+A.survival+A.shadowcraft>earned)A.assault=A.survival=A.shadowcraft=0;
+ p.attrPts=earned-A.assault-A.survival-A.shadowcraft;
+ let sp=PROG.level_up.skill_point_levels.filter(L=>p.level>=L).length,used=0;for(const id of BOSS_IDS)if(s.rewardsClaimed['boss:'+id])sp+=PROG.rewards[id].skill_points;
+ for(const id in s.powers)for(let t=2;t<=s.powers[id].tier;t++)used+=tierCost(t).sp;
+ if(used>sp){for(const id in s.powers)s.powers[id].tier=1;used=0}p.skillPts=sp-used}
+// character-screen actions. A fight's hero is built from the save when the fight starts, so nothing here reaches a fight in progress.
+function spendAttr(s,k){if(s.profile.attrPts<1||s.profile.attrs[k]>=PROG.attributes.rank_cap)return false;s.profile.attrs[k]++;points(s);return true}
+function resetAttrs(s){const a=s.profile.attrs;a.assault=a.survival=a.shadowcraft=0;points(s)}
+function tierBlock(s,id){const pw=POWERS[id],own=s.powers[id],t=own&&own.tier,c=t&&tierCost(t+1);
+ return!own?'not absorbed yet':!pw.ready?'awakens in a later update':t>=5?'fully upgraded':c.trial&&t>=maxTier(s,id)?`needs ${BOSSES[BOSS_IDS.indexOf(pw.boss)].name}’s Ink Trial (coming with the ladders)`
+  :s.profile.skillPts<c.sp?`needs ${plural(c.sp,'skill point')}`:s.profile.mon<c.mon?`needs ${c.mon} mon`:''}
+function upgradePower(s,id){if(tierBlock(s,id))return false;const c=tierCost(s.powers[id].tier+1);s.powers[id].tier++;s.profile.mon-=c.mon;points(s);return true}
+// slots: power slots take playable powers; echo slots take any absorbed power; one power never fills both kinds (it moves)
+function setSlot(s,kind,i,id){const L=s.loadout,need=PROG[kind==='powers'?'power_slots':'echo_slots'].unlock_levels[i];
+ if(s.profile.level<need||id&&(!s.powers[id]||kind==='powers'&&!POWERS[id].ready))return false;
+ if(id)for(const k of['powers','echoes'])L[k]=L[k].map(x=>x===id?null:x);L[kind][i]=id||null;return true}
 // a slot holds {sum,doc}: the checksum catches truncated or hand-edited saves
 const fnv=t=>{let h=0x811c9dc5;for(let i=0;i<t.length;i++)h=Math.imul(h^t.charCodeAt(i),0x01000193);return(h>>>0).toString(36)};
 const seal=d=>JSON.stringify({sum:fnv(JSON.stringify(d)),doc:d});
@@ -1127,11 +1180,11 @@ function migrate(raw){const s=newSave();if(raw==null)return{save:s,granted:[]};l
 // one boss victory. The first clear (claim "boss:<id>") pays in full, once; later wins pay repeat_share of the XP only.
 // winId identifies the match: the same victory reported twice replays its stored result and grants nothing again.
 function grantClear(s,i,winId){const g=s.progress,p=s.profile;if(winId&&g.lastWin&&g.lastWin.id===winId)return g.lastWin.result;
- const id=BOSS_IDS[i],rw=PROG.rewards[id],claim='boss:'+id,first=!s.rewardsClaimed[claim],L0=p.level;
+ const id=BOSS_IDS[i],rw=PROG.rewards[id],claim='boss:'+id,first=!s.rewardsClaimed[claim],L0=p.level,sp0=p.skillPts;
  g.beaten=Math.max(g.beaten,i+1);if(!g.defeated.includes(id))g.defeated.push(id);g.regionsUnlocked=Math.max(g.regionsUnlocked,Math.min(BOSSES.length,i+2));
  const r={boss:id,first,xp:first?rw.xp:Math.round(rw.xp*PROG.xp.repeat_share),sp:0,mon:0,power:null,slot:-1};
- if(first){s.rewardsClaimed[claim]=Date.now();r.sp=rw.skill_points;r.mon=rw.mon;p.skillPts+=r.sp;p.mon+=r.mon;if(!s.powers[rw.power]){s.powers[rw.power]={unlocked:true,tier:1};r.power=rw.power}}
- p.xp=Math.min(1e9,p.xp+r.xp);p.level=levelOf(p.xp).level;p.attrPts+=(p.level-L0)*PROG.level_up.attr_points;r.levelFrom=L0;r.levelTo=p.level;
+ if(first){s.rewardsClaimed[claim]=Date.now();r.mon=rw.mon;p.mon+=r.mon;if(!s.powers[rw.power]){s.powers[rw.power]={unlocked:true,tier:1};r.power=rw.power}}
+ p.xp=Math.min(1e9,p.xp+r.xp);p.level=levelOf(p.xp).level;points(s);r.sp=p.skillPts-sp0;r.levelFrom=L0;r.levelTo=p.level; /* skill points: the boss claim + milestone levels */
  if(r.power&&POWERS[r.power].ready){const k=s.loadout.powers.findIndex((x,j)=>!x&&p.level>=PROG.power_slots.unlock_levels[j]);if(k>=0){s.loadout.powers[k]=r.power;r.slot=k}}
  if(winId)g.lastWin={id:winId,result:r};return r}
 const plural=(n,w)=>`${n} ${w}${n===1?'':'s'}`;
@@ -1141,8 +1194,24 @@ function rewardText(list){if(!list.length)return'';const sum=k=>list.reduce((a,r
  return a.join(' · ')}
 const exportCode=()=>'ISSEN2-'+btoa(String.fromCharCode(...new TextEncoder().encode(seal(SV))));
 function importCode(code){try{const d=unseal(new TextDecoder().decode(Uint8Array.from(atob(String(code).trim().replace(/^ISSEN2-/,'')),c=>c.charCodeAt(0))));return d?cleanSave(d):null}catch(e){return null}}
-// the hero for the next fight comes from the profile: playable powers by slot. A new profile gives exactly HERO_D (no powers).
-const heroDef=()=>Object.assign({},HERO_D,{powers:SV.loadout.powers.map(id=>id&&SV.powers[id]&&POWERS[id].ready?id:null)});
+// attributes: bonus = cap·(1 − e^(−k·rank)), rank ≤ rank_cap; echoes scale with Shadowcraft's power bonus (docs/balance.md)
+const attrBonus=(path,key,rank)=>PROG.attributes[path][key]*(1-Math.exp(-PROG.attributes.k*rank));
+function derive(s){const r=s.profile.attrs,b=(p,k)=>attrBonus(p,k,r[p]),pe=b('shadowcraft','power'),x=1+pe;let speed=b('shadowcraft','speed');
+ const mod={dmg:1+b('assault','damage'),combo:1+b('assault','combo'),crit:b('assault','crit_chance'),critDmg:PROG.attributes.crit_damage,mit:b('survival','mitigation'),
+  cd:1-b('shadowcraft','cooldown'),ink:1+b('shadowcraft','ink'),roll:1-b('shadowcraft','roll'),pe},ov={},mv=n=>ov[n]||(ov[n]=Object.assign({},MV[n]||HERO_MV[n]));
+ for(const id of s.loadout.powers){if(!id||!POWERS[id].ready)continue;const m=mv(POWERS[id].move); /* tiers II.. add to the equipped power's move */
+  for(let t=1;t<s.powers[id].tier;t++){const e=POWERS[id].tiers[t];if(e.reach)m.reach+=e.reach;if(e.dmg)m.dmg+=e.dmg;if(e.armor_pierce)m.pierceArmor=1;if(e.block_push)m.blockPush=e.block_push}
+  m.dmg*=x}
+ for(const id of s.loadout.echoes){const e=id&&POWERS[id].echo;if(!e)continue;
+  if(e.reach)for(const n of e.moves)mv(n).reach*=1+e.reach*x;
+  if(e.roll)mod.roll*=1-e.roll*x;if(e.speed)speed+=e.speed*x;
+  if(e.reduce)mod.skin={every:e.every,reduce:Math.min(.5,e.reduce*x)};
+  if(e.wave_speed){mod.waveV=1+e.wave_speed*x;mod.pierce=!!e.pierce}
+  if(e.ink)mod.ember={below:e.below,ink:e.ink*x}}
+ return{hp:Math.round(HERO_D.hp*(1+b('survival','hp'))),speed:HERO_D.speed*(1+speed),mod,ov}}
+// the hero for the next fight comes from the profile. A new profile gives HERO_D's numbers exactly (no points, no powers).
+const heroDef=()=>{const d=derive(SV);return Object.assign({},HERO_D,{hp:d.hp,speed:d.speed,mod:d.mod,ov:d.ov,echoes:SV.loadout.echoes.slice(),
+ powers:SV.loadout.powers.map(id=>id&&SV.powers[id]&&POWERS[id].ready?id:null)})};
 let SV;{const L=loadSave();SV=L.save;if(L.write)writeSave(SV)}
 /* --- flow & menus --- */
 let MODE='film',helpBack='menu';
@@ -1282,7 +1351,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
  // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
- window.game={lab:{P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ window.game={lab:{P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,derive,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
  if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 (async()=>{try{await Promise.race([Promise.all([document.fonts.load('380px "Yuji Boku"','一閃終師'),document.fonts.load('46px "Cormorant Garamond"')]),new Promise(r=>setTimeout(r,3500))])}catch(e){}
  build();st.ready=true;const q=new URLSearchParams(location.search);
