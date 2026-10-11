@@ -184,7 +184,8 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
 </script>
 <script type="application/json" id="data-movement">
 {"schema_version":1,
- "roll":{"dur":0.34,"dist":240,"travel":0.26,"inv":[0.05,0.22],"cd":0.7}}
+ "roll":{"dur":0.34,"dist":240,"travel":0.26,"inv":[0.05,0.22],"cd":0.7},
+ "blend":{"state":0.07,"move":0.05,"hit":0.05,"fall":0.1,"turn":0.07,"land":0.14,"step_px":45}}
 </script>
 <script type="application/json" id="data-powers">
 {"schema_version":1,
@@ -747,7 +748,10 @@ K.monk={L:LH,ink:'#1a1714',back:'#4d4740',jit:.6,type:'monk',club:1};
 K.ghost={L:LH,ink:'#ece6da',back:'#b8b1a3',jit:.4,type:'ghost',nagi:1};
 const CR={tl:.35,hd:-.1,th1:1.35,sh1:-.25,th2:.7,sh2:-.95},JMP={tl:.3,th1:1.6,sh1:-.3,th2:.7,sh2:-1.2},KICK={tl:-.2,hd:-.1,th1:1.55,sh1:1.55,th2:-.05,sh2:-.05},
  RHK={tl:-.45,hd:-.2,th1:2.1,sh1:2.2,th2:-.1,sh2:-.05},SWK={tl:.6,hd:-.2,th1:1.55,sh1:1.6,th2:1.2,sh2:-1.45},BLK={tl:-.08,hd:-.15,ua1:1.0,fa1:2.2,g2:1,sw:3.0},BLKL={ua1:.9,fa1:1.5,g2:1,sw:2.0},
- LOWC={tl:.7,hd:-.2,ua1:1.45,fa1:1.5,sw:1.35,th1:1.4,sh1:.3,th2:-1.2,sh2:-1.5},DOWNP=P(PS.collapse,{blade:1,sheath:0}),STAG={tl:-.35,hd:-.3,th1:.55,sh1:.3,th2:-.3,sh2:-.2};
+ LOWC={tl:.7,hd:-.2,ua1:1.45,fa1:1.5,sw:1.35,th1:1.4,sh1:.3,th2:-1.2,sh2:-1.5},DOWNP=P(PS.collapse,{blade:1,sheath:0});
+const JRISE={tl:.12,hd:-.15,th1:.4,sh1:-.1,th2:-.3,sh2:-.75},JFALL={tl:.18,hd:-.1,th1:.75,sh1:.15,th2:-.05,sh2:-.35},KNEEL={tl:.3,hd:-.15,th1:1.4,sh1:.05,th2:.15,sh2:-1.45};
+// hit reactions (arms keep the weapon): high = head snap back, mid = torso folds over the blow, low = the front knee buckles
+const HITP={high:{tl:-.32,hd:-.8,th1:.4,sh1:.18,th2:-.38,sh2:-.3},mid:{tl:.6,hd:.5,th1:.12,sh1:.05,th2:-.5,sh2:-.42},low:{tl:.12,hd:.15,th1:1.05,sh1:-.25,th2:-.3,sh2:-.95}};
 const KG=P({tl:.28,hd:-.15,ua1:.95,fa1:1.95,ua2:.55,fa2:1.7,sw:2.4,sw2:2.7,sheath:0,th1:.6,sh1:.05,th2:-.6,sh2:-.5});
 const KS1=P(KG,{ua1:1.55,fa1:1.62,sw:1.62,tl:.42,th1:.95,sh1:.1,th2:-.8,sh2:-.9}),KS2=P(KG,{ua2:1.55,fa2:1.62,sw2:1.6,ua1:.5,fa1:1.0,tl:.42,th1:.95,sh1:.1,th2:-.8,sh2:-.9});
 const SPLL=P(SPL,{sw:1.95,tl:.7,th1:1.4,sh1:.3,th2:-1.1,sh2:-1.5}),SPUP=P(SPG,{ua1:2.4,fa1:2.8,sw:3.9,tl:-.1});
@@ -886,7 +890,7 @@ function tryHit(A,Dd,m,proj){if(Dd.inv>0||rollInv(Dd)||Dd.st==='dead'||Dd.st==='
  const armored=Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.kd&&Dd.hp>0;
  if(!armored){Dd.mv=null;Dd.manual=false;Dd.alpha=1;Dd.next=null;Dd.crouch=false;Dd.block=false;
   if(m.kd||Dd.hp<=0){setSt(Dd,'down');Dd.vx=dir*(m.push||220)*1.2;Dd.vy=-520;Dd.air=true;fxAdd({k:'splash',x:Dd.x+dir*40,y:-2,sz:46,dir:0,persist:1})}
-  else{setSt(Dd,'hit');Dd.stun=m.stun||.3;Dd.vx=dir*(m.push||90)}}
+  else{setSt(Dd,'hit');Dd.stun=m.stun||.3;Dd.vx=dir*(m.push||90);Dd.hz=m.zone||'mid';Dd.hk=m.dmg>=10;Dd.hn=(Dd.hn||0)+1}}
  fxAdd({k:'slash',x:hx,y:hy,a:m.zone==='high'?-.75:m.zone==='low'?.35:(Math.random()-.5)*.5});fxAdd({k:'splash',x:hx,y:hy,sz:m.kd?70:46,dir:dir>0?0:Math.PI});
  G.freeze=m.kd?.09:.055;G.shake=Math.max(G.shake,m.kd?18:9);snd('drum',m.kd?.9:.55);if(m.kd)snd('boom',.3);if(Dd.isP&&navigator.vibrate)navigator.vibrate(m.kd?45:18);
  A.ink=Math.min(100,A.ink+9);Dd.ink=Math.min(100,Dd.ink+5);
@@ -913,7 +917,7 @@ function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;if(F.hitFlash>0)F.hitFlash-=
    else if(inp.atk){const n=F.isP?heroMove(F,inp.atk,inp):inp.atk;if(F.isP)G.buf=null;if(n&&startMove(F,n))break}
    if(inp.up){F.vy=-1000;F.vx=inp.mx*sp*.95;F.air=true;F.crouch=false;F.block=false;setSt(F,'jump');snd('whoosh',.25);if(F.isP)G.jb=-9;break}
    F.vx=F.crouch||inp.block?0:inp.mx*sp*(F.block?.6:1);const ns=F.crouch?'crouch':inp.mx?'walk':'idle';if(F.st!==ns)setSt(F,ns)}}
- if(!F.manual){F.x+=F.vx*dt;if(F.air||F.y<0){F.vy+=GRAV*dt;F.y+=F.vy*dt;if(F.y>=0){F.y=0;F.vy=0;F.air=false;if(F.st==='jump')setSt(F,'idle');fxAdd({k:'dust',x:F.x,y:0})}}}
+ if(!F.manual){F.x+=F.vx*dt;if(F.air||F.y<0){F.vy+=GRAV*dt;F.y+=F.vy*dt;if(F.y>=0){F.y=0;F.vy=0;F.air=false;F.landT=G.t;if(F.st==='jump')setSt(F,'idle');fxAdd({k:'dust',x:F.x,y:0})}}}
  F.x=clamp(F.x,-ARENA,ARENA)}
 function separate(a,b){if(a.air||b.air||a.manual||b.manual||a.mv&&a.mv.issen||b.mv&&b.mv.issen||a.st==='dead'||b.st==='dead')return;const min=58*(a.def.s+b.def.s)/2,d=b.x-a.x;
  if(Math.abs(d)<min){const p=(min-Math.abs(d))/2*(d>=0?1:-1);a.x=clamp(a.x-p,-ARENA,ARENA);b.x=clamp(b.x+p,-ARENA,ARENA)}}
@@ -936,7 +940,7 @@ const STEP=1/60;
 function stepGame(dt){G.acc=Math.min(G.acc+dt,.1);while(G.acc>=STEP-1e-9){G.acc-=STEP;for(const F of[G.P,G.B]){F.px=F.x;F.py=F.y}for(const p of G.proj)p.px=p.x;updGame(STEP)}G.ia=clamp(G.acc/STEP)}
 const ip=(v,pv)=>pv==null||Math.abs(v-pv)>150?v:lerp(pv,v,G.ia);
 function readIn(){const k=G.keys;return{mx:(k.right?1:0)-(k.left?1:0),up:fresh(G.jb,.15),down:!!k.down,block:!!k.block,atk:G.buf&&fresh(G.buf.t,.28)?G.buf.a:null}}
-function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},rollCd:0,roll:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
+function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},rollCd:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
  G.proj=[];G.fx=[];G.timer=60;G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
  G.ban=G.round===1?{k:G.def.jp,sub:`${G.def.name}, ${G.def.title}`,t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
 function endRound(){G.rw.wins++;if(G.rw.wins>=2)matchEnd(G.rw===G.P);else{G.round++;newRound()}}
@@ -957,21 +961,31 @@ function updGame(dt){if(G.paused||G.state==='over')return;G.shake*=Math.pow(.004
 function music(dt){if(!AU.ctx||G.state==='ko')return;const ar=ARENAS[G.def.arena];G.nb-=dt;if(G.nb>0)return;G.nb+=60/ar.bpm/2;const s=G.step++%16,w=AU.ctx.currentTime+.02;
  try{if(s===0||s===6||s===8||s===11||s===14)S.drum(w,s===0?.55:.3);if(s%4===2&&hash(G.step*1.7)<.7)S.pluck(w,ar.notes[hash(G.step*3.1)*ar.notes.length|0],.18);if(s===0&&G.step%64===1)S.flute(w,ar.notes[0]*2,2.2,.22)}catch(e){}}
 /* --- drawing --- */
+// the largest distance (px) any joint travels between two poses of fighter F
+function poseGap(a,b,F){const L=F.def.kind.L,A=joints(a,L),C=joints(b,L);let m=0;for(const k in A)if(Array.isArray(A[k]))m=Math.max(m,Math.hypot(A[k][0]-C[k][0],A[k][1]+A.oy-C[k][1]-C.oy));return m*F.def.s}
 function poseOf(F){const d=F.def,g=d.guard;let p;
  switch(F.st){
   case 'walk':p=P(g,walk(F.x*.04*F.f,.85),{ua2:g.ua2,fa2:g.fa2,tl:g.tl});break;
   case 'crouch':p=P(g,CR);break;
-  case 'bstun':p=F.crouch?P(g,CR,BLKL):P(g,BLK);break;
-  case 'jump':p=P(g,JMP,{tl:.25+F.vy*.0002});break;
+  case 'bstun':p=F.crouch?P(g,CR,BLKL):P(g,BLK,{tl:BLK.tl-.2*(1-ss(0,F.stun,F.stT))});break; // block recoil
+  case 'jump':p=kf(clamp((F.vy+1000)/2000),[[0,P(g,JRISE)],[.42,P(g,JMP)],[.62,P(g,JMP,{tl:.36,th1:1.85,sh1:-.55})],[1,P(g,JFALL)]]);if(F.stT<.07)p=mixv(P(g,CR),p,ss(0,.07,F.stT));break; // push-off, rise, apex tuck, reach for the ground
   case 'move':p=kf(F.mvT,F.mv.fr(g));break;
-  case 'hit':p=mixv(P(g,STAG),g,ss(0,F.stun,F.stT));break;
-  case 'down':case 'dead':p=P(DOWNP,{rot:-lerp(.2,1.5,ss(0,.35,F.stT))});break;
-  case 'getup':p=mixv(P(DOWNP,{rot:-1.5}),g,ss(0,.42,F.stT));break;
-  case 'roll':{const R=MOVE.roll,u=clamp(F.stT/R.travel),k=Math.min(ss(0,.05,F.stT),1-ss(R.travel-.02,R.dur,F.stT));p=mixv(P(g,CR),P(g,ROLLP),k);p.rot=(F.roll.dir===F.f?1:-1)*(E.io(u)*6.2832%6.2832);break}
+  case 'hit':p=mixv(mixv(g,P(g,HITP[F.hz||'mid']),F.hk?1.3:.85),g,ss(0,F.stun,F.stT));break; // heavy hits overshoot the reaction
+  case 'down':case 'dead':{p=P(DOWNP,{rot:-lerp(.2,1.5,ss(0,.35,F.stT))});const b=F.air?-1:G.t-F.landT;if(F.st==='down'&&b>=0&&b<.6)p.lift=Math.abs(Math.sin(b*15))*24*Math.exp(-b*8);break} // a bounce as the body lands
+  case 'getup':p=kf(F.stT,[[0,P(DOWNP,{rot:-1.5})],[.18,P(g,KNEEL)],[.42,g]]);break;
+  case 'roll':{const R=MOVE.roll,u=clamp(F.stT/R.travel),k=Math.min(ss(0,.05,F.stT),1-ss(R.travel-.02,R.dur,F.stT));p=mixv(P(g,CR),P(g,ROLLP),k);const r=E.io(u)*6.2832;p.rot=(F.roll.dir===F.f?1:-1)*(r>3.1416?r-6.2832:r);break} // kept within ±π so a blend out of the roll turns the short way
   case 'win':p=d.win||g;break;
-  default:p=P(g,{tl:g.tl+Math.sin(G.t*2.6+d.s*3)*.025})}
+  default:{const w=Math.sin(G.t*.9+d.s*5);p=P(g,{tl:g.tl+Math.sin(G.t*2.6+d.s*3)*.025+w*.02,th1:g.th1+w*.05,th2:g.th2+w*.05})}} // breathing + a slow weight shift
  if(isFree(F)&&F.block){const wl=walk(F.x*.04*F.f,.6);p=F.crouch?P(g,CR,BLKL):P(g,BLK,F.st==='walk'?{th1:wl.th1,sh1:wl.sh1,th2:wl.th2,sh2:wl.sh2}:{})}
- p=Object.assign(P(),p,d.wk);p.x=ip(F.x,F.px);p.f=F.f;p.s=d.s;p.lift=(p.lift||0)-ip(F.y,F.py);p.rage=F.rage?1:0;p.stream=0;return p}
+ // blends (data-movement.blend): each visual change eases from the last drawn pose instead of snapping; a landing absorbs
+ // into a brief crouch; a facing flip turns through a squash. Cosmetic only: none of this delays the simulation.
+ const B=MOVE.blend,vk=F.st+(isFree(F)&&F.block?'b':'')+(F.crouch?'c':'')+(F.st==='move'?F.mvId:F.st==='hit'?F.hn:'');
+ if(F.vk!==vk){F.vk=vk;F.bFrom=F.lp;F.bT=G.t-STEP;F.bD=F.st==='hit'||F.st==='bstun'?B.hit:F.st==='down'||F.st==='dead'?B.fall:F.st==='move'?B.move:B.state;
+  if(F.lp)for(let i=0;i<8&&F.bD<.2&&poseGap(F.lp,mixv(F.lp,p,STEP/F.bD),F)>B.step_px;i++)F.bD=Math.min(.2,F.bD*1.25)} // a long way between poses gets a longer blend: the first frame steps at most step_px
+ if(F.bFrom&&G.t-F.bT<F.bD)p=mixv(F.bFrom,p,(G.t-F.bT)/F.bD); // linear: over 3-4 frames a curve is invisible, and even steps never pop
+ if(isFree(F)&&G.t-F.landT<B.land)p=mixv(p,P(p,CR),.5*Math.sin(Math.PI*(G.t-F.landT)/B.land)); // the knees give and recover
+ F.lp=p;if(F.lf!==F.f){F.tT=F.lf==null?-9:G.t;F.lf=F.f}const tu=clamp((G.t-F.tT)/B.turn),ff=F.f*(2*E.io(tu)-1);
+ p=Object.assign(P(),p,d.wk);p.x=ip(F.x,F.px);p.f=Math.abs(ff)<.08?.08*F.f:ff;p.s=d.s;p.lift=(p.lift||0)-ip(F.y,F.py);p.rage=F.rage?1:0;p.stream=0;return p}
 function drawF(g,F){const p=poseOf(F);if(F.hitFlash>0)p.x+=noise(G.t*90)*8;if(F.alpha<.03)return;
  if(F.rage){g.globalAlpha=.4+.15*Math.sin(G.t*9);g.drawImage(GLOW,p.x-170*p.s,-p.lift-330*p.s,340*p.s,380*p.s)}
  if(F.st==='roll'&&F.stT<MOVE.roll.travel){const d=F.roll.dir,a=1-F.stT/MOVE.roll.travel;g.fillStyle=INK;for(let k=0;k<3;k++){const y=-40-k*42,x=p.x-d*(70+k*24);g.globalAlpha=.35*a;brush(g,[[x,y],[x-d*(90+k*30)*a,y+3]],7-k*1.5,{taper:u=>1-u})}}
@@ -1057,6 +1071,7 @@ function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
  ok(PROG.schema_version===1,'progression.schema_version');ok(DATA('data-powers').schema_version===1,'powers.schema_version');
  ok(PROG.xp.base>0&&PROG.xp.exponent>0&&PROG.xp.level_cap>=2&&PROG.xp.repeat_share>=0&&PROG.xp.repeat_share<=1,'xp curve');
  ok(PROG.power_slots.unlock_levels.length===2&&PROG.level_up.attr_points>=0,'slots / level-up');
+ ok(['state','move','hit','fall','turn','land'].every(k=>MOVE.blend[k]>0&&MOVE.blend[k]<=.2)&&MOVE.blend.step_px>0,'movement.blend');
  {const r=MOVE.roll;ok(MOVE.schema_version===1&&r.dur>0&&r.dist>0&&r.travel>0&&r.travel<=r.dur&&r.inv[0]>=0&&r.inv[0]<r.inv[1]&&r.inv[1]<=r.dur&&r.cd>=r.dur,'movement.roll')}
  for(const id of BOSS_IDS){const r=PROG.rewards[id];ok(r&&r.xp>=0&&r.skill_points>=0&&r.mon>=0&&POWERS[r.power],'reward '+id)}
  for(const[id,p]of Object.entries(POWERS)){ok(/^[a-z_]+$/.test(id)&&BOSS_IDS.includes(p.boss)&&p.name&&p.jp&&p.short,'power '+id);if(p.ready)ok(HERO_MV[p.move]&&HERO_MV[p.move].cost>=0&&HERO_MV[p.move].cd>0,'power move '+id)}
