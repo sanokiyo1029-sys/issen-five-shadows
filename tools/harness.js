@@ -25,7 +25,7 @@ function element(tag = 'div', id = '') {
     setAttribute(k, v) { this.attrs[k] = String(v); }, getAttribute(k) { return this.attrs[k] ?? null; },
     addEventListener: noop, removeEventListener: noop, focus: noop, blur: noop, select: noop, setPointerCapture: noop, insertAdjacentHTML: noop,
     appendChild(c) { this.children.push(c); return c; }, append(...c) { this.children.push(...c); }, remove: noop,
-    click() { this.onclick && this.onclick({ preventDefault: noop }); },
+    click() { this.onclick && this.onclick({ preventDefault: noop, stopPropagation: noop }); },
     getBoundingClientRect: () => ({ left: 0, top: 0, width: 100, height: 100 }), querySelectorAll: () => [] };
   if (tag === 'canvas') { let c; e.getContext = () => c || (c = ctx2d(e)); }
   return e;

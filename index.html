@@ -73,7 +73,10 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
 .install{font:italic 500 max(1.05cqw,12px)/1.5 'Cormorant Garamond',serif;color:rgba(21,19,15,.78);background:rgba(236,229,214,.75);padding:.35em 1em;border-radius:999px;display:flex;gap:.9em;align-items:center;flex-wrap:wrap;justify-content:center}
 .panel .rw{font-style:normal;font-weight:500;font-size:max(1.2cqw,11px);margin:0;max-width:70cqw}
 .xpbar{width:36cqw;height:max(.6cqw,5px);background:rgba(21,19,15,.15);border-radius:99px;overflow:hidden}.xpbar i{display:block;height:100%;width:0;background:var(--ink)}
-.card.pcard{width:27cqw;cursor:default}.card.pcard .ti{font-size:max(1cqw,10px);line-height:1.3}.card.pcard.locked>*{opacity:.5}
+.card.pcard{width:27cqw;cursor:default}.card.qcard{width:15.4cqw}.card.acard{width:19cqw}.card.static{cursor:default}.card.static:hover{transform:none;box-shadow:none}
+.card.sel{outline:2px solid var(--red);outline-offset:2px}.card .lnk{font-size:max(1.05cqw,11px);margin-top:.3cqw}.card.acard .ti,.card.qcard .ti{font-size:max(.95cqw,10px);line-height:1.3}
+.tabs .lnk.on{color:var(--red);border-color:var(--red)}
+#char{gap:.55cqw}#char h2{font-size:max(2.4cqw,16px)}#char .big{padding:7px 26px}.card.acard,.card.qcard{padding:.8cqw .7cqw .7cqw;gap:.2cqw}.card.acard .kj,.card.qcard .kj{font-size:max(2.4cqw,19px)}.lnk[disabled]{opacity:.4;pointer-events:none}.card.pcard .ti{font-size:max(1cqw,10px);line-height:1.3}.card.pcard.locked>*{opacity:.5}
 .code{width:52cqw;font:max(1cqw,11px)/1.3 ui-monospace,monospace;background:rgba(255,255,255,.6);border:1px solid rgba(21,19,15,.4);padding:.5em;color:var(--ink);word-break:break-all}.code.off{display:none}
 .install[hidden]{display:none}.install svg{width:1.1em;height:1.1em;vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:2}.install a,.install .lnk{color:var(--red);font-size:inherit}
 /* touch controls: floating joystick (left) + brush-ink buttons (right); --u scales them to the phone */
@@ -128,9 +131,9 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
   </div>
   <div class="panel dim off" id="result" role="dialog" aria-labelledby="rTitle"><div class="rk" id="rKanji">勝</div><h2 id="rTitle">Victory</h2><p id="rText"></p><p class="rw" id="rRewards"></p><div class="row" id="rBtns"></div></div>
   <div class="panel dim off" id="char" role="dialog" aria-labelledby="cTitle"><h2 id="cTitle">Issen · level <span id="cLvl">1</span></h2>
-    <div class="xpbar" aria-hidden="true"><i id="cXp"></i></div><p class="rw" id="cXpT"></p><p class="rw" id="cStat"></p>
-    <div class="levels" id="cPowers"></div><p class="rw" id="cMore"></p>
-    <div class="row"><button class="lnk" id="cExport">Export save code</button><button class="lnk" id="cImport">Import save code</button></div>
+    <div class="xpbar" aria-hidden="true"><i id="cXp"></i></div><p class="rw" id="cXpT"></p>
+    <div class="row tabs" id="cTabs" role="tablist"><button class="lnk" data-tab="attrs" role="tab">Attributes</button><button class="lnk" data-tab="powers" role="tab">Powers</button><button class="lnk" data-tab="loadout" role="tab">Loadout</button><button class="lnk" data-tab="save" role="tab">Save code</button></div>
+    <div class="levels" id="cBody"></div><p class="rw" id="cMore"></p>
     <textarea id="cCode" class="code off" rows="2" spellcheck="false" aria-label="Save code"></textarea><div class="row"><span id="cCodeBtns" class="row"></span><span class="rw" id="cMsg" role="status"></span></div>
     <button class="big" id="cClose">Back to the map</button></div>
   <div class="panel dim off" id="notice" role="dialog" aria-labelledby="nTitle"><div class="rk" id="nKanji">墨</div><h2 id="nTitle"></h2><p id="nText"></p><div class="row" id="nBtns"></div></div>
@@ -1217,7 +1220,7 @@ let SV;{const L=loadSave();SV=L.save;if(L.write)writeSave(SV)}
 let MODE='film',helpBack='menu';
 const PANELS=['menu','result','pause','help','char','notice'];
 const show=id=>{for(const p of PANELS)document.getElementById(p).classList.toggle('off',p!==id)};
-function buildMenu(){const box=document.getElementById('levels');box.innerHTML='';$('mChar').textContent=`Character · level ${SV.profile.level}`;BOSSES.forEach((b,i)=>{const done=SV.progress.beaten>i,open=SV.progress.beaten>=i,el=document.createElement('button');
+function buildMenu(){const box=document.getElementById('levels');box.innerHTML='';const todo=SV.profile.attrPts>0||Object.keys(SV.powers).some(id=>!tierBlock(SV,id));$('mChar').textContent=`Character · level ${SV.profile.level}${todo?' · points to spend':''}`;BOSSES.forEach((b,i)=>{const done=SV.progress.beaten>i,open=SV.progress.beaten>=i,el=document.createElement('button');
  el.className='card'+(open?'':' locked');el.disabled=!open;el.setAttribute('aria-label',`${b.name}, ${b.title}. ${done?'Defeated':open?'Challenge':'Locked'}`);
  el.innerHTML=`<span class="n">${['First','Second','Third','Fourth','Fifth'][i]} shadow</span><span class="kj">${b.jp}</span><span class="nm">${b.name}</span><span class="ti">${b.title}</span><span class="ar">${ARENAS[b.arena].name}</span><span class="stt">${done?'Defeated · fight again':open?'Challenge':'Locked'}</span>${done?'<span class="seal">討</span>':''}`;
  el.onclick=()=>startFight(i);box.appendChild(el)})}
@@ -1235,7 +1238,7 @@ function showResult(){const{win,r}=G.res,lv=G.lv,last=lv===BOSSES.length-1;
  document.getElementById('rKanji').textContent=win?(last?'終':'勝'):'敗';document.getElementById('rTitle').textContent=win?(last?'The Five Shadows are no more':'Victory'):'Defeat';
  document.getElementById('rText').textContent=win?(last?'The ink remembers. Beneath the blossoms, the village sleeps in peace.':`${G.def.name} falls. ${BOSSES[lv+1].name}, ${BOSSES[lv+1].title}, waits at ${ARENAS[BOSSES[lv+1].arena].name}.`):`${G.def.name} still stands. Breathe — then strike once more.`;
  const bt=document.getElementById('rBtns');bt.innerHTML='';const mkb=(txt,fn,big)=>{const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=txt;e.onclick=fn;bt.appendChild(e)};
- if(win&&!last)mkb(`Next · ${BOSSES[lv+1].name}`,()=>startFight(lv+1),1);if(win&&last)mkb('Watch the film again',watchFilm,1);if(!win)mkb('Retry',()=>startFight(lv),1);mkb('Return to the map',toMenu);
+ if(win&&!last)mkb(`Next · ${BOSSES[lv+1].name}`,()=>startFight(lv+1),1);if(win&&last)mkb('Watch the film again',watchFilm,1);if(!win)mkb('Retry',()=>startFight(lv),1);mkb('Character & loadout',()=>openChar(null,'result'));mkb('Return to the map',toMenu);
  show('result');amb(.08,0,0);bt.firstChild.focus()}
 function toMenu(){MODE='menu';G.paused=false;buildMenu();show('menu');amb(.1,0,0);nextNotice()}
 // one-time messages queued in the save (migration, a damaged save, a ceremony cut short): shown on the map, cleared once read
@@ -1245,20 +1248,48 @@ function nextNotice(){const n=SV.story.pending[0];if(!n||MODE!=='menu')return;
  else notice('墨',n.kind==='corrupt'?'Your save was damaged':'Welcome back',n.text,[['Continue',done,1]].concat(n.kind==='corrupt'?[['Import a save code',()=>{done();openChar('import')}]]:[]))}
 function notice(k,title,text,btns){$('nKanji').textContent=k;$('nTitle').textContent=title;$('nText').textContent=text;const b=$('nBtns');b.innerHTML='';
  for(const[t,fn,big]of btns){const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=t;e.onclick=fn;b.appendChild(e)}show('notice');b.firstChild.focus()}
-function openChar(mode){const p=SV.profile,l=levelOf(p.xp),rom=['I','II','III','IV','V'];$('cLvl').textContent=l.level;$('cXp').style.width=(l.need?l.into/l.need*100:100)+'%';
- $('cXpT').textContent=l.need?`${l.into} / ${l.need} XP to level ${l.level+1} · ${p.xp} XP in all`:`Level cap · ${p.xp} XP in all`;
- $('cStat').textContent=`${SV.progress.beaten} of 5 shadows defeated · ${plural(p.skillPts,'skill point')} · ${plural(p.attrPts,'attribute point')} (spent in a later update) · ${p.mon} mon`;
- const box=$('cPowers');box.innerHTML='';PROG.power_slots.unlock_levels.forEach((need,i)=>{const id=SV.loadout.powers[i],pw=id&&POWERS[id],m=pw&&HERO_MV[pw.move],el=document.createElement('div');el.className='card pcard'+(pw?'':' locked');
-  el.innerHTML=pw?`<span class="n">Power slot ${i+1} · ${TOUCH.on?pw.jp+' button':['U','O'][i]+' key'}</span><span class="kj">${pw.jp}</span><span class="nm">${pw.name}</span><span class="ti">${pw.desc}</span><span class="stt">Tier ${rom[SV.powers[id].tier-1]} · ${plural(m.cost,'ink bar')} · ${m.cd} s cooldown</span>`
-   :`<span class="n">Power slot ${i+1}</span><span class="kj">—</span><span class="ti">${l.level<need?`Opens at level ${need}`:'Empty: defeat a shadow and absorb its power'}</span>`;box.appendChild(el)});
- const more=Object.keys(SV.powers).filter(id=>!SV.loadout.powers.includes(id)).map(id=>`${POWERS[id].jp} ${POWERS[id].name}`);
- $('cMore').textContent=more.length?`Also absorbed: ${more.join(', ')} — awakening in a later update.`:'';
- const code=$('cCode'),cb=$('cCodeBtns');cb.innerHTML='';$('cMsg').textContent='';code.classList.toggle('off',!mode);code.readOnly=mode==='export';code.value=mode==='export'?exportCode():'';
- const mk=(t,fn)=>{const e=document.createElement('button');e.className='lnk';e.textContent=t;e.onclick=fn;cb.appendChild(e)};
- if(mode==='export')mk('Copy',()=>{code.select();try{navigator.clipboard.writeText(code.value).then(()=>$('cMsg').textContent='Copied.',()=>{})}catch(e){}});
- if(mode==='import')mk('Load this code',()=>{const d=importCode(code.value);if(!d){$('cMsg').textContent='That code could not be read. Check that it was copied in full.';return}
-  notice('墨','Load this save?',`Replace your progress (level ${p.level}, ${SV.progress.beaten} of 5 shadows) with the save code (level ${d.profile.level}, ${d.progress.beaten} of 5 shadows)?`,
-   [['Load it',()=>{d.rev=Math.max(d.rev,SV.rev);SV=d;writeSave(SV);openChar()},1],['Cancel',()=>openChar('import')]])});
+/* --- character screen: attributes, powers and tiers, loadout, save code. Reachable from the map and the result panel only:
+   a fight's hero is built from the save when the fight starts, so nothing here can change a fight in progress. --- */
+const CH={tab:'attrs',back:'menu',slot:null,pw:null},ROM=['I','II','III','IV','V'],ATTR={assault:['斬','Assault'],survival:['守','Survival'],shadowcraft:['墨','Shadowcraft']};
+const pct=v=>`${+(v*100).toFixed(v<.1?1:0)}%`;
+function attrLines(k,r){const b=key=>pct(attrBonus(k,key,r));
+ return k==='assault'?[`attack +${b('damage')}`,`chain hits 2–3 +${b('combo')}`,`crit chance ${b('crit_chance')}`]:k==='survival'?[`health +${b('hp')}`,`damage taken −${b('mitigation')}`]
+  :[`powers and echoes +${b('power')}`,`power cooldowns −${b('cooldown')}`,`ink +${b('ink')} · roll −${b('roll')}`,`walk +${b('speed')}`]}
+function openChar(mode,back){if(back)CH.back=back;if(mode)CH.tab='save';const p=SV.profile,l=levelOf(p.xp);
+ $('cLvl').textContent=l.level;$('cXp').style.width=(l.need?l.into/l.need*100:100)+'%';
+ $('cXpT').textContent=`${l.need?`${l.into} / ${l.need} XP to level ${l.level+1}`:'Level cap'} · ${plural(p.attrPts,'attribute point')} · ${plural(p.skillPts,'skill point')} · ${p.mon} mon · ${SV.progress.beaten} of 5 shadows`;
+ for(const b of $('cTabs').children){b.classList.toggle('on',b.dataset.tab===CH.tab);b.setAttribute('aria-selected',b.dataset.tab===CH.tab)}
+ $('cClose').textContent=CH.back==='result'?'Back':'Back to the map';
+ const box=$('cBody'),more=$('cMore'),acts=$('cCodeBtns'),code=$('cCode');box.innerHTML='';more.textContent='';acts.innerHTML='';$('cMsg').textContent='';code.classList.toggle('off',!mode);
+ const card=(cls,html,fn)=>{const e=document.createElement(fn?'button':'div');e.className='card '+cls+(fn?'':' static');e.innerHTML=html;if(fn)e.onclick=fn;box.appendChild(e);return e};
+ const btn=(el,t,fn,dis)=>{const e=document.createElement('button');e.className='lnk';e.textContent=t;e.disabled=!!dis;e.onclick=fn;el.appendChild(e);return e};
+ const edit=fn=>()=>{if(MODE==='game'&&G.state!=='over')return;if(fn()!==false)writeSave(SV);openChar()};
+ if(CH.tab==='attrs'){const cap=PROG.attributes.rank_cap,d=derive(SV);
+  for(const k in ATTR){const r=p.attrs[k],c=card('acard',`<span class="n">Rank ${r} / ${cap}</span><span class="kj">${ATTR[k][0]}</span><span class="nm">${ATTR[k][1]}</span><span class="ti">${attrLines(k,r).join('<br>')}</span>`);
+   btn(c,r>=cap?'Rank cap reached':'+ 1 point',edit(()=>spendAttr(SV,k)),r>=cap||p.attrPts<1)}
+  more.textContent=`In a fight: ${d.hp} health · attack ×${d.mod.dmg.toFixed(2)} · crit ${pct(d.mod.crit)} (×${d.mod.critDmg}) · damage taken −${pct(d.mod.mit)} · power cooldowns −${pct(1-d.mod.cd)} · ink ×${d.mod.ink.toFixed(2)} · roll ${(MOVE.roll.cd*d.mod.roll).toFixed(2)} s · walk ${Math.round(d.speed)}`;
+  btn(acts,'Reset points (free)',edit(()=>resetAttrs(SV)),!(p.attrs.assault+p.attrs.survival+p.attrs.shadowcraft))}
+ else if(CH.tab==='powers'){if(!CH.pw)CH.pw=Object.keys(SV.powers)[0]||'red_moon';
+  for(const[id,pw]of Object.entries(POWERS)){const own=SV.powers[id],t=own?own.tier:0,why=own&&t<5&&tierBlock(SV,id),c=t&&t<5&&tierCost(t+1);
+   const e=card('qcard'+(own?'':' locked')+(CH.pw===id?' sel':''),`<span class="n">${own?`Tier ${ROM[t-1]} of V`:'Not absorbed'}</span><span class="kj">${pw.jp}</span><span class="nm">${pw.name}</span><span class="ti">${!own?`Defeat ${BOSSES[BOSS_IDS.indexOf(pw.boss)].name}`:t>=5?'Fully upgraded':why||`Next: ${plural(c.sp,'skill point')} · ${c.mon} mon`}</span>`,()=>{CH.pw=id;openChar()});
+   if(own&&t<5&&!why)btn(e,`Upgrade to ${ROM[t]}`,ev=>{ev.stopPropagation();edit(()=>upgradePower(SV,id))()})}
+  const pw=POWERS[CH.pw],own=SV.powers[CH.pw],t=own?own.tier:0;
+  more.textContent=`${pw.name}${pw.ready?'':' (its active power awakens in a later update; the echo works now)'} — ${t<5?`${t?'next, ':''}tier ${ROM[t]}: ${pw.tiers[t].desc}`:pw.tiers[4].desc} · Echo, ${pw.echo.name}: ${pw.echo.desc}`}
+ else if(CH.tab==='loadout'){[['powers',0],['powers',1],['echoes',0],['echoes',1]].forEach(([kind,i])=>{
+   const need=PROG[kind==='powers'?'power_slots':'echo_slots'].unlock_levels[i],open=l.level>=need,id=SV.loadout[kind][i],pw=id&&POWERS[id],sel=CH.slot&&CH.slot[0]===kind&&CH.slot[1]===i;
+   card('qcard'+(open?'':' locked')+(sel?' sel':''),`<span class="n">${kind==='powers'?'Power':'Echo'} slot ${i+1}${kind==='powers'&&pw?` · ${TOUCH.on?pw.jp+' button':['U','O'][i]+' key'}`:''}</span><span class="kj">${pw?pw.jp:'—'}</span><span class="nm">${pw?(kind==='powers'?pw.name:pw.echo.name):open?'Empty':'Locked'}</span><span class="ti">${!open?`Opens at level ${need}`:!pw?'Choose below':kind==='powers'?`Tier ${ROM[SV.powers[id].tier-1]} · ${pw.short}`:pw.echo.desc}</span>`,
+    open?()=>{CH.slot=sel?null:[kind,i];openChar()}:null)});
+  if(CH.slot){const[kind,i]=CH.slot;
+   for(const id of Object.keys(SV.powers).filter(id=>kind==='echoes'||POWERS[id].ready))btn(acts,`${POWERS[id].jp} ${kind==='powers'?POWERS[id].name:POWERS[id].echo.name}`,edit(()=>{setSlot(SV,kind,i,id);CH.slot=null}),SV.loadout[kind][i]===id);
+   btn(acts,'Empty',edit(()=>{setSlot(SV,kind,i,null);CH.slot=null}),!SV.loadout[kind][i]);
+   more.textContent=kind==='powers'?'A power slot holds an awakened power: in a fight it costs ink, then cools down.':'An echo is a power’s passive. A power sits in a power slot or an echo slot, never both.'}
+  else more.textContent=Object.keys(SV.powers).length?'Choose a slot to change it. Loadouts change here, between fights, never mid-fight.':'Defeat a shadow to absorb its power.'}
+ else{code.readOnly=mode==='export';code.value=mode==='export'?exportCode():'';more.textContent='A save code carries your whole journey: paste it on another device to continue there.';
+  btn(acts,'Export save code',()=>openChar('export'));btn(acts,'Import save code',()=>openChar('import'));
+  if(mode==='export')btn(acts,'Copy',()=>{code.select();try{navigator.clipboard.writeText(code.value).then(()=>$('cMsg').textContent='Copied.',()=>{})}catch(e){}});
+  if(mode==='import')btn(acts,'Load this code',()=>{const d=importCode(code.value);if(!d){$('cMsg').textContent='That code could not be read. Check that it was copied in full.';return}
+   notice('墨','Load this save?',`Replace your progress (level ${p.level}, ${SV.progress.beaten} of 5 shadows) with the save code (level ${d.profile.level}, ${d.progress.beaten} of 5 shadows)?`,
+    [['Load it',()=>{d.rev=Math.max(d.rev,SV.rev);SV=d;writeSave(SV);openChar()},1],['Cancel',()=>openChar('import')]])})}
  show('char');if(mode)code.focus()}
 function togglePause(){if(MODE!=='game'||G.state==='over')return;if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;show(G.paused?'pause':null);G.keys={}}
 const KMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',KeyH:'block',ShiftLeft:'block',ShiftRight:'block',Space:'roll',Escape:'pause',KeyP:'pause'};
@@ -1314,7 +1345,8 @@ function frame(now){const raw=(now-st.last)/1000||0,dt=Math.min(.1,raw);st.last=
  if(st.dirty&&st.ready){render(st.t);st.dirty=false;fill.style.width=(st.t/DUR*100)+'%';tm.textContent=`${fmt(st.t)} / ${fmt(DUR)}`;$('prog').setAttribute('aria-valuenow',st.t.toFixed(1))}requestAnimationFrame(frame)}
 $('playBig').onclick=play;$('replayBig').onclick=replay;$('enterGame').onclick=enterGame;$('toGame').onclick=enterGame;$('skip').onclick=enterGame;
 $('mFilm').onclick=watchFilm;$('mReset').onclick=()=>{if(confirm('Reset your progress through the Five Shadows? Your level, powers and victories will be lost.')){const rev=SV.rev;SV=newSave();SV.rev=rev;writeSave(SV);buildMenu()}};
-$('mChar').onclick=()=>openChar();$('cExport').onclick=()=>openChar('export');$('cImport').onclick=()=>openChar('import');$('cClose').onclick=()=>{buildMenu();show('menu')};
+$('mChar').onclick=()=>openChar(null,'menu');$('cClose').onclick=()=>{if(CH.back==='result')show('result');else{buildMenu();show('menu')}};
+for(const b of $('cTabs').children)b.onclick=()=>{CH.tab=b.dataset.tab;CH.slot=null;openChar()};
 $('mHelp').onclick=()=>{helpBack='menu';show('help')};$('pHelp').onclick=()=>{helpBack='pause';show('help')};$('hClose').onclick=()=>show(helpBack);
 $('pResume').onclick=togglePause;$('pRestart').onclick=()=>startFight(G.lv);$('pQuit').onclick=toMenu;
 /* --- touch controls: floating joystick + multi-touch buttons feed the same G.keys / G.buf as the keyboard --- */
@@ -1351,7 +1383,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
  // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
- window.game={lab:{P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,derive,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ window.game={lab:{P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,derive,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
  if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 (async()=>{try{await Promise.race([Promise.all([document.fonts.load('380px "Yuji Boku"','一閃終師'),document.fonts.load('46px "Cormorant Garamond"')]),new Promise(r=>setTimeout(r,3500))])}catch(e){}
  build();st.ready=true;const q=new URLSearchParams(location.search);

@@ -15,7 +15,7 @@
   profile:  { level, xp, attrPts, skillPts, attrs: {assault, survival, shadowcraft}, mon, materials },
   progress: { beaten: 0-5, defeated: [boss_id], ladder: {}, regionsUnlocked: 1-5, trialsDone: [], lastWin: {id, result} | null },
   powers:   { <power_id>: { unlocked: true, tier: 1-5 } },
-  loadout:  { powers: [id|null, id|null], echoes: [null, null] },
+  loadout:  { powers: [id|null, id|null], echoes: [id|null, id|null] },
   gear:     { owned: [], equipped: {} },
   settings: {}, rewardsClaimed: { "boss:<boss_id>": <timestamp> },
   story:    { pending: [ {kind:"power", id} | {kind:"migrated"|"corrupt", text} ] },
@@ -23,6 +23,13 @@
 ```
 
 - **`xp` is the running total.** `level` is always re-derived from it on load (see `docs/balance.md`).
+- **`attrPts` and `skillPts` are derived on every load** (M4), as earned minus spent:
+  - Attribute points: earned = (level − 1) × 2; spent = the sum of the ranks.
+  - Skill points: earned = the claimed bosses' skill points + one per milestone level reached (5, 10, 15, 20, 25); spent = the tier costs.
+  - If spent exceeds earned, the save is impossible: ranks (or tiers) reset to 0 (tier I), and the points come back.
+- **`attrs`**: ranks from 0 to `rank_cap` (20).
+- **`powers[id].tier`**: capped at III until that boss's Ink Trial is in `progress.trialsDone`, and at I for a power that isn't playable yet.
+- **`loadout.echoes`**: absorbed powers only, with slots opening at levels 8 and 14. A power in a power slot can't also be an echo.
 - **`lastWin`** records the last victory processed, keyed by the match id. A victory reported twice replays the stored result and grants nothing again.
 - **`story.pending`** holds one-time messages shown on the map and removed once read. It also covers a reveal ceremony interrupted by an app kill.
 
