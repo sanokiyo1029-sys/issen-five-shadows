@@ -20,17 +20,17 @@ Audited against `issen_master_prompt_v4.txt`, using the real source plus runs in
 
 | # | Finding | Verified how | Decision |
 |---|---|---|---|
-| a | No keyboard Block key; only walk-away (touch has a Block button) | `KMAP` has no block entry | **M2** (§5.2a), with gamepad |
-| b | Reposition attacks give little warning. **k_vanish**: hidden at 0.10–0.12 s, teleports at 0.50 s, visible at 0.55 s, hits at 0.60 s, so there is 0.05 s of visible cue. The keyboard "away" direction flips at the teleport. **y_phase**: fades from 0.13 s, visible again at 0.57 s, hits at 0.62 s. | Harness: forced each move and logged alpha, position and hit times at 60 Hz | **M2** (§5.2b): destination marker at vanish start |
-| c | Only `g_dragon` has a telegraph (`tell`) | Scanned MV in the harness | **M2** telegraph standard |
+| a | No keyboard Block key; only walk-away (touch has a Block button) | `KMAP` has no block entry | **Done in M2:** H / Shift block key; gamepad LB (`tests/input.test.js`) |
+| b | Reposition attacks give little warning. **k_vanish**: hidden at 0.10–0.12 s, teleports at 0.50 s, visible at 0.55 s, hits at 0.60 s, so there is 0.05 s of visible cue. The keyboard "away" direction flips at the teleport. **y_phase**: fades from 0.13 s, visible again at 0.57 s, hits at 0.62 s. | Harness: forced each move and logged alpha, position and hit times at 60 Hz | **Done in M2:** a closing ink ring marks the destination from the vanish, 0.50 / 0.56 s before the hit. The Block key turns with her (`tests/fairness.test.js`) |
+| c | Only `g_dragon` has a telegraph (`tell`) | Scanned MV in the harness | **Done in M2:** all 14 heavy boss moves have a tell: glint shape + steel ting + windup (`docs/fairness.md`) |
 | d | The save is unvalidated and unversioned. **New, worse than the prompt says:** `{"beaten":"abc"}` or a negative value **locks all five bosses, including the first** (a soft-lock). Bad JSON silently reads as 0, and the next win overwrites the raw text. | Harness: menu built from 5 corrupted saves | **Fixed in M3** (save v2: clamp, migrate, keep the legacy raw text) |
 | e | `confirm()` on Reset in the WebView | The shell sets a plain `WebChromeClient`. Chromium WebView shows its default dialog when `onJsConfirm` isn't overridden. **Not tested on a device.** | Replace with an in-game confirm panel in M4 (settings) |
 | f | Debug hooks exposed in release | Code | **Fixed in M1** (debug flag) |
-| g | `Math.random` everywhere, so fights aren't reproducible | Code | Tests seed it in the harness, so fights replay identically (test "same seed, same fight"). The in-game seedable RNG lands in **M2** with the fixed-step sim. |
+| g | `Math.random` everywhere, so fights aren't reproducible | Code | **Done in M2:** each fight has a seed; the AI draws from `G.rand`. Fixed 1/60 s step; `{seed, boss, inputs}` replays are exact (`tests/sim.test.js`) |
 | h | Per-frame allocations: `G.fx.filter`, `G.proj.filter`, point arrays in every brush stroke, `P()` pose objects per fighter per frame | Code | **M8** performance pass. v1.2 already removed the big per-frame GPU costs. |
 | i | Yuji Boku is a subset of **38 kanji**: 一五光勝参城墨壱始守寺将山師弐怒敗斬時月林止湖焼白竹終討跳蹴軍郎野鉄閃霞鬼鷺. Any other kanji silently falls back to a serif font. | Listed from `index.html` | M3 reuses only existing glyphs (月). A re-subset (Google Fonts `text=` or pyftsubset on the OFL source) is needed before M4–M5 add power kanji. |
 | j | manifest/sw "missing" | See the table above | By design |
-| k | Animation gaps: one jump pose (lean only); one hit pose (`STAG`); instant facing flip; no landing pose (straight to idle plus dust); moves start from the guard pose, so a move begun mid-walk pops; no weapon trails in the game | Read `poseOf` and `upd` | **M2** locomotion and hit-reaction pass |
+| k | Animation gaps: one jump pose (lean only); one hit pose (`STAG`); instant facing flip; no landing pose (straight to idle plus dust); moves start from the guard pose, so a move begun mid-walk pops; no weapon trails in the game | Read `poseOf` and `upd` | **Done in M2** except trails: blends, turn squash, jump phases, landing, hit variants, get-up. Worst pop 246 → 56 px (`docs/animation-notes.md`). Trails are a later pass |
 
 ## State of the build
 
@@ -70,3 +70,7 @@ The same JSON text can be extracted for the Godot port (D8a). `MV` and `BOSSES` 
 - **M2:** Block key and gamepad, telegraph standard and fairness fixes for b and c, dodge roll, seeded RNG in-game, a fixed 1/60 step, the locomotion and hit-reaction pass, and the Pose Lab.
   - The prompt orders M2 before M3. §19 explicitly makes the M3 slice the first action, so M2 follows it.
 - **M4–M9:** as listed in the prompt.
+
+## M2 status (2026-10-12)
+
+M2 is done (spec §5.2–5.8, §6.9, §16), except the items listed as not done in the M2 report: remappable keys, Reduce Shake / Flash, whiff punish, Guard Assist, swing trails, and JSON keyframe tracks. Fairness: `docs/fairness.md`. Animation: `docs/animation-notes.md`, `docs/animation-review/`. Performance: `docs/performance.md`.
