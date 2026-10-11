@@ -30,6 +30,11 @@
 - **`attrs`**: ranks from 0 to `rank_cap` (20).
 - **`powers[id].tier`**: capped at III until that boss's Ink Trial is in `progress.trialsDone`, and at I for a power that isn't playable yet.
 - **`loadout.echoes`**: absorbed powers only, with slots opening at levels 8 and 14. A power in a power slot can't also be an echo.
+- **`progress.ladder`** (M6) is `{ <region_id>: steps cleared, 0 to the step count }`. It is the checkpoint, kept through losses.
+- **Ladder and trial claims:**
+  - `rewardsClaimed` also holds `step:<region_id>:<i>` and `trial:<boss_id>` claims, paid once like the boss claims.
+  - `progress.trialsDone` lists the bosses whose Ink Trial is passed (boss ids only); `gear.owned` receives the trial item.
+- **`story.seen`** lists the regions whose story card was shown.
 - **`lastWin`** records the last victory processed, keyed by the match id. A victory reported twice replays the stored result and grants nothing again.
 - **`story.pending`** holds one-time messages shown on the map and removed once read. It also covers a reveal ceremony interrupted by an app kill.
 

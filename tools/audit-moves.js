@@ -11,6 +11,7 @@ const JUDGED = {
   b_kick: 'fast (0.13 s) but light (5): holding block answers it.',
   k_flurry: 'fast (0.08 s) but light (3 × 4): holding block answers every hit.',
   k_stab: 'fast (0.11 s) but light (6): holding block answers it.',
+  r_jab: 'the cutthroat’s jab: fast (0.13 s) but light (4); holding block answers it.',
   k_low: 'fast (0.17 s) knockdown sweep, kept fast as Kasumi’s identity: crouch-block (held) answers it, its tell glints from 0.02 s. M2 raised its recovery 0.23 → 0.30 s.',
 };
 const NOTES = {
@@ -42,7 +43,9 @@ function flags(f) {
 
 async function audit({ verify = true } = {}) {
   const v = await verifier(), bosses = v.game.BOSSES, rows = [];
-  for (const b of bosses) for (const id of [...b.moves, b.phase && b.phase.move].filter(Boolean)) {
+  const seen = new Set(), owners = [...bosses.map(b => [b, [...b.moves, b.phase && b.phase.move].filter(Boolean)]), ...Object.values(v.game.FOES).map(f => [f, f.moves])];
+  for (const [b, list] of owners) for (const id of list) {
+    if (!b.arena && b.arena !== 0 && seen.has(id)) continue; seen.add(id); // a retainer's borrowed boss move is audited once, with its boss
     const f = Object.assign(frameData(v.MV, id), { boss: b.id, phase: !!b.phase && b.phase.move === id }), d = v.distance(id);
     f.verified = verify && d != null ? f.answers.filter(a => v.works(id, a, d)) : null;
     f.flags = flags(f); f.judged = JUDGED[id] || null; f.note = NOTES[id] || null;

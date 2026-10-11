@@ -14,7 +14,7 @@ const parts = m => [m, ...(m.win || []).filter(Boolean).map(w => Object.assign({
 module.exports = {
   async 'audit: every boss move has >= 2 answers, all verified by simulation; every flag is judged'() {
     const rows = await audit();
-    assert.strictEqual(rows.length, 31, '26 moves + five second-phase moves');
+    assert.strictEqual(rows.length, 37, '26 moves + five second-phase moves + six retainer moves');
     for (const f of rows) {
       assert.ok(f.answers.length >= 2 && f.answers.every(a => ANSWERS.includes(a)), `${f.id}: answers ${f.answers}`);
       assert.deepStrictEqual(f.verified, f.answers, `${f.id}: declared ${f.answers}, simulation confirms ${f.verified}`);

@@ -11,6 +11,7 @@
   - Reward claims: `boss:<boss_id>` for a first clear.
 - **Data:** engine-neutral JSON in `<script type="application/json" id="data-…">` blocks in `index.html`. Each has a `schema_version` and a validator that runs at boot and in tests. See the decision record in `docs/audit.md`.
 - **Saves:** schema v2 (see `docs/save-format.md`).
+- **Ladders (M6):** `data-ladders` (schema 1) holds regions (boss, story, steps: foe, xp, mon, materials, elite) and Ink Trials (rules: timer, no_block, hero_hp, phase, rage; rewards). Opponents other than bosses live in `FOES` (ids `footman`, `cutthroat`, `thrower`, `guard`, `elite_*`), shaped like `BOSSES` entries. Region ids: `burning_field`, `bamboo_grove`, `mountain_shrine`, `moonlit_lake`, `oni_castle`.
 - **Movement data:** `data-movement` (schema 1) holds the roll (duration, distance, invulnerable window, cooldown) and the cosmetic blend timings. Boss moves carry `answers` (verified by `tools/answers.js`), `tell:[from,to]` (heavy moves) and, for repositions, `mark:[vanish,teleport]` plus `dest(F,O)`. Pose keyframes (`fr`) are still JavaScript functions; JSON tracks come in a later pass (§6.9).
 - **More move fields (M5):**
   - `win:[override|null, …]` gives per-hit-window overrides (a string whose steps differ in zone or damage).

@@ -170,3 +170,57 @@ Below 50% health, once a round, each boss:
 
 The first m_quake2 draft spaced the quakes 0.4 s apart. That left only a flickering 1–2 frame jump window, so the second quake now follows after 0.25 s.
 
+## Regions, ladders and Ink Trials (M6)
+
+Each region is a short ladder in `data-ladders`:
+- Retainer duels: one round each, in order.
+- An optional elite: best of three, paying 1 upgrade material.
+- The boss: best of three. It opens once the retainers are cleared, or if it was already beaten before M6.
+- Its Ink Trial: opens once the boss is beaten.
+
+A win saves the checkpoint (`progress.ladder`). A loss retries the same duel, with no progress lost. Retainers and elites gain 12% health per region.
+
+| Region | Duels (first-clear XP) | Ladder XP |
+|---|---|---|
+| Burning Field | footman 250, thrower 300, elite Spear Captain 500 | 1,050 |
+| Bamboo Grove | cutthroat 300, thrower 350, footman 350, elite Shinobi Adept 650 | 1,650 |
+| Mountain Shrine | guard 400, footman 400, cutthroat 450, elite Iron Acolyte 750 | 2,000 |
+| Moonlit Lake | thrower 450, guard 500, cutthroat 500, elite Drowned Ronin 850 | 2,300 |
+| Oni Castle | guard 550, thrower 550, cutthroat 600, elite Oni Lieutenant 900 | 2,600 |
+
+**Campaign first clear:** ladders 9,600 + bosses 6,700 = **16,300 XP: level 11** (target 10–12).
+
+| Ink Trial | Rule | XP | Also |
+|---|---|---|---|
+| Swift Spear (Gekkō) | 30-second rounds | 6,000 | |
+| Open Hands (Kasumi) | you cannot block | 7,500 | |
+| Half Measure (Tetsugorō) | you start each round at half health | 9,000 | |
+| Pale Night (Shirasagi) | she starts in her second phase | 10,500 | |
+| Unending Wrath (Akuma) | he is enraged from the first blow | 12,000 | |
+
+Every trial also pays 1 skill point, 300 mon and a named item (its effects come with the gear in M7), and opens tier IV of that boss's power.
+
+**With every trial:** 61,300 XP, **level 19** (target 18–20). Repeat clears of anything pay 25% of the XP only. `tests/ladder.test.js` checks both targets against the data.
+
+**Archetypes (§11.3):** the existing rigs in new ink, using the existing AI and move machinery.
+
+| Archetype | Character | Moves | Health |
+|---|---|---|---|
+| Footman | plain cuts at three heights | r_slash / r_high / r_low / kick | 55 |
+| Cutthroat | fast and close | r_jab / r_low / kick | 50 |
+| Knife-thrower | keeps his distance | r_knife / r_jab | 45 |
+| Iron Guard | armored overhead r_bash with a tell | r_bash / r_slash / kick | 80, scale 1.12 |
+
+Each elite is a lesser version of its region's boss: the boss's ink and a few of its moves, plus one signature trick (g_spin, k_vanish, m_slam, y_phase, a_wave).
+
+The last region mixes all three troublesome archetypes, so different loadouts pay off: an armored guard (Red Moon III), knives (Phantom Edge, Iron Resolve IV) and a cutthroat (Iron Resolve, Miststep).
+
+## Power tiers IV and V (M6)
+
+| Power | IV (needs that boss's Ink Trial) | V |
+|---|---|---|
+| Spear of the Red Moon | +80 reach; the lance breaks projectiles in its line; 30% of the damage passes a block | 1 s shorter cooldown; 15 ink back on a hit |
+| Miststep | Shadow Clone: 3 s where you stood; it repeats your next melee attack once | 1 s shorter cooldown; the clone waits 4.5 s |
+| Iron Resolve | projectiles striking the stance fly back at the thrower | +0.6 s stance; counter +4 (cap 28) |
+| Phantom Edge | each hit returns from behind for 60% (unblockable) | 1 s shorter cooldown; a second wave 0.25 s later |
+| Demon Sovereignty | Sovereign Cut +12 (52) | 1 s burnout |

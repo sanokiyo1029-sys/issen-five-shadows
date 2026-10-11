@@ -13,10 +13,13 @@ const first = m => m.hit ? m.hit[0][0] : m.proj.t;
 async function verifier() {
   const { game } = await boot(), G = game.G, MV = game.MV;
   const lvOf = id => game.BOSSES.findIndex(b => b.moves.includes(id) || b.phase && b.phase.move === id);
+  const foeOf = id => Object.values(game.FOES).find(f => f.moves.includes(id)); // retainer moves: fought in region 1 by their foe
 
   // one trial: boss `id` at distance d; `act(G, tick)` drives the hero; returns the damage the hero took
   function trial(id, d, act) {
-    game.startFight(lvOf(id), 1); G.state = 'fight'; G.st = 0; G.P.x = -d / 2; G.B.x = d / 2;
+    const lv = lvOf(id);
+    if (lv >= 0) game.startFight(lv, 1); else { game.startFight(0, 1); G.B = game.mkF(foeOf(id), false); game.newRound(); }
+    G.state = 'fight'; G.st = 0; G.P.x = -d / 2; G.B.x = d / 2;
     passive(G); game.updGame(1 / 60);
     if (!game.startMove(G.B, id)) throw new Error('could not start ' + id);
     const m = MV[id], ticks = Math.ceil((m.dur + (m.proj ? 2 : .2)) * 60);
@@ -30,7 +33,7 @@ async function verifier() {
   const idle = () => {};
   // the distance a trial uses: the first candidate inside the AI's range at which an idle hero gets hit
   function distance(id) {
-    const m = MV[id], s = game.BOSSES[lvOf(id)].s, lo = m.ai[0] * s, hi = m.ai[1] * s;
+    const m = MV[id], s = (lvOf(id) >= 0 ? game.BOSSES[lvOf(id)] : foeOf(id)).s, lo = m.ai[0] * s, hi = m.ai[1] * s;
     const cands = m.proj ? [600] : [.85 * m.reach * s, lo + 30, (lo + hi) / 2].map(v => Math.min(hi, Math.max(lo + 1, v)));
     for (const d of cands) if (trial(id, d, idle) > 0) return d;
     return null;
@@ -53,7 +56,7 @@ async function verifier() {
 module.exports = { verifier, ANSWERS, MIN_WINDOW, first };
 
 if (require.main === module) (async () => {
-  const v = await verifier(), ids = [...new Set(v.game.BOSSES.flatMap(b => [...b.moves, b.phase && b.phase.move].filter(Boolean)))];
+  const v = await verifier(), ids = [...new Set([...v.game.BOSSES.flatMap(b => [...b.moves, b.phase && b.phase.move].filter(Boolean)), ...Object.values(v.game.FOES).flatMap(f => f.moves)])];
   for (const id of ids) {
     const d = v.distance(id);
     console.log(id.padEnd(9), d == null ? 'NEVER HITS AN IDLE HERO' : 'd=' + Math.round(d), d == null ? '' : ANSWERS.filter(a => v.works(id, a, d)).join(' '), ' declared:', (v.MV[id].answers || []).join(' '));

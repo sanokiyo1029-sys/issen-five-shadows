@@ -895,6 +895,162 @@
    "start": "fn start(F,O){F.d.x0=F.x;F.d.tx=clamp(O.x-F.f*110*F.def.s,-ARENA,ARENA);F.manual=true;snd('whoosh',.6)}",
    "tick": "fn tick(F,O,a,b){if(!F.manual)return;const u=ss(.18,.82,b);F.x=lerp(F.d.x0,F.d.tx,u);F.y=-Math.sin(u*Math.PI)*300;if(b>=.82){F.y=0;F.manual=false;fxAdd({k:'ring',x:F.x+F.f*80,y:0});fxAdd({k:'splash',x:F.x+F.f*90,y:-4,sz:60,persist:1});G.shake=22;snd('boom',.7);snd('drum',1)}}"
   },
+  "r_slash": {
+   "dur": 0.55,
+   "hit": [
+    [
+     0.24,
+     0.32
+    ]
+   ],
+   "reach": 185,
+   "dmg": 6,
+   "zone": "mid",
+   "push": 100,
+   "ai": [
+    0,
+    200
+   ],
+   "w": 3,
+   "answers": [
+    "block",
+    "roll"
+   ],
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.14,PS.wind],[.27,PS.cutSide,'o5'],[.55,g]]"
+  },
+  "r_high": {
+   "dur": 0.6,
+   "hit": [
+    [
+     0.26,
+     0.34
+    ]
+   ],
+   "reach": 180,
+   "dmg": 7,
+   "zone": "high",
+   "push": 110,
+   "ai": [
+    0,
+    195
+   ],
+   "w": 2,
+   "answers": [
+    "block",
+    "crouch",
+    "roll"
+   ],
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.16,PS.high],[.29,P(PS.cutLow,{sw:1.1}),'o5'],[.6,g]]"
+  },
+  "r_low": {
+   "dur": 0.6,
+   "hit": [
+    [
+     0.26,
+     0.35
+    ]
+   ],
+   "reach": 180,
+   "dmg": 6,
+   "zone": "low",
+   "push": 90,
+   "crouch": 1,
+   "ai": [
+    0,
+    195
+   ],
+   "w": 2,
+   "answers": [
+    "block",
+    "jump",
+    "roll"
+   ],
+   "snd": "slash",
+   "fr": "fn g=>[[0,P(g,CR)],[.15,P(PS.wind,CR)],[.28,P(PS.guard,LOWC),'o5'],[.6,P(g,CR)]]"
+  },
+  "r_jab": {
+   "dur": 0.38,
+   "hit": [
+    [
+     0.13,
+     0.19
+    ]
+   ],
+   "reach": 140,
+   "dmg": 4,
+   "zone": "mid",
+   "push": 70,
+   "ai": [
+    0,
+    155
+   ],
+   "w": 3,
+   "answers": [
+    "block",
+    "roll"
+   ],
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.13,KS1,'o5'],[.38,g]]"
+  },
+  "r_knife": {
+   "dur": 0.5,
+   "cd": 1.6,
+   "proj": {
+    "t": 0.24,
+    "type": "star",
+    "v": 1150,
+    "dmg": 5,
+    "zone": "mid",
+    "y": -140
+   },
+   "ai": [
+    250,
+    1200
+   ],
+   "w": 4,
+   "answers": [
+    "block",
+    "jump",
+    "roll"
+   ],
+   "fr": "fn g=>[[0,g],[.12,P(g,{ua1:-.6,fa1:-.2,tl:0})],[.24,KS1,'o5'],[.5,g]]"
+  },
+  "r_bash": {
+   "dur": 0.95,
+   "hit": [
+    [
+     0.5,
+     0.6
+    ]
+   ],
+   "reach": 200,
+   "dmg": 12,
+   "zone": "high",
+   "kd": 1,
+   "push": 260,
+   "armor": [
+    0,
+    0.52
+   ],
+   "tell": [
+    0.14,
+    0.48
+   ],
+   "ai": [
+    0,
+    215
+   ],
+   "w": 3,
+   "answers": [
+    "block",
+    "crouch",
+    "roll"
+   ],
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,g],[.42,P(PS.high,{tl:-.12})],[.54,P(PS.cutLow,{sw:.85}),'o5'],[.95,g]]"
+  },
   "g_twin": {
    "dur": 1.25,
    "hit": [
@@ -1829,7 +1985,7 @@
    "snd": "slash",
    "sndT": 0.24,
    "fr": "fn g=>[[0,g],[.2,P(PS.guard,{tl:-.05,hd:-.2,ua1:.15,fa1:1.45,sw:1.57,th1:.25,sh1:.05,th2:-.75,sh2:-.55})],[.27,P(PS.cutSide,{tl:.55,hd:-.38,sw:1.57,th1:1.3,sh1:.15,th2:-1.15,sh2:-1.45}),'o5'],[.36,P(PS.cutSide,{tl:.5,hd:-.34,sw:1.57,th1:1.25,sh1:.15,th2:-1.1,sh2:-1.4})],[.7,g]]",
-   "tick": "fn tick(F,O,a,b){if(a<.24&&b>=.24)fxAdd({k:'moon',x:F.x+F.f*40,y:-135,f:F.f})}"
+   "tick": "fn tick(F,O,a,b){if(a<.24&&b>=.24){fxAdd({k:'moon',x:F.x+F.f*40,y:-135,f:F.f});if(this.lance){for(const p of G.proj)if(p.o!==F&&(p.x-F.x)*F.f>-20&&(p.x-F.x)*F.f<this.reach+60&&Math.abs(p.y+130)<140)p.dead=1;fxAdd({k:'lance',x:F.x,y:-135,f:F.f,len:this.reach+60})}}}"
   },
   "p_miststep": {
    "dur": 0.35,
@@ -1848,7 +2004,7 @@
    "snd": "whoosh",
    "sndT": 0,
    "fr": "fn g=>[[0,g],[.06,P(g,CR,{tl:.6})],[.28,P(g,CR,{tl:.5})],[.35,g]]",
-   "start": "fn start(F,O){const fwd=!!F.in&&F.in.mx===F.f,min=58*(F.def.s+O.def.s)/2;F.d.x0=F.x;F.d.x1=clamp(fwd?O.x+F.f*(min+70):F.x-F.f*this.dist,-ARENA,ARENA);F.manual=true;\r\n   G.proj.push({o:F,x:F.x,y:-120,vx:0,type:'ghost',fuse:.5,dmg:this.ghostDmg,t:0});fxAdd({k:'smoke',x:F.x,y:0})}",
+   "start": "fn start(F,O){const fwd=!!F.in&&F.in.mx===F.f,min=58*(F.def.s+O.def.s)/2;F.d.x0=F.x;F.d.x1=clamp(fwd?O.x+F.f*(min+70):F.x-F.f*this.dist,-ARENA,ARENA);F.manual=true;\r\n   G.proj.push({o:F,x:F.x,y:-120,vx:0,type:'ghost',fuse:.5,dmg:this.ghostDmg,t:0});fxAdd({k:'smoke',x:F.x,y:0});\r\n   if(this.clone)G.clone={o:F,x:F.x,y:0,f:F.f,def:F.def,mod:F.mod,rage:false,sov:null,hp:1,maxHp:1,ink:0,until:G.t+this.clone,mv:null}}",
    "tick": "fn tick(F,O,a,b){F.x=lerp(F.d.x0,F.d.x1,E.io(clamp((b-.04)/.24)));F.alpha=b>.04&&b<.28?.3:1}"
   },
   "p_iron": {
@@ -1861,7 +2017,7 @@
    "snd": "clang",
    "sndT": 0.05,
    "fr": "fn g=>[[0,g],[.12,P(g,{tl:-.05,th1:.75,sh1:.1,th2:-.75,sh2:-.6})],[.25,P(g,{tl:-.02,th1:.7,sh1:.08,th2:-.7,sh2:-.55})]]",
-   "start": "fn start(F){F.iron={until:G.t+this.dur+this.stance,mit:this.mit,heal:this.heal,absorbed:0,cnt:0}}"
+   "start": "fn start(F){F.iron={until:G.t+this.dur+this.stance,mit:this.mit,heal:this.heal,reflect:!!this.reflect,bonus:this.counterBonus||0,absorbed:0,cnt:0}}"
   },
   "p_iron_counter": {
    "dur": 0.55,
@@ -1882,7 +2038,7 @@
    "push": 300,
    "snd": "slash",
    "fr": "fn g=>[[0,g],[.08,PS.wind],[.16,PS.cutSide,'o5'],[.55,g]]",
-   "start": "fn start(F){const I=F.iron||{absorbed:0,heal:0};F.mv=Object.assign({},this,{dmg:Math.min(24,this.base+1.2*I.absorbed)});F.d.heal=I.heal;F.iron=null}",
+   "start": "fn start(F){const I=F.iron||{absorbed:0,heal:0,bonus:0};F.mv=Object.assign({},this,{dmg:Math.min(24+I.bonus,this.base+I.bonus+1.2*I.absorbed)});F.d.heal=I.heal;F.iron=null}",
    "onHit": "fn onHit(F){if(F.d.heal){F.hp=Math.min(F.maxHp,F.hp+this.dmg*F.d.heal*F.mod.heal);fxAdd({k:'ring',x:F.x,y:0})}}"
   },
   "p_phantom": {
@@ -1915,7 +2071,7 @@
    "snd": "growl",
    "sndT": 0.05,
    "fr": "fn g=>[[0,g],[.22,P(PS.high,{tl:-.2,hd:-.5})],[.55,g]]",
-   "start": "fn start(F){F.sov={until:G.t+this.dur+this.form,dmg:this.formDmg,spd:1.15,burn:this.burn,bleed:this.bleed};G.shake=Math.max(G.shake,8);fxAdd({k:'ring',x:F.x,y:0})}"
+   "start": "fn start(F){F.sov={until:G.t+this.dur+this.form,dmg:this.formDmg,spd:1.15,burn:this.burn,bleed:this.bleed,cutPlus:this.cutPlus||0};G.shake=Math.max(G.shake,8);fxAdd({k:'ring',x:F.x,y:0})}"
   },
   "p_sov_cut": {
    "dur": 1.3,
@@ -1925,8 +2081,8 @@
     "cut"
    ],
    "fr": "fn ()=>[[0,PS.ready],[.38,P(PS.ready,{tl:.55,th1:1.1,sh1:.1,th2:-1.0,sh2:-1.2})],[.46,PS.cutSide,'o5'],[1.3,PS.cutSide]]",
-   "start": "fn start(F,O){MV.issen.start(F,O);F.d.hit=Math.abs(O.x-F.x)<1100&&(O.x-F.x)*F.f>-140;if(F.sov)F.sov.until=G.t}",
-   "tick": "fn tick(F,O,a,b){if(b>=.38&&a<.47)F.x=lerp(F.d.x0,F.d.x1,ss(.38,.46,b));if(a<.4&&b>=.4)snd('slash',1.4);if(a<.8&&b>=.8&&F.d.hit&&tryHit(F,O,{dmg:this.cut,kd:1,unblock:1,zone:'mid',push:300,vx:F.f},true))fxAdd({k:'splash',x:O.x,y:-150*O.def.s,sz:150,dir:F.f>0?0:Math.PI})}"
+   "start": "fn start(F,O){MV.issen.start(F,O);F.d.hit=Math.abs(O.x-F.x)<1100&&(O.x-F.x)*F.f>-140;F.d.cut=this.cut+(F.sov?F.sov.cutPlus:0);if(F.sov)F.sov.until=G.t}",
+   "tick": "fn tick(F,O,a,b){if(b>=.38&&a<.47)F.x=lerp(F.d.x0,F.d.x1,ss(.38,.46,b));if(a<.4&&b>=.4)snd('slash',1.4);if(a<.8&&b>=.8&&F.d.hit&&tryHit(F,O,{dmg:F.d.cut,kd:1,unblock:1,zone:'mid',push:300,vx:F.f},true))fxAdd({k:'splash',x:O.x,y:-150*O.def.s,sz:150,dir:F.f>0?0:Math.PI})}"
   }
  }
 }
