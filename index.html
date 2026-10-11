@@ -100,6 +100,7 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
 .tb[data-a=jump]{width:calc(74*var(--u));height:calc(74*var(--u));right:calc(32*var(--u) + env(safe-area-inset-right));bottom:calc(136*var(--u) + env(safe-area-inset-bottom))}
 .tb[data-a=ink]{width:calc(64*var(--u));height:calc(64*var(--u));right:calc(132*var(--u) + env(safe-area-inset-right));bottom:calc(118*var(--u) + env(safe-area-inset-bottom))}
 .tb[data-a=power1]{width:calc(64*var(--u));height:calc(64*var(--u));right:calc(222*var(--u) + env(safe-area-inset-right));bottom:calc(112*var(--u) + env(safe-area-inset-bottom))}.tb.off{display:none}
+.tb[data-a=power2]{width:calc(64*var(--u));height:calc(64*var(--u));right:calc(222*var(--u) + env(safe-area-inset-right));bottom:calc(190*var(--u) + env(safe-area-inset-bottom))}
 .tb[data-a=issen]{width:calc(68*var(--u));height:calc(68*var(--u));right:calc(84*var(--u) + env(safe-area-inset-right));bottom:calc(210*var(--u) + env(safe-area-inset-bottom))}
 .tpause{all:unset;position:fixed;z-index:21;top:calc(10px + env(safe-area-inset-top));right:calc(12px + env(safe-area-inset-right));width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(12,11,10,.5);color:var(--paper);font:700 15px/1 sans-serif;letter-spacing:2px;cursor:pointer;touch-action:none}
 .tpause.off{display:none}.tpause:focus-visible{outline:2px solid var(--red)}
@@ -169,7 +170,8 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
   <button class="tb" data-a="jump" aria-label="Jump"><b>跳</b><i>Jump</i></button>
   <button class="tb dis" data-a="ink" id="tbInk" aria-label="Ink wave"><b>墨</b><i>Ink</i></button>
   <button class="tb dis" data-a="issen" id="tbIssen" aria-label="Issen"><b>閃</b><i>Issen</i></button>
-  <button class="tb dis off" data-a="power1" id="tbP1" aria-label="Power"><b>月</b><i>Moon</i></button>
+  <button class="tb dis off" data-a="power1" id="tbP1" aria-label="Power 1"><b>月</b><i>Moon</i></button>
+  <button class="tb dis off" data-a="power2" id="tbP2" aria-label="Power 2"><b>霞</b><i>Mist</i></button>
 </div>
 <button id="tPause" class="tpause off" aria-label="Pause">❚❚</button>
 <!-- engine-neutral game data (JSON, read at boot; see docs/conventions.md). XP and reward arithmetic: docs/balance.md -->
@@ -181,7 +183,7 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
  "echo_slots":{"unlock_levels":[8,14]},
  "attributes":{"rank_cap":20,"k":0.1,"crit_damage":1.5,
   "assault":{"damage":0.2,"combo":0.06,"crit_chance":0.1},
-  "survival":{"hp":0.15,"mitigation":0.06},
+  "survival":{"hp":0.15,"mitigation":0.06,"healing":0.3},
   "shadowcraft":{"power":0.25,"cooldown":0.2,"ink":0.2,"roll":0.2,"speed":0.05}},
  "power_tiers":[{"sp":1,"mon":50},{"sp":2,"mon":150},{"sp":3,"mon":300,"trial":true},{"sp":4,"mon":500}],
  "power_budget":{"max":2.0,"attributes_and_echoes":1.75,"iron_skin_share":0.4},
@@ -198,32 +200,35 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
  "blend":{"state":0.07,"move":0.05,"hit":0.05,"fall":0.1,"turn":0.07,"land":0.14,"step_px":45}}
 </script>
 <script type="application/json" id="data-powers">
-{"schema_version":2,
+{"schema_version":3,
  "powers":{
   "red_moon":{"name":"Spear of the Red Moon","short":"Moon","jp":"月","boss":"gekko","ready":true,"move":"p_red_moon","tags":["reach","pierce"],
    "desc":"Gekkō’s thrust, in your hands: step in and pierce with a red crescent at long reach. One ink bar, 4 s cooldown.",
-   "tiers":[{"desc":"14 damage at 300 reach; one ink bar, 4 s cooldown."},{"desc":"Longer and harder: +20 reach, +2 damage.","reach":20,"dmg":2},
-    {"desc":"Armor-piercing: breaks hyper-armor and doubles block pushback.","armor_pierce":true,"block_push":2},
+   "tiers":[{"desc":"14 damage at 300 reach; one ink bar, 4 s cooldown."},{"desc":"Longer and harder: +20 reach, +2 damage.","add":{"reach":20,"dmg":2}},
+    {"desc":"Armor-piercing: breaks hyper-armor and doubles block pushback.","set":{"pierceArmor":1,"blockPush":2}},
     {"desc":"Moon Pierce: a lance of light that destroys projectiles and passes a share of its damage through a block."},{"desc":"A shorter cooldown and part of the ink back on a hit."}],
    "echo":{"name":"Red Moon Reach","desc":"Lunges and thrusts reach 8% further.","reach":0.08,"moves":["lunge","slash3","p_red_moon"]}},
-  "miststep":{"name":"Miststep","short":"Mist","jp":"霞","boss":"kasumi","ready":false,"move":null,"tags":["mobility","crossup"],
-   "desc":"Kasumi’s vanishing step.",
-   "tiers":[{"desc":"Retreat, or pass behind the opponent, through a short evasion window."},{"desc":"Further, and a shorter cooldown."},{"desc":"A stronger afterimage, and ink back when it dodges a live attack."},
+  "miststep":{"name":"Miststep","short":"Mist","jp":"霞","boss":"kasumi","ready":true,"move":"p_miststep","tags":["mobility","crossup"],
+   "desc":"Kasumi’s vanishing step: slip back through a blade, or press toward your foe to pass behind them. An afterimage bursts where you stood. One ink bar, 7 s cooldown.",
+   "tiers":[{"desc":"Retreat 380 px, or pass behind the foe; safe from 0.04 to 0.28 s."},{"desc":"Further (+60 px) and a 1 s shorter cooldown.","add":{"dist":60,"cd":-1}},
+    {"desc":"A stronger afterimage, and ink back when it slips through a live attack.","add":{"ghostDmg":3},"set":{"dodgeInk":10}},
     {"desc":"Shadow Clone: a clone stays to repeat your next attack once."},{"desc":"A shorter cooldown and a longer-lived clone."}],
    "echo":{"name":"Light Step","desc":"Roll cooldown 15% shorter; walk 4% faster.","roll":0.15,"speed":0.04}},
-  "iron_resolve":{"name":"Iron Resolve","short":"Iron","jp":"鉄","boss":"tetsugoro","ready":false,"move":null,"tags":["defence","counter"],
-   "desc":"Tetsugorō’s unbreakable stance.",
-   "tiers":[{"desc":"A stance that takes less damage and answers an absorbed hit with a counter."},{"desc":"Takes even less damage."},{"desc":"The counter heals a little."},
+  "iron_resolve":{"name":"Iron Resolve","short":"Iron","jp":"鉄","boss":"tetsugoro","ready":true,"move":"p_iron","extra":["p_iron_counter"],"tags":["defence","counter"],
+   "desc":"Tetsugorō’s stance: for 1.6 s take 55% less damage and do not stagger. Slash right after it absorbs a blow to counter with a knockdown. One ink bar, 8 s cooldown.",
+   "tiers":[{"desc":"A 1.6 s stance: 55% less damage, no stagger; Slash after an absorbed blow counters."},{"desc":"Takes even less damage (65%).","add":{"mit":0.1}},
+    {"desc":"The counter heals a little (30% of its damage, more with Survival).","set":{"heal":0.3}},
     {"desc":"Reflects projectiles that strike the stance."},{"desc":"A longer stance and a harder counter."}],
    "echo":{"name":"Iron Skin","desc":"Every 6 s, the first hit you take is 25% weaker and cannot stagger you.","every":6,"reduce":0.25}},
-  "phantom_edge":{"name":"Phantom Edge","short":"Pale","jp":"白","boss":"shirasagi","ready":false,"move":null,"tags":["ranged","area"],
-   "desc":"Shirasagi’s spectral wave.",
-   "tiers":[{"desc":"A tall, slow spectral wave that hits standing and crouching foes."},{"desc":"More damage, a wider wave."},{"desc":"It travels faster."},
+  "phantom_edge":{"name":"Phantom Edge","short":"Pale","jp":"白","boss":"shirasagi","ready":true,"move":"p_phantom","tags":["ranged","area"],
+   "desc":"Shirasagi’s spectral wave: tall and slow, it cannot be ducked and breaks the projectiles it meets. One ink bar, 3.5 s cooldown.",
+   "tiers":[{"desc":"12 damage; 650 px/s; strikes any grounded foe."},{"desc":"More damage (+3) and a wider wave.","add":{"proj.dmg":3,"proj.wide":30}},{"desc":"It travels 30% faster.","mul":{"proj.v":1.3}},
     {"desc":"A second strike returns from behind the target."},{"desc":"A shorter cooldown; the wave splits in two."}],
    "echo":{"name":"Pale Reflection","desc":"Ink Wave flies 25% faster and pierces through foes and their projectiles.","wave_speed":0.25,"pierce":true}},
-  "demon_sovereignty":{"name":"Demon Sovereignty","short":"Oni","jp":"鬼","boss":"akuma","ready":false,"move":null,"tags":["burst"],
-   "desc":"Akuma’s fury, worn as your own.",
-   "tiers":[{"desc":"A short transformation: harder, faster, and a Sovereign Cut."},{"desc":"It lasts longer."},{"desc":"More damage, and a bleed."},
+  "demon_sovereignty":{"name":"Demon Sovereignty","short":"Oni","jp":"鬼","boss":"akuma","ready":true,"move":"p_sovereign","extra":["p_sov_cut"],"tags":["burst"],
+   "desc":"Akuma’s fury: for 8 s strike harder, move faster and cool down quicker, and the Issen key becomes the Sovereign Cut, which ends the form. Two ink bars, once a round.",
+   "tiers":[{"desc":"8 s: damage x1.25, speed x1.15, power cooldowns x0.6, ink x1.5; then 2 s of burnout."},{"desc":"It lasts 2 s longer.","add":{"form":2}},
+    {"desc":"Harder (x1.35), and every hit bleeds 2 health a second for 3 s.","add":{"formDmg":0.1},"set":{"bleed":2}},
     {"desc":"A larger Sovereign Cut."},{"desc":"A shorter burnout."}],
    "echo":{"name":"Ember of Rage","desc":"Below half health, ink fills 50% faster.","below":0.5,"ink":0.5}}}}
 </script>
@@ -467,6 +472,7 @@ function fig(c,p,k,t,col){const L=k.L,J=joints(p,L),ty=k.type,ik_=col?col[0]:k.i
  if(ty==='ghost'){c.strokeStyle=INK;c.lineWidth=2;line(c,add(add(hd,fw,hr*.45),up,hr*.15),add(add(hd,fw,hr*.9),up,hr*.1))}
  if(p.rage>0){c.fillStyle=RED;circ(c,...add(add(hd,fw,hr*.78),up,hr*.05),3.4);c.fillStyle=ik_}
  if(robe&&ty!=='monk'&&ty!=='ghost'){circ(c,...add(add(hd,up,hr*.95),fw,-hr*.3),hr*.36);brush(c,[add(add(hd,up,hr*1.0),fw,-hr*.35),add(add(hd,up,hr*1.12),fw,0),add(add(hd,up,hr*1.08),fw,hr*.35)],5,{taper:u=>1-u*.5})}
+ if(ty==='hero'&&p.rage>0){brush(c,qpts(add(add(hd,fw,hr*.35),up,hr*.85),add(add(hd,fw,hr*1.5),up,hr*1.9),add(add(hd,fw,hr*.8),up,hr*2.9),10),5,{taper:u=>1-u*.85});brush(c,qpts(add(add(hd,fw,-hr*.3),up,hr*.9),add(add(hd,fw,-hr*1.3),up,hr*2.0),add(add(hd,fw,-hr*.6),up,hr*2.9),10),5,{taper:u=>1-u*.85})} // Demon Sovereignty's horns
  if(ty==='hero'){c.strokeStyle=PAPER;c.lineWidth=2.2;c.beginPath();const a=add(add(hd,fw,-hr*.95),up,hr*.28),m=add(hd,up,hr*.78),e=add(add(hd,fw,hr*.9),up,hr*.42);c.moveTo(a[0],a[1]);c.quadraticCurveTo(m[0],m[1],e[0],e[1]);c.stroke()}
  if(ty==='master'){c.fillStyle=ik_;const ch=add(add(hd,fw,hr*.55),up,-hr*.85);brush(c,qpts(ch,add(ch,[flow[0]*8,18]),add(ch,[flow[0]*16-4,40]),10),9,{taper:u=>1-u*.9})}
  if(ty==='bandit'){c.fillStyle=ik_;tri(c,add(hd,up,hr*1.6),add(add(hd,up,hr*.1),fw,hr*2.2),add(add(hd,up,hr*.1),fw,-hr*2.2))}
@@ -781,6 +787,7 @@ const HITP={high:{tl:-.32,hd:-.8,th1:.4,sh1:.18,th2:-.38,sh2:-.3},mid:{tl:.6,hd:
 const KG=P({tl:.28,hd:-.15,ua1:.95,fa1:1.95,ua2:.55,fa2:1.7,sw:2.4,sw2:2.7,sheath:0,th1:.6,sh1:.05,th2:-.6,sh2:-.5});
 const KS1=P(KG,{ua1:1.55,fa1:1.62,sw:1.62,tl:.42,th1:.95,sh1:.1,th2:-.8,sh2:-.9}),KS2=P(KG,{ua2:1.55,fa2:1.62,sw2:1.6,ua1:.5,fa1:1.0,tl:.42,th1:.95,sh1:.1,th2:-.8,sh2:-.9});
 const SPLL=P(SPL,{sw:1.95,tl:.7,th1:1.4,sh1:.3,th2:-1.1,sh2:-1.5}),SPUP=P(SPG,{ua1:2.4,fa1:2.8,sw:3.9,tl:-.1});
+const NOTRAIL=new Set(['kick','round','sweepK','airKick','b_kick','k_low']),tipLen=k=>k.spear?132:k.club?150:k.nagi?170:k.blen||112; // swing trails follow blades, not feet
 const ROLLP={tl:.95,hd:.55,ua1:1.15,fa1:2.25,ua2:1.0,fa2:2.0,th1:2.35,sh1:-.35,th2:2.1,sh2:-.6,sw:-2.5,g2:0}; // the roll's tuck
 const ARENA=900,GRAV=2700,ZY={high:-200,mid:-135,low:-45};
 // moves: dur, hit windows [start,end], reach, dmg, zone (high=duck it, low=jump it / crouch-block), kd=knockdown, fr=pose keyframes from guard g
@@ -830,26 +837,61 @@ const MV={
  a_wave:{dur:.7,cd:3,proj:{t:.32,type:'wave',v:950,dmg:12,zone:'mid',y:-130},ai:[280,1200],w:3,answers:['block','crouch','roll'],tell:[.06,.3],fr:g=>[[0,g],[.22,PS.wind],[.32,PS.cutSide,'o5'],[.7,g]]},
  a_leap:{dur:1.25,hit:[[.8,.95]],reach:175,dmg:17,zone:'high',kd:1,push:300,cd:6,ai:[260,950],w:3,answers:['block','crouch','roll'],tell:[.1,.78],fr:g=>[[0,g],[.15,P(g,{tl:.4,th1:1.0,sh1:.2,th2:-.4,sh2:-1.0})],[.3,P(PS.high,{th1:1.5,sh1:-.4,th2:.8,sh2:-1})],[.78,P(PS.high,{th1:.8,sh1:0,th2:-.5,sh2:-.6})],[.86,P(PS.cutLow,{sw:1.2}),'o5'],[1.25,g]],
   start(F,O){F.d.x0=F.x;F.d.tx=clamp(O.x-F.f*110*F.def.s,-ARENA,ARENA);F.manual=true;snd('whoosh',.6)},
-  tick(F,O,a,b){if(!F.manual)return;const u=ss(.18,.82,b);F.x=lerp(F.d.x0,F.d.tx,u);F.y=-Math.sin(u*Math.PI)*300;if(b>=.82){F.y=0;F.manual=false;fxAdd({k:'ring',x:F.x+F.f*80,y:0});fxAdd({k:'splash',x:F.x+F.f*90,y:-4,sz:60,persist:1});G.shake=22;snd('boom',.7);snd('drum',1)}}}};
+  tick(F,O,a,b){if(!F.manual)return;const u=ss(.18,.82,b);F.x=lerp(F.d.x0,F.d.tx,u);F.y=-Math.sin(u*Math.PI)*300;if(b>=.82){F.y=0;F.manual=false;fxAdd({k:'ring',x:F.x+F.f*80,y:0});fxAdd({k:'splash',x:F.x+F.f*90,y:-4,sz:60,persist:1});G.shake=22;snd('boom',.7);snd('drum',1)}}},
+ // second-phase moves (below 50% health; BOSSES[].phase): each answerable two ways, heavy steps telegraphed
+ g_twin:{dur:1.25,hit:[[.3,.38],[.78,.88]],reach:255,dmg:7,zone:'mid',push:110,win:[null,{zone:'low',dmg:10,kd:1,push:220,reach:245}],tell:[.52,.76],tellZone:'low',ai:[100,270],w:4,answers:['block','roll'],snd:'whoosh',
+  fr:g=>[[0,g],[.22,P(SPG,{tl:-.05,ua1:.5,fa1:1.0})],[.34,SPL,'o5'],[.5,P(SPG,{tl:.1})],[.72,P(SPG,CR,{sw:-1.4,ua1:-.4,fa1:-.2})],[.84,SPLL,'o5'],[1.25,g]]},
+ k_volley:{dur:.55,cd:3,proj:{t:.24,type:'star',v:1300,dmg:5,zone:'high',y:-190},proj2:{t:.24,type:'star',v:1300,dmg:5,zone:'low',y:-40},ai:[260,1200],w:4,answers:['block','roll'],
+  fr:g=>[[0,g],[.12,P(g,{ua1:-.6,fa1:-.2,ua2:-.5,fa2:-.1,tl:0})],[.24,P(KS1,{ua2:1.5,fa2:1.6}),'o5'],[.55,g]]},
+ m_quake2:{dur:1.45,cd:7,armor:[0,.62],proj:{t:.62,type:'quake',v:800,dmg:9,zone:'low',y:-20,kd:1},proj2:{t:.87,type:'quake',v:800,dmg:9,zone:'low',y:-20,kd:1},tell:[.15,.6],ai:[220,1200],w:4,answers:['block','jump'],
+  fr:g=>[[0,g],[.5,P(PS.high,{tl:-.15})],[.64,P(PS.cutLow,{sw:.4,tl:.75,th1:1.3,sh1:.2,th2:-1.1,sh2:-1.4}),'o5'],[.76,P(PS.high,{tl:-.1})],[.89,P(PS.cutLow,{sw:.4,tl:.75,th1:1.3,sh1:.2,th2:-1.1,sh2:-1.4}),'o5'],[1.45,g]],
+  tick(F,O,a,b){for(const t of[.62,.87])if(a<t&&b>=t){G.shake=20;fxAdd({k:'ring',x:F.x+F.f*150,y:0});snd('boom',.6)}}},
+ y_wisp2:{dur:.7,cd:4,proj:{t:.3,type:'wisp',v:560,dmg:8,zone:'mid',y:-150},proj2:{t:.3,type:'wisp',v:400,dmg:8,zone:'high',y:-215},ai:[260,1200],w:3,answers:['block','crouch'],
+  fr:g=>[[0,g],[.2,P(SPG,{ua1:1.6,fa1:1.7,sw:1.6,tl:.1})],[.32,P(SPG,{ua1:2.2,fa1:2.4,sw:2.6,tl:-.05}),'o5'],[.7,g]]},
+ a_rend:{dur:1.05,hit:[[.22,.3],[.62,.72]],reach:220,dmg:8,zone:'mid',push:100,win:[null,{zone:'high',dmg:13,kd:1,push:280}],tell:[.4,.6],tellZone:'high',ai:[0,235],w:4,answers:['block','roll'],snd:'slash',
+  fr:g=>[[0,g],[.12,PS.wind],[.24,PS.cutSide,'o5'],[.5,PS.high],[.66,P(PS.cutLow,{sw:1.0}),'o5'],[1.05,g]]}};
 // hero-only moves granted by absorbed powers. Never added to MV (shared with every boss): each hero fighter
 // resolves moves through F.moves, an object whose prototype is MV, so bosses stay byte-identical to the baseline.
 const HERO_MV={
  // Spear of the Red Moon (Gekkō): 0.24 s startup with the red glint, 0.12 s active, 0.34 s recovery; ~260 px step-in, reach 300
  p_red_moon:{dur:.7,hit:[[.24,.36]],reach:300,dmg:14,zone:'mid',push:220,cost:1,cd:4,lunge:[.12,.3,1450],tell:[.02,.22],snd:'slash',sndT:.24,
   fr:g=>[[0,g],[.2,P(PS.guard,{tl:-.05,hd:-.2,ua1:.15,fa1:1.45,sw:1.57,th1:.25,sh1:.05,th2:-.75,sh2:-.55})],[.27,P(PS.cutSide,{tl:.55,hd:-.38,sw:1.57,th1:1.3,sh1:.15,th2:-1.15,sh2:-1.45}),'o5'],[.36,P(PS.cutSide,{tl:.5,hd:-.34,sw:1.57,th1:1.25,sh1:.15,th2:-1.1,sh2:-1.4})],[.7,g]],
-  tick(F,O,a,b){if(a<.24&&b>=.24)fxAdd({k:'moon',x:F.x+F.f*40,y:-135,f:F.f})}}};
+  tick(F,O,a,b){if(a<.24&&b>=.24)fxAdd({k:'moon',x:F.x+F.f*40,y:-135,f:F.f})}},
+ // Miststep (Kasumi): invulnerable 0.04-0.28 s; back or neutral retreats `dist` px, forward passes behind the foe; the afterimage left behind bursts after 0.5 s
+ p_miststep:{dur:.35,cost:1,cd:7,inv:[.04,.28],dist:380,ghostDmg:4,dodgeInk:0,pe:['ghostDmg'],snd:'whoosh',sndT:0,
+  fr:g=>[[0,g],[.06,P(g,CR,{tl:.6})],[.28,P(g,CR,{tl:.5})],[.35,g]],
+  start(F,O){const fwd=!!F.in&&F.in.mx===F.f,min=58*(F.def.s+O.def.s)/2;F.d.x0=F.x;F.d.x1=clamp(fwd?O.x+F.f*(min+70):F.x-F.f*this.dist,-ARENA,ARENA);F.manual=true;
+   G.proj.push({o:F,x:F.x,y:-120,vx:0,type:'ghost',fuse:.5,dmg:this.ghostDmg,t:0});fxAdd({k:'smoke',x:F.x,y:0})},
+  tick(F,O,a,b){F.x=lerp(F.d.x0,F.d.x1,E.io(clamp((b-.04)/.24)));F.alpha=b>.04&&b<.28?.3:1}},
+ // Iron Resolve (Tetsugorō): a 0.25 s brace, then `stance` s of damage taken x(1-mit), no stagger from non-knockdown hits, walking x0.4.
+ // Slash within 0.5 s of an absorbed blow: the counter (base + 1.2 x absorbed, at most 24, knockdown); tier III heals
+ p_iron:{dur:.25,cost:1,cd:8,stance:1.6,mit:.55,heal:0,snd:'clang',sndT:.05,fr:g=>[[0,g],[.12,P(g,{tl:-.05,th1:.75,sh1:.1,th2:-.75,sh2:-.6})],[.25,P(g,{tl:-.02,th1:.7,sh1:.08,th2:-.7,sh2:-.55})]],
+  start(F){F.iron={until:G.t+this.dur+this.stance,mit:this.mit,heal:this.heal,absorbed:0,cnt:0}}},
+ p_iron_counter:{dur:.55,hit:[[.12,.24]],reach:195,dmg:8,base:8,pe:['base'],zone:'mid',kd:1,push:300,snd:'slash',fr:g=>[[0,g],[.08,PS.wind],[.16,PS.cutSide,'o5'],[.55,g]],
+  start(F){const I=F.iron||{absorbed:0,heal:0};F.mv=Object.assign({},this,{dmg:Math.min(24,this.base+1.2*I.absorbed)});F.d.heal=I.heal;F.iron=null},
+  onHit(F){if(F.d.heal){F.hp=Math.min(F.maxHp,F.hp+this.dmg*F.d.heal*F.mod.heal);fxAdd({k:'ring',x:F.x,y:0})}}},
+ // Phantom Edge (Shirasagi): a tall, slow spectral wave that strikes any grounded foe (jump it) and breaks the projectiles it meets
+ p_phantom:{dur:.6,cost:1,cd:3.5,proj:{t:.3,type:'phantom',v:650,dmg:12,zone:'mid',y:-130,ground:1,wide:0},snd:'whoosh',sndT:.28,
+  fr:g=>[[0,g],[.2,P(PS.high,{tl:-.1})],[.3,P(PS.cutLow,{sw:1.2}),'o5'],[.6,g]]},
+ // Demon Sovereignty (Akuma): two bars, once a round (+20 s). For `form` s: damage x formDmg, speed x1.15, power cooldowns x0.6, ink x1.5,
+ // and the Issen key becomes the Sovereign Cut (40, unblockable), which ends the form; then `burn` s with no powers
+ p_sovereign:{dur:.55,cost:2,cd:20,once:1,form:8,formDmg:1.25,burn:2,bleed:0,snd:'growl',sndT:.05,fr:g=>[[0,g],[.22,P(PS.high,{tl:-.2,hd:-.5})],[.55,g]],
+  start(F){F.sov={until:G.t+this.dur+this.form,dmg:this.formDmg,spd:1.15,burn:this.burn,bleed:this.bleed};G.shake=Math.max(G.shake,8);fxAdd({k:'ring',x:F.x,y:0})}},
+ p_sov_cut:{dur:1.3,issen:1,cut:40,pe:['cut'],fr:MV.issen.fr,
+  start(F,O){MV.issen.start(F,O);F.d.hit=Math.abs(O.x-F.x)<1100&&(O.x-F.x)*F.f>-140;if(F.sov)F.sov.until=G.t},
+  tick(F,O,a,b){if(b>=.38&&a<.47)F.x=lerp(F.d.x0,F.d.x1,ss(.38,.46,b));if(a<.4&&b>=.4)snd('slash',1.4);if(a<.8&&b>=.8&&F.d.hit&&tryHit(F,O,{dmg:this.cut,kd:1,unblock:1,zone:'mid',push:300,vx:F.f},true))fxAdd({k:'splash',x:O.x,y:-150*O.def.s,sz:150,dir:F.f>0?0:Math.PI})}}};
 const HERO_D={name:'Issen',jp:'一閃',kind:K.hero,s:1,hp:100,speed:340,guard:PS.guard,win:PS.stand,wk:{}};
 const BOSSES=[
- {id:'gekko',name:'Gekkō',title:'the Red Spear',jp:'月光',kind:K.gekko,s:1.1,hp:100,speed:240,guard:SPG,wk:{gl:45,sheath:0},moves:['g_thrust','g_low','g_spin','g_dragon','b_kick'],ai:{think:.75,aggr:.55,block:.22,range:235},arena:0,win:P(SPG,{tl:-.1,hd:-.3}),
-  tip:'Long reach, slow recovery. A red glint warns of a heavy blow at the height it will land — block, duck or roll.'},
- {id:'kasumi',name:'Kasumi',title:'the Mist Shinobi',jp:'霞',kind:K.kasumi,s:1,hp:95,speed:400,guard:KG,wk:{sheath:0},moves:['k_flurry','k_stab','k_low','k_star','k_vanish'],ai:{think:.45,aggr:.66,block:.3,range:145,jump:.2},arena:1,win:P(KG,{tl:0,hd:-.2}),
-  tip:'Fast blades and throwing stars — duck the stars. When she vanishes, an ink ring marks where she will strike from: hold block.'},
- {id:'tetsugoro',name:'Tetsugorō',title:'the Iron Monk',jp:'鉄五郎',kind:K.monk,s:1.32,hp:150,speed:185,guard:P(PS.guard,{sw:2.6,tl:.06,hd:-.05}),wk:{gl:20,sheath:0},moves:['m_smash','m_swing','m_low','m_slam','b_kick'],ai:{think:.85,aggr:.6,block:.15,range:200},arena:2,win:P(PS.high,{tl:-.1}),
-  tip:'Iron skin: light blows will not stagger him. Jump the earthquake, punish the long swings.'},
- {id:'shirasagi',name:'Shirasagi',title:'the Pale Ronin',jp:'白鷺',kind:K.ghost,s:1.08,hp:120,speed:290,guard:P(SPG,{sw:1.8,tl:.1}),wk:{gl:45,sheath:0},moves:['y_thrust','y_sweep','y_rise','y_wisp','y_phase'],ai:{think:.55,aggr:.66,block:.4,range:235},arena:3,win:P(SPG,{tl:-.05,hd:-.25}),
-  tip:'A drowned duelist. She fades; a pale ring marks where she will reappear. Ghost-fire drifts slowly — block it.'},
- {id:'akuma',name:'Akuma',title:'the Horned Warlord',jp:'鬼将軍',kind:K.lord,s:1.28,hp:170,speed:265,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_cut','a_crush','a_sweep','a_wave','a_leap','b_kick'],ai:{think:.45,aggr:.7,block:.45,range:225,rage:1},arena:4,win:P(PS.high,{tl:-.2,hd:-.4}),
-  tip:'The warlord returns from the ink. At half strength his fury awakens. Save your Issen.'}];
+ {id:'gekko',name:'Gekkō',title:'the Red Spear',jp:'月光',kind:K.gekko,s:1.1,hp:100,speed:240,guard:SPG,wk:{gl:45,sheath:0},moves:['g_thrust','g_low','g_spin','g_dragon','b_kick'],ai:{think:.75,aggr:.55,block:.22,range:235},phase:{at:.5,move:'g_twin',k:'月',sub:'The Red Spear presses harder',think:.85,aggr:.1},arena:0,win:P(SPG,{tl:-.1,hd:-.3}),
+  tip:'Long reach, slow recovery. A red glint warns of a heavy blow at the height it lands. Hurt, he adds a thrust-and-sweep: crouch-block it.'},
+ {id:'kasumi',name:'Kasumi',title:'the Mist Shinobi',jp:'霞',kind:K.kasumi,s:1,hp:95,speed:400,guard:KG,wk:{sheath:0},moves:['k_flurry','k_stab','k_low','k_star','k_vanish'],ai:{think:.45,aggr:.66,block:.3,range:145,jump:.2},phase:{at:.5,move:'k_volley',k:'霞',sub:'Stars at two heights',think:.9,aggr:.05},arena:1,win:P(KG,{tl:0,hd:-.2}),
+  tip:'Fast blades and stars — duck them. When she vanishes, an ink ring marks where she will strike: hold block. Hurt, she throws high and low.'},
+ {id:'tetsugoro',name:'Tetsugorō',title:'the Iron Monk',jp:'鉄五郎',kind:K.monk,s:1.32,hp:150,speed:185,guard:P(PS.guard,{sw:2.6,tl:.06,hd:-.05}),wk:{gl:20,sheath:0},moves:['m_smash','m_swing','m_low','m_slam','b_kick'],ai:{think:.85,aggr:.6,block:.15,range:200},phase:{at:.5,move:'m_quake2',k:'鉄',sub:'The mountain answers twice',think:.9,aggr:.05},arena:2,win:P(PS.high,{tl:-.1}),
+  tip:'While his body shines like iron, light blows will not stagger him. Jump the earthquakes — hurt, he sends two — and punish the long swings.'},
+ {id:'shirasagi',name:'Shirasagi',title:'the Pale Ronin',jp:'白鷺',kind:K.ghost,s:1.08,hp:120,speed:290,guard:P(SPG,{sw:1.8,tl:.1}),wk:{gl:45,sheath:0},moves:['y_thrust','y_sweep','y_rise','y_wisp','y_phase'],ai:{think:.55,aggr:.66,block:.4,range:235},phase:{at:.5,move:'y_wisp2',k:'白',sub:'The ghost-fire spreads',think:.9,aggr:.05},arena:3,win:P(SPG,{tl:-.05,hd:-.25}),
+  tip:'A drowned duelist. She fades; a pale ring marks where she will reappear. Ghost-fire drifts slowly — block it, or duck the spread.'},
+ {id:'akuma',name:'Akuma',title:'the Horned Warlord',jp:'鬼将軍',kind:K.lord,s:1.28,hp:170,speed:265,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_cut','a_crush','a_sweep','a_wave','a_leap','b_kick'],ai:{think:.45,aggr:.7,block:.45,range:225,rage:1},phase:{at:.5,move:'a_rend',think:1,aggr:0},arena:4,win:P(PS.high,{tl:-.2,hd:-.4}),
+  tip:'The warlord returns from the ink. At half strength his fury awakens, with a red-trailed cut-and-crush: block both. Save your Issen.'}];
 /* --- arenas --- */
 function shrineBG(c,t){WIND={x:-1,y:.06,s:.35};screen(c);c.fillStyle=PAPER;c.fillRect(0,0,W,H);camT(c,.06);c.globalAlpha=.6;c.drawImage(CLOUDL,-1800+t*5,-1450);c.globalAlpha=1;
  camT(c,.12);c.drawImage(M_FAR,-1800,-760);mistBand(c,.18,-200,t,.5);camT(c,.25);c.drawImage(M_MID,-1800,-560);mistBand(c,.32,-40,t,.6);
@@ -881,44 +923,50 @@ const NOIN={mx:0,up:false,down:false,atk:null};
 const snd=(n,v)=>{if(AU.ctx&&AU.ctx.state==='running')try{S[n](AU.ctx.currentTime+.01,v)}catch(e){}};
 function amb(w,r,ru){if(!AU.ctx)return;const now=AU.ctx.currentTime;AU.wind.gain.setTargetAtTime(w*.5,now,.4);AU.rain.gain.setTargetAtTime(r*.35,now,.4);AU.rumb.gain.setTargetAtTime(ru,now,.4);AU.lp.frequency.setTargetAtTime(16000,now,.1)}
 // combat modifiers of a fighter: bosses (and a new hero) use NEUTRAL, so their numbers are exactly the v1.2 ones
-const NEUTRAL={dmg:1,combo:1,crit:0,critDmg:1.5,mit:0,cd:1,ink:1,roll:1,pe:0};
-function mkF(def,isP){const moves=Object.create(MV);for(const id of def.powers||[])if(id)moves[POWERS[id].move]=HERO_MV[POWERS[id].move];Object.assign(moves,def.ov); /* per-fighter copies: MV is never touched */
- return{def,isP,moves,maxHp:def.hp,hp:def.hp,lag:def.hp,lagHold:0,mod:def.mod||NEUTRAL,ink:0,wins:0,x:0,y:0,vx:0,vy:0,f:1,st:'idle',stT:0,mv:null,mvT:0,mvId:0,mask:0,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},ai:{t:1,pt:0,blk:0,plan:'hold'},hitFlash:0,d:{}}}
+const NEUTRAL={dmg:1,combo:1,crit:0,critDmg:1.5,mit:0,heal:1,cd:1,ink:1,roll:1,pe:0};
+function mkF(def,isP){const moves=Object.create(MV);for(const id of def.powers||[])if(id)for(const n of[POWERS[id].move,...(POWERS[id].extra||[])])moves[n]=HERO_MV[n];Object.assign(moves,def.ov); /* per-fighter copies: MV is never touched */
+ return{def,isP,moves,maxHp:def.hp,hp:def.hp,lag:def.hp,lagHold:0,mod:def.mod||NEUTRAL,once:{},ink:0,wins:0,x:0,y:0,vx:0,vy:0,f:1,st:'idle',stT:0,mv:null,mvT:0,mvId:0,mask:0,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},ai:{t:1,pt:0,blk:0,plan:'hold'},hitFlash:0,d:{}}}
 const setSt=(F,s)=>{F.st=s;F.stT=0};
 // dodge roll (data-movement.roll): invulnerable only inside inv, then a vulnerable rise; ends facing the opponent
 const rollInv=F=>F.st==='roll'&&F.stT>=MOVE.roll.inv[0]&&F.stT<MOVE.roll.inv[1];
+// invulnerable: getup / Issen grace, the roll's window, or a move's own inv:[from,to] window (Miststep)
+const invul=F=>F.inv>0||rollInv(F)||F.st==='move'&&!!F.mv.inv&&F.mvT>=F.mv.inv[0]&&F.mvT<F.mv.inv[1];
 function startRoll(F,O,inp){if((F.rollCd||0)>G.t)return false;const dir=inp.mx||-F.f;
  F.roll={x0:F.x,dir};F.rollCd=G.t+MOVE.roll.cd*F.mod.roll;F.block=F.crouch=false;F.vx=0;setSt(F,'roll');fxAdd({k:'dust',x:F.x,y:0});snd('whoosh',.35);return true}
 const isFree=F=>F.st==='idle'||F.st==='walk'||F.st==='crouch';
 function fxAdd(o){o.t0=G.t;o.seed=Math.random()*1000;G.fx.push(o);if(o.persist){const ps=G.fx.filter(f=>f.persist);if(ps.length>16)G.fx.splice(G.fx.indexOf(ps[0]),1)}}
-function heroMove(F,a,inp){const fwd=inp.mx===F.f;if(a==='power1'||a==='power2'){const id=(F.def.powers||[])[a==='power1'?0:1];return id?POWERS[id].move:null}if(a==='slash')return F.air?'air':inp.down?'low':fwd?'lunge':'slash';if(a==='kick')return F.air?'airKick':inp.down?'sweepK':fwd?'round':'kick';if(a==='ink')return F.ink>=33.3?'wave':null;return a==='issen'&&F.ink>=99.5?'issen':null}
-function startMove(F,n){const m=F.moves[n];if(!m||m.cd&&(F.cd[n]||0)>G.t)return false;const O=F===G.P?G.B:G.P;
+function heroMove(F,a,inp){const fwd=inp.mx===F.f;if(a==='power1'||a==='power2'){const id=(F.def.powers||[])[a==='power1'?0:1];return id?POWERS[id].move:null}if(a==='slash')return F.iron&&G.t<F.iron.cnt&&F.moves.p_iron_counter?'p_iron_counter':F.air?'air':inp.down?'low':fwd?'lunge':'slash';if(a==='kick')return F.air?'airKick':inp.down?'sweepK':fwd?'round':'kick';if(a==='ink')return F.ink>=33.3?'wave':null;return a==='issen'&&F.sov&&F.moves.p_sov_cut?'p_sov_cut':a==='issen'&&F.ink>=99.5?'issen':null}
+function startMove(F,n){const m=F.moves[n];if(!m||m.cd&&(F.cd[n]||0)>G.t||m.once&&F.once[n]||HERO_MV[n]&&F.burn>G.t)return false;const O=F===G.P?G.B:G.P;
  if(m.cost){if(F.ink<m.cost*33.3-.5)return false;F.ink=Math.max(0,F.ink-m.cost*33.34)}
+ if(m.once)F.once[n]=1;if(F.iron&&n!=='p_iron_counter')F.iron=null; // attacking ends Iron Resolve's stance
  F.mv=m;F.mvn=n;F.mvT=0;F.mask=0;F.mvId=++G.mvId;F.next=null;F.d={};setSt(F,'move');F.block=false;F.crouch=!!m.crouch;
- if(m.cd)F.cd[n]=G.t+m.cd*(F.rage?.6:1)*F.mod.cd;
+ if(m.cd)F.cd[n]=G.t+m.cd*(F.rage?.6:1)*F.mod.cd*(F.sov&&HERO_MV[n]?.6:1);
  if(m.snd&&AU.ctx)try{S[m.snd](AU.ctx.currentTime+.01+(m.sndT??(m.hit?m.hit[0][0]:0)),.5)}catch(e){}
  if(m.start)m.start(F,O);return true}
 function stepMove(F,O,dt){const m=F.mv,a=F.mvT,b=a+dt;F.mvT=b;
  if(m.lunge&&b>m.lunge[0]&&b<m.lunge[1])F.vx=m.lunge[2]*F.f*(F.rage?1.15:1);else if(!F.air)F.vx*=Math.pow(.0008,dt);
- if(m.hit)m.hit.forEach((w,i)=>{if(!(F.mask&1<<i)&&b>=w[0]&&a<=w[1]&&tryHit(F,O,m))F.mask|=1<<i});
- if(m.proj&&a<m.proj.t&&b>=m.proj.t)spawnProj(F,m.proj);
+ if(m.hit)m.hit.forEach((w,i)=>{if(!(F.mask&1<<i)&&b>=w[0]&&a<=w[1]&&tryHit(F,O,m.win&&m.win[i]?Object.assign({},m,m.win[i]):m)){F.mask|=1<<i;if(m.onHit)m.onHit(F,O)}});
+ if(m.proj&&a<m.proj.t&&b>=m.proj.t)spawnProj(F,m.proj);if(m.proj2&&a<m.proj2.t&&b>=m.proj2.t)spawnProj(F,m.proj2);
  if(m.tell&&!F.isP&&a<m.tell[0]&&b>=m.tell[0])snd('tell',.6);
  if(m.tick)m.tick(F,O,a,b);
  if(F.mv!==m)return;
  if(m.air&&!F.air&&b>.08){F.mv=null;setSt(F,'idle');return}
  if(b>=m.dur){F.mv=null;F.manual=false;F.alpha=1;const n=F.next;F.next=null;if(n&&startMove(F,n))return;setSt(F,F.air?'jump':'idle')}}
-function tryHit(A,Dd,m,proj){if(Dd.inv>0||rollInv(Dd)||Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')return false;
+function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')return false;
  if(!proj){const dx=(Dd.x-A.x)*A.f;if(dx<-40||dx>m.reach*A.def.s+20*Dd.def.s)return false}
  const dAir=Dd.y<-50,dir=proj?Math.sign(m.vx)||A.f:A.f;
  if(!proj&&(m.zone==='high'&&Dd.crouch&&!dAir||m.zone==='low'&&dAir))return false;
+ if(invul(Dd)){if(Dd.st==='move'&&Dd.mv.dodgeInk&&!Dd.d.dodged){Dd.d.dodged=1;inkUp(Dd,Dd.mv.dodgeInk)}return false} // Miststep III: ink for slipping a live attack
  const hx=Dd.x-dir*14*Dd.def.s,hy=Dd.y+ZY[m.zone||'mid']*Dd.def.s*(Dd.crouch&&m.zone!=='low'?.7:1);
  const facing=Dd.f===-dir,canBlock=!m.unblock&&Dd.block&&facing&&!dAir&&(isFree(Dd)||Dd.st==='bstun')&&(m.zone==='low'?Dd.crouch:m.zone==='high'?!Dd.crouch:true);
  if(canBlock){setSt(Dd,'bstun');Dd.stun=.2;Dd.vx=dir*(m.push||90)*.9*(m.blockPush||1);fxAdd({k:'clash',x:hx,y:hy,sz:.7});snd('clang',.55);inkUp(A,3);inkUp(Dd,5);G.freeze=.04;G.shake=Math.max(G.shake,5);return true}
  // damage: rage, then the attacker's modifiers (attack, chain hits 2-3, a crit drawn from the fight RNG only if crit > 0), then the defender's
- let dmg=m.dmg*(A.rage?1.2:1)*A.mod.dmg*(!proj&&(A.mvn==='slash2'||A.mvn==='slash3')?A.mod.combo:1);const crit=A.mod.crit>0&&G.rand()<A.mod.crit;if(crit)dmg*=A.mod.critDmg;
+ let dmg=m.dmg*(A.rage?1.2:1)*(A.sov?A.sov.dmg:1)*A.mod.dmg*(!proj&&(A.mvn==='slash2'||A.mvn==='slash3')?A.mod.combo:1);const crit=A.mod.crit>0&&G.rand()<A.mod.crit;if(crit)dmg*=A.mod.critDmg;
  const skin=Dd.mod.skin&&G.t>=Dd.skinT;if(skin){dmg*=1-Dd.mod.skin.reduce;Dd.skinT=G.t+Dd.mod.skin.every;fxAdd({k:'clash',x:hx,y:hy,sz:.5})} /* Iron Skin echo */
+ const iron=Dd.iron;if(iron){if(!m.kd){iron.absorbed+=dmg;iron.cnt=G.t+.5}dmg*=1-iron.mit;fxAdd({k:'clash',x:hx,y:hy,sz:.6})} // Iron Resolve: absorbed blows feed the counter
+ if(A.sov&&A.sov.bleed)Dd.bleed={until:G.t+3,dps:A.sov.bleed};
  Dd.hp=Math.max(0,Dd.hp-dmg*(1-Dd.mod.mit));Dd.lagHold=.6;Dd.hitFlash=.14;
- const armored=(Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.pierceArmor||skin)&&!m.kd&&Dd.hp>0;
+ const armored=(Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.pierceArmor||skin||iron)&&!m.kd&&Dd.hp>0;if(iron&&m.kd)Dd.iron=null;
  if(!armored){Dd.mv=null;Dd.manual=false;Dd.alpha=1;Dd.next=null;Dd.crouch=false;Dd.block=false;
   if(m.kd||Dd.hp<=0){setSt(Dd,'down');Dd.vx=dir*(m.push||220)*1.2;Dd.vy=-520;Dd.air=true;fxAdd({k:'splash',x:Dd.x+dir*40,y:-2,sz:46,dir:0,persist:1})}
   else{setSt(Dd,'hit');Dd.stun=m.stun||.3;Dd.vx=dir*(m.push||90);Dd.hz=m.zone||'mid';Dd.hk=m.dmg>=10;Dd.hn=(Dd.hn||0)+1}}
@@ -926,16 +974,20 @@ function tryHit(A,Dd,m,proj){if(Dd.inv>0||rollInv(Dd)||Dd.st==='dead'||Dd.st==='
  G.freeze=m.kd?.09:.055;G.shake=Math.max(G.shake,m.kd?18:9);snd('drum',m.kd?.9:.55);if(m.kd)snd('boom',.3);if(Dd.isP&&navigator.vibrate)navigator.vibrate(m.kd?45:18);
  inkUp(A,9);inkUp(Dd,5);
  if(Dd.def.ai&&Dd.def.ai.rage&&!Dd.rage&&Dd.hp<Dd.maxHp*.5&&Dd.hp>0){Dd.rage=true;G.ban={k:'怒',sub:'The warlord’s fury awakens',t0:G.rt,dur:1.6};snd('growl',1)}
+ const ph=Dd.def.phase;if(ph&&!Dd.phase&&Dd.hp<Dd.maxHp*ph.at&&Dd.hp>0){Dd.phase=true;if(ph.k){G.ban={k:ph.k,sub:ph.sub,t0:G.rt,dur:1.5,size:240};snd('gong',.5)}} // the boss's second phase
  return true}
 // ink gain: the fighter's ink modifier, faster below half health with the Ember of Rage echo
-const inkUp=(F,v)=>{F.ink=Math.min(100,F.ink+v*F.mod.ink*(F.mod.ember&&F.hp<F.maxHp*F.mod.ember.below?1+F.mod.ember.ink:1))};
-function spawnProj(F,pd){const wave=pd.type==='wave';G.proj.push({o:F,x:F.x+F.f*80*F.def.s,y:pd.y*F.def.s,vx:pd.v*F.f*(wave&&F.mod.waveV||1),pierce:wave&&!!F.mod.pierce,type:pd.type,dmg:pd.dmg,zone:pd.zone,kd:pd.kd,push:140,t:0,big:F.def.s>1.2});snd(pd.type==='star'||pd.type==='wisp'?'whoosh':'slash',.5)}
+const inkUp=(F,v)=>{F.ink=Math.min(100,F.ink+v*F.mod.ink*(F.sov?1.5:1)*(F.mod.ember&&F.hp<F.maxHp*F.mod.ember.below?1+F.mod.ember.ink:1))};
+function spawnProj(F,pd){const wave=pd.type==='wave';G.proj.push({o:F,x:F.x+F.f*80*F.def.s,y:pd.y*F.def.s,vx:pd.v*F.f*(wave&&F.mod.waveV||1),pierce:wave&&!!F.mod.pierce,ground:pd.ground,wide:pd.wide,type:pd.type,dmg:pd.dmg,zone:pd.zone,kd:pd.kd,push:140,t:0,big:F.def.s>1.2});snd(pd.type==='star'||pd.type==='wisp'?'whoosh':'slash',.5)}
 function updProj(dt){for(const p of G.proj){p.t+=dt;p.x+=p.vx*dt;const Dd=p.o===G.P?G.B:G.P,top=Dd.y-246*Dd.def.s*(Dd.crouch?.62:1);
-  if(!p.done&&Math.abs(p.x-Dd.x)<46*Dd.def.s+20&&p.y>top&&p.y<Dd.y+10&&tryHit(p.o,Dd,p,true)){if(p.pierce)p.done=1;else p.dead=1} /* a piercing wave hits once and flies on */if(Math.abs(p.x)>ARENA+500)p.dead=1}
- for(const a of G.proj)for(const b of G.proj)if(a.o!==b.o&&!a.dead&&!b.dead&&Math.abs(a.x-b.x)<40&&Math.abs(a.y-b.y)<90){a.dead=!a.pierce;b.dead=!b.pierce;fxAdd({k:'clash',x:(a.x+b.x)/2,y:(a.y+b.y)/2,sz:1});snd('clang',.6)}
+  if(p.type==='ghost'){if(p.t>=p.fuse){if(Math.abs(Dd.x-p.x)<150*Dd.def.s)tryHit(p.o,Dd,{dmg:p.dmg,zone:'mid',push:90,vx:Math.sign(Dd.x-p.x)||1},true);fxAdd({k:'smoke',x:p.x,y:0});p.dead=1}continue} // Miststep's afterimage bursts
+  if(!p.done&&Math.abs(p.x-Dd.x)<46*Dd.def.s+20+(p.wide||0)&&(p.ground?Dd.y>-40:p.y>top&&p.y<Dd.y+10)&&tryHit(p.o,Dd,p,true)){if(p.pierce)p.done=1;else p.dead=1} /* a piercing wave hits once and flies on */if(Math.abs(p.x)>ARENA+500)p.dead=1}
+ for(const a of G.proj)for(const b of G.proj)if(a.o!==b.o&&!a.dead&&!b.dead&&a.type!=='ghost'&&b.type!=='ghost'&&Math.abs(a.x-b.x)<40&&Math.abs(a.y-b.y)<(a.ground||b.ground?170:90)){a.dead=!(a.pierce||a.ground);b.dead=!(b.pierce||b.ground);fxAdd({k:'clash',x:(a.x+b.x)/2,y:(a.y+b.y)/2,sz:1});snd('clang',.6)}
  G.proj=G.proj.filter(p=>!p.dead)}
-function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;if(F.hitFlash>0)F.hitFlash-=dt;if(F.lagHold>0)F.lagHold-=dt;else F.lag=Math.max(F.hp,F.lag-dt*30);
- const inp=F.in,sp=F.def.speed*(F.rage?1.25:1);
+function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;
+ if(F.sov&&G.t>=F.sov.until){F.burn=G.t+F.sov.burn;F.sov=null}if(F.iron&&G.t>=F.iron.until)F.iron=null;
+ if(F.bleed){if(G.t>=F.bleed.until)F.bleed=null;else if(F.hp>1)F.hp=Math.max(1,F.hp-F.bleed.dps*dt)}if(F.hitFlash>0)F.hitFlash-=dt;if(F.lagHold>0)F.lagHold-=dt;else F.lag=Math.max(F.hp,F.lag-dt*30);
+ const inp=F.in,sp=F.def.speed*(F.rage?1.25:1)*(F.sov?F.sov.spd:1)*(F.iron?.4:1);
  switch(F.st){
   case 'move':if(F.isP&&inp.atk==='slash'&&F.mv.chain&&F.mvT>=F.mv.cw){F.next=F.mv.chain;G.buf=null}stepMove(F,O,dt);break;
   case 'hit':case 'bstun':F.vx*=Math.pow(.015,dt);if(F.stT>=F.stun)setSt(F,'idle');break;
@@ -955,14 +1007,15 @@ function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;if(F.hitFlash>0)F.hitFlash-=
 function separate(a,b){if(a.air||b.air||a.manual||b.manual||a.mv&&a.mv.issen||b.mv&&b.mv.issen||a.st==='dead'||b.st==='dead')return;const min=58*(a.def.s+b.def.s)/2,d=b.x-a.x;
  if(Math.abs(d)<min){const p=(min-Math.abs(d))/2*(d>=0?1:-1);a.x=clamp(a.x-p,-ARENA,ARENA);b.x=clamp(b.x+p,-ARENA,ARENA)}}
 function ai(B,Pl,dt){const A=B.def.ai,d=Math.abs(Pl.x-B.x),inp={mx:0,up:false,down:false,atk:null},toward=Pl.x>B.x?1:-1,R=B.rage?.7:1,s=B.def.s;
- if(Pl.st==='move'&&!Pl.mv.issen&&B.ai.seen!==Pl.mvId){B.ai.seen=Pl.mvId;if(d<(Pl.mv.reach||300)+130&&G.rand()<A.block*(B.rage?1.2:1)){B.ai.blk=.42;B.ai.low=Pl.mv.zone==='low'}}
+ if(Pl.st==='move'&&!Pl.mv.issen&&B.ai.seen!==Pl.mvId){B.ai.seen=Pl.mvId;if(d<(Pl.mv.reach||300)+130&&G.rand()<A.block*(B.rage?1.2:1)+(Pl.sov?.2:0)){B.ai.blk=.42;B.ai.low=Pl.mv.zone==='low'}}
  for(const p of G.proj)if(p.o===Pl&&!p.seen&&Math.abs(p.x-B.x)<420&&Math.sign(B.x-p.x)===Math.sign(p.vx)){p.seen=1;if(G.rand()<A.block+.25){B.ai.blk=.5;B.ai.low=p.zone==='low'}}
  if(B.ai.blk>0){B.ai.blk-=dt;inp.mx=-toward;inp.down=B.ai.low;return inp}
  B.ai.t-=dt;
- if(B.ai.t<=0&&isFree(B)){B.ai.t=A.think*R*(.6+G.rand()*.8);
-  const opts=B.def.moves.filter(n=>{const m=B.moves[n];return(!m.cd||(B.cd[n]||0)<=G.t)&&d>=m.ai[0]*s&&d<=m.ai[1]*s});
+ const PH=B.phase&&B.def.phase,wt=n=>B.moves[n].w*(Pl.iron&&B.moves[n].kd?3:1); // knockdowns break Iron Resolve
+ if(B.ai.t<=0&&isFree(B)){B.ai.t=A.think*R*(PH?PH.think:1)*(.6+G.rand()*.8);
+  const opts=(PH?B.def.moves.concat(PH.move):B.def.moves).filter(n=>{const m=B.moves[n];return(!m.cd||(B.cd[n]||0)<=G.t)&&d>=m.ai[0]*s&&d<=m.ai[1]*s});
   if(Pl.air&&d<280){const aa=opts.find(n=>B.moves[n].zone==='high');if(aa){inp.atk=aa;return inp}}
-  if(opts.length&&G.rand()<A.aggr+(B.rage?.15:0)){let tw=0;for(const n of opts)tw+=B.moves[n].w;let r=G.rand()*tw;for(const n of opts){r-=B.moves[n].w;if(r<=0){inp.atk=n;break}}return inp}
+  if(opts.length&&G.rand()<A.aggr+(B.rage?.15:0)+(PH?PH.aggr:0)){let tw=0;for(const n of opts)tw+=wt(n);let r=G.rand()*tw;for(const n of opts){r-=wt(n);if(r<=0){inp.atk=n;break}}return inp}
   const r=G.rand();B.ai.plan=d>A.range*s*1.1?'in':d<A.range*s*.55?'out':r<(A.jump||.06)?'jump':r<.45?'hold':r<.72?'in':'out';B.ai.pt=.25+G.rand()*.5}
  if(B.ai.pt>0){B.ai.pt-=dt;if(B.ai.plan==='in')inp.mx=toward;else if(B.ai.plan==='out')inp.mx=-toward;else if(B.ai.plan==='jump'){inp.up=true;inp.mx=toward;B.ai.plan='hold'}}
  return inp}
@@ -973,7 +1026,7 @@ const STEP=1/60;
 function stepGame(dt){G.acc=Math.min(G.acc+dt,.1);while(G.acc>=STEP-1e-9){G.acc-=STEP;for(const F of[G.P,G.B]){F.px=F.x;F.py=F.y}for(const p of G.proj)p.px=p.x;updGame(STEP)}G.ia=clamp(G.acc/STEP)}
 const ip=(v,pv)=>pv==null||Math.abs(v-pv)>150?v:lerp(pv,v,G.ia);
 function readIn(){const k=G.keys;return{mx:(k.right?1:0)-(k.left?1:0),up:fresh(G.jb,.15),down:!!k.down,block:!!k.block,atk:G.buf&&fresh(G.buf.t,.28)?G.buf.a:null}}
-function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
+function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},once:{},sov:null,iron:null,burn:0,bleed:null,phase:false,trail:null,rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
  G.proj=[];G.fx=[];G.timer=60;G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
  G.ban=G.round===1?{k:G.def.jp,sub:`${G.def.name}, ${G.def.title}`,t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
 function endRound(){G.rw.wins++;if(G.rw.wins>=2)matchEnd(G.rw===G.P);else{G.round++;newRound()}}
@@ -1018,12 +1071,18 @@ function poseOf(F){const d=F.def,g=d.guard;let p;
  if(F.bFrom&&G.t-F.bT<F.bD)p=mixv(F.bFrom,p,(G.t-F.bT)/F.bD); // linear: over 3-4 frames a curve is invisible, and even steps never pop
  if(isFree(F)&&G.t-F.landT<B.land)p=mixv(p,P(p,CR),.5*Math.sin(Math.PI*(G.t-F.landT)/B.land)); // the knees give and recover
  F.lp=p;if(F.lf!==F.f){F.tT=F.lf==null?-9:G.t;F.lf=F.f}const tu=clamp((G.t-F.tT)/B.turn),ff=F.f*(2*E.io(tu)-1);
- p=Object.assign(P(),p,d.wk);p.x=ip(F.x,F.px);p.f=Math.abs(ff)<.08?.08*F.f:ff;p.s=d.s;p.lift=(p.lift||0)-ip(F.y,F.py);p.rage=F.rage?1:0;p.stream=0;return p}
+ p=Object.assign(P(),p,d.wk);p.x=ip(F.x,F.px);p.f=Math.abs(ff)<.08?.08*F.f:ff;p.s=d.s;p.lift=(p.lift||0)-ip(F.y,F.py);p.rage=F.rage||F.sov?1:0;p.stream=0;return p}
 function drawF(g,F){const p=poseOf(F);if(F.hitFlash>0)p.x+=noise(G.t*90)*8;if(F.alpha<.03)return;
- if(F.rage){g.globalAlpha=.4+.15*Math.sin(G.t*9);g.drawImage(GLOW,p.x-170*p.s,-p.lift-330*p.s,340*p.s,380*p.s)}
+ if(F.rage||F.sov){g.globalAlpha=.4+.15*Math.sin(G.t*9);g.drawImage(GLOW,p.x-170*p.s,-p.lift-330*p.s,340*p.s,380*p.s)}
  if(F.st==='roll'&&F.stT<MOVE.roll.travel){const d=F.roll.dir,a=1-F.stT/MOVE.roll.travel;g.fillStyle=INK;for(let k=0;k<3;k++){const y=-40-k*42,x=p.x-d*(70+k*24);g.globalAlpha=.35*a;brush(g,[[x,y],[x-d*(90+k*30)*a,y+3]],7-k*1.5,{taper:u=>1-u})}}
  g.globalAlpha=F.alpha*(rollInv(F)?.5:1);fig(g,p,F.def.kind,G.t);g.globalAlpha=1;
- const m=F.st==='move'&&F.mv;if(m&&m.tell&&F.mvT>m.tell[0]&&F.mvT<m.tell[1]){const z=m.zone||m.proj&&m.proj.zone||'mid',q=F.isP?bladePt(p,F.def.kind,130):[p.x+F.f*70*p.s,ip(F.y,F.py)+ZY[z]*p.s],u=(F.mvT-m.tell[0])/(m.tell[1]-m.tell[0]),r=26*(m.kd||m.proj&&m.proj.kd?1.3:1);
+ const m=F.st==='move'&&F.mv;
+ // iron sheen: Iron Resolve's stance, and a boss's hyper-armor frames (light hits will not stagger it)
+ if(F.iron||m&&m.armor&&F.mvT<=m.armor[1]&&!F.isP){g.globalAlpha=(.25+.12*Math.sin(G.t*14))*F.alpha;fig(g,Object.assign({},p,{x:p.x-3*p.f}),F.def.kind,G.t,['#aaa498','#aaa498']);g.globalAlpha=1}
+ // swing trail: the weapon tip during the active window, fading over 0.2 s (red for powers, rage and Sovereignty)
+ if(m&&m.hit&&!NOTRAIL.has(F.mvn)&&m.hit.some(w=>F.mvT>=w[0]-.03&&F.mvT<=w[1]+.02)){const q=bladePt(p,F.def.kind,tipLen(F.def.kind));(F.trail||(F.trail=[])).push([q[0],q[1],G.t]);if(F.trail.length>16)F.trail.shift()}
+ if(F.trail){while(F.trail.length&&G.t-F.trail[0][2]>.2)F.trail.shift();if(F.trail.length>1){g.fillStyle=F.rage||F.sov||m&&HERO_MV[F.mvn]?RED:INK;g.globalAlpha=.6;brush(g,F.trail,(F.isP?15:20)*p.s,{taper:u=>u*u});g.globalAlpha=1}}
+ if(m&&m.tell&&F.mvT>m.tell[0]&&F.mvT<m.tell[1]){const z=m.tellZone||m.zone||m.proj&&m.proj.zone||'mid',q=F.isP?bladePt(p,F.def.kind,130):[p.x+F.f*70*p.s,ip(F.y,F.py)+ZY[z]*p.s],u=(F.mvT-m.tell[0])/(m.tell[1]-m.tell[0]),r=26*(m.kd||m.proj&&m.proj.kd?1.3:1);
   g.globalAlpha=Math.sin(u*Math.PI);g.drawImage(MIST,q[0]-50,q[1]-50,100,100);g.fillStyle=RED;g.save();g.translate(q[0],q[1]);g.rotate(u*3);for(let k=0;k<4;k++){g.rotate(Math.PI/2);tri(g,[-3,0],[3,0],[0,-r])}g.restore();g.globalAlpha=1}}
 // reposition attacks: a closing ink ring where the boss will reappear, from the moment it vanishes (it tracks the player until the teleport)
 function drawMarks(c){camT(c,1);for(const F of[G.B,G.P]){const m=F.st==='move'&&F.mv;if(!m||!m.mark||F.mvT<m.mark[0]||F.mvT>m.mark[1]+.1)continue;
@@ -1044,19 +1103,21 @@ function drawFx(c){camT(c,1);for(const f of G.fx){const age=G.t-f.t0;
 function drawProj(c){camT(c,1);for(const q of G.proj){const p=Object.assign({},q,{x:ip(q.x,q.px)}),d=Math.sign(p.vx);
  if(p.type==='wave'){const s=p.big?1.35:1,pts=[];for(let i=0;i<=14;i++){const u=i/14;pts.push([p.x+d*Math.sin(u*Math.PI)*34*s-d*20*s,p.y+(u-.5)*170*s])}c.fillStyle=INK;brush(c,pts,26*s,{taper:u=>Math.sin(Math.PI*u)});c.strokeStyle=INK;dry(c,pts.map(q=>[q[0]-d*40*s,q[1]]),34*s,p.t*9|0,{dry:.9,alpha:.5});if(p.big){c.strokeStyle=RED;c.lineWidth=3;c.beginPath();pts.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]));c.stroke()}}
  else if(p.type==='star'){c.save();c.translate(p.x,p.y);c.rotate(p.t*30);c.fillStyle=INK;for(let k=0;k<4;k++){c.rotate(Math.PI/2);tri(c,[-4,0],[4,0],[0,-16])}circ(c,0,0,5);c.restore();c.strokeStyle=ink(.6,.6);c.lineWidth=2;line(c,[p.x-d*14,p.y],[p.x-d*70,p.y])}
+ else if(p.type==='phantom'){const pts=[];for(let i=0;i<=16;i++){const u=i/16;pts.push([p.x+d*Math.sin(u*Math.PI)*(46+(p.wide||0)*.5)-d*24,-u*262])}c.globalAlpha=.85;c.drawImage(MIST,p.x-110,-300,220,330);c.fillStyle='#f4efe6';brush(c,pts,30,{taper:u=>Math.sin(Math.PI*u)});c.strokeStyle=ink(.5);dry(c,pts,30,p.t*9|0,{dry:.8,alpha:.6});c.globalAlpha=1}
+ else if(p.type==='ghost'){c.globalAlpha=.5*(1-p.t/p.fuse);for(let k=0;k<5;k++)c.drawImage(PUFF,p.x-42-k*3,-70-k*42,84,84);c.globalAlpha=1}
  else if(p.type==='quake'){for(let k=0;k<5;k++){const x=p.x-d*k*26,h=(60-k*10)*(.7+.3*Math.sin(p.t*30+k));c.fillStyle=ink(.9-k*.12);tri(c,[x-14,2],[x+14,2],[x+d*6,-h])}c.globalAlpha=.4;c.drawImage(PUFF,p.x-70,-40,140,50);c.globalAlpha=1}
  else{c.globalAlpha=.9;c.drawImage(MIST,p.x-46,p.y-46,92,92);c.fillStyle='#f6f2ea';circ(c,p.x,p.y,12+Math.sin(p.t*14)*2);c.globalAlpha=.6;for(let k=1;k<5;k++)circ(c,p.x-d*k*14,p.y+Math.sin(p.t*10+k)*6,10-k*2);c.globalAlpha=1}}}
 function hbar(c,x,y,w,F,rev){const pts=[[x,y],[x+w*.5,y-5],[x+w,y+1]],o={taper:u=>.8+.2*Math.sin(Math.PI*clamp(u*.96+.02))};c.fillStyle=ink(.17);brush(c,pts,40,o);
  const seg=(f,col)=>{if(f<=0)return;c.save();c.beginPath();if(rev)c.rect(x+w*(1-f),y-40,w*f+4,80);else c.rect(x-4,y-40,w*f+4,80);c.clip();c.fillStyle=col;brush(c,pts,40,o);c.restore()};
  seg(F.lag/F.maxHp,RED);seg(F.hp/F.maxHp,INK);c.strokeStyle='rgba(236,229,214,.55)';dry(c,pts,34,x,{dry:.95,b:5,alpha:.4,even:1})}
 function hud(c){screen(c);const pl=G.P,bo=G.B;c.globalAlpha=.85;c.drawImage(MIST,-260,-200,W+520,460);c.globalAlpha=1;
- hbar(c,100,72,690,pl,false);hbar(c,W-790,72,690,bo,true);
+ hbar(c,100,72,690,pl,false);hbar(c,W-790,72,690,bo,true);if(bo.def.phase){const x=W-790+690*(1-bo.def.phase.at);c.strokeStyle=bo.phase?RED:INK;c.lineWidth=4;line(c,[x,44],[x,100])} // the phase notch
  c.fillStyle=INK;c.textBaseline='alphabetic';c.textAlign='left';c.font='38px "Yuji Boku", serif';c.fillText('一閃',100,142);c.font='600 28px "Cormorant Garamond", serif';c.fillText('ISSEN',184,140);
  c.textAlign='right';c.font='38px "Yuji Boku", serif';c.fillText(G.def.jp,W-100,142);const jw_=c.measureText(G.def.jp).width;c.font='600 28px "Cormorant Garamond", serif';const nm=G.def.name.toUpperCase();c.fillText(nm,W-114-jw_,140);const nw=jw_+14+c.measureText(nm).width;
  for(let i=0;i<2;i++)for(const[F,x]of[[pl,300+i*42],[bo,W-100-nw-62-i*42]]){if(F.wins>i)c.drawImage(SEAL,x,114,32,32);else{c.strokeStyle=ink(.45);c.lineWidth=2;c.strokeRect(x+3,117,26,26)}}
  const full=pl.ink>=99.5;for(let i=0;i<3;i++){const x=100+i*112,f=clamp((pl.ink-i*33.34)/33.34),sp=[[x,186],[x+50,184],[x+100,186]];c.fillStyle=ink(.16);brush(c,sp,16,{taper:()=>1});if(f>0){c.save();c.beginPath();c.rect(x-6,166,112*f,40);c.clip();c.fillStyle=full?RED:INK;brush(c,sp,16,{taper:()=>1});c.restore()}}
- c.textAlign='left';c.font='italic 24px "Cormorant Garamond", serif';c.fillStyle=full?RED:ink(.62);c.fillText(full?'I · ISSEN ready':pl.ink>=33.3?'L · ink wave':'ink',446,194);
- (pl.def.powers||[]).forEach((id,i)=>{if(!id)return;const pw=POWERS[id],n=pw.move,m=pl.moves[n],x=690+i*70,y=186,cd=clamp(((pl.cd[n]||0)-G.t)/m.cd),ok=cd<=0&&pl.ink>=m.cost*33.3-.5; // equipped powers: red when usable, grey sweep while cooling down
+ c.textAlign='left';c.font='italic 24px "Cormorant Garamond", serif';c.fillStyle=full||pl.sov?RED:ink(.62);c.fillText(pl.sov?'I · SOVEREIGN CUT':full?'I · ISSEN ready':pl.ink>=33.3?'L · ink wave':'ink',446,194);
+ (pl.def.powers||[]).forEach((id,i)=>{if(!id)return;const pw=POWERS[id],n=pw.move,m=pl.moves[n],x=690+i*70,y=186,cd=clamp(((pl.cd[n]||0)-G.t)/m.cd),ok=cd<=0&&pl.ink>=m.cost*33.3-.5&&!(m.once&&pl.once[n])&&!(pl.burn>G.t); // equipped powers: red when usable, grey sweep while cooling down
   c.globalAlpha=ok?1:.5;c.strokeStyle=ok?RED:ink(.5);c.lineWidth=3;c.beginPath();c.arc(x,y,26,0,6.2832);c.stroke();
   if(cd>0){c.fillStyle=ink(.22);c.beginPath();c.moveTo(x,y);c.arc(x,y,24,-1.5708,-1.5708+cd*6.2832);c.closePath();c.fill()}
   c.fillStyle=ok?RED:INK;c.textAlign='center';c.textBaseline='middle';c.font='30px "Yuji Boku", serif';c.fillText(pw.jp,x,y+1);
@@ -1101,7 +1162,7 @@ function renderMenu(t){setCam({x:-60+Math.sin(t*.05)*60,y:-270,z:1.05},0,t);clif
 const DATA=id=>JSON.parse(document.getElementById(id).textContent);
 const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,MOVE=DATA('data-movement'),BOSS_IDS=BOSSES.map(b=>b.id);
 function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
- ok(PROG.schema_version===2,'progression.schema_version');ok(DATA('data-powers').schema_version===2,'powers.schema_version');
+ ok(PROG.schema_version===2,'progression.schema_version');ok(DATA('data-powers').schema_version===3,'powers.schema_version');
  {const A=PROG.attributes;ok(A.rank_cap>0&&A.k>0&&A.crit_damage>=1&&['assault','survival','shadowcraft'].every(p=>Object.values(A[p]).every(v=>v>=0&&v<1)),'attributes')}
  ok(PROG.echo_slots.unlock_levels.length===2&&PROG.power_tiers.length===4&&PROG.power_tiers.every(t=>t.sp>0&&t.mon>=0),'echo slots / power tiers');
  ok(PROG.xp.base>0&&PROG.xp.exponent>0&&PROG.xp.level_cap>=2&&PROG.xp.repeat_share>=0&&PROG.xp.repeat_share<=1,'xp curve');
@@ -1109,7 +1170,7 @@ function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
  ok(['state','move','hit','fall','turn','land'].every(k=>MOVE.blend[k]>0&&MOVE.blend[k]<=.2)&&MOVE.blend.step_px>0,'movement.blend');
  {const r=MOVE.roll;ok(MOVE.schema_version===1&&r.dur>0&&r.dist>0&&r.travel>0&&r.travel<=r.dur&&r.inv[0]>=0&&r.inv[0]<r.inv[1]&&r.inv[1]<=r.dur&&r.cd>=r.dur,'movement.roll')}
  for(const id of BOSS_IDS){const r=PROG.rewards[id];ok(r&&r.xp>=0&&r.skill_points>=0&&r.mon>=0&&POWERS[r.power],'reward '+id)}
- for(const[id,p]of Object.entries(POWERS)){ok(/^[a-z_]+$/.test(id)&&BOSS_IDS.includes(p.boss)&&p.name&&p.jp&&p.short&&p.tiers&&p.tiers.length===5&&p.echo&&p.echo.name&&p.echo.desc,'power '+id);if(p.ready)ok(HERO_MV[p.move]&&HERO_MV[p.move].cost>=0&&HERO_MV[p.move].cd>0,'power move '+id)}
+ for(const[id,p]of Object.entries(POWERS)){ok(/^[a-z_]+$/.test(id)&&BOSS_IDS.includes(p.boss)&&p.name&&p.jp&&p.short&&p.tiers&&p.tiers.length===5&&p.echo&&p.echo.name&&p.echo.desc,'power '+id);if(p.ready)ok(HERO_MV[p.move]&&HERO_MV[p.move].cost>=0&&HERO_MV[p.move].cd>0&&(p.extra||[]).every(x=>HERO_MV[x]),'power move '+id)}
  return e}
 {const e=validateData();if(e.length)console.error('Issen data invalid:',e)}
 // XP is a running total; going from level L to L+1 costs round(base·L^exponent)
@@ -1198,13 +1259,15 @@ function rewardText(list){if(!list.length)return'';const sum=k=>list.reduce((a,r
 const exportCode=()=>'ISSEN2-'+btoa(String.fromCharCode(...new TextEncoder().encode(seal(SV))));
 function importCode(code){try{const d=unseal(new TextDecoder().decode(Uint8Array.from(atob(String(code).trim().replace(/^ISSEN2-/,'')),c=>c.charCodeAt(0))));return d?cleanSave(d):null}catch(e){return null}}
 // attributes: bonus = cap·(1 − e^(−k·rank)), rank ≤ rank_cap; echoes scale with Shadowcraft's power bonus (docs/balance.md)
+// tier patches: {add|mul|set: {field or "nested.field": value}} applied to the fighter's own copy of the move
+const patch=(m,e)=>{for(const op of['add','mul','set'])for(const[k,v]of Object.entries(e[op]||{})){const ks=k.split('.'),o=ks.length>1?(m[ks[0]]=Object.assign({},m[ks[0]])):m,f=ks[ks.length-1];o[f]=op==='add'?(o[f]||0)+v:op==='mul'?o[f]*v:v}};
+const scalePe=(m,x)=>{if(m.dmg)m.dmg*=x;if(m.proj)m.proj=Object.assign({},m.proj,{dmg:m.proj.dmg*x});for(const k of m.pe||[])m[k]*=x};
 const attrBonus=(path,key,rank)=>PROG.attributes[path][key]*(1-Math.exp(-PROG.attributes.k*rank));
 function derive(s){const r=s.profile.attrs,b=(p,k)=>attrBonus(p,k,r[p]),pe=b('shadowcraft','power'),x=1+pe;let speed=b('shadowcraft','speed');
- const mod={dmg:1+b('assault','damage'),combo:1+b('assault','combo'),crit:b('assault','crit_chance'),critDmg:PROG.attributes.crit_damage,mit:b('survival','mitigation'),
+ const mod={dmg:1+b('assault','damage'),combo:1+b('assault','combo'),crit:b('assault','crit_chance'),critDmg:PROG.attributes.crit_damage,mit:b('survival','mitigation'),heal:1+b('survival','healing'),
   cd:1-b('shadowcraft','cooldown'),ink:1+b('shadowcraft','ink'),roll:1-b('shadowcraft','roll'),pe},ov={},mv=n=>ov[n]||(ov[n]=Object.assign({},MV[n]||HERO_MV[n]));
- for(const id of s.loadout.powers){if(!id||!POWERS[id].ready)continue;const m=mv(POWERS[id].move); /* tiers II.. add to the equipped power's move */
-  for(let t=1;t<s.powers[id].tier;t++){const e=POWERS[id].tiers[t];if(e.reach)m.reach+=e.reach;if(e.dmg)m.dmg+=e.dmg;if(e.armor_pierce)m.pierceArmor=1;if(e.block_push)m.blockPush=e.block_push}
-  m.dmg*=x}
+ for(const id of s.loadout.powers){if(!id||!POWERS[id].ready)continue;const pw=POWERS[id]; /* tiers II.. patch the equipped power's move; Shadowcraft scales its damage */
+  for(let t=1;t<s.powers[id].tier;t++)patch(mv(pw.move),pw.tiers[t]);for(const n of[pw.move,...(pw.extra||[])])scalePe(mv(n),x)}
  for(const id of s.loadout.echoes){const e=id&&POWERS[id].echo;if(!e)continue;
   if(e.reach)for(const n of e.moves)mv(n).reach*=1+e.reach*x;
   if(e.roll)mod.roll*=1-e.roll*x;if(e.speed)speed+=e.speed*x;
@@ -1225,7 +1288,7 @@ function buildMenu(){const box=document.getElementById('levels');box.innerHTML='
  el.innerHTML=`<span class="n">${['First','Second','Third','Fourth','Fifth'][i]} shadow</span><span class="kj">${b.jp}</span><span class="nm">${b.name}</span><span class="ti">${b.title}</span><span class="ar">${ARENAS[b.arena].name}</span><span class="stt">${done?'Defeated · fight again':open?'Challenge':'Locked'}</span>${done?'<span class="seal">討</span>':''}`;
  el.onclick=()=>startFight(i);box.appendChild(el)})}
 function startFight(lv,seed){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.lv=lv;G.seed=(seed??SEED_Q??Math.random()*4294967296)>>>0;G.rand=rng(G.seed);G.acc=0;G.ia=1;G.def=BOSSES[lv];G.P=mkF(heroDef(),true);G.B=mkF(G.def,false);G.matchId=BOSS_IDS[lv]+':'+Date.now();G.res=null;G.rv=0;
- const p1=G.P.def.powers[0];tEls.p1.classList.toggle('off',!p1);if(p1)tEls.p1.innerHTML=`<b>${POWERS[p1].jp}</b><i>${POWERS[p1].short}</i>`;G.round=1;G.t=0;G.mvId=0;G.hint=lv===0?14:7;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2};
+ G.P.def.powers.forEach((id,i)=>{const el=tEls['p'+(i+1)];el.classList.toggle('off',!id);if(id)el.innerHTML=`<b>${POWERS[id].jp}</b><i>${POWERS[id].short}</i>`});G.round=1;G.t=0;G.mvId=0;G.hint=lv===0?14:7;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2};
  MODE='game';show(null);const ar=ARENAS[G.def.arena];amb(ar.wind,ar.rain,ar.rumb||0);newRound()}
 // victory: rewards are computed and SAVED first, then the (skippable) absorption ceremony, then the result panel
 function matchEnd(win){G.state='over';G.res={win,r:null};
@@ -1253,7 +1316,7 @@ function notice(k,title,text,btns){$('nKanji').textContent=k;$('nTitle').textCon
 const CH={tab:'attrs',back:'menu',slot:null,pw:null},ROM=['I','II','III','IV','V'],ATTR={assault:['斬','Assault'],survival:['守','Survival'],shadowcraft:['墨','Shadowcraft']};
 const pct=v=>`${+(v*100).toFixed(v<.1?1:0)}%`;
 function attrLines(k,r){const b=key=>pct(attrBonus(k,key,r));
- return k==='assault'?[`attack +${b('damage')}`,`chain hits 2–3 +${b('combo')}`,`crit chance ${b('crit_chance')}`]:k==='survival'?[`health +${b('hp')}`,`damage taken −${b('mitigation')}`]
+ return k==='assault'?[`attack +${b('damage')}`,`chain hits 2–3 +${b('combo')}`,`crit chance ${b('crit_chance')}`]:k==='survival'?[`health +${b('hp')}`,`damage taken −${b('mitigation')}`,`healing +${b('healing')}`]
   :[`powers and echoes +${b('power')}`,`power cooldowns −${b('cooldown')}`,`ink +${b('ink')} · roll −${b('roll')}`,`walk +${b('speed')}`]}
 function openChar(mode,back){if(back)CH.back=back;if(mode)CH.tab='save';const p=SV.profile,l=levelOf(p.xp);
  $('cLvl').textContent=l.level;$('cXp').style.width=(l.need?l.into/l.need*100:100)+'%';
@@ -1350,7 +1413,7 @@ for(const b of $('cTabs').children)b.onclick=()=>{CH.tab=b.dataset.tab;CH.slot=n
 $('mHelp').onclick=()=>{helpBack='menu';show('help')};$('pHelp').onclick=()=>{helpBack='pause';show('help')};$('hClose').onclick=()=>show(helpBack);
 $('pResume').onclick=togglePause;$('pRestart').onclick=()=>startFight(G.lv);$('pQuit').onclick=toMenu;
 /* --- touch controls: floating joystick + multi-touch buttons feed the same G.keys / G.buf as the keyboard --- */
-const tEls={touch:$('touch'),pause:$('tPause'),ink:$('tbInk'),issen:$('tbIssen'),p1:$('tbP1'),roll:$('tbRoll')},capture=(el,id)=>{try{el.setPointerCapture(id)}catch(e){}};
+const tEls={touch:$('touch'),pause:$('tPause'),ink:$('tbInk'),issen:$('tbIssen'),p1:$('tbP1'),p2:$('tbP2'),roll:$('tbRoll')},capture=(el,id)=>{try{el.setPointerCapture(id)}catch(e){}};
 const setTouch=v=>{TOUCH.on=v;document.body.classList.toggle('touch',v)};setTouch(TOUCH.on);
 addEventListener('pointerdown',e=>{if(e.pointerType==='touch'){usePad(false);if(!TOUCH.on)setTouch(true)}},true);
 {const zone=$('stickZone'),stk=$('stick'),knob=$('knob');let id=null,sx=0,sy=0,up=false;
@@ -1364,8 +1427,8 @@ addEventListener('pointerdown',e=>{if(e.pointerType==='touch'){usePad(false);if(
   b.addEventListener('pointerup',rel);b.addEventListener('pointercancel',rel);b.addEventListener('contextmenu',e=>e.preventDefault())}}
 tEls.pause.onclick=togglePause;
 function syncTouch(){const fight=MODE==='game'&&G.state!=='over'&&G.state!=='absorb'&&!G.paused;tEls.touch.classList.toggle('off',!(TOUCH.on&&fight));tEls.pause.classList.toggle('off',!fight);document.body.classList.toggle('gm',MODE!=='film');
- if(fight&&TOUCH.on){tEls.roll.classList.toggle('dis',(G.P.rollCd||0)>G.t);tEls.ink.classList.toggle('dis',G.P.ink<33.3);tEls.issen.classList.toggle('dis',G.P.ink<99.5);tEls.issen.classList.toggle('ready',G.P.ink>=99.5);
-  const id=G.P.def.powers[0];if(id){const n=POWERS[id].move,m=G.P.moves[n];tEls.p1.classList.toggle('dis',G.P.ink<m.cost*33.3-.5||(G.P.cd[n]||0)>G.t)}}}
+ if(fight&&TOUCH.on){tEls.roll.classList.toggle('dis',(G.P.rollCd||0)>G.t);tEls.ink.classList.toggle('dis',G.P.ink<33.3);tEls.issen.classList.toggle('dis',G.P.ink<99.5&&!G.P.sov);tEls.issen.classList.toggle('ready',G.P.ink>=99.5||!!G.P.sov);
+  G.P.def.powers.forEach((id,i)=>{if(!id)return;const n=POWERS[id].move,m=G.P.moves[n];tEls['p'+(i+1)].classList.toggle('dis',G.P.ink<m.cost*33.3-.5||(G.P.cd[n]||0)>G.t||m.once&&G.P.once[n]||G.P.burn>G.t)})}}
 function goFull(){const el=document.documentElement,o=window.screen.orientation;if(document.fullscreenElement||!el.requestFullscreen)return;el.requestFullscreen({navigationUI:'hide'}).then(()=>o&&o.lock&&o.lock('landscape').catch(()=>{})).catch(()=>{})}
 stage.addEventListener('pointerdown',poke);stage.addEventListener('pointerdown',()=>{if(MODE==='game'&&G.state==='absorb'&&G.st>.8)absorbDone()});
 // leaving the tab/app pauses the fight and silences audio; the Android shell calls these too (Back = pause toggle)
@@ -1383,7 +1446,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
  // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
- window.game={lab:{P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,derive,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ window.game={lab:{P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,derive,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
  if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 (async()=>{try{await Promise.race([Promise.all([document.fonts.load('380px "Yuji Boku"','一閃終師'),document.fonts.load('46px "Cormorant Garamond"')]),new Promise(r=>setTimeout(r,3500))])}catch(e){}
  build();st.ready=true;const q=new URLSearchParams(location.search);

@@ -93,14 +93,14 @@ module.exports = {
     assert.strictEqual(game.cleanSave(JSON.parse(JSON.stringify(old))).profile.skillPts, 7);
   },
 
-  async 'power tiers: skill points and mon, in order; IV needs the Ink Trial; a dormant power cannot be upgraded'() {
+  async 'power tiers: skill points and mon, in order; IV needs the Ink Trial; a power not yet absorbed cannot be upgraded'() {
     const { game } = await boot(), s = profile(game, { beaten: 3 }), T = game.PROG.power_tiers; // level 5: 3 + 1 skill points, 450 mon
     assert.strictEqual(s.profile.skillPts, 4); assert.strictEqual(s.profile.mon, 450);
     assert.ok(game.upgradePower(s, 'red_moon')); assert.strictEqual(s.powers.red_moon.tier, 2);
     assert.strictEqual(s.profile.skillPts, 4 - T[0].sp); assert.strictEqual(s.profile.mon, 450 - T[0].mon);
     assert.ok(game.upgradePower(s, 'red_moon')); assert.strictEqual(s.powers.red_moon.tier, 3); assert.strictEqual(s.profile.skillPts, 1);
     assert.strictEqual(game.upgradePower(s, 'red_moon'), false); assert.match(game.tierBlock(s, 'red_moon'), /Ink Trial/);
-    assert.strictEqual(game.upgradePower(s, 'miststep'), false); assert.match(game.tierBlock(s, 'miststep'), /later update/);
+    assert.ok(game.upgradePower(s, 'miststep'), 'every absorbed power can be upgraded (M5)'); assert.strictEqual(s.profile.skillPts, 0);
     assert.match(game.tierBlock(s, 'phantom_edge'), /not absorbed/);
     const poor = profile(game, { beaten: 1 }); poor.profile.mon = 10;
     assert.match(game.tierBlock(poor, 'red_moon'), /mon/);
@@ -133,8 +133,8 @@ module.exports = {
     assert.strictEqual(s7.profile.level, 7); assert.strictEqual(game.setSlot(s7, 'echoes', 0, 'miststep'), false, 'echo slot 1 opens at level 8');
     const s = profile(game, { beaten: 5 }); // level 8
     assert.ok(game.setSlot(s, 'echoes', 0, 'iron_resolve')); assert.strictEqual(game.setSlot(s, 'echoes', 1, 'miststep'), false, 'echo slot 2 opens at level 14');
-    assert.strictEqual(game.setSlot(s, 'powers', 1, 'miststep'), false, 'a dormant power cannot take a power slot');
-    eq(s.loadout.powers, ['red_moon', null]); assert.ok(game.setSlot(s, 'echoes', 0, 'red_moon'));
+    assert.ok(game.setSlot(s, 'powers', 1, 'miststep'), 'power slot 2 is open from level 6'); assert.strictEqual(game.setSlot(s7, 'powers', 1, 'nothing'), false, 'only absorbed powers');
+    eq(s.loadout.powers, ['red_moon', 'miststep']); assert.ok(game.setSlot(s, 'echoes', 0, 'red_moon')); assert.ok(game.setSlot(s, 'powers', 1, null));
     eq(s.loadout, { powers: [null, null], echoes: ['red_moon', null] }, 'it moved from the power slot to the echo slot');
     game.SV = s; game.writeSave(s);
     const again = await boot({ storage: st }); eq(again.game.SV.loadout, { powers: [null, null], echoes: ['red_moon', null] }, 'persists across a restart');

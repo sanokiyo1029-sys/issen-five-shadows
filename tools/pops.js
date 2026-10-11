@@ -9,9 +9,11 @@ const BODY = ['hip', 'neck', 'head', 'e1', 'h1', 'e2', 'h2', 'k1', 'f1', 'k2', '
 
 // joint positions in px relative to the fighter's root, mirrored by the drawn facing, plus the weapon tip
 function points(game, F) {
+  // measured in the character's own (unmirrored) frame: facing is its own animated transition (the drawn facing squashes
+  // through zero over blend.turn, tested in tests/anim.test.js), so only changes of pose count here
   const p = game.poseOf(F), J = game.joints(p, F.def.kind.L), out = {};
-  for (const k of BODY) out[k] = [J[k][0] * p.s * p.f, (J[k][1] + J.oy) * p.s - p.lift - F.y]; // p.lift includes -F.y: add it back
-  const t = game.bladePt(p, F.def.kind, 100); out.tip = [t[0] - p.x, t[1] - F.y];
+  for (const k of BODY) out[k] = [J[k][0] * p.s, (J[k][1] + J.oy) * p.s - p.lift - F.y]; // p.lift includes -F.y: add it back
+  const t = game.bladePt(Object.assign({}, p, { f: 1, x: 0 }), F.def.kind, 100); out.tip = [t[0], t[1] - F.y];
   return { out, alpha: F.alpha };
 }
 

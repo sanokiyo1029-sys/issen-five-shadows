@@ -11,8 +11,9 @@ async function withLab() {
 
 module.exports = {
   async 'every move of every fighter gets a review sheet and a §6.6 checklist'() {
-    const { lab } = await withLab(), ids = [...new Set(lab.FIGHTERS.flatMap(f => f.moves))];
-    assert.strictEqual(ids.length, 37);
+    const { lab, game } = await withLab(), ids = [...new Set(lab.FIGHTERS.flatMap(f => f.moves))];
+    const want = new Set([...lab.FIGHTERS[0].moves, ...game.BOSSES.flatMap(b => [...b.moves, b.phase && b.phase.move].filter(Boolean))]);
+    assert.strictEqual(ids.length, want.size, 'every hero move and every boss move, phase moves included');
     for (const id of ids) {
       const cl = lab.sheet(id);
       assert.deepStrictEqual(JSON.parse(JSON.stringify(cl.map(r => r.n))), [1, 2, 3, 4, 5, 6, 7, 8, 12, 13], id); // vm arrays: compare as JSON

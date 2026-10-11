@@ -12,7 +12,7 @@ const first = m => m.hit ? m.hit[0][0] : m.proj.t;
 
 async function verifier() {
   const { game } = await boot(), G = game.G, MV = game.MV;
-  const lvOf = id => game.BOSSES.findIndex(b => b.moves.includes(id));
+  const lvOf = id => game.BOSSES.findIndex(b => b.moves.includes(id) || b.phase && b.phase.move === id);
 
   // one trial: boss `id` at distance d; `act(G, tick)` drives the hero; returns the damage the hero took
   function trial(id, d, act) {
@@ -20,6 +20,7 @@ async function verifier() {
     passive(G); game.updGame(1 / 60);
     if (!game.startMove(G.B, id)) throw new Error('could not start ' + id);
     const m = MV[id], ticks = Math.ceil((m.dur + (m.proj ? 2 : .2)) * 60);
+    if (lvOf(id) >= 0 && game.BOSSES[lvOf(id)].phase && game.BOSSES[lvOf(id)].phase.move === id) G.B.phase = true;
     for (let i = 0; i < ticks; i++) {
       passive(G); act(G, i); game.updGame(1 / 60);
       if (G.P.hp < G.P.maxHp) break;
@@ -35,7 +36,7 @@ async function verifier() {
     return null;
   }
   function works(id, answer, d) {
-    const m = MV[id], low = (m.zone || m.proj.zone) === 'low';
+    const m = MV[id], low = [m.zone, m.proj && m.proj.zone, m.proj2 && m.proj2.zone, ...(m.win || []).map(w => w && w.zone)].includes('low');
     if (answer === 'block') return trial(id, d, G => { G.keys.block = true; G.keys.down = low; }) === 0;
     if (answer === 'crouch') return trial(id, d, G => { G.keys.down = true; }) === 0;
     const last = Math.ceil((first(m) + (m.proj ? 1.2 : 0)) * 60) + 2, ok = []; // a projectile is answered when it arrives, not when it is thrown
@@ -52,7 +53,7 @@ async function verifier() {
 module.exports = { verifier, ANSWERS, MIN_WINDOW, first };
 
 if (require.main === module) (async () => {
-  const v = await verifier(), ids = [...new Set(v.game.BOSSES.flatMap(b => b.moves))];
+  const v = await verifier(), ids = [...new Set(v.game.BOSSES.flatMap(b => [...b.moves, b.phase && b.phase.move].filter(Boolean)))];
   for (const id of ids) {
     const d = v.distance(id);
     console.log(id.padEnd(9), d == null ? 'NEVER HITS AN IDLE HERO' : 'd=' + Math.round(d), d == null ? '' : ANSWERS.filter(a => v.works(id, a, d)).join(' '), ' declared:', (v.MV[id].answers || []).join(' '));

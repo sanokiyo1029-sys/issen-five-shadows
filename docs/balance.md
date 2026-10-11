@@ -107,7 +107,7 @@ Power damage (Shadowcraft) is left out of the multiplier: powers are limited by 
 
 Tiers apply to the equipped power's move as a per-fighter copy. `MV` and `HERO_MV` never change.
 
-Only Spear of the Red Moon is playable so far:
+All five powers are playable from M5. Spear of the Red Moon:
 
 | Red Moon tier | Effect |
 |---|---|
@@ -133,3 +133,40 @@ Echo strength scales with Shadowcraft's power bonus. Iron Skin's reduction is ca
 | Ember of Rage (Akuma) | below half health, ink fills 50% faster |
 
 Echoes work from the moment the power is absorbed, even while the active power still awaits M5.
+
+## The five powers (M5)
+
+All costs are in ink bars. Shadowcraft scales each power's damage, including the afterimage, the counter and the Sovereign Cut. The tier columns list only what that tier changes.
+
+| Power | Use | Tier I | Tier II | Tier III |
+|---|---|---|---|---|
+| Spear of the Red Moon | 1 bar, 4 s | 14 damage at 300 reach | +20 reach, +2 damage | breaks hyper-armor, ×2 block pushback |
+| Miststep | 1 bar, 7 s | 0.35 s, invulnerable 0.04–0.28 s. Back or neutral retreats 380 px; toward the foe passes behind them. The afterimage bursts for 4 after 0.5 s if the foe is within 150 px. | +60 px, 6 s cooldown | afterimage 7 damage; +10 ink when it slips a live attack |
+| Iron Resolve | 1 bar, 8 s | 0.25 s brace, then a 1.6 s stance: −55% damage, no stagger from non-knockdown hits, walk ×0.4. Slash within 0.5 s of an absorbed blow counters for 8 + 1.2 × absorbed (at most 24), with knockdown. Knockdowns break the stance; so does any other attack. | −65% damage | the counter heals 30% of its damage (× Survival's healing) |
+| Phantom Edge | 1 bar, 3.5 s | a tall wave at 650 px/s: 12 damage to any grounded foe (crouching doesn't help; jumping does). It breaks every projectile it meets. | +3 damage, wider | 30% faster |
+| Demon Sovereignty | 2 bars, once a round (+20 s) | 8 s: damage ×1.25, speed ×1.15, power cooldowns ×0.6, ink ×1.5. The Issen key becomes the Sovereign Cut (40, unblockable), which ends the form. Then 2 s of burnout with no powers. | 10 s | damage ×1.35; each hit bleeds 2 health a second for 3 s (bleed never kills) |
+
+**AI:**
+- Bosses weight their knockdown moves ×3 against a hero in Iron Resolve.
+- They block 20% more often while the hero is in Sovereignty.
+- `tests/powers.test.js` plays every power against every boss to a result.
+
+**Healing:** Survival now also raises healing (+30% cap). Its only source so far is Iron Resolve tier III. Healing is left out of the effective-power multiplier, which stays at 1.73× best build.
+
+## Boss second phases (M5)
+
+Below 50% health, once a round, each boss:
+- shows a banner (Akuma keeps his rage banner);
+- fills the notch on its health bar;
+- adds one move to its AI, with its own think and aggression tuning in `BOSSES[].phase`.
+
+| Boss | New move | What it is | Answers (verified) |
+|---|---|---|---|
+| Gekkō | g_twin | a thrust (7), then a low sweep (10, knockdown) with its own low glint | block (crouch-block), roll |
+| Kasumi | k_volley | two stars at once, head-high and ankle-high | block (crouch-block), roll |
+| Tetsugorō | m_quake2 | two earthquakes 0.25 s apart (9 + 9, knockdown) | block, jump (one jump clears both) |
+| Shirasagi | y_wisp2 | two wisps, mid and high, at different speeds | block, crouch |
+| Akuma (rage) | a_rend | a cut (8), then a crush (13, knockdown) with a high glint; red swing trail | block, roll |
+
+The first m_quake2 draft spaced the quakes 0.4 s apart. That left only a flickering 1–2 frame jump window, so the second quake now follows after 0.25 s.
+

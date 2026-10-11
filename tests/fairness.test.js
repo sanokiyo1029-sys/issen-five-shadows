@@ -7,13 +7,14 @@ const { audit } = require('../tools/audit-moves');
 const { ANSWERS, first } = require('../tools/answers');
 
 const passive = G => { G.B.ai.t = 1e9; G.B.ai.pt = 0; G.B.ai.blk = 0; G.B.ai.seen = G.P.mvId; };
-const bossMoves = game => [...new Set(game.BOSSES.flatMap(b => b.moves))];
-const lvOf = (game, id) => game.BOSSES.findIndex(b => b.moves.includes(id));
+const bossMoves = game => [...new Set(game.BOSSES.flatMap(b => [...b.moves, b.phase && b.phase.move].filter(Boolean)))];
+const lvOf = (game, id) => game.BOSSES.findIndex(b => b.moves.includes(id) || b.phase && b.phase.move === id);
+const parts = m => [m, ...(m.win || []).filter(Boolean).map(w => Object.assign({}, m, w)), m.proj, m.proj2].filter(x => x && x.dmg != null);
 
 module.exports = {
   async 'audit: every boss move has >= 2 answers, all verified by simulation; every flag is judged'() {
     const rows = await audit();
-    assert.strictEqual(rows.length, 26);
+    assert.strictEqual(rows.length, 31, '26 moves + five second-phase moves');
     for (const f of rows) {
       assert.ok(f.answers.length >= 2 && f.answers.every(a => ANSWERS.includes(a)), `${f.id}: answers ${f.answers}`);
       assert.deepStrictEqual(f.verified, f.answers, `${f.id}: declared ${f.answers}, simulation confirms ${f.verified}`);
@@ -26,9 +27,10 @@ module.exports = {
   async 'every heavy boss move (dmg >= 10 or knockdown) carries a tell that ends by its first active frame'() {
     const { game } = await boot(), MV = game.MV;
     for (const id of bossMoves(game)) {
-      const m = MV[id], dmg = m.dmg ?? m.proj.dmg, kd = m.kd || m.proj && m.proj.kd;
-      if (!(dmg >= 10 || kd || m.mark)) continue;
-      assert.ok(Array.isArray(m.tell) && m.tell[0] >= 0 && m.tell[0] < m.tell[1] && m.tell[1] <= first(m), `${id}: tell ${m.tell}`);
+      const m = MV[id], ps = parts(m);
+      if (!(ps.some(x => x.dmg >= 10 || x.kd) || m.mark)) continue;
+      const heavyAt = m.hit ? m.hit.find((w, i) => { const x = m.win && m.win[i] ? Object.assign({}, m, m.win[i]) : m; return x.dmg >= 10 || x.kd; }) : null, by = heavyAt ? heavyAt[0] : first(m);
+      assert.ok(Array.isArray(m.tell) && m.tell[0] >= 0 && m.tell[0] < m.tell[1] && m.tell[1] <= by, `${id}: tell ${m.tell} must end by its heavy step at ${by}`);
     }
   },
 

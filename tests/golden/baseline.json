@@ -894,6 +894,192 @@
    "fr": "fn g=>[[0,g],[.15,P(g,{tl:.4,th1:1.0,sh1:.2,th2:-.4,sh2:-1.0})],[.3,P(PS.high,{th1:1.5,sh1:-.4,th2:.8,sh2:-1})],[.78,P(PS.high,{th1:.8,sh1:0,th2:-.5,sh2:-.6})],[.86,P(PS.cutLow,{sw:1.2}),'o5'],[1.25,g]]",
    "start": "fn start(F,O){F.d.x0=F.x;F.d.tx=clamp(O.x-F.f*110*F.def.s,-ARENA,ARENA);F.manual=true;snd('whoosh',.6)}",
    "tick": "fn tick(F,O,a,b){if(!F.manual)return;const u=ss(.18,.82,b);F.x=lerp(F.d.x0,F.d.tx,u);F.y=-Math.sin(u*Math.PI)*300;if(b>=.82){F.y=0;F.manual=false;fxAdd({k:'ring',x:F.x+F.f*80,y:0});fxAdd({k:'splash',x:F.x+F.f*90,y:-4,sz:60,persist:1});G.shake=22;snd('boom',.7);snd('drum',1)}}"
+  },
+  "g_twin": {
+   "dur": 1.25,
+   "hit": [
+    [
+     0.3,
+     0.38
+    ],
+    [
+     0.78,
+     0.88
+    ]
+   ],
+   "reach": 255,
+   "dmg": 7,
+   "zone": "mid",
+   "push": 110,
+   "win": [
+    null,
+    {
+     "zone": "low",
+     "dmg": 10,
+     "kd": 1,
+     "push": 220,
+     "reach": 245
+    }
+   ],
+   "tell": [
+    0.52,
+    0.76
+   ],
+   "tellZone": "low",
+   "ai": [
+    100,
+    270
+   ],
+   "w": 4,
+   "answers": [
+    "block",
+    "roll"
+   ],
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,g],[.22,P(SPG,{tl:-.05,ua1:.5,fa1:1.0})],[.34,SPL,'o5'],[.5,P(SPG,{tl:.1})],[.72,P(SPG,CR,{sw:-1.4,ua1:-.4,fa1:-.2})],[.84,SPLL,'o5'],[1.25,g]]"
+  },
+  "k_volley": {
+   "dur": 0.55,
+   "cd": 3,
+   "proj": {
+    "t": 0.24,
+    "type": "star",
+    "v": 1300,
+    "dmg": 5,
+    "zone": "high",
+    "y": -190
+   },
+   "proj2": {
+    "t": 0.24,
+    "type": "star",
+    "v": 1300,
+    "dmg": 5,
+    "zone": "low",
+    "y": -40
+   },
+   "ai": [
+    260,
+    1200
+   ],
+   "w": 4,
+   "answers": [
+    "block",
+    "roll"
+   ],
+   "fr": "fn g=>[[0,g],[.12,P(g,{ua1:-.6,fa1:-.2,ua2:-.5,fa2:-.1,tl:0})],[.24,P(KS1,{ua2:1.5,fa2:1.6}),'o5'],[.55,g]]"
+  },
+  "m_quake2": {
+   "dur": 1.45,
+   "cd": 7,
+   "armor": [
+    0,
+    0.62
+   ],
+   "proj": {
+    "t": 0.62,
+    "type": "quake",
+    "v": 800,
+    "dmg": 9,
+    "zone": "low",
+    "y": -20,
+    "kd": 1
+   },
+   "proj2": {
+    "t": 0.87,
+    "type": "quake",
+    "v": 800,
+    "dmg": 9,
+    "zone": "low",
+    "y": -20,
+    "kd": 1
+   },
+   "tell": [
+    0.15,
+    0.6
+   ],
+   "ai": [
+    220,
+    1200
+   ],
+   "w": 4,
+   "answers": [
+    "block",
+    "jump"
+   ],
+   "fr": "fn g=>[[0,g],[.5,P(PS.high,{tl:-.15})],[.64,P(PS.cutLow,{sw:.4,tl:.75,th1:1.3,sh1:.2,th2:-1.1,sh2:-1.4}),'o5'],[.76,P(PS.high,{tl:-.1})],[.89,P(PS.cutLow,{sw:.4,tl:.75,th1:1.3,sh1:.2,th2:-1.1,sh2:-1.4}),'o5'],[1.45,g]]",
+   "tick": "fn tick(F,O,a,b){for(const t of[.62,.87])if(a<t&&b>=t){G.shake=20;fxAdd({k:'ring',x:F.x+F.f*150,y:0});snd('boom',.6)}}"
+  },
+  "y_wisp2": {
+   "dur": 0.7,
+   "cd": 4,
+   "proj": {
+    "t": 0.3,
+    "type": "wisp",
+    "v": 560,
+    "dmg": 8,
+    "zone": "mid",
+    "y": -150
+   },
+   "proj2": {
+    "t": 0.3,
+    "type": "wisp",
+    "v": 400,
+    "dmg": 8,
+    "zone": "high",
+    "y": -215
+   },
+   "ai": [
+    260,
+    1200
+   ],
+   "w": 3,
+   "answers": [
+    "block",
+    "crouch"
+   ],
+   "fr": "fn g=>[[0,g],[.2,P(SPG,{ua1:1.6,fa1:1.7,sw:1.6,tl:.1})],[.32,P(SPG,{ua1:2.2,fa1:2.4,sw:2.6,tl:-.05}),'o5'],[.7,g]]"
+  },
+  "a_rend": {
+   "dur": 1.05,
+   "hit": [
+    [
+     0.22,
+     0.3
+    ],
+    [
+     0.62,
+     0.72
+    ]
+   ],
+   "reach": 220,
+   "dmg": 8,
+   "zone": "mid",
+   "push": 100,
+   "win": [
+    null,
+    {
+     "zone": "high",
+     "dmg": 13,
+     "kd": 1,
+     "push": 280
+    }
+   ],
+   "tell": [
+    0.4,
+    0.6
+   ],
+   "tellZone": "high",
+   "ai": [
+    0,
+    235
+   ],
+   "w": 4,
+   "answers": [
+    "block",
+    "roll"
+   ],
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.12,PS.wind],[.24,PS.cutSide,'o5'],[.5,PS.high],[.66,P(PS.cutLow,{sw:1.0}),'o5'],[1.05,g]]"
   }
  },
  "BOSSES": [
@@ -967,6 +1153,14 @@
     "block": 0.22,
     "range": 235
    },
+   "phase": {
+    "at": 0.5,
+    "move": "g_twin",
+    "k": "月",
+    "sub": "The Red Spear presses harder",
+    "think": 0.85,
+    "aggr": 0.1
+   },
    "arena": 0,
    "win": {
     "x": 0,
@@ -997,7 +1191,7 @@
     "horn": 1,
     "rage": 0
    },
-   "tip": "Long reach, slow recovery. A red glint warns of a heavy blow at the height it will land — block, duck or roll."
+   "tip": "Long reach, slow recovery. A red glint warns of a heavy blow at the height it lands. Hurt, he adds a thrust-and-sweep: crouch-block it."
   },
   {
    "id": "kasumi",
@@ -1070,6 +1264,14 @@
     "range": 145,
     "jump": 0.2
    },
+   "phase": {
+    "at": 0.5,
+    "move": "k_volley",
+    "k": "霞",
+    "sub": "Stars at two heights",
+    "think": 0.9,
+    "aggr": 0.05
+   },
    "arena": 1,
    "win": {
     "x": 0,
@@ -1100,7 +1302,7 @@
     "horn": 1,
     "rage": 0
    },
-   "tip": "Fast blades and throwing stars — duck the stars. When she vanishes, an ink ring marks where she will strike from: hold block."
+   "tip": "Fast blades and stars — duck them. When she vanishes, an ink ring marks where she will strike: hold block. Hurt, she throws high and low."
   },
   {
    "id": "tetsugoro",
@@ -1172,6 +1374,14 @@
     "block": 0.15,
     "range": 200
    },
+   "phase": {
+    "at": 0.5,
+    "move": "m_quake2",
+    "k": "鉄",
+    "sub": "The mountain answers twice",
+    "think": 0.9,
+    "aggr": 0.05
+   },
    "arena": 2,
    "win": {
     "x": 0,
@@ -1202,7 +1412,7 @@
     "horn": 1,
     "rage": 0
    },
-   "tip": "Iron skin: light blows will not stagger him. Jump the earthquake, punish the long swings."
+   "tip": "While his body shines like iron, light blows will not stagger him. Jump the earthquakes — hurt, he sends two — and punish the long swings."
   },
   {
    "id": "shirasagi",
@@ -1274,6 +1484,14 @@
     "block": 0.4,
     "range": 235
    },
+   "phase": {
+    "at": 0.5,
+    "move": "y_wisp2",
+    "k": "白",
+    "sub": "The ghost-fire spreads",
+    "think": 0.9,
+    "aggr": 0.05
+   },
    "arena": 3,
    "win": {
     "x": 0,
@@ -1304,7 +1522,7 @@
     "horn": 1,
     "rage": 0
    },
-   "tip": "A drowned duelist. She fades; a pale ring marks where she will reappear. Ghost-fire drifts slowly — block it."
+   "tip": "A drowned duelist. She fades; a pale ring marks where she will reappear. Ghost-fire drifts slowly — block it, or duck the spread."
   },
   {
    "id": "akuma",
@@ -1378,6 +1596,12 @@
     "range": 225,
     "rage": 1
    },
+   "phase": {
+    "at": 0.5,
+    "move": "a_rend",
+    "think": 1,
+    "aggr": 0
+   },
    "arena": 4,
    "win": {
     "x": 0,
@@ -1408,7 +1632,7 @@
     "horn": 1,
     "rage": 0
    },
-   "tip": "The warlord returns from the ink. At half strength his fury awakens. Save your Issen."
+   "tip": "The warlord returns from the ink. At half strength his fury awakens, with a red-trailed cut-and-crush: block both. Save your Issen."
   }
  ],
  "ARENAS": [
@@ -1606,6 +1830,103 @@
    "sndT": 0.24,
    "fr": "fn g=>[[0,g],[.2,P(PS.guard,{tl:-.05,hd:-.2,ua1:.15,fa1:1.45,sw:1.57,th1:.25,sh1:.05,th2:-.75,sh2:-.55})],[.27,P(PS.cutSide,{tl:.55,hd:-.38,sw:1.57,th1:1.3,sh1:.15,th2:-1.15,sh2:-1.45}),'o5'],[.36,P(PS.cutSide,{tl:.5,hd:-.34,sw:1.57,th1:1.25,sh1:.15,th2:-1.1,sh2:-1.4})],[.7,g]]",
    "tick": "fn tick(F,O,a,b){if(a<.24&&b>=.24)fxAdd({k:'moon',x:F.x+F.f*40,y:-135,f:F.f})}"
+  },
+  "p_miststep": {
+   "dur": 0.35,
+   "cost": 1,
+   "cd": 7,
+   "inv": [
+    0.04,
+    0.28
+   ],
+   "dist": 380,
+   "ghostDmg": 4,
+   "dodgeInk": 0,
+   "pe": [
+    "ghostDmg"
+   ],
+   "snd": "whoosh",
+   "sndT": 0,
+   "fr": "fn g=>[[0,g],[.06,P(g,CR,{tl:.6})],[.28,P(g,CR,{tl:.5})],[.35,g]]",
+   "start": "fn start(F,O){const fwd=!!F.in&&F.in.mx===F.f,min=58*(F.def.s+O.def.s)/2;F.d.x0=F.x;F.d.x1=clamp(fwd?O.x+F.f*(min+70):F.x-F.f*this.dist,-ARENA,ARENA);F.manual=true;\r\n   G.proj.push({o:F,x:F.x,y:-120,vx:0,type:'ghost',fuse:.5,dmg:this.ghostDmg,t:0});fxAdd({k:'smoke',x:F.x,y:0})}",
+   "tick": "fn tick(F,O,a,b){F.x=lerp(F.d.x0,F.d.x1,E.io(clamp((b-.04)/.24)));F.alpha=b>.04&&b<.28?.3:1}"
+  },
+  "p_iron": {
+   "dur": 0.25,
+   "cost": 1,
+   "cd": 8,
+   "stance": 1.6,
+   "mit": 0.55,
+   "heal": 0,
+   "snd": "clang",
+   "sndT": 0.05,
+   "fr": "fn g=>[[0,g],[.12,P(g,{tl:-.05,th1:.75,sh1:.1,th2:-.75,sh2:-.6})],[.25,P(g,{tl:-.02,th1:.7,sh1:.08,th2:-.7,sh2:-.55})]]",
+   "start": "fn start(F){F.iron={until:G.t+this.dur+this.stance,mit:this.mit,heal:this.heal,absorbed:0,cnt:0}}"
+  },
+  "p_iron_counter": {
+   "dur": 0.55,
+   "hit": [
+    [
+     0.12,
+     0.24
+    ]
+   ],
+   "reach": 195,
+   "dmg": 8,
+   "base": 8,
+   "pe": [
+    "base"
+   ],
+   "zone": "mid",
+   "kd": 1,
+   "push": 300,
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.08,PS.wind],[.16,PS.cutSide,'o5'],[.55,g]]",
+   "start": "fn start(F){const I=F.iron||{absorbed:0,heal:0};F.mv=Object.assign({},this,{dmg:Math.min(24,this.base+1.2*I.absorbed)});F.d.heal=I.heal;F.iron=null}",
+   "onHit": "fn onHit(F){if(F.d.heal){F.hp=Math.min(F.maxHp,F.hp+this.dmg*F.d.heal*F.mod.heal);fxAdd({k:'ring',x:F.x,y:0})}}"
+  },
+  "p_phantom": {
+   "dur": 0.6,
+   "cost": 1,
+   "cd": 3.5,
+   "proj": {
+    "t": 0.3,
+    "type": "phantom",
+    "v": 650,
+    "dmg": 12,
+    "zone": "mid",
+    "y": -130,
+    "ground": 1,
+    "wide": 0
+   },
+   "snd": "whoosh",
+   "sndT": 0.28,
+   "fr": "fn g=>[[0,g],[.2,P(PS.high,{tl:-.1})],[.3,P(PS.cutLow,{sw:1.2}),'o5'],[.6,g]]"
+  },
+  "p_sovereign": {
+   "dur": 0.55,
+   "cost": 2,
+   "cd": 20,
+   "once": 1,
+   "form": 8,
+   "formDmg": 1.25,
+   "burn": 2,
+   "bleed": 0,
+   "snd": "growl",
+   "sndT": 0.05,
+   "fr": "fn g=>[[0,g],[.22,P(PS.high,{tl:-.2,hd:-.5})],[.55,g]]",
+   "start": "fn start(F){F.sov={until:G.t+this.dur+this.form,dmg:this.formDmg,spd:1.15,burn:this.burn,bleed:this.bleed};G.shake=Math.max(G.shake,8);fxAdd({k:'ring',x:F.x,y:0})}"
+  },
+  "p_sov_cut": {
+   "dur": 1.3,
+   "issen": 1,
+   "cut": 40,
+   "pe": [
+    "cut"
+   ],
+   "fr": "fn ()=>[[0,PS.ready],[.38,P(PS.ready,{tl:.55,th1:1.1,sh1:.1,th2:-1.0,sh2:-1.2})],[.46,PS.cutSide,'o5'],[1.3,PS.cutSide]]",
+   "start": "fn start(F,O){MV.issen.start(F,O);F.d.hit=Math.abs(O.x-F.x)<1100&&(O.x-F.x)*F.f>-140;if(F.sov)F.sov.until=G.t}",
+   "tick": "fn tick(F,O,a,b){if(b>=.38&&a<.47)F.x=lerp(F.d.x0,F.d.x1,ss(.38,.46,b));if(a<.4&&b>=.4)snd('slash',1.4);if(a<.8&&b>=.8&&F.d.hit&&tryHit(F,O,{dmg:this.cut,kd:1,unblock:1,zone:'mid',push:300,vx:F.f},true))fxAdd({k:'splash',x:O.x,y:-150*O.def.s,sz:150,dir:F.f>0?0:Math.PI})}"
   }
  }
 }

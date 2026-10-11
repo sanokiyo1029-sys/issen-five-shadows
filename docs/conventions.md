@@ -12,5 +12,15 @@
 - **Data:** engine-neutral JSON in `<script type="application/json" id="data-…">` blocks in `index.html`. Each has a `schema_version` and a validator that runs at boot and in tests. See the decision record in `docs/audit.md`.
 - **Saves:** schema v2 (see `docs/save-format.md`).
 - **Movement data:** `data-movement` (schema 1) holds the roll (duration, distance, invulnerable window, cooldown) and the cosmetic blend timings. Boss moves carry `answers` (verified by `tools/answers.js`), `tell:[from,to]` (heavy moves) and, for repositions, `mark:[vanish,teleport]` plus `dest(F,O)`. Pose keyframes (`fr`) are still JavaScript functions; JSON tracks come in a later pass (§6.9).
+- **More move fields (M5):**
+  - `win:[override|null, …]` gives per-hit-window overrides (a string whose steps differ in zone or damage).
+  - `proj2` is a second projectile.
+  - `tellZone` is the height the glint shows, when the heavy step differs from the move's zone.
+  - `inv:[from,to]` is a move's own invulnerable window.
+  - `once` means once a round.
+  - `onHit(F,O)` runs when a hit window lands.
+  - `pe:[field…]` lists the extra damage fields that Shadowcraft scales.
+  - `BOSSES[].phase = {at, move, k, sub, think, aggr}` defines the second phase.
+  - Power tiers are patches: `{add|mul|set: {"field" or "nested.field": value}}`, applied to the hero's own copy of the move.
 - **Determinism:** every fight has a seed (`G.seed`; debug: `?debug&seed=N`, or `startFight(lv, seed)`). All simulation randomness (the AI) draws from `G.rand`, a mulberry32 stream of that seed. Cosmetic randomness (ink-splash shapes, audio noise) stays on `Math.random` and never changes the outcome. A replay is `{ seed, boss, inputs per tick }` (see `tests/sim.test.js`); it reproduces a fight exactly in this engine.
 - **Assets:** everything is procedural or original. `assets/PROVENANCE.md` will list any file asset if one is ever added. Nothing comes from another game's package.

@@ -30,8 +30,19 @@ Decisions and the reasons for them (spec §3.5). Numbers live in the `data-movem
 
 - **Authored strikes are fast by design.** For example, Tetsugorō's club strikes move a joint up to 115 px in one frame with the `o5` ease-out. 6.6 #4 asks to flag tip jumps over ~60 px. The Pose Lab plots the tip path for review rather than this pass changing boss timing.
 - **Not yet built:**
-  - Weapon swing trails (6.6 #8).
   - Secondary motion reacting to velocity (6.6 #7).
   - Per-weapon guard stances (M7).
   - A shorter backstep cycle.
   - Per-boss KO flourishes (M5).
+
+## M5: trails, sheen, power looks
+
+- **Swing trails (6.6 #8):**
+  - What: the weapon tip is sampled every drawn frame during a move's hit windows. The trail is drawn as a tapered brush that fades over 0.2 s, capped at 16 points per fighter. It is ink, or red for hero powers, Akuma's rage and Demon Sovereignty. Kicks draw none.
+  - Why: the strike's arc becomes readable without new art.
+- **Iron sheen:** a pale grey copy of the figure, offset 3 px and pulsing. It shows during Iron Resolve's stance and during any boss's hyper-armor frames (spec §10: "show when light hits will not stagger him").
+- **Miststep:** the body thins to 30% ink through the invulnerable window, and a column of mist marks where the afterimage will burst.
+- **Phantom Edge:** a 262 px pale crescent with a dry-brush edge.
+- **Demon Sovereignty:** the rig's rage eye and glow, plus two ink horns on the hero.
+- **No-pop measure:** pops are now measured in the character's own unmirrored frame. A facing turn is its own animated transition (the drawn facing squashes through zero over 0.07 s) and has its own test. Counting a mid-turn mirror as a pose pop double-counted it whenever a hit landed during a cross-up.
+

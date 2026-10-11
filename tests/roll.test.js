@@ -73,7 +73,7 @@ module.exports = {
     const css = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), u = Math.min(1.3, Math.max(.72, .0027 * 360)), btn = {};
     for (const m of css.matchAll(/\.tb\[data-a=(\w+)\]\{width:calc\((\d+)\*var\(--u\)\);height:calc\(\d+\*var\(--u\)\);right:calc\((\d+)\*var\(--u\)[^;]*;bottom:calc\((\d+)\*var\(--u\)/g))
       btn[m[1]] = { r: +m[2] / 2 * u, cx: 800 - (+m[3] + +m[2] / 2) * u, cy: 360 - (+m[4] + +m[2] / 2) * u };
-    assert.deepStrictEqual(Object.keys(btn).sort(), ['block', 'ink', 'issen', 'jump', 'kick', 'power1', 'roll', 'slash']);
+    assert.deepStrictEqual(Object.keys(btn).sort(), ['block', 'ink', 'issen', 'jump', 'kick', 'power1', 'power2', 'roll', 'slash']);
     const ks = Object.keys(btn);
     for (const k of ks) assert.ok(btn[k].r * 2 >= 48, `${k} is ${btn[k].r * 2} px`);
     for (let i = 0; i < ks.length; i++) for (let j = i + 1; j < ks.length; j++) {

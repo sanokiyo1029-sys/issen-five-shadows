@@ -9,6 +9,7 @@ const findBrowser = () => BROWSERS.find(b => fs.existsSync(b));
 
 /** Serve `root` on 127.0.0.1; resolves to { port, close }. */
 async function serve(root) {
+  root = path.resolve(root); // the path guard below compares resolved paths
   const server = http.createServer((q, r) => {
     const f = path.join(root, decodeURIComponent(q.url.split('?')[0]).replace(/^\/+/, '') || 'index.html');
     if (!f.startsWith(root) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { r.writeHead(404); return r.end(); }
