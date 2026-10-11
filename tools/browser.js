@@ -28,12 +28,13 @@ async function launch() {
   const target = (await (await fetch(`http://${new URL(wsUrl).host}/json/list`)).json()).find(t => t.type === 'page');
   const ws = new WebSocket(target.webSocketDebuggerUrl), pend = new Map(); let n = 0;
   await new Promise(r => ws.onopen = r);
-  ws.onmessage = e => { const m = JSON.parse(e.data); if (pend.has(m.id)) { pend.get(m.id)(m.result || {}); pend.delete(m.id); } };
+  const events = []; // DevTools events (console calls, exceptions) for tools/smoke.js
+  ws.onmessage = e => { const m = JSON.parse(e.data); if (pend.has(m.id)) { pend.get(m.id)(m.result || {}); pend.delete(m.id); } else if (m.method) events.push(m); };
   const send = (method, params = {}) => new Promise(r => { pend.set(++n, r); ws.send(JSON.stringify({ id: n, method, params })); });
   const evaluate = async expr => { const r = await send('Runtime.evaluate', { expression: expr, returnByValue: true, awaitPromise: true }); return r.result && r.result.value; };
   await send('Emulation.setDeviceMetricsOverride', { width: 1920, height: 1080, deviceScaleFactor: 1, mobile: false });
   return {
-    send, eval: evaluate,
+    send, eval: evaluate, events,
     async page(url, ready, timeout = 20000) { // navigate, then wait until `ready` (a JS expression) is truthy
       await send('Page.navigate', { url });
       for (const t0 = Date.now(); Date.now() - t0 < timeout;) { if (await evaluate(ready)) return true; await new Promise(r => setTimeout(r, 100)); }

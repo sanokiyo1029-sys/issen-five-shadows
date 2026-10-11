@@ -74,3 +74,12 @@ The same JSON text can be extracted for the Godot port (D8a). `MV` and `BOSSES` 
 ## M2 status (2026-10-12)
 
 M2 is done (spec §5.2–5.8, §6.9, §16), except the items listed as not done in the M2 report: remappable keys, Reduce Shake / Flash, whiff punish, Guard Assist, swing trails, and JSON keyframe tracks. Fairness: `docs/fairness.md`. Animation: `docs/animation-notes.md`, `docs/animation-review/`. Performance: `docs/performance.md`.
+
+## Status after M9 (2026-10-12)
+
+- **M1–M9 are done.** Milestone notes and evidence:
+  - `docs/acceptance.md`: the §17.2 checklist.
+  - `docs/release.md`: platforms, the PC decision record, untested device behavior.
+  - `docs/fairness.md`, `docs/reach-check.md`, `docs/animation-review/`, `docs/performance.md`.
+- **Item e** (`confirm()` on Reset in the WebView) is still open: the Reset link uses `window.confirm`. It is untested on a device.
+- **M10** (the native port plan) waits for the owner's go-ahead (spec D1 and M10).

@@ -75,3 +75,13 @@ node tools/answers.js              # which of block / crouch / jump / roll answe
 node tools/pops.js                 # worst per-frame joint jumps at state changes (no-pop check)
 node tools/capture.js [move ...]   # review sheets for every move -> docs/animation-review/ (needs Edge or Chrome)
 ```
+
+## Releases (M9)
+
+```
+node tests/run.js && node tools/smoke.js          # headless tests, then every screen in headless Edge
+cd ../issen-android && python build.py 7 1.6      # the APK (raise the versionCode every release)
+node tools/serve.js                               # play locally on a PC at http://localhost:8779/
+```
+
+Keep `VERSION` in `index.html` equal to the APK's versionName. See `docs/release.md` for the PC decision record, the storage notes and what could not be tested.
