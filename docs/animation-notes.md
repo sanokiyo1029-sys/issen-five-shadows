@@ -46,3 +46,20 @@ Decisions and the reasons for them (spec §3.5). Numbers live in the `data-movem
 - **Demon Sovereignty:** the rig's rage eye and glow, plus two ink horns on the hero.
 - **No-pop measure:** pops are now measured in the character's own unmirrored frame. A facing turn is its own animated transition (the drawn facing squashes through zero over 0.07 s) and has its own test. Counting a mid-turn mirror as a pose pop double-counted it whenever a hit landed during a cross-up.
 
+## M8: polish
+
+- **Secondary motion (6.6 #7):** the rig's `stream` parameter (hair, scarf and sleeves) now follows the fighter's own speed, plus a push during lunges and rolls, as well as the wind.
+- **Grounding (6.8):**
+  - A soft ink contact shadow under each fighter, shrinking and fading with height.
+  - Landing dust (M2) and knockdown dust (existing).
+- **Impact tiers (6.8):**
+  - Light hits keep the brush mark.
+  - Heavy hits (≥ 10) and knockdowns add a camera punch (2% and 3% zoom, decaying), which honors Reduce Shake.
+  - Knockdowns keep the persistent ink splash; blocks keep the spark ring.
+- **Whiff punish (5.8a):** a red ring flash and a steel note when the hero hits a foe in recovery.
+- **KO flourish (5.7):** the fallen fighter's ink breaks into mist and a lasting splash.
+- **Still open:**
+  - Foot sliding where attack poses change stance without a step. The sheets flag it, and fixing it means re-posing or adding root motion: a review item for the owner.
+  - Footstep dust.
+  - Per-boss KO flourishes beyond the shared one.
+  - Weapon-specific secondary parts (a spear tassel, a naginata ribbon).

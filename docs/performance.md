@@ -24,3 +24,24 @@ The one heavy case is the Burning Field: about 5% of frames take around 33 ms of
 - 4× CPU throttling.
 
 Both are for the M8 performance pass and the M9 device tests. The spec targets ≥ 55 fps on mid-range Android.
+
+## After M8 (2026-10-12)
+
+M3 to M8 added powers, phases, ladders, weapon classes, trails, contact shadows and settings. Frame cost is unchanged within noise:
+
+| boss | M8 render ms, mean / p95 | M8 with Low quality | simulation ms per frame |
+|---|---|---|---|
+| gekko (Burning Field) | 4.88–4.95 / 33.6 | 4.65 / 32.7 | < 0.01 |
+| kasumi | 1.57–1.58 / 1.5–5.5 | 1.58 / 0.7 | < 0.01 |
+| tetsugoro | 0.46–0.50 / 0.7 | 0.45 / 0.7 | < 0.01 |
+| shirasagi | 1.11–1.13 / 2.3–3.9 | 1.05 / 0.6 | < 0.01 |
+| akuma | 0.96–1.00 / 2.1–3.4 | 0.91 / 0.8 | < 0.01 |
+
+**Per-frame allocations (§16):** the fight loop now compacts effects and projectiles in place, so they no longer allocate a new array every step (`tests/settings.test.js` checks this).
+
+**The Burning Field spike (about 5% of frames near 33 ms):**
+- It survives Low quality.
+- Its grass and rain are drawn as single paths, so the CPU work is small.
+- It is most likely the GPU stalling the canvas in the arena with the most full-screen layers (storm, hills, burning village, smoke, gradient, grain).
+
+It predates M2. Adaptive resolution (`adapt`) already shrinks the canvas on a device that cannot keep up. It needs profiling on a real phone (M9).

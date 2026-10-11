@@ -1,12 +1,13 @@
 // Frame-time baseline (spec §16): in headless Edge / Chrome, plays 10 s of each boss fight with a scripted player and
 // times the simulation (one 1/60 s step) and the render (renderGame) per frame. CPU-side cost only: GPU work is async.
-// Usage: node tools/perf.js [folder]   (default: this game; pass a checkout of an older commit to compare builds)
+// Usage: node tools/perf.js [folder] [--low]   (default: this game; pass a checkout of an older commit to compare builds;
+// --low measures with the Low effects-quality setting)
 'use strict';
 const path = require('path');
 const { serve, launch } = require('./browser');
 
-const PROBE = `(async () => {
-  game.enterGame(); const out = [], bot = (G, i) => { const d = G.B.x - G.P.x, k = G.keys; k.right = d > 165; k.left = d < -165;
+const PROBE = low => `(async () => {
+  ${low ? "game.SV.settings.quality = 'low';" : ''} game.enterGame(); const out = [], bot = (G, i) => { const d = G.B.x - G.P.x, k = G.keys; k.right = d > 165; k.left = d < -165;
     if (i % 18 === 0 && Math.abs(d) < 200) G.buf = { a: G.P.ink >= 99.5 ? 'issen' : i % 72 === 0 ? 'kick' : 'slash', t: G.t }; };
   for (let lv = 0; lv < 5; lv++) {
     game.startFight(lv, 7); const G = game.G; G.state = 'fight'; G.hint = 0; G.rdt = 1 / 60;
@@ -19,9 +20,9 @@ const PROBE = `(async () => {
   return out; })()`;
 
 (async () => {
-  const root = path.resolve(process.argv[2] || path.join(__dirname, '..')), server = await serve(root), br = await launch();
+  const root = path.resolve(process.argv.slice(2).find(a => !a.startsWith('--')) || path.join(__dirname, '..')), server = await serve(root), br = await launch();
   await br.page(`http://127.0.0.1:${server.port}/index.html?debug`, "window.game && document.getElementById('playLbl').textContent === 'Play'");
-  const rows = await br.eval(PROBE);
+  const rows = await br.eval(PROBE(process.argv.includes('--low')));
   await br.close(); server.close();
   console.log(`${root}\nboss        sim ms/step   render ms (mean / p95)`);
   for (const r of rows) console.log(`${r.boss.padEnd(11)} ${r.sim.toFixed(4).padStart(9)}   ${r.render.toFixed(2).padStart(6)} / ${r.render95.toFixed(2)}`);

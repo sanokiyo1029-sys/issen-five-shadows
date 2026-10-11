@@ -282,3 +282,12 @@ First clears only: repeats pay XP, never mon or materials, so nothing is grindab
 | Skill points | bosses 6 + milestones (3 by level 19) + trials 5 = **14** | 50 to max every power |
 
 **So the player chooses:** for example, one power to tier V (10 skill points, 1,000 mon), one weapon to tier V (1,000 mon, 6 materials), and a few tiers elsewhere. Nothing is required to beat a boss (D4).
+
+## Feel and accessibility (M8)
+
+- **Whiff punish (§5.8a, hero only):** a hit into the foe's recovery (after its last hit window) deals ×1.2 and pays 4 ink (`data-movement.punish`). It rewards the long recoveries the fairness audit guarantees.
+- **Guard Assist (§5.8b, off by default):**
+  - An idle, standing hero raises the guard against a mid or high melee hit, with 60% pushback.
+  - Never against low hits, projectiles or unblockable cuts.
+  - Never while attacking, rolling or airborne, and never in the no-blocking Ink Trial.
+- **Anti-turtle (§5.8c):** not added. There is no evidence yet that blocking is the dominant strategy; the spec asks for evidence first.

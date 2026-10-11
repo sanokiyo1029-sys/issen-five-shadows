@@ -47,7 +47,7 @@ module.exports = {
     game.startMove(B, 'g_thrust'); let staggered = false; run(game, .45, G => { passive(G); if (P.st === 'hit') staggered = true; });
     near(P.maxHp - P.hp, 9 * .45, 'damage x0.45'); assert.strictEqual(staggered, false, 'no stagger');
     press(G, 'slash'); run(game, .5, (G, i) => { passive(G); if (i > 0) release(G); });
-    near(B.maxHp - B.hp, Math.min(24, 8 + 1.2 * 9), 'the counter'); assert.ok(['down', 'getup'].includes(B.st), 'and it knocks down');
+    near(B.maxHp - B.hp, Math.min(24, 8 + 1.2 * 9) * 1.2, 'the counter, into the thrust recovery: whiff punish x1.2 (M8)'); assert.ok(['down', 'getup'].includes(B.st), 'and it knocks down');
     assert.strictEqual(P.iron, null, 'the counter ends the stance');
     ({ game, G, P, B } = await duel(['iron_resolve', null], 0, [-100, 100]));
     P.ink = 40; press(G, 'power1'); run(game, .3, (G, i) => { passive(G); if (i > 0) release(G); });

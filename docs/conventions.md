@@ -24,5 +24,6 @@
   - `pe:[field…]` lists the extra damage fields that Shadowcraft scales.
   - `BOSSES[].phase = {at, move, k, sub, think, aggr}` defines the second phase.
   - Power tiers are patches: `{add|mul|set: {"field" or "nested.field": value}}`, applied to the hero's own copy of the move.
+- **Settings (M8):** `save.settings = {volume 0–1, shake full|reduced|off, flash full|reduced, haptics, quality high|low, assist, scale 0.8–1.4, lefty, keys {code: action}}`, validated by `cleanSettings`, applied live by `applySettings`.
 - **Determinism:** every fight has a seed (`G.seed`; debug: `?debug&seed=N`, or `startFight(lv, seed)`). All simulation randomness (the AI) draws from `G.rand`, a mulberry32 stream of that seed. Cosmetic randomness (ink-splash shapes, audio noise) stays on `Math.random` and never changes the outcome. A replay is `{ seed, boss, inputs per tick }` (see `tests/sim.test.js`); it reproduces a fight exactly in this engine.
 - **Assets:** everything is procedural or original. `assets/PROVENANCE.md` will list any file asset if one is ever added. Nothing comes from another game's package.

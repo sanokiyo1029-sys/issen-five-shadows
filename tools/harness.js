@@ -18,7 +18,7 @@ function ctx2d(canvas) {
 }
 
 function element(tag = 'div', id = '') {
-  const e = { tagName: tag.toUpperCase(), id, style: {}, dataset: {}, classList: classList(), children: [], attrs: {}, textContent: '', value: '',
+  const e = { tagName: tag.toUpperCase(), id, style: { setProperty(k, v) { this[k] = v; } }, dataset: {}, classList: classList(), children: [], attrs: {}, textContent: '', value: '',
     disabled: false, hidden: false, offsetWidth: 100, width: 300, height: 150, _html: '',
     get innerHTML() { return this._html; }, set innerHTML(v) { this._html = v; if (v === '') this.children = []; },
     get firstChild() { return this.children[0] || null; },
@@ -53,7 +53,7 @@ async function boot({ storage = memoryStorage(), seed = 1, search = '' } = {}) {
     localStorage: storage, navigator: { userAgent: 'node', platform: 'node', maxTouchPoints: 0, vibrate: noop },
     matchMedia: () => ({ matches: false, addEventListener: noop }), requestAnimationFrame: noop, addEventListener: noop, confirm: () => true,
     CanvasRenderingContext2D: class { drawImage() {} },
-    document: { getElementById: byId, createElement: element, querySelectorAll: () => [], addEventListener: noop, hidden: false,
+    document: { getElementById: byId, createElement: element, createTextNode: t => ({ textContent: String(t) }), querySelectorAll: () => [], addEventListener: noop, hidden: false,
       body: element('body'), documentElement: element('html'), fonts: { load: () => Promise.resolve([]) } },
   };
   win.window = win; win.self = win;

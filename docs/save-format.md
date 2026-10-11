@@ -35,6 +35,7 @@
   - `rewardsClaimed` also holds `step:<region_id>:<i>` and `trial:<boss_id>` claims, paid once like the boss claims.
   - `progress.trialsDone` lists the bosses whose Ink Trial is passed (boss ids only); `gear.owned` receives the trial item.
 - **`story.seen`** lists the regions whose story card was shown.
+- **`settings`** (M8): validated field by field with defaults (see `cleanSettings`); custom key bindings are `{KeyboardEvent.code: action}`.
 - **`gear`** (M7):
   - `owned`: weapon and charm ids; the katana is always owned.
   - `equipped`: `{weapon, charm}`; anything not owned falls back to the katana / no charm.
