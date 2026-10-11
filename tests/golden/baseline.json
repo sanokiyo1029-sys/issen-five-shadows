@@ -204,6 +204,10 @@
     135
    ],
    "w": 1,
+   "answers": [
+    "block",
+    "roll"
+   ],
    "fr": "fn g=>[[0,g],[.14,P(g,KICK),'o5'],[.4,g]]"
   },
   "g_thrust": {
@@ -223,6 +227,10 @@
     280
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "roll"
+   ],
    "snd": "whoosh",
    "fr": "fn g=>[[0,g],[.2,P(SPG,{tl:-.05,ua1:.5,fa1:1.0})],[.32,SPL,'o5'],[.6,g]]"
   },
@@ -244,6 +252,11 @@
     265
    ],
    "w": 2,
+   "answers": [
+    "block",
+    "jump",
+    "roll"
+   ],
    "snd": "whoosh",
    "fr": "fn g=>[[0,g],[.2,P(SPG,CR)],[.33,SPLL,'o5'],[.62,g]]"
   },
@@ -265,6 +278,15 @@
     225
    ],
    "w": 2,
+   "answers": [
+    "block",
+    "crouch",
+    "roll"
+   ],
+   "tell": [
+    0.08,
+    0.3
+   ],
    "snd": "whoosh",
    "fr": "fn g=>[[0,g],[.26,SPUP],[.45,P(SPL,{sw:1.3}),'o5'],[.8,g]]"
   },
@@ -292,6 +314,10 @@
     950
    ],
    "w": 5,
+   "answers": [
+    "block",
+    "roll"
+   ],
    "tell": [
     0.05,
     0.42
@@ -329,6 +355,10 @@
     160
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "roll"
+   ],
    "snd": "slash",
    "fr": "fn g=>[[0,g],[.1,KS1,'o5'],[.19,KS2],[.27,KS1,'o5'],[.35,KS2,'o5'],[.43,KS1,'o5'],[.66,g]]"
   },
@@ -349,11 +379,15 @@
     150
    ],
    "w": 2,
+   "answers": [
+    "block",
+    "roll"
+   ],
    "snd": "slash",
    "fr": "fn g=>[[0,g],[.12,KS1,'o5'],[.34,g]]"
   },
   "k_low": {
-   "dur": 0.5,
+   "dur": 0.57,
    "hit": [
     [
      0.17,
@@ -371,7 +405,16 @@
     165
    ],
    "w": 2,
-   "fr": "fn g=>[[0,P(g,CR)],[.18,P(g,SWK),'o5'],[.5,P(g,CR)]]"
+   "answers": [
+    "block",
+    "jump",
+    "roll"
+   ],
+   "tell": [
+    0.02,
+    0.15
+   ],
+   "fr": "fn g=>[[0,P(g,CR)],[.18,P(g,SWK),'o5'],[.57,P(g,CR)]]"
   },
   "k_star": {
    "dur": 0.45,
@@ -389,6 +432,11 @@
     1200
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "crouch",
+    "roll"
+   ],
    "fr": "fn g=>[[0,g],[.12,P(g,{ua1:-.6,fa1:-.2,tl:0})],[.22,KS1,'o5'],[.45,g]]"
   },
   "k_vanish": {
@@ -409,8 +457,21 @@
     800
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "roll"
+   ],
+   "tell": [
+    0.1,
+    0.58
+   ],
    "fr": "fn g=>[[0,g],[.12,P(g,CR)],[.5,P(g,CR)],[.6,KS1,'o5'],[1,g]]",
-   "tick": "fn tick(F,O,a,b){if(a<.1&&b>=.1){fxAdd({k:'smoke',x:F.x,y:0});F.alpha=0;F.inv=.5;snd('whoosh',.4)}if(a<.5&&b>=.5){F.x=clamp(O.x-O.f*130,-ARENA,ARENA);F.f=O.x>F.x?1:-1;fxAdd({k:'smoke',x:F.x,y:0})}if(b>=.55)F.alpha=1}"
+   "mark": [
+    0.1,
+    0.5
+   ],
+   "dest": "fn (F,O)=>clamp(O.x-O.f*130,-ARENA,ARENA)",
+   "tick": "fn tick(F,O,a,b){if(a<.1&&b>=.1){fxAdd({k:'smoke',x:F.x,y:0});F.alpha=0;F.inv=.5;snd('whoosh',.4)}if(a<this.mark[1]&&b>=this.mark[1]){F.x=this.dest(F,O);F.f=O.x>F.x?1:-1;fxAdd({k:'smoke',x:F.x,y:0})}if(b>=.55)F.alpha=1}"
   },
   "m_smash": {
    "dur": 0.95,
@@ -434,6 +495,15 @@
     215
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "crouch",
+    "roll"
+   ],
+   "tell": [
+    0.12,
+    0.46
+   ],
    "snd": "whoosh",
    "sndT": 0.4,
    "fr": "fn g=>[[0,g],[.4,P(PS.high,{tl:-.12})],[.52,P(PS.cutLow,{sw:.85}),'o5'],[.95,g]]",
@@ -460,6 +530,14 @@
     215
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "roll"
+   ],
+   "tell": [
+    0.08,
+    0.34
+   ],
    "snd": "whoosh",
    "fr": "fn g=>[[0,g],[.3,PS.wind],[.42,PS.cutSide,'o5'],[.8,g]]"
   },
@@ -486,6 +564,15 @@
     210
    ],
    "w": 2,
+   "answers": [
+    "block",
+    "jump",
+    "roll"
+   ],
+   "tell": [
+    0.1,
+    0.38
+   ],
    "snd": "whoosh",
    "fr": "fn g=>[[0,g],[.32,P(PS.wind,CR)],[.46,P(PS.guard,LOWC),'o5'],[.85,g]]"
   },
@@ -510,6 +597,15 @@
     1200
    ],
    "w": 4,
+   "answers": [
+    "block",
+    "jump",
+    "roll"
+   ],
+   "tell": [
+    0.15,
+    0.6
+   ],
    "fr": "fn g=>[[0,g],[.5,P(PS.high,{tl:-.15})],[.64,P(PS.cutLow,{sw:.4,tl:.75,th1:1.3,sh1:.2,th2:-1.1,sh2:-1.4}),'o5'],[1.2,g]]",
    "tick": "fn tick(F,O,a,b){if(a<.62&&b>=.62){G.shake=20;fxAdd({k:'ring',x:F.x+F.f*150,y:0});snd('boom',.6)}}"
   },
@@ -530,6 +626,10 @@
     275
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "roll"
+   ],
    "snd": "whoosh",
    "fr": "fn g=>[[0,g],[.2,P(SPG,{tl:-.05,ua1:.5,fa1:1.0})],[.32,SPL,'o5'],[.62,g]]"
   },
@@ -552,11 +652,20 @@
     260
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "jump",
+    "roll"
+   ],
+   "tell": [
+    0.08,
+    0.3
+   ],
    "snd": "whoosh",
    "fr": "fn g=>[[0,g],[.24,P(SPG,CR,{sw:-1.4,ua1:-.4,fa1:-.2})],[.4,SPLL,'o5'],[.75,g]]"
   },
   "y_rise": {
-   "dur": 0.6,
+   "dur": 0.64,
    "hit": [
     [
      0.2,
@@ -572,8 +681,17 @@
     240
    ],
    "w": 2,
+   "answers": [
+    "block",
+    "crouch",
+    "roll"
+   ],
+   "tell": [
+    0.02,
+    0.18
+   ],
    "snd": "whoosh",
-   "fr": "fn g=>[[0,P(SPG,CR)],[.28,SPUP,'o5'],[.6,g]]"
+   "fr": "fn g=>[[0,P(SPG,CR)],[.28,SPUP,'o5'],[.64,g]]"
   },
   "y_wisp": {
    "dur": 0.6,
@@ -591,10 +709,15 @@
     1200
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "crouch",
+    "roll"
+   ],
    "fr": "fn g=>[[0,g],[.2,P(SPG,{ua1:1.6,fa1:1.7,sw:1.6,tl:.1})],[.6,g]]"
   },
   "y_phase": {
-   "dur": 1,
+   "dur": 1.04,
    "hit": [
     [
      0.62,
@@ -611,8 +734,21 @@
     900
    ],
    "w": 3,
-   "fr": "fn g=>[[0,g],[.5,P(SPG,{tl:.3})],[.64,SPL,'o5'],[1,g]]",
-   "tick": "fn tick(F,O,a,b){if(a<.06&&b>=.06){fxAdd({k:'smoke',x:F.x,y:0,pale:1});F.inv=.55;snd('whoosh',.3)}if(b<.5)F.alpha=lerp(1,.12,ss(.04,.2,b));if(a<.45&&b>=.45){F.x=clamp(O.x+(O.x>0?-1:1)*235*F.def.s,-ARENA,ARENA);F.f=O.x>F.x?1:-1;fxAdd({k:'smoke',x:F.x,y:0,pale:1})}if(b>=.5)F.alpha=lerp(.12,1,ss(.5,.62,b))}"
+   "answers": [
+    "block",
+    "roll"
+   ],
+   "tell": [
+    0.06,
+    0.6
+   ],
+   "fr": "fn g=>[[0,g],[.5,P(SPG,{tl:.3})],[.64,SPL,'o5'],[1.04,g]]",
+   "mark": [
+    0.06,
+    0.45
+   ],
+   "dest": "fn (F,O)=>clamp(O.x+(O.x>0?-1:1)*235*F.def.s,-ARENA,ARENA)",
+   "tick": "fn tick(F,O,a,b){if(a<.06&&b>=.06){fxAdd({k:'smoke',x:F.x,y:0,pale:1});F.inv=.55;snd('whoosh',.3)}if(b<.5)F.alpha=lerp(1,.12,ss(.04,.2,b));if(a<this.mark[1]&&b>=this.mark[1]){F.x=this.dest(F,O);F.f=O.x>F.x?1:-1;fxAdd({k:'smoke',x:F.x,y:0,pale:1})}if(b>=.5)F.alpha=lerp(.12,1,ss(.5,.62,b))}"
   },
   "a_cut": {
    "dur": 0.5,
@@ -631,6 +767,10 @@
     230
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "roll"
+   ],
    "snd": "slash",
    "fr": "fn g=>[[0,g],[.12,PS.wind],[.24,PS.cutSide,'o5'],[.5,g]]"
   },
@@ -652,12 +792,21 @@
     235
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "crouch",
+    "roll"
+   ],
+   "tell": [
+    0.1,
+    0.4
+   ],
    "snd": "slash",
    "sndT": 0.38,
    "fr": "fn g=>[[0,g],[.36,PS.high],[.46,P(PS.cutLow,{sw:1.0}),'o5'],[.85,g]]"
   },
   "a_sweep": {
-   "dur": 0.75,
+   "dur": 0.76,
    "hit": [
     [
      0.34,
@@ -675,8 +824,17 @@
     235
    ],
    "w": 2,
+   "answers": [
+    "block",
+    "jump",
+    "roll"
+   ],
+   "tell": [
+    0.08,
+    0.32
+   ],
    "snd": "slash",
-   "fr": "fn g=>[[0,g],[.26,P(PS.wind,CR)],[.4,P(PS.guard,LOWC),'o5'],[.75,g]]"
+   "fr": "fn g=>[[0,g],[.26,P(PS.wind,CR)],[.4,P(PS.guard,LOWC),'o5'],[.76,g]]"
   },
   "a_wave": {
    "dur": 0.7,
@@ -694,6 +852,15 @@
     1200
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "crouch",
+    "roll"
+   ],
+   "tell": [
+    0.06,
+    0.3
+   ],
    "fr": "fn g=>[[0,g],[.22,PS.wind],[.32,PS.cutSide,'o5'],[.7,g]]"
   },
   "a_leap": {
@@ -715,6 +882,15 @@
     950
    ],
    "w": 3,
+   "answers": [
+    "block",
+    "crouch",
+    "roll"
+   ],
+   "tell": [
+    0.1,
+    0.78
+   ],
    "fr": "fn g=>[[0,g],[.15,P(g,{tl:.4,th1:1.0,sh1:.2,th2:-.4,sh2:-1.0})],[.3,P(PS.high,{th1:1.5,sh1:-.4,th2:.8,sh2:-1})],[.78,P(PS.high,{th1:.8,sh1:0,th2:-.5,sh2:-.6})],[.86,P(PS.cutLow,{sw:1.2}),'o5'],[1.25,g]]",
    "start": "fn start(F,O){F.d.x0=F.x;F.d.tx=clamp(O.x-F.f*110*F.def.s,-ARENA,ARENA);F.manual=true;snd('whoosh',.6)}",
    "tick": "fn tick(F,O,a,b){if(!F.manual)return;const u=ss(.18,.82,b);F.x=lerp(F.d.x0,F.d.tx,u);F.y=-Math.sin(u*Math.PI)*300;if(b>=.82){F.y=0;F.manual=false;fxAdd({k:'ring',x:F.x+F.f*80,y:0});fxAdd({k:'splash',x:F.x+F.f*90,y:-4,sz:60,persist:1});G.shake=22;snd('boom',.7);snd('drum',1)}}"
@@ -821,7 +997,7 @@
     "horn": 1,
     "rage": 0
    },
-   "tip": "Long reach, slow recovery. When the spear glints, jump or block."
+   "tip": "Long reach, slow recovery. A red glint warns of a heavy blow at the height it will land — block, duck or roll."
   },
   {
    "id": "kasumi",
@@ -924,7 +1100,7 @@
     "horn": 1,
     "rage": 0
    },
-   "tip": "Fast blades and throwing stars — duck the stars. She vanishes and strikes from behind."
+   "tip": "Fast blades and throwing stars — duck the stars. When she vanishes, an ink ring marks where she will strike from: hold block."
   },
   {
    "id": "tetsugoro",
@@ -1128,7 +1304,7 @@
     "horn": 1,
     "rage": 0
    },
-   "tip": "A drowned duelist. She fades and reappears beside you; ghost-fire drifts slowly — block it."
+   "tip": "A drowned duelist. She fades; a pale ring marks where she will reappear. Ghost-fire drifts slowly — block it."
   },
   {
    "id": "akuma",
