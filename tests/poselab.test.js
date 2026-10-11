@@ -12,7 +12,8 @@ async function withLab() {
 module.exports = {
   async 'every move of every fighter gets a review sheet and a §6.6 checklist'() {
     const { lab, game } = await withLab(), ids = [...new Set(lab.FIGHTERS.flatMap(f => f.moves))];
-    const want = new Set([...lab.FIGHTERS[0].moves, ...game.BOSSES.flatMap(b => [...b.moves, b.phase && b.phase.move].filter(Boolean)), ...Object.values(game.FOES).flatMap(f => f.moves)]);
+    const want = new Set([...lab.FIGHTERS[0].moves, ...game.BOSSES.flatMap(b => [...b.moves, b.phase && b.phase.move].filter(Boolean)), ...Object.values(game.FOES).flatMap(f => f.moves),
+      ...Object.entries(game.GEAR.weapons).flatMap(([w, x]) => w === 'katana' ? [] : Object.keys(x.moves).map(n => w + '.' + n))]);
     assert.strictEqual(ids.length, want.size, 'every hero move and every boss move, phase moves included');
     for (const id of ids) {
       const cl = lab.sheet(id);

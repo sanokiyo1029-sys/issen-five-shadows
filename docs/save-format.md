@@ -35,6 +35,11 @@
   - `rewardsClaimed` also holds `step:<region_id>:<i>` and `trial:<boss_id>` claims, paid once like the boss claims.
   - `progress.trialsDone` lists the bosses whose Ink Trial is passed (boss ids only); `gear.owned` receives the trial item.
 - **`story.seen`** lists the regions whose story card was shown.
+- **`gear`** (M7):
+  - `owned`: weapon and charm ids; the katana is always owned.
+  - `equipped`: `{weapon, charm}`; anything not owned falls back to the katana / no charm.
+  - `tiers`: `{weapon_id: 1-5}`.
+  - Mon and materials are stored (spent on tiers), not derived.
 - **`lastWin`** records the last victory processed, keyed by the match id. A victory reported twice replays the stored result and grants nothing again.
 - **`story.pending`** holds one-time messages shown on the map and removed once read. It also covers a reveal ceremony interrupted by an app kill.
 

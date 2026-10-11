@@ -224,3 +224,61 @@ The last region mixes all three troublesome archetypes, so different loadouts pa
 | Iron Resolve | projectiles striking the stance fly back at the thrower | +0.6 s stance; counter +4 (cap 28) |
 | Phantom Edge | each hit returns from behind for 60% (unblockable) | 1 s shorter cooldown; a second wave 0.25 s later |
 | Demon Sovereignty | Sovereign Cut +12 (52) | 1 s burnout |
+
+## Weapon classes (M7)
+
+Each class's basic moves take their numbers from the katana move they replace, scaled per class. Their animation comes from an existing move of that weapon type, time-warped onto the new timings (`forge` in `index.html`, data in `data-gear`). The katana at tier I adds nothing, so the default hero is byte-identical.
+
+| Class | Found | Reach | Damage | Windups | Trait |
+|---|---|---|---|---|---|
+| Katana | at the start | ×1 | ×1 | ×1 | balanced; three-hit chain |
+| Yari | Spear Captain (Burning Field elite) | ×1.3–1.45 | ×0.9 | ×1.2 | a whiffed thrust recovers 0.15 s later |
+| Kodachi pair | Shinobi Adept (Bamboo Grove elite) | ×0.75–0.8 | ×0.6 a hit | ×0.7 | four-hit chain; ink ×1.3 |
+| Kanabō | Iron Acolyte (Mountain Shrine elite) | ×1.15 (low ×1.2) | ×1.5 | ×1.4 | third swing: hyper-armor through its windup, and knockdown |
+| Naginata | Drowned Ronin (Moonlit Lake elite) | ×1.3 | ×1 | ×1.15 (recovery ×1.15) | `arc` sweeps: no height whiffs, any guard blocks them |
+| Nodachi | Oni Lieutenant (Oni Castle elite) | ×1.2 | ×1.25 | ×1.25 | the third cut lunges |
+
+**Rules (§6.2), checked in `tests/gear.test.js`:**
+- Every class differs from the katana by at least 10% in two stats.
+- Every class has a handling trait.
+- None is better than the katana in everything.
+
+**Kanabō reach:** the spec suggests ×0.85. But the drawn club is 150 px long, so at ×0.85 it visibly swept through foes it could not hit (the tip landed 1.4–1.6× past the hit distance). The §6.3 visual / data check wins, so the reach is ×1.15, and the club stays a trade-off through its ×1.4 windups.
+
+**Weapon tiers** (II–V, mon + upgrade materials; each tier is 5% to one stat):
+
+| Tier | Effect | Cost |
+|---|---|---|
+| II | +5% damage | 100 mon + 1 material |
+| III | +5% reach | 200 mon + 1 material |
+| IV | 5% faster windups | 300 mon + 2 materials |
+| V | +5% ink | 400 mon + 2 materials |
+
+**Rarity:** the schema covers Common, Rare, Epic, Legendary and Mythic, with modifier slots 0 / 1 / 2 / 2 / 3. The game ships Common charms, Rare weapons and Legendary trial charms. Rarity never multiplies base power, and modifiers wait for a later pass.
+
+## Charms (M7)
+
+There is one charm slot, and the item screen shows ▲ / ▼ against the worn charm. Garb is not built: the spec allows starting with weapons and charms.
+
+| Charm | Source | Effect |
+|---|---|---|
+| Straw / Crane / Fox / Bell / Carp Charm (Common) | the second duel of each region | health +3% / attack +3% / crit +2% / power cooldowns −4% / ink +6% |
+| Moon Tassel (Legendary) | Gekkō's Ink Trial | reach +5%, crit +3% |
+| Mist Veil | Kasumi's | roll cooldown −10%, walk +3% |
+| Iron Bead | Tetsugorō's | health +6%, damage taken −3% |
+| Pale Ribbon | Shirasagi's | ink +10%, power cooldowns −6% |
+| Oni Horn | Akuma's | attack +6% |
+
+**Power budget with gear:** best build 1.73× from attributes and echoes. The best gear adds a weapon at tier V (+5% damage) and the Iron Bead or Oni Horn. The search in `tests/gear.test.js` keeps it **≤ 2.0×**.
+
+## Economy (M7)
+
+First clears only: repeats pay XP, never mon or materials, so nothing is grindable.
+
+| Resource | Supply | Demand to max everything |
+|---|---|---|
+| Mon | bosses 1,100 + ladders 860 + trials 1,500 = **3,460** | power tiers 5,000 + weapon tiers 6,000 = 11,000 |
+| Upgrade materials | elites 5 + trials 5 = **10** | 36 to max every weapon |
+| Skill points | bosses 6 + milestones (3 by level 19) + trials 5 = **14** | 50 to max every power |
+
+**So the player chooses:** for example, one power to tier V (10 skill points, 1,000 mon), one weapon to tier V (1,000 mon, 6 materials), and a few tiers elsewhere. Nothing is required to beat a boss (D4).

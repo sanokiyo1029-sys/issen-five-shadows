@@ -13,10 +13,13 @@ const L = game.lab, G = game.G, MV = game.MV, HMV = game.HERO_MV;
 const PARAMS = ['tl', 'hd', 'ua1', 'fa1', 'ua2', 'fa2', 'sw', 'th1', 'sh1', 'th2', 'sh2'];
 const HERO_MOVES = ['slash', 'slash2', 'slash3', 'lunge', 'low', 'kick', 'round', 'sweepK', 'air', 'airKick', 'wave', 'issen', ...Object.keys(HMV)];
 const FIGHTERS = [{ name: 'Issen', def: game.HERO_D, moves: HERO_MOVES }, ...game.BOSSES.map(b => ({ name: b.name, def: b, moves: [...b.moves, ...(b.phase ? [b.phase.move] : [])] })),
-  ...Object.values(game.FOES).filter(f => !f.id.startsWith('elite')).map(f => ({ name: f.name, def: f, moves: f.moves }))]; // retainers (elites borrow boss moves)
+  ...Object.values(game.FOES).filter(f => !f.id.startsWith('elite')).map(f => ({ name: f.name, def: f, moves: f.moves })), // retainers (elites borrow boss moves)
+  ...Object.entries(game.GEAR.weapons).filter(([id]) => id !== 'katana').map(([id, w]) => { const d = game.derive(Object.assign({}, game.SV, { gear: { owned: [id], equipped: { weapon: id, charm: null }, tiers: { [id]: 1 } } }));
+    return { name: 'Issen · ' + w.name, def: Object.assign({}, game.HERO_D, { kind: d.kind, guard: d.guard, wk: d.wk }), moves: Object.keys(w.moves).map(n => id + '.' + n) }; })];
 const KICKS = new Set(['kick', 'round', 'sweepK', 'airKick', 'b_kick', 'k_low']);
 const DELIBERATE = m => !!(m.lunge || m.start || m.mark || m.issen || m.proj); // big jumps are the point of these moves
-const moveOf = id => MV[id] || HMV[id];
+const WMV = {}; // weapon-class moves, forged once: ids like 'yari.slash'
+const moveOf = id => MV[id] || HMV[id] || WMV[id] || (id.includes('.') && (WMV[id] = game.forge(id.split('.')[1], game.GEAR.weapons[id.split('.')[0]].moves[id.split('.')[1]], { dmg: 1, reach: 1, startup: 1 })));
 const ownerOf = id => FIGHTERS.find(f => f.moves.includes(id)) || FIGHTERS[0];
 const tipLen = k => k.spear ? 132 : k.club ? 150 : k.nagi ? 170 : k.blen || 112;
 
@@ -47,7 +50,7 @@ function checklist(id) {
   else { const s = sil(0, f.startup); out.push({ n: 1, name: 'Anticipation', ok: f.startup >= 2 / 60 && s >= 20, detail: `${f.startup.toFixed(2)} s windup; the silhouette moves ${s.toFixed(0)} px` }); }
   if (f.startup != null && !m.proj) {
     const xs = tp.map(q => q[0]), peak = xs.indexOf(Math.max(...xs)) / 60, w = f.windows[0];
-    out.push({ n: 2, name: 'Contact', ok: peak >= w[0] - 2 / 60 && peak <= f.windows[f.windows.length - 1][1] + 2 / 60, detail: `furthest reach at ${peak.toFixed(2)} s; active ${w[0]}–${w[1]} s` });
+    out.push({ n: 2, name: 'Contact', ok: peak >= w[0] - 2 / 60 && peak <= f.windows[f.windows.length - 1][1] + 2 / 60, detail: `furthest reach at ${peak.toFixed(2)} s; active ${w[0].toFixed(2)}–${w[1].toFixed(2)} s` });
   } else out.push({ n: 2, name: 'Contact', ok: null, detail: m.proj ? 'projectile: review the release pose' : 'review by eye' });
   out.push({ n: 3, name: 'Follow-through', ok: null, detail: `recovery ${f.recovery == null ? '—' : f.recovery.toFixed(2) + ' s'}: review the overshoot and the return to guard` });
   out.push({ n: 4, name: 'Arcs', ok: maxJ <= 60 || DELIBERATE(m), detail: `largest striking-point jump ${maxJ.toFixed(0)} px per frame at ${at.toFixed(2)} s${maxJ > 60 && DELIBERATE(m) ? ' (lunge / scripted: allowed)' : ''}` });
@@ -57,7 +60,7 @@ function checklist(id) {
     out.push({ n: 5, name: 'Feet planted', ok: slide <= 12, detail: `feet move ${slide.toFixed(0)} px against the ground${slide > 12 ? ' (the pose changes stance without a step: foot slide)' : ''}` }); }
   out.push({ n: 6, name: 'Timing and spacing', ok: null, detail: 'review the holds and the o5 strike' });
   out.push({ n: 7, name: 'Secondary motion', ok: false, detail: 'cloth reacts to wind only (planned, §6.6 #7)' });
-  out.push({ n: 8, name: 'Trails', ok: m.proj || KICKS.has(id) ? null : false, detail: m.proj || KICKS.has(id) ? 'n/a' : 'no swing trail yet (planned, §6.6 #8)' });
+  out.push({ n: 8, name: 'Trails', ok: m.proj || KICKS.has(id) || !m.hit ? null : true, detail: m.proj || KICKS.has(id) || !m.hit ? 'n/a' : 'a brush trail follows the tip through the active window and fades in 0.2 s (M5)' });
   out.push({ n: 12, name: 'Time-based', ok: true, detail: 'poses are evaluated from time in seconds' });
   out.push({ n: 13, name: 'No pops', ok: true, detail: 'entered through the state blend (tools/pops.js)' });
   return out;
@@ -104,7 +107,7 @@ function labFrame(dt) {
   c.fillStyle = L.INK; c.textAlign = 'left'; c.font = '600 34px "Cormorant Garamond", serif'; c.fillText(`${fr.name} · ${LAB.id}`, 60, 70);
   c.font = '500 22px "Cormorant Garamond", serif'; const fd = v => v == null ? '—' : v.toFixed(2);
   [`t ${t.toFixed(3)} s · frame ${Math.round(t * 60)} / ${Math.round(m.dur * 60)} · ${phaseAt(m, t)} · ${LAB.speed === 1 ? '1×' : '¼×'}${LAB.playing ? '' : ' · paused'}`,
-   `startup ${fd(f.startup)} · active ${fd(f.active)} · recovery ${fd(f.recovery)} · reach ${m.reach || (m.proj ? 'projectile' : '—')} · dmg ${m.dmg ?? (m.proj && m.proj.dmg) ?? '—'} ${zy}${m.kd || m.proj && m.proj.kd ? ' · knockdown' : ''}`,
+   `startup ${fd(f.startup)} · active ${fd(f.active)} · recovery ${fd(f.recovery)} · reach ${m.reach ? Math.round(m.reach) : m.proj ? 'projectile' : '—'} · dmg ${+((m.dmg ?? (m.proj && m.proj.dmg)) || 0).toFixed(1)} ${zy}${m.kd || m.proj && m.proj.kd ? ' · knockdown' : ''}`,
    `answers: ${(m.answers || ['—']).join(', ')}${m.tell ? ` · tell ${m.tell.join('–')} s` : ''}${m.mark ? ` · marker ${m.mark.join('–')} s` : ''}`,
    'Space play · ← → frame · [ ] move · Esc close'].forEach((s, i) => c.fillText(s, 60, 108 + i * 30));
 }
@@ -167,7 +170,7 @@ function sheet(id) {
   c.font = '600 36px "Cormorant Garamond", serif'; c.fillText(`${id} — ${fr.name}`, 40, 56);
   const fd = v => v == null ? '—' : v.toFixed(2);
   c.font = '500 22px "Cormorant Garamond", serif';
-  c.fillText(`dur ${m.dur} s · startup ${fd(f.startup)} · active ${fd(f.active)} · recovery ${fd(f.recovery)} · reach ${m.reach || (m.proj ? 'projectile' : '—')} · dmg ${m.dmg ?? (m.proj && m.proj.dmg) ?? '—'} · ${m.zone || m.proj && m.proj.zone || ''}${m.kd ? ' · knockdown' : ''}${m.answers ? ' · answers ' + m.answers.join(', ') : ''}`, 40, 92);
+  c.fillText(`dur ${fd(m.dur)} s · startup ${fd(f.startup)} · active ${fd(f.active)} · recovery ${fd(f.recovery)} · reach ${m.reach ? Math.round(m.reach) : m.proj ? 'projectile' : '—'} · dmg ${+((m.dmg ?? (m.proj && m.proj.dmg)) || 0).toFixed(1)} · ${m.zone || m.proj && m.proj.zone || ''}${m.kd ? ' · knockdown' : ''}${m.answers ? ' · answers ' + m.answers.join(', ') : ''}`, 40, 92);
   const tp = path(def, id, m), sc = .62 / def.s;
   ts.forEach((t, i) => {
     const cx = 40 + (i % 6) * 310 + 120, gy = 140 + Math.floor(i / 6) * 350 + 300, ph = phaseAt(m, t);
