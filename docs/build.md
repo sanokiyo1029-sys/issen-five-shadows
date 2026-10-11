@@ -64,3 +64,14 @@ node tests/run.js --update-golden  # after an intentional change to moves/bosses
 There is no build step for the web version: the folder is the site. Run `python -m http.server 8779 -d samurai-film` for localhost.
 
 Add `?debug` to the URL to expose `window.game` and `window.film` for console debugging. Without it they don't exist, which is how the APK runs.
+
+`?debug` also loads `tools/poselab.js`: the **Pose Lab** (a link on the map, or `?debug&lab=<move>`), the in-fight frame-data overlay (the ` key), and review sheets (`?debug&sheet=<move>`). `?debug&seed=N` fixes a fight's seed. The APK ships only `index.html`, `fonts/` and `icons/`, so none of `tools/` is in a release build.
+
+## Design tools (M2)
+
+```
+node tools/audit-moves.js --write  # boss move fairness: frame data, tells, verified answers -> docs/fairness.md
+node tools/answers.js              # which of block / crouch / jump / roll answers each boss move (by simulation)
+node tools/pops.js                 # worst per-frame joint jumps at state changes (no-pop check)
+node tools/capture.js [move ...]   # review sheets for every move -> docs/animation-review/ (needs Edge or Chrome)
+```

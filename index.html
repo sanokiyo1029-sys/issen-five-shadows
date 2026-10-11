@@ -1050,7 +1050,7 @@ function renderGame(){const ar=ARENAS[G.def.arena],pl=G.P,bo=G.B,t=G.t,dt=Math.m
  drawMarks(X);figLayer(X,g=>{drawF(g,bo);drawF(g,pl)});drawFx(X);drawProj(X);ar.fg(X,t);if(G.state==='absorb')drawAbsorb(X);
  if(iss>=.4&&iss<1.25){const pr=clamp((iss-.4)/.22),al=1-ss(.85,1.25,iss),y=scr(0,-150*bo.def.s)[1];screen(X);const pts=[];for(let i=0;i<=50;i++){const u=i/50;pts.push([lerp(120,lerp(120,W-120,E.out(pr)),u),y+Math.sin(u*3)*10+40-u*90])}
   X.fillStyle=INK;X.globalAlpha=al;brush(X,pts,34,{taper:u=>Math.pow(Math.sin(Math.PI*clamp(u*.96+.02)),.45)});X.strokeStyle=INK;dry(X,pts,60,7,{dry:.9,alpha:al*.8});X.globalAlpha=1}
- grain(X);hud(X);banner(X);if(G.state==='absorb')absorbText(X)}
+ grain(X);hud(X);banner(X);if(G.state==='absorb')absorbText(X);if(G.overlay)G.overlay(X)} // G.overlay: debug frame-data overlay
 // victory ceremony: the defeated boss's ink streams into the hero, then the power is named (ABSORB s; a key or tap skips after 0.8 s)
 const ABSORB=5.4;
 function drawAbsorb(c){const pl=G.P,bo=G.B,a=[bo.x,-150*bo.def.s],b=[pl.x,-150],m=[(a[0]+b[0])/2,-420],q=e=>[(1-e)*(1-e)*a[0]+2*(1-e)*e*m[0]+e*e*b[0],(1-e)*(1-e)*a[1]+2*(1-e)*e*m[1]+e*e*b[1]];camT(c,1);
@@ -1238,6 +1238,7 @@ function poke(){if(MODE!=='film')return;bar.classList.remove('off');stage.classL
 const AQ={n:0,slow:0,t:0};
 function adapt(raw){if(raw>.25)return;AQ.n++;AQ.t+=raw;if(raw>.026)AQ.slow++;if(AQ.t<2)return;if(AQ.slow>AQ.n/2&&QS>.4)setQS(Math.max(.4,QS*.82));AQ.n=AQ.slow=AQ.t=0}
 function frame(now){const raw=(now-st.last)/1000||0,dt=Math.min(.1,raw);st.last=now;
+ if(G.lab){if(st.ready)G.lab(dt);requestAnimationFrame(frame);return} // the debug Pose Lab (tools/poselab.js) takes over the canvas
  pollPad();syncTouch();
  if(MODE!=='film'){if(st.ready){G.rdt=dt;G.rt+=dt;if(MODE==='game'){if(!G.paused){adapt(raw);stepGame(dt);renderGame()}}else{adapt(raw);G.mt+=dt;renderMenu(G.mt)}}requestAnimationFrame(frame);return}
  if(st.playing){adapt(raw);const a=st.t;st.t=Math.min(DUR,st.t+dt);audioTick(a,st.t);if(st.t>=DUR){st.playing=false;audioSilence();setPP();endc.classList.remove('off');$('skip').classList.add('off');poke();$('enterGame').focus()}st.dirty=true}
@@ -1280,7 +1281,9 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 // debug hooks (tests, console scrubbing) exist only with ?debug in the URL or when a test harness sets ISSEN_DEBUG: never in normal play or the APK
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
- window.game={G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}}}
+ // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
+ window.game={lab:{P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 (async()=>{try{await Promise.race([Promise.all([document.fonts.load('380px "Yuji Boku"','一閃終師'),document.fonts.load('46px "Cormorant Garamond"')]),new Promise(r=>setTimeout(r,3500))])}catch(e){}
  build();st.ready=true;const q=new URLSearchParams(location.search);
  if(q.has('t')){seek(+q.get('t'));cover.classList.add('off')}else{render(3.4);st.dirty=false} // poster = finished title card; playback still starts at 0
