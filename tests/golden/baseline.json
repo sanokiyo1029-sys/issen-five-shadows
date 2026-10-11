@@ -1,0 +1,1400 @@
+{
+ "MV": {
+  "slash": {
+   "dur": 0.34,
+   "hit": [
+    [
+     0.1,
+     0.18
+    ]
+   ],
+   "reach": 170,
+   "dmg": 7,
+   "zone": "mid",
+   "push": 70,
+   "chain": "slash2",
+   "cw": 0.15,
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.09,PS.wind],[.16,PS.cutSide,'o5'],[.34,g]]"
+  },
+  "slash2": {
+   "dur": 0.38,
+   "hit": [
+    [
+     0.1,
+     0.2
+    ]
+   ],
+   "reach": 170,
+   "dmg": 8,
+   "zone": "high",
+   "push": 80,
+   "chain": "slash3",
+   "cw": 0.17,
+   "snd": "slash",
+   "fr": "fn g=>[[0,PS.cutSide],[.09,PS.high],[.18,PS.cutLow,'o5'],[.38,g]]"
+  },
+  "slash3": {
+   "dur": 0.55,
+   "hit": [
+    [
+     0.17,
+     0.27
+    ]
+   ],
+   "reach": 185,
+   "dmg": 11,
+   "zone": "mid",
+   "push": 320,
+   "lunge": [
+    0.1,
+    0.24,
+    700
+   ],
+   "snd": "slash",
+   "fr": "fn g=>[[0,PS.cutLow],[.12,PS.wind],[.24,PS.cutSide,'o5'],[.55,g]]"
+  },
+  "lunge": {
+   "dur": 0.5,
+   "hit": [
+    [
+     0.17,
+     0.3
+    ]
+   ],
+   "reach": 175,
+   "dmg": 10,
+   "zone": "mid",
+   "push": 160,
+   "lunge": [
+    0.08,
+    0.27,
+    1150
+   ],
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.1,PS.wind],[.24,PS.cutSide,'o5'],[.5,g]]"
+  },
+  "low": {
+   "dur": 0.46,
+   "hit": [
+    [
+     0.15,
+     0.25
+    ]
+   ],
+   "reach": 180,
+   "dmg": 7,
+   "zone": "low",
+   "push": 90,
+   "crouch": 1,
+   "snd": "slash",
+   "fr": "fn g=>[[0,P(g,CR)],[.1,P(PS.wind,CR)],[.2,P(PS.guard,LOWC),'o5'],[.46,P(g,CR)]]"
+  },
+  "kick": {
+   "dur": 0.36,
+   "hit": [
+    [
+     0.11,
+     0.2
+    ]
+   ],
+   "reach": 125,
+   "dmg": 5,
+   "zone": "mid",
+   "push": 320,
+   "fr": "fn g=>[[0,g],[.12,P(g,KICK),'o5'],[.36,g]]"
+  },
+  "round": {
+   "dur": 0.6,
+   "hit": [
+    [
+     0.22,
+     0.32
+    ]
+   ],
+   "reach": 140,
+   "dmg": 9,
+   "zone": "high",
+   "kd": 1,
+   "push": 260,
+   "fr": "fn g=>[[0,g],[.12,P(g,{th1:1.2,sh1:.2,tl:.1})],[.26,P(g,RHK),'o5'],[.6,g]]"
+  },
+  "sweepK": {
+   "dur": 0.5,
+   "hit": [
+    [
+     0.16,
+     0.27
+    ]
+   ],
+   "reach": 150,
+   "dmg": 6,
+   "zone": "low",
+   "kd": 1,
+   "push": 120,
+   "crouch": 1,
+   "fr": "fn g=>[[0,P(g,CR)],[.18,P(g,SWK),'o5'],[.5,P(g,CR)]]"
+  },
+  "air": {
+   "dur": 0.42,
+   "hit": [
+    [
+     0.06,
+     0.24
+    ]
+   ],
+   "reach": 165,
+   "dmg": 8,
+   "zone": "high",
+   "air": 1,
+   "push": 120,
+   "snd": "slash",
+   "fr": "fn g=>[[0,P(PS.high,JMP)],[.14,P(PS.cutLow,JMP),'o5'],[.42,P(g,JMP)]]"
+  },
+  "airKick": {
+   "dur": 0.42,
+   "hit": [
+    [
+     0.06,
+     0.26
+    ]
+   ],
+   "reach": 135,
+   "dmg": 6,
+   "zone": "high",
+   "air": 1,
+   "push": 220,
+   "fr": "fn g=>[[0,P(g,JMP)],[.1,P(g,KICK,{tl:.1}),'o5'],[.42,P(g,JMP)]]"
+  },
+  "wave": {
+   "dur": 0.55,
+   "cost": 1,
+   "proj": {
+    "t": 0.24,
+    "type": "wave",
+    "v": 1050,
+    "dmg": 10,
+    "zone": "mid",
+    "y": -125
+   },
+   "fr": "fn g=>[[0,g],[.14,PS.wind],[.24,PS.cutSide,'o5'],[.55,g]]"
+  },
+  "issen": {
+   "dur": 1.3,
+   "cost": 3,
+   "issen": 1,
+   "fr": "fn ()=>[[0,PS.ready],[.38,P(PS.ready,{tl:.55,th1:1.1,sh1:.1,th2:-1.0,sh2:-1.2})],[.46,PS.cutSide,'o5'],[1.3,PS.cutSide]]",
+   "start": "fn start(F,O){F.d.x0=F.x;F.d.x1=clamp(O.x+F.f*190,-ARENA,ARENA);F.d.hit=Math.abs(O.x-F.x)<1000&&(O.x-F.x)*F.f>-20;F.inv=1.35;if(O.st!=='dead'){O.mv=null;O.manual=false;O.alpha=1;if(O.air)setSt(O,'jump');else{setSt(O,'hit');O.stun=1.2}}snd('boom',.5)}",
+   "tick": "fn tick(F,O,a,b){if(b>=.38&&a<.47)F.x=lerp(F.d.x0,F.d.x1,ss(.38,.46,b));if(a<.4&&b>=.4)snd('slash',1.4);if(a<.8&&b>=.8&&F.d.hit&&tryHit(F,O,{dmg:30,kd:1,unblock:1,zone:'mid',push:260,vx:F.f},true))fxAdd({k:'splash',x:O.x,y:-150*O.def.s,sz:110,dir:F.f>0?0:Math.PI})}"
+  },
+  "b_kick": {
+   "dur": 0.4,
+   "hit": [
+    [
+     0.13,
+     0.22
+    ]
+   ],
+   "reach": 130,
+   "dmg": 5,
+   "zone": "mid",
+   "push": 340,
+   "ai": [
+    0,
+    135
+   ],
+   "w": 1,
+   "fr": "fn g=>[[0,g],[.14,P(g,KICK),'o5'],[.4,g]]"
+  },
+  "g_thrust": {
+   "dur": 0.6,
+   "hit": [
+    [
+     0.27,
+     0.36
+    ]
+   ],
+   "reach": 255,
+   "dmg": 9,
+   "zone": "mid",
+   "push": 150,
+   "ai": [
+    100,
+    280
+   ],
+   "w": 3,
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,g],[.2,P(SPG,{tl:-.05,ua1:.5,fa1:1.0})],[.32,SPL,'o5'],[.6,g]]"
+  },
+  "g_low": {
+   "dur": 0.62,
+   "hit": [
+    [
+     0.28,
+     0.38
+    ]
+   ],
+   "reach": 245,
+   "dmg": 8,
+   "zone": "low",
+   "push": 110,
+   "crouch": 1,
+   "ai": [
+    100,
+    265
+   ],
+   "w": 2,
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,g],[.2,P(SPG,CR)],[.33,SPLL,'o5'],[.62,g]]"
+  },
+  "g_spin": {
+   "dur": 0.8,
+   "hit": [
+    [
+     0.32,
+     0.5
+    ]
+   ],
+   "reach": 215,
+   "dmg": 10,
+   "zone": "high",
+   "kd": 1,
+   "push": 260,
+   "ai": [
+    0,
+    225
+   ],
+   "w": 2,
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,g],[.26,SPUP],[.45,P(SPL,{sw:1.3}),'o5'],[.8,g]]"
+  },
+  "g_dragon": {
+   "dur": 1.15,
+   "hit": [
+    [
+     0.45,
+     0.66
+    ]
+   ],
+   "reach": 160,
+   "dmg": 15,
+   "zone": "mid",
+   "kd": 1,
+   "push": 320,
+   "lunge": [
+    0.42,
+    0.64,
+    1700
+   ],
+   "cd": 6,
+   "ai": [
+    300,
+    950
+   ],
+   "w": 5,
+   "tell": [
+    0.05,
+    0.42
+   ],
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,g],[.36,P(SPG,{tl:.5,th1:1.0,sh1:.15,th2:-.8,sh2:-1.0,sw:1.75})],[.46,SPL,'o5'],[1.15,g]]"
+  },
+  "k_flurry": {
+   "dur": 0.66,
+   "hit": [
+    [
+     0.08,
+     0.13
+    ],
+    [
+     0.24,
+     0.29
+    ],
+    [
+     0.4,
+     0.46
+    ]
+   ],
+   "reach": 130,
+   "dmg": 4,
+   "zone": "mid",
+   "push": 60,
+   "lunge": [
+    0,
+    0.5,
+    170
+   ],
+   "ai": [
+    0,
+    160
+   ],
+   "w": 3,
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.1,KS1,'o5'],[.19,KS2],[.27,KS1,'o5'],[.35,KS2,'o5'],[.43,KS1,'o5'],[.66,g]]"
+  },
+  "k_stab": {
+   "dur": 0.34,
+   "hit": [
+    [
+     0.11,
+     0.18
+    ]
+   ],
+   "reach": 130,
+   "dmg": 6,
+   "zone": "mid",
+   "push": 90,
+   "ai": [
+    0,
+    150
+   ],
+   "w": 2,
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.12,KS1,'o5'],[.34,g]]"
+  },
+  "k_low": {
+   "dur": 0.5,
+   "hit": [
+    [
+     0.17,
+     0.27
+    ]
+   ],
+   "reach": 150,
+   "dmg": 6,
+   "zone": "low",
+   "kd": 1,
+   "push": 140,
+   "crouch": 1,
+   "ai": [
+    0,
+    165
+   ],
+   "w": 2,
+   "fr": "fn g=>[[0,P(g,CR)],[.18,P(g,SWK),'o5'],[.5,P(g,CR)]]"
+  },
+  "k_star": {
+   "dur": 0.45,
+   "cd": 1.8,
+   "proj": {
+    "t": 0.2,
+    "type": "star",
+    "v": 1400,
+    "dmg": 5,
+    "zone": "high",
+    "y": -190
+   },
+   "ai": [
+    260,
+    1200
+   ],
+   "w": 3,
+   "fr": "fn g=>[[0,g],[.12,P(g,{ua1:-.6,fa1:-.2,tl:0})],[.22,KS1,'o5'],[.45,g]]"
+  },
+  "k_vanish": {
+   "dur": 1,
+   "hit": [
+    [
+     0.6,
+     0.72
+    ]
+   ],
+   "reach": 145,
+   "dmg": 9,
+   "zone": "mid",
+   "push": 150,
+   "cd": 5,
+   "ai": [
+    0,
+    800
+   ],
+   "w": 3,
+   "fr": "fn g=>[[0,g],[.12,P(g,CR)],[.5,P(g,CR)],[.6,KS1,'o5'],[1,g]]",
+   "tick": "fn tick(F,O,a,b){if(a<.1&&b>=.1){fxAdd({k:'smoke',x:F.x,y:0});F.alpha=0;F.inv=.5;snd('whoosh',.4)}if(a<.5&&b>=.5){F.x=clamp(O.x-O.f*130,-ARENA,ARENA);F.f=O.x>F.x?1:-1;fxAdd({k:'smoke',x:F.x,y:0})}if(b>=.55)F.alpha=1}"
+  },
+  "m_smash": {
+   "dur": 0.95,
+   "hit": [
+    [
+     0.48,
+     0.58
+    ]
+   ],
+   "reach": 200,
+   "dmg": 14,
+   "zone": "high",
+   "kd": 1,
+   "push": 260,
+   "armor": [
+    0,
+    0.5
+   ],
+   "ai": [
+    0,
+    215
+   ],
+   "w": 3,
+   "snd": "whoosh",
+   "sndT": 0.4,
+   "fr": "fn g=>[[0,g],[.4,P(PS.high,{tl:-.12})],[.52,P(PS.cutLow,{sw:.85}),'o5'],[.95,g]]",
+   "tick": "fn tick(F,O,a,b){if(a<.52&&b>=.52){G.shake=Math.max(G.shake,14);fxAdd({k:'dust',x:F.x+F.f*170*F.def.s,y:0})}}"
+  },
+  "m_swing": {
+   "dur": 0.8,
+   "hit": [
+    [
+     0.36,
+     0.48
+    ]
+   ],
+   "reach": 205,
+   "dmg": 11,
+   "zone": "mid",
+   "push": 380,
+   "armor": [
+    0,
+    0.4
+   ],
+   "ai": [
+    0,
+    215
+   ],
+   "w": 3,
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,g],[.3,PS.wind],[.42,PS.cutSide,'o5'],[.8,g]]"
+  },
+  "m_low": {
+   "dur": 0.85,
+   "hit": [
+    [
+     0.4,
+     0.52
+    ]
+   ],
+   "reach": 200,
+   "dmg": 10,
+   "zone": "low",
+   "kd": 1,
+   "push": 200,
+   "armor": [
+    0,
+    0.42
+   ],
+   "crouch": 1,
+   "ai": [
+    0,
+    210
+   ],
+   "w": 2,
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,g],[.32,P(PS.wind,CR)],[.46,P(PS.guard,LOWC),'o5'],[.85,g]]"
+  },
+  "m_slam": {
+   "dur": 1.2,
+   "cd": 5.5,
+   "armor": [
+    0,
+    0.62
+   ],
+   "proj": {
+    "t": 0.62,
+    "type": "quake",
+    "v": 800,
+    "dmg": 11,
+    "zone": "low",
+    "y": -20,
+    "kd": 1
+   },
+   "ai": [
+    220,
+    1200
+   ],
+   "w": 4,
+   "fr": "fn g=>[[0,g],[.5,P(PS.high,{tl:-.15})],[.64,P(PS.cutLow,{sw:.4,tl:.75,th1:1.3,sh1:.2,th2:-1.1,sh2:-1.4}),'o5'],[1.2,g]]",
+   "tick": "fn tick(F,O,a,b){if(a<.62&&b>=.62){G.shake=20;fxAdd({k:'ring',x:F.x+F.f*150,y:0});snd('boom',.6)}}"
+  },
+  "y_thrust": {
+   "dur": 0.62,
+   "hit": [
+    [
+     0.28,
+     0.37
+    ]
+   ],
+   "reach": 255,
+   "dmg": 9,
+   "zone": "mid",
+   "push": 150,
+   "ai": [
+    110,
+    275
+   ],
+   "w": 3,
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,g],[.2,P(SPG,{tl:-.05,ua1:.5,fa1:1.0})],[.32,SPL,'o5'],[.62,g]]"
+  },
+  "y_sweep": {
+   "dur": 0.75,
+   "hit": [
+    [
+     0.32,
+     0.45
+    ]
+   ],
+   "reach": 245,
+   "dmg": 9,
+   "zone": "low",
+   "kd": 1,
+   "push": 200,
+   "crouch": 1,
+   "ai": [
+    0,
+    260
+   ],
+   "w": 3,
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,g],[.24,P(SPG,CR,{sw:-1.4,ua1:-.4,fa1:-.2})],[.4,SPLL,'o5'],[.75,g]]"
+  },
+  "y_rise": {
+   "dur": 0.6,
+   "hit": [
+    [
+     0.2,
+     0.34
+    ]
+   ],
+   "reach": 230,
+   "dmg": 10,
+   "zone": "high",
+   "push": 200,
+   "ai": [
+    0,
+    240
+   ],
+   "w": 2,
+   "snd": "whoosh",
+   "fr": "fn g=>[[0,P(SPG,CR)],[.28,SPUP,'o5'],[.6,g]]"
+  },
+  "y_wisp": {
+   "dur": 0.6,
+   "cd": 2.6,
+   "proj": {
+    "t": 0.3,
+    "type": "wisp",
+    "v": 560,
+    "dmg": 8,
+    "zone": "mid",
+    "y": -150
+   },
+   "ai": [
+    260,
+    1200
+   ],
+   "w": 3,
+   "fr": "fn g=>[[0,g],[.2,P(SPG,{ua1:1.6,fa1:1.7,sw:1.6,tl:.1})],[.6,g]]"
+  },
+  "y_phase": {
+   "dur": 1,
+   "hit": [
+    [
+     0.62,
+     0.74
+    ]
+   ],
+   "reach": 260,
+   "dmg": 10,
+   "zone": "mid",
+   "push": 180,
+   "cd": 4.5,
+   "ai": [
+    0,
+    900
+   ],
+   "w": 3,
+   "fr": "fn g=>[[0,g],[.5,P(SPG,{tl:.3})],[.64,SPL,'o5'],[1,g]]",
+   "tick": "fn tick(F,O,a,b){if(a<.06&&b>=.06){fxAdd({k:'smoke',x:F.x,y:0,pale:1});F.inv=.55;snd('whoosh',.3)}if(b<.5)F.alpha=lerp(1,.12,ss(.04,.2,b));if(a<.45&&b>=.45){F.x=clamp(O.x+(O.x>0?-1:1)*235*F.def.s,-ARENA,ARENA);F.f=O.x>F.x?1:-1;fxAdd({k:'smoke',x:F.x,y:0,pale:1})}if(b>=.5)F.alpha=lerp(.12,1,ss(.5,.62,b))}"
+  },
+  "a_cut": {
+   "dur": 0.5,
+   "hit": [
+    [
+     0.2,
+     0.3
+    ]
+   ],
+   "reach": 215,
+   "dmg": 9,
+   "zone": "mid",
+   "push": 120,
+   "ai": [
+    0,
+    230
+   ],
+   "w": 3,
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.12,PS.wind],[.24,PS.cutSide,'o5'],[.5,g]]"
+  },
+  "a_crush": {
+   "dur": 0.85,
+   "hit": [
+    [
+     0.42,
+     0.52
+    ]
+   ],
+   "reach": 225,
+   "dmg": 14,
+   "zone": "high",
+   "kd": 1,
+   "push": 280,
+   "ai": [
+    0,
+    235
+   ],
+   "w": 3,
+   "snd": "slash",
+   "sndT": 0.38,
+   "fr": "fn g=>[[0,g],[.36,PS.high],[.46,P(PS.cutLow,{sw:1.0}),'o5'],[.85,g]]"
+  },
+  "a_sweep": {
+   "dur": 0.75,
+   "hit": [
+    [
+     0.34,
+     0.46
+    ]
+   ],
+   "reach": 225,
+   "dmg": 11,
+   "zone": "low",
+   "kd": 1,
+   "push": 220,
+   "crouch": 1,
+   "ai": [
+    0,
+    235
+   ],
+   "w": 2,
+   "snd": "slash",
+   "fr": "fn g=>[[0,g],[.26,P(PS.wind,CR)],[.4,P(PS.guard,LOWC),'o5'],[.75,g]]"
+  },
+  "a_wave": {
+   "dur": 0.7,
+   "cd": 3,
+   "proj": {
+    "t": 0.32,
+    "type": "wave",
+    "v": 950,
+    "dmg": 12,
+    "zone": "mid",
+    "y": -130
+   },
+   "ai": [
+    280,
+    1200
+   ],
+   "w": 3,
+   "fr": "fn g=>[[0,g],[.22,PS.wind],[.32,PS.cutSide,'o5'],[.7,g]]"
+  },
+  "a_leap": {
+   "dur": 1.25,
+   "hit": [
+    [
+     0.8,
+     0.95
+    ]
+   ],
+   "reach": 175,
+   "dmg": 17,
+   "zone": "high",
+   "kd": 1,
+   "push": 300,
+   "cd": 6,
+   "ai": [
+    260,
+    950
+   ],
+   "w": 3,
+   "fr": "fn g=>[[0,g],[.15,P(g,{tl:.4,th1:1.0,sh1:.2,th2:-.4,sh2:-1.0})],[.3,P(PS.high,{th1:1.5,sh1:-.4,th2:.8,sh2:-1})],[.78,P(PS.high,{th1:.8,sh1:0,th2:-.5,sh2:-.6})],[.86,P(PS.cutLow,{sw:1.2}),'o5'],[1.25,g]]",
+   "start": "fn start(F,O){F.d.x0=F.x;F.d.tx=clamp(O.x-F.f*110*F.def.s,-ARENA,ARENA);F.manual=true;snd('whoosh',.6)}",
+   "tick": "fn tick(F,O,a,b){if(!F.manual)return;const u=ss(.18,.82,b);F.x=lerp(F.d.x0,F.d.tx,u);F.y=-Math.sin(u*Math.PI)*300;if(b>=.82){F.y=0;F.manual=false;fxAdd({k:'ring',x:F.x+F.f*80,y:0});fxAdd({k:'splash',x:F.x+F.f*90,y:-4,sz:60,persist:1});G.shake=22;snd('boom',.7);snd('drum',1)}}"
+  }
+ },
+ "BOSSES": [
+  {
+   "name": "Gekkō",
+   "title": "the Red Spear",
+   "jp": "月光",
+   "kind": {
+    "L": {
+     "torso": 88,
+     "neck": 24,
+     "head": 16,
+     "ua": 46,
+     "fa": 42,
+     "th": 60,
+     "sh": 58
+    },
+    "ink": "#1e1b17",
+    "back": "#544d45",
+    "jit": 0.8,
+    "type": "bandit",
+    "spear": 1
+   },
+   "s": 1.1,
+   "hp": 100,
+   "speed": 240,
+   "guard": {
+    "x": 0,
+    "y": 0,
+    "s": 1,
+    "f": 1,
+    "rot": 0,
+    "lift": 0,
+    "tl": 0.15,
+    "hd": -0.1,
+    "ua1": 0.8,
+    "fa1": 1.3,
+    "ua2": -0.06,
+    "fa2": 0.05,
+    "th1": 0.5,
+    "sh1": 0.05,
+    "th2": -0.45,
+    "sh2": -0.35,
+    "sw": 1.85,
+    "sw2": 2,
+    "sheath": 0,
+    "blade": 1,
+    "g2": 1,
+    "gl": 45,
+    "hilt1": 0,
+    "noto": 0,
+    "stream": 0,
+    "horn": 1,
+    "rage": 0
+   },
+   "wk": {
+    "gl": 45,
+    "sheath": 0
+   },
+   "moves": [
+    "g_thrust",
+    "g_low",
+    "g_spin",
+    "g_dragon",
+    "b_kick"
+   ],
+   "ai": {
+    "think": 0.75,
+    "aggr": 0.55,
+    "block": 0.22,
+    "range": 235
+   },
+   "arena": 0,
+   "win": {
+    "x": 0,
+    "y": 0,
+    "s": 1,
+    "f": 1,
+    "rot": 0,
+    "lift": 0,
+    "tl": -0.1,
+    "hd": -0.3,
+    "ua1": 0.8,
+    "fa1": 1.3,
+    "ua2": -0.06,
+    "fa2": 0.05,
+    "th1": 0.5,
+    "sh1": 0.05,
+    "th2": -0.45,
+    "sh2": -0.35,
+    "sw": 1.85,
+    "sw2": 2,
+    "sheath": 0,
+    "blade": 1,
+    "g2": 1,
+    "gl": 45,
+    "hilt1": 0,
+    "noto": 0,
+    "stream": 0,
+    "horn": 1,
+    "rage": 0
+   },
+   "tip": "Long reach, slow recovery. When the spear glints, jump or block."
+  },
+  {
+   "name": "Kasumi",
+   "title": "the Mist Shinobi",
+   "jp": "霞",
+   "kind": {
+    "L": {
+     "torso": 84,
+     "neck": 22,
+     "head": 15,
+     "ua": 44,
+     "fa": 40,
+     "th": 60,
+     "sh": 58
+    },
+    "ink": "#15130f",
+    "back": "#4f4943",
+    "jit": 0.5,
+    "type": "ninja",
+    "twin": 1,
+    "blen": 58
+   },
+   "s": 1,
+   "hp": 95,
+   "speed": 400,
+   "guard": {
+    "x": 0,
+    "y": 0,
+    "s": 1,
+    "f": 1,
+    "rot": 0,
+    "lift": 0,
+    "tl": 0.28,
+    "hd": -0.15,
+    "ua1": 0.95,
+    "fa1": 1.95,
+    "ua2": 0.55,
+    "fa2": 1.7,
+    "th1": 0.6,
+    "sh1": 0.05,
+    "th2": -0.6,
+    "sh2": -0.5,
+    "sw": 2.4,
+    "sw2": 2.7,
+    "sheath": 0,
+    "blade": 1,
+    "g2": 0,
+    "gl": 15,
+    "hilt1": 0,
+    "noto": 0,
+    "stream": 0,
+    "horn": 1,
+    "rage": 0
+   },
+   "wk": {
+    "sheath": 0
+   },
+   "moves": [
+    "k_flurry",
+    "k_stab",
+    "k_low",
+    "k_star",
+    "k_vanish"
+   ],
+   "ai": {
+    "think": 0.45,
+    "aggr": 0.66,
+    "block": 0.3,
+    "range": 145,
+    "jump": 0.2
+   },
+   "arena": 1,
+   "win": {
+    "x": 0,
+    "y": 0,
+    "s": 1,
+    "f": 1,
+    "rot": 0,
+    "lift": 0,
+    "tl": 0,
+    "hd": -0.2,
+    "ua1": 0.95,
+    "fa1": 1.95,
+    "ua2": 0.55,
+    "fa2": 1.7,
+    "th1": 0.6,
+    "sh1": 0.05,
+    "th2": -0.6,
+    "sh2": -0.5,
+    "sw": 2.4,
+    "sw2": 2.7,
+    "sheath": 0,
+    "blade": 1,
+    "g2": 0,
+    "gl": 15,
+    "hilt1": 0,
+    "noto": 0,
+    "stream": 0,
+    "horn": 1,
+    "rage": 0
+   },
+   "tip": "Fast blades and throwing stars — duck the stars. She vanishes and strikes from behind."
+  },
+  {
+   "name": "Tetsugorō",
+   "title": "the Iron Monk",
+   "jp": "鉄五郎",
+   "kind": {
+    "L": {
+     "torso": 88,
+     "neck": 24,
+     "head": 16,
+     "ua": 46,
+     "fa": 42,
+     "th": 60,
+     "sh": 58
+    },
+    "ink": "#1a1714",
+    "back": "#4d4740",
+    "jit": 0.6,
+    "type": "monk",
+    "club": 1
+   },
+   "s": 1.32,
+   "hp": 150,
+   "speed": 185,
+   "guard": {
+    "x": 0,
+    "y": 0,
+    "s": 1,
+    "f": 1,
+    "rot": 0,
+    "lift": 0,
+    "tl": 0.06,
+    "hd": -0.05,
+    "ua1": 0.62,
+    "fa1": 1.25,
+    "ua2": -0.06,
+    "fa2": 0.05,
+    "th1": 0.45,
+    "sh1": 0.04,
+    "th2": -0.45,
+    "sh2": -0.3,
+    "sw": 2.6,
+    "sw2": 2,
+    "sheath": 0,
+    "blade": 1,
+    "g2": 1,
+    "gl": 15,
+    "hilt1": 0,
+    "noto": 0,
+    "stream": 0,
+    "horn": 1,
+    "rage": 0
+   },
+   "wk": {
+    "gl": 20,
+    "sheath": 0
+   },
+   "moves": [
+    "m_smash",
+    "m_swing",
+    "m_low",
+    "m_slam",
+    "b_kick"
+   ],
+   "ai": {
+    "think": 0.85,
+    "aggr": 0.6,
+    "block": 0.15,
+    "range": 200
+   },
+   "arena": 2,
+   "win": {
+    "x": 0,
+    "y": 0,
+    "s": 1,
+    "f": 1,
+    "rot": 0,
+    "lift": 0,
+    "tl": -0.1,
+    "hd": -0.18,
+    "ua1": 2.55,
+    "fa1": 2.95,
+    "ua2": -0.06,
+    "fa2": 0.05,
+    "th1": 0.45,
+    "sh1": 0.04,
+    "th2": -0.45,
+    "sh2": -0.3,
+    "sw": 3.8,
+    "sw2": 2,
+    "sheath": 0,
+    "blade": 1,
+    "g2": 1,
+    "gl": 15,
+    "hilt1": 0,
+    "noto": 0,
+    "stream": 0,
+    "horn": 1,
+    "rage": 0
+   },
+   "tip": "Iron skin: light blows will not stagger him. Jump the earthquake, punish the long swings."
+  },
+  {
+   "name": "Shirasagi",
+   "title": "the Pale Ronin",
+   "jp": "白鷺",
+   "kind": {
+    "L": {
+     "torso": 88,
+     "neck": 24,
+     "head": 16,
+     "ua": 46,
+     "fa": 42,
+     "th": 60,
+     "sh": 58
+    },
+    "ink": "#ece6da",
+    "back": "#b8b1a3",
+    "jit": 0.4,
+    "type": "ghost",
+    "nagi": 1
+   },
+   "s": 1.08,
+   "hp": 120,
+   "speed": 290,
+   "guard": {
+    "x": 0,
+    "y": 0,
+    "s": 1,
+    "f": 1,
+    "rot": 0,
+    "lift": 0,
+    "tl": 0.1,
+    "hd": -0.1,
+    "ua1": 0.8,
+    "fa1": 1.3,
+    "ua2": -0.06,
+    "fa2": 0.05,
+    "th1": 0.5,
+    "sh1": 0.05,
+    "th2": -0.45,
+    "sh2": -0.35,
+    "sw": 1.8,
+    "sw2": 2,
+    "sheath": 0,
+    "blade": 1,
+    "g2": 1,
+    "gl": 45,
+    "hilt1": 0,
+    "noto": 0,
+    "stream": 0,
+    "horn": 1,
+    "rage": 0
+   },
+   "wk": {
+    "gl": 45,
+    "sheath": 0
+   },
+   "moves": [
+    "y_thrust",
+    "y_sweep",
+    "y_rise",
+    "y_wisp",
+    "y_phase"
+   ],
+   "ai": {
+    "think": 0.55,
+    "aggr": 0.66,
+    "block": 0.4,
+    "range": 235
+   },
+   "arena": 3,
+   "win": {
+    "x": 0,
+    "y": 0,
+    "s": 1,
+    "f": 1,
+    "rot": 0,
+    "lift": 0,
+    "tl": -0.05,
+    "hd": -0.25,
+    "ua1": 0.8,
+    "fa1": 1.3,
+    "ua2": -0.06,
+    "fa2": 0.05,
+    "th1": 0.5,
+    "sh1": 0.05,
+    "th2": -0.45,
+    "sh2": -0.35,
+    "sw": 1.85,
+    "sw2": 2,
+    "sheath": 0,
+    "blade": 1,
+    "g2": 1,
+    "gl": 45,
+    "hilt1": 0,
+    "noto": 0,
+    "stream": 0,
+    "horn": 1,
+    "rage": 0
+   },
+   "tip": "A drowned duelist. She fades and reappears beside you; ghost-fire drifts slowly — block it."
+  },
+  {
+   "name": "Akuma",
+   "title": "the Horned Warlord",
+   "jp": "鬼将軍",
+   "kind": {
+    "L": {
+     "torso": 88,
+     "neck": 24,
+     "head": 16,
+     "ua": 46,
+     "fa": 42,
+     "th": 60,
+     "sh": 58
+    },
+    "ink": "#0b0a08",
+    "back": "#3b3631",
+    "jit": 0.6,
+    "type": "lord",
+    "sword": 1,
+    "blen": 150
+   },
+   "s": 1.28,
+   "hp": 170,
+   "speed": 265,
+   "guard": {
+    "x": 0,
+    "y": 0,
+    "s": 1,
+    "f": 1,
+    "rot": 0,
+    "lift": 0,
+    "tl": 0.12,
+    "hd": -0.1,
+    "ua1": 0.62,
+    "fa1": 1.25,
+    "ua2": -0.06,
+    "fa2": 0.05,
+    "th1": 0.45,
+    "sh1": 0.04,
+    "th2": -0.45,
+    "sh2": -0.3,
+    "sw": 2.2,
+    "sw2": 2,
+    "sheath": 0,
+    "blade": 1,
+    "g2": 1,
+    "gl": 15,
+    "hilt1": 0,
+    "noto": 0,
+    "stream": 0,
+    "horn": 1,
+    "rage": 0
+   },
+   "wk": {
+    "sheath": 0
+   },
+   "moves": [
+    "a_cut",
+    "a_crush",
+    "a_sweep",
+    "a_wave",
+    "a_leap",
+    "b_kick"
+   ],
+   "ai": {
+    "think": 0.45,
+    "aggr": 0.7,
+    "block": 0.45,
+    "range": 225,
+    "rage": 1
+   },
+   "arena": 4,
+   "win": {
+    "x": 0,
+    "y": 0,
+    "s": 1,
+    "f": 1,
+    "rot": 0,
+    "lift": 0,
+    "tl": -0.2,
+    "hd": -0.4,
+    "ua1": 2.55,
+    "fa1": 2.95,
+    "ua2": -0.06,
+    "fa2": 0.05,
+    "th1": 0.45,
+    "sh1": 0.04,
+    "th2": -0.45,
+    "sh2": -0.3,
+    "sw": 3.8,
+    "sw2": 2,
+    "sheath": 0,
+    "blade": 1,
+    "g2": 1,
+    "gl": 15,
+    "hilt1": 0,
+    "noto": 0,
+    "stream": 0,
+    "horn": 1,
+    "rage": 0
+   },
+   "tip": "The warlord returns from the ink. At half strength his fury awakens. Save your Issen."
+  }
+ ],
+ "ARENAS": [
+  {
+   "name": "the Burning Field",
+   "jp": "焼野",
+   "wind": 0.32,
+   "rain": 0.4,
+   "rumb": 0.25,
+   "bpm": 116,
+   "notes": [
+    293.66,
+    311.13,
+    392,
+    440,
+    466.16
+   ],
+   "bg": "fn (c,t)=>{WIND={x:-1,y:.08,s:1};fieldBG(c,t,t,{storm:1,sun:0,fire:1})}",
+   "fg": "fn (c,t)=>{fgGrass(c,t);rain(c,t,.55)}"
+  },
+  {
+   "name": "the Bamboo Grove",
+   "jp": "竹林",
+   "wind": 0.18,
+   "rain": 0,
+   "bpm": 128,
+   "notes": [
+    293.66,
+    392,
+    440,
+    587.33,
+    622.25
+   ],
+   "bg": "fn (c,t)=>{WIND={x:-1,y:.1,s:.45};bambooBG(c,t)}",
+   "fg": "fn function leaves(c,t){camT(c,1);c.fillStyle=INK;for(let i=0;i<24;i++){const age=(t*.6+hash(i))%1,x=CAM.x-1100+hash(i*3)*2200-age*300,y=-900+age*1000+Math.sin(t*3+i)*30;c.globalAlpha=.7;c.save();c.translate(x,y);c.rotate(t*2+i);brush(c,[[-14,0],[0,-2],[14,0]],5);c.restore()}c.globalAlpha=1}"
+  },
+  {
+   "name": "the Mountain Shrine",
+   "jp": "山寺",
+   "wind": 0.22,
+   "rain": 0,
+   "bpm": 100,
+   "notes": [
+    220,
+    293.66,
+    311.13,
+    392,
+    440
+   ],
+   "bg": "fn function shrineBG(c,t){WIND={x:-1,y:.06,s:.35};screen(c);c.fillStyle=PAPER;c.fillRect(0,0,W,H);camT(c,.06);c.globalAlpha=.6;c.drawImage(CLOUDL,-1800+t*5,-1450);c.globalAlpha=1;\r\n camT(c,.12);c.drawImage(M_FAR,-1800,-760);mistBand(c,.18,-200,t,.5);camT(c,.25);c.drawImage(M_MID,-1800,-560);mistBand(c,.32,-40,t,.6);\r\n camT(c,.5);c.drawImage(TEMPLE,-750,-640);mistBand(c,.6,30,t,.35);camT(c,.78);c.drawImage(TORII,-420,-655,840,655);\r\n camT(c,.85);c.drawImage(TREE.img,980-TREE.ox*.8,6-TREE.oy*.8,TREE.img.lw*.8,TREE.img.lh*.8);\r\n camT(c,1);const gr=c.createLinearGradient(0,0,0,500);gr.addColorStop(0,ink(.3));gr.addColorStop(1,ink(.08));c.fillStyle=gr;c.fillRect(CAM.x-2400,-4,4800,900);tiles(c,FLOOR,1,-14);for(const lx of[-820,820])c.drawImage(LANTERN,lx-75,-268)}",
+   "fg": "fn (c,t)=>{camT(c,1);petalField(c,t,22,CAM.x-1200,CAM.x+1200,-950,10,4,8)}"
+  },
+  {
+   "name": "the Moonlit Lake",
+   "jp": "月湖",
+   "wind": 0.08,
+   "rain": 0,
+   "bpm": 92,
+   "notes": [
+    293.66,
+    311.13,
+    440,
+    466.16,
+    587.33
+   ],
+   "bg": "fn function lakeBG(c,t){WIND={x:-1,y:.05,s:.3};screen(c);const sk=c.createLinearGradient(0,0,0,H);sk.addColorStop(0,ink(.84));sk.addColorStop(.6,ink(.44));sk.addColorStop(1,ink(.6));c.fillStyle=sk;c.fillRect(0,0,W,H);\r\n camT(c,.03);c.globalAlpha=.6;c.drawImage(MIST,300,-650,620,620);c.globalAlpha=1;c.fillStyle='#f4efe5';circ(c,610,-340,96);\r\n c.globalCompositeOperation='multiply';camT(c,.12);c.drawImage(M_FAR,-1800,-640);camT(c,.25);c.drawImage(M_MID,-1800,-500);c.globalCompositeOperation='source-over';\r\n const hy=scr(0,-30,.35)[1],mx=scr(610,0,.03)[0];screen(c);const wg=c.createLinearGradient(0,hy,0,H);wg.addColorStop(0,ink(.42));wg.addColorStop(1,ink(.7));c.fillStyle=wg;c.fillRect(0,hy,W,H-hy);\r\n c.fillStyle='#f4efe5';for(let i=0;i<24;i++){const y=hy+6+i*i*.9+i*5,w=(96-i*2.6)*(.55+.45*noise(i*1.7+t*1.3));c.globalAlpha=Math.max(0,.6-i*.022);c.fillRect(mx-w/2+noise(i+t*2)*14,y,w,3+i*.15)}c.globalAlpha=1;\r\n grassRow(c,.75,{sp:14,h0:30,h1:90,w:4,tone:.66,seed:7},t);camT(c,1);c.fillStyle=ink(.6);c.fillRect(CAM.x-2400,-4,4800,900)}",
+   "fg": "fn function lakeFG(c,t){camT(c,1);for(let i=0;i<14;i++){const x=CAM.x-1000+((hash(i)*2000+t*(20+hash(i*3)*30))%2000),y=-120-hash(i*7)*420+Math.sin(t*1.3+i)*30;c.globalAlpha=.35+.25*Math.sin(t*3+i);c.drawImage(MIST,x-22,y-22,44,44)}c.globalAlpha=1;grassRow(c,1.12,{sp:16,h0:70,h1:150,w:6,tone:.9,seed:8,gy:45},t)}"
+  },
+  {
+   "name": "the Oni Castle",
+   "jp": "鬼城",
+   "wind": 0.35,
+   "rain": 0,
+   "rumb": 0.35,
+   "bpm": 136,
+   "notes": [
+    293.66,
+    311.13,
+    220,
+    233.08,
+    587.33
+   ],
+   "bg": "fn function castleBG(c,t){WIND={x:-1,y:.1,s:.8};screen(c);c.fillStyle=PAPER;c.fillRect(0,0,W,H);camT(c,.03);sunDisc(c,140,-420,250,1);\r\n camT(c,.07);c.globalAlpha=.85;c.drawImage(STORM,-1800+t*10,-1150);c.globalAlpha=1;camT(c,.2);c.drawImage(HILLS,-1800,-560);\r\n camT(c,.38);c.drawImage(CASTLE,-380,-505,760,500);for(const[x,y]of[[-250,-20],[60,-70],[230,-30]]){c.globalAlpha=.45*(.75+.25*noise(t*7+x));c.drawImage(GLOW,x-150,y-90,300,180);c.globalAlpha=1;smoke(c,x,y-20,t,x,.9,1.4,.45)}\r\n const hy=scr(0,-15,.38)[1];screen(c);const gr=c.createLinearGradient(0,hy,0,H);gr.addColorStop(0,ink(.25));gr.addColorStop(1,ink(.62));c.fillStyle=gr;c.fillRect(0,hy,W,H-hy);camT(c,1);tiles(c,FLOOR,1,-14);\r\n screen(c);c.globalCompositeOperation='multiply';c.fillStyle='rgb(255,226,210)';c.fillRect(0,0,W,H);c.globalCompositeOperation='source-over'}",
+   "fg": "fn function castleFG(c,t){screen(c);c.fillStyle=RED;for(let i=0;i<40;i++){const y=H-((t*(60+hash(i)*90)+hash(i*3)*H)%H),x=((hash(i*5)*W+Math.sin(t+i)*60-t*25)%W+W)%W;c.globalAlpha=.75*(y/H);circ(c,x,y,1.5+hash(i*9)*2.5)}c.globalAlpha=1}"
+  }
+ ],
+ "HERO_D": {
+  "name": "Issen",
+  "jp": "一閃",
+  "kind": {
+   "L": {
+    "torso": 88,
+    "neck": 24,
+    "head": 16,
+    "ua": 46,
+    "fa": 42,
+    "th": 60,
+    "sh": 58
+   },
+   "ink": "#15130f",
+   "back": "#4a443d",
+   "jit": 0.5,
+   "type": "hero",
+   "sword": 1,
+   "blen": 112
+  },
+  "s": 1,
+  "hp": 100,
+  "speed": 340,
+  "guard": {
+   "x": 0,
+   "y": 0,
+   "s": 1,
+   "f": 1,
+   "rot": 0,
+   "lift": 0,
+   "tl": 0.12,
+   "hd": -0.1,
+   "ua1": 0.62,
+   "fa1": 1.25,
+   "ua2": -0.06,
+   "fa2": 0.05,
+   "th1": 0.45,
+   "sh1": 0.04,
+   "th2": -0.45,
+   "sh2": -0.3,
+   "sw": 2,
+   "sw2": 2,
+   "sheath": 0,
+   "blade": 1,
+   "g2": 1,
+   "gl": 15,
+   "hilt1": 0,
+   "noto": 0,
+   "stream": 0,
+   "horn": 1,
+   "rage": 0
+  },
+  "win": {
+   "x": 0,
+   "y": 0,
+   "s": 1,
+   "f": 1,
+   "rot": 0,
+   "lift": 0,
+   "tl": 0.03,
+   "hd": 0.05,
+   "ua1": 0.12,
+   "fa1": 0.5,
+   "ua2": -0.06,
+   "fa2": 0.05,
+   "th1": 0.07,
+   "sh1": 0.02,
+   "th2": -0.07,
+   "sh2": -0.04,
+   "sw": 1.9,
+   "sw2": 2,
+   "sheath": 1,
+   "blade": 1,
+   "g2": 0,
+   "gl": 15,
+   "hilt1": 1,
+   "noto": 0,
+   "stream": 0,
+   "horn": 1,
+   "rage": 0
+  },
+  "wk": {}
+ }
+}

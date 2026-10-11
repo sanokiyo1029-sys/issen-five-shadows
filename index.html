@@ -1024,8 +1024,10 @@ $('prog').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();seek((e.cl
 stage.addEventListener('mousemove',poke);
 addEventListener('keyup',e=>gameKey(e,false));
 addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code==='Space'){e.preventDefault();st.playing?pause():play()}else if(e.key==='r'||e.key==='R')replay();else if(e.key==='f'||e.key==='F')$('fs').click();else if(e.key==='m'||e.key==='M')$('snd').click();else if(e.key==='ArrowRight')seek(st.t+5);else if(e.key==='ArrowLeft')seek(st.t-5)});
-window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick}; // console hooks for scrubbing/debugging
-window.game={G,MV,BOSSES,startFight,toMenu,enterGame,updGame,renderGame,syncTouch,get mode(){return MODE}};
+// debug hooks (tests, console scrubbing) exist only with ?debug in the URL or when a test harness sets ISSEN_DEBUG: never in normal play or the APK
+const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search);
+if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
+ window.game={G,MV,BOSSES,ARENAS,HERO_D,startFight,toMenu,enterGame,updGame,renderGame,syncTouch,get mode(){return MODE}}}
 (async()=>{try{await Promise.race([Promise.all([document.fonts.load('380px "Yuji Boku"','一閃終師'),document.fonts.load('46px "Cormorant Garamond"')]),new Promise(r=>setTimeout(r,3500))])}catch(e){}
  build();st.ready=true;const q=new URLSearchParams(location.search);
  if(q.has('t')){seek(+q.get('t'));cover.classList.add('off')}else{render(3.4);st.dirty=false} // poster = finished title card; playback still starts at 0
