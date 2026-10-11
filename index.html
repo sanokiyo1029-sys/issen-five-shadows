@@ -69,7 +69,7 @@ canvas{display:block;width:100%;height:100%}
 .panel p{font:italic 1.5cqw/1.45 'Cormorant Garamond',serif;margin:0 0 .6cqw;max-width:52cqw}
 .card .n,.card .ar,.card .stt{font-size:max(.85cqw,9px)}.card .ti{font-size:max(1.05cqw,10px)}.card .nm{font-size:max(1.45cqw,12px)}.card .kj{font-size:max(3.4cqw,24px)}
 .keys{font-size:max(1.25cqw,11px)!important}.panel p,.tag{font-size:max(1.45cqw,12px)}
-body.touch .kb,body:not(.touch) .tc{display:none}
+body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp{display:none}
 .install{font:italic 500 max(1.05cqw,12px)/1.5 'Cormorant Garamond',serif;color:rgba(21,19,15,.78);background:rgba(236,229,214,.75);padding:.35em 1em;border-radius:999px;display:flex;gap:.9em;align-items:center;flex-wrap:wrap;justify-content:center}
 .panel .rw{font-style:normal;font-weight:500;font-size:max(1.2cqw,11px);margin:0;max-width:70cqw}
 .xpbar{width:36cqw;height:max(.6cqw,5px);background:rgba(21,19,15,.15);border-radius:99px;overflow:hidden}.xpbar i{display:block;height:100%;width:0;background:var(--ink)}
@@ -138,8 +138,12 @@ body.touch .kb,body:not(.touch) .tc{display:none}
     <b>斬 Slash</b><span>Tap three times to combo · with joystick forward: lunge · down: low cut · in the air: overhead</span><b>蹴 Kick</b><span>Pushes away · forward: roundhouse (knockdown) · down: sweep</span>
     <b>守 Block</b><span>Hold to stand your ground · hold with joystick down to block low attacks</span><b>跳 Jump</b><span>Same as pushing the joystick up</span><b>墨 Ink · 閃 Issen</b><span>Ink wave costs one bar · Issen needs all three — it glows red when ready</span><b>Power (e.g. 月)</b><span>Appears once you absorb a shadow’s power · costs ink, then cools down</span></div>
     <div class="keys kb"><b>← →  /  A D</b><span>Move — walking away from the enemy blocks</span><b>↑  /  W</b><span>Jump — leaps over low attacks</span><b>↓  /  S</b><span>Crouch — ducks high attacks; crouch + back blocks low ones</span>
+    <b>H  /  Shift</b><span>Block — hold to guard where you stand, even as a shadow appears behind you · with ↓ it guards low</span>
     <b>J  /  Z</b><span>Slash — tap three times to combo · → J lunge · ↓ J low cut · in the air: overhead</span><b>K  /  X</b><span>Kick — pushes away · → K roundhouse (knockdown) · ↓ K sweep</span>
     <b>L  /  C</b><span>Ink wave — a thrown brushstroke, costs one ink bar</span><b>I  /  V</b><span>Issen — all three ink bars: an unblockable single stroke</span><b>U  /  O</b><span>Absorbed powers in slots 1 and 2 — each costs ink, then cools down</span><b>Esc · F · M</b><span>Pause · fullscreen · sound</span></div>
+    <div class="keys gp"><b>Left stick · D-pad</b><span>Move — walking away blocks · up jumps · down crouches</span><b>LB</b><span>Block — hold to guard in place · with down it guards low</span>
+    <b>A</b><span>Jump</span><b>X</b><span>Slash — press three times to combo · forward: lunge · down: low cut · in the air: overhead</span><b>Y</b><span>Kick — pushes away · forward: roundhouse · down: sweep</span>
+    <b>RB · RT</b><span>Ink wave (one bar) · Issen (all three bars)</span><b>LT · R3</b><span>Absorbed powers in slots 1 and 2</span><b>Start</b><span>Pause · in menus the stick moves, A selects, B goes back</span></div>
     <p>Hits and blocks fill your ink. Win two rounds to defeat a shadow.</p><button class="big" id="hClose">Understood</button></div>
   <div id="bar" class="off">
     <button id="pp" aria-label="Play or pause"><svg viewBox="0 0 24 24"><path id="ppi" d="M7 4.5v15l12.5-7.5z"/></svg></button>
@@ -985,7 +989,7 @@ function hud(c){screen(c);const pl=G.P,bo=G.B;c.globalAlpha=.85;c.drawImage(MIST
  c.fillStyle=INK;c.textAlign='center';c.textBaseline='middle';c.font='600 50px "Cormorant Garamond", serif';c.fillText(Math.max(0,Math.ceil(G.timer)),cx,cy+2);
  c.font='500 20px "Cormorant Garamond", serif';c.fillStyle=ink(.6);c.fillText(['FIRST','SECOND','THIRD','FOURTH','FIFTH'][G.lv]+' SHADOW · '+ARENAS[G.def.arena].name.toUpperCase(),cx,184);
  if(G.hint>0&&G.state!=='ko'&&G.state!=='absorb'){const a=clamp(G.hint);c.globalAlpha=a*.86;c.fillStyle=PAPER;c.beginPath();c.roundRect(W/2-850,H-112,1700,96,48);c.fill();c.globalAlpha=a;c.fillStyle=INK;c.font='500 25px "Cormorant Garamond", "Yuji Boku", serif';
-  c.fillText(TOUCH.on?'Joystick  move  ·  pull back or 守  block  ·  up  jump  ·  down  crouch  ·  斬  slash  ·  蹴  kick  ·  墨  ink wave  ·  閃  issen':'← →  move  ·  hold back  block  ·  ↑  jump  ·  ↓  crouch  ·  J  slash  ·  K  kick  ·  L  ink wave  ·  I  issen  ·  Esc  pause',W/2,H-72);c.font='italic 23px "Cormorant Garamond", serif';c.fillStyle=ink(.7,a);c.fillText(G.def.tip,W/2,H-38);c.globalAlpha=1}
+  c.fillText(PAD.on?'Stick  move  ·  LB  block  ·  A  jump  ·  down  crouch  ·  X  slash  ·  Y  kick  ·  RB  ink wave  ·  RT  issen  ·  Start  pause':TOUCH.on?'Joystick  move  ·  pull back or 守  block  ·  up  jump  ·  down  crouch  ·  斬  slash  ·  蹴  kick  ·  墨  ink wave  ·  閃  issen':'← →  move  ·  H or hold back  block  ·  ↑  jump  ·  ↓  crouch  ·  J  slash  ·  K  kick  ·  L  ink wave  ·  I  issen  ·  Esc  pause',W/2,H-72);c.font='italic 23px "Cormorant Garamond", serif';c.fillStyle=ink(.7,a);c.fillText(G.def.tip,W/2,H-38);c.globalAlpha=1}
  c.textBaseline='alphabetic'}
 const BANB={}; // banner glyph + its blurred shadow, built once (a blur filter every frame is slow on phones)
 function banner(c){const b=G.ban;if(!b)return;const u=G.rt-b.t0;if(u>b.dur){G.ban=null;return}
@@ -1143,13 +1147,34 @@ function openChar(mode){const p=SV.profile,l=levelOf(p.xp),rom=['I','II','III','
    [['Load it',()=>{d.rev=Math.max(d.rev,SV.rev);SV=d;writeSave(SV);openChar()},1],['Cancel',()=>openChar('import')]])});
  show('char');if(mode)code.focus()}
 function togglePause(){if(MODE!=='game'||G.state==='over')return;if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;show(G.paused?'pause':null);G.keys={}}
-const KMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',Escape:'pause',KeyP:'pause'};
-function gameKey(e,down){if(e.code==='KeyF'&&down){document.getElementById('fs').click();return}if(e.code==='KeyM'&&down){document.getElementById('snd').click();return}
+const KMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',KeyH:'block',ShiftLeft:'block',ShiftRight:'block',Escape:'pause',KeyP:'pause'};
+function gameKey(e,down){if(down)usePad(false);if(e.code==='KeyF'&&down){document.getElementById('fs').click();return}if(e.code==='KeyM'&&down){document.getElementById('snd').click();return}
  if(MODE==='game'&&G.state==='absorb'){if(down&&!e.repeat&&G.st>.8){e.preventDefault();absorbDone()}return}
  const a=KMAP[e.code];if(!a||MODE!=='game')return;e.preventDefault();if(a==='pause'){if(down&&!e.repeat)togglePause();return}if(G.paused)return;
  if(a==='slash'||a==='kick'||a==='ink'||a==='issen'||a==='power1'||a==='power2'){if(down&&!e.repeat)G.buf={a,t:G.t};return}
  if(a==='up'&&down&&!e.repeat)G.jb=G.t;G.keys[a]=down}
 addEventListener('blur',()=>{G.keys={}});
+/* --- gamepad (Gamepad API, standard mapping), polled once per frame; hot-plug works because getGamepads() is re-read each frame.
+   It writes G.keys only when its own state changes, so the keyboard and touch keep working beside it. --- */
+const PADB={0:'jump',2:'slash',3:'kick',4:'block',5:'ink',6:'power1',7:'issen',11:'power2',9:'pause',8:'pause'},PAD={on:false,prev:{},held:{},nav:0};
+const usePad=v=>{if(PAD.on===v)return;PAD.on=v;document.body.classList.toggle('pad',v);if(v&&TOUCH.on)setTouch(false)};
+function pollPad(){const ps=navigator.getGamepads?[...navigator.getGamepads()].filter(p=>p&&p.connected):[],gp=ps.find(p=>p.mapping==='standard')||ps[0];
+ if(!gp){for(const k in PAD.held)if(PAD.held[k])G.keys[k]=false;PAD.held={};PAD.prev={};return}
+ const b=i=>!!(gp.buttons[i]&&gp.buttons[i].pressed),a0=gp.axes[0]||0,a1=gp.axes[1]||0,m=Math.hypot(a0,a1),k=m<.3?0:(m-.3)/(.7*m); // radial dead zone .3, rescaled
+ const nx=a0*k,ny=a1*k,held={left:b(14)||nx<-.4,right:b(15)||nx>.4,down:b(13)||ny>.55,block:b(4)},up=b(12)||ny<-.6,edge=[];
+ for(const i in PADB)if(b(i)&&!PAD.prev[i])edge.push(PADB[i]);const upE=up&&!PAD.prev.up;PAD.prev={up};for(const i in PADB)PAD.prev[i]=b(i);
+ if(edge.length||upE||held.left||held.right||held.down)usePad(true);
+ const fight=MODE==='game'&&!G.paused&&G.state!=='over'&&G.state!=='absorb';
+ for(const k in held)if(held[k]!==!!PAD.held[k])G.keys[k]=fight&&held[k];PAD.held=fight?held:{};
+ if(fight){if(upE)G.jb=G.t;for(const a of edge){if(a==='pause')togglePause();else if(a==='jump')G.jb=G.t;else if(a!=='block')G.buf={a,t:G.t}}return}
+ if(MODE==='game'&&G.state==='absorb'){if(edge.length&&G.st>.8)absorbDone();return}
+ if(MODE==='game'&&G.paused&&edge.includes('pause')){togglePause();return}
+ // menus: stick / d-pad moves the focus through the visible buttons, A presses, B goes back
+ const dir=(held.right||held.down?1:0)-(held.left||up?1:0);if(!dir)PAD.nav=0;else if(PAD.nav!==dir){PAD.nav=dir;
+  const bs=[...document.querySelectorAll('button')].filter(e=>!e.disabled&&e.offsetParent&&!e.closest('.off,#touch,#bar')),i=bs.indexOf(document.activeElement),n=bs.length;
+  if(n)bs[i<0?(dir>0?0:n-1):(i+dir+n)%n].focus()}
+ if(b(0)&&!PAD.prevA&&document.activeElement&&document.activeElement.tagName==='BUTTON')document.activeElement.click();
+ if(b(1)&&!PAD.prevB)window.issenApp.back();PAD.prevA=b(0);PAD.prevB=b(1)}
 
 /* ================= player UI ================= */
 const $=id=>document.getElementById(id),stage=$('stage'),cover=$('cover'),endc=$('endc'),bar=$('bar'),fill=$('fill'),tm=$('time');
@@ -1168,7 +1193,7 @@ function poke(){if(MODE!=='film')return;bar.classList.remove('off');stage.classL
 const AQ={n:0,slow:0,t:0};
 function adapt(raw){if(raw>.25)return;AQ.n++;AQ.t+=raw;if(raw>.026)AQ.slow++;if(AQ.t<2)return;if(AQ.slow>AQ.n/2&&QS>.4)setQS(Math.max(.4,QS*.82));AQ.n=AQ.slow=AQ.t=0}
 function frame(now){const raw=(now-st.last)/1000||0,dt=Math.min(.1,raw);st.last=now;
- syncTouch();
+ pollPad();syncTouch();
  if(MODE!=='film'){if(st.ready){G.rdt=dt;G.rt+=dt;if(MODE==='game'){if(!G.paused){adapt(raw);stepGame(dt);renderGame()}}else{adapt(raw);G.mt+=dt;renderMenu(G.mt)}}requestAnimationFrame(frame);return}
  if(st.playing){adapt(raw);const a=st.t;st.t=Math.min(DUR,st.t+dt);audioTick(a,st.t);if(st.t>=DUR){st.playing=false;audioSilence();setPP();endc.classList.remove('off');$('skip').classList.add('off');poke();$('enterGame').focus()}st.dirty=true}
  if(st.dirty&&st.ready){render(st.t);st.dirty=false;fill.style.width=(st.t/DUR*100)+'%';tm.textContent=`${fmt(st.t)} / ${fmt(DUR)}`;$('prog').setAttribute('aria-valuenow',st.t.toFixed(1))}requestAnimationFrame(frame)}
@@ -1180,7 +1205,7 @@ $('pResume').onclick=togglePause;$('pRestart').onclick=()=>startFight(G.lv);$('p
 /* --- touch controls: floating joystick + multi-touch buttons feed the same G.keys / G.buf as the keyboard --- */
 const tEls={touch:$('touch'),pause:$('tPause'),ink:$('tbInk'),issen:$('tbIssen'),p1:$('tbP1')},capture=(el,id)=>{try{el.setPointerCapture(id)}catch(e){}};
 const setTouch=v=>{TOUCH.on=v;document.body.classList.toggle('touch',v)};setTouch(TOUCH.on);
-addEventListener('pointerdown',e=>{if(e.pointerType==='touch'&&!TOUCH.on)setTouch(true)},true);
+addEventListener('pointerdown',e=>{if(e.pointerType==='touch'){usePad(false);if(!TOUCH.on)setTouch(true)}},true);
 {const zone=$('stickZone'),stk=$('stick'),knob=$('knob');let id=null,sx=0,sy=0,up=false;
  const move=e=>{const R=stk.offsetWidth*.36;let dx=e.clientX-sx,dy=e.clientY-sy;const d=Math.hypot(dx,dy);if(d>R){dx*=R/d;dy*=R/d}knob.style.transform=`translate(${dx}px,${dy}px)`;
   const nx=dx/R,ny=dy/R,k=G.keys;k.left=nx<-.35;k.right=nx>.35;k.down=ny>.5;const u=ny<-.55;if(u&&!up)G.jb=G.t;up=u};
@@ -1210,7 +1235,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 // debug hooks (tests, console scrubbing) exist only with ?debug in the URL or when a test harness sets ISSEN_DEBUG: never in normal play or the APK
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
- window.game={G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,stepGame,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}}}
+ window.game={G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}}}
 (async()=>{try{await Promise.race([Promise.all([document.fonts.load('380px "Yuji Boku"','一閃終師'),document.fonts.load('46px "Cormorant Garamond"')]),new Promise(r=>setTimeout(r,3500))])}catch(e){}
  build();st.ready=true;const q=new URLSearchParams(location.search);
  if(q.has('t')){seek(+q.get('t'));cover.classList.add('off')}else{render(3.4);st.dirty=false} // poster = finished title card; playback still starts at 0
