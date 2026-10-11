@@ -92,6 +92,8 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
 .tb[data-a=slash] b{font-size:calc(40*var(--u))}
 .tb[data-a=kick]{width:calc(80*var(--u));height:calc(80*var(--u));right:calc(136*var(--u) + env(safe-area-inset-right));bottom:calc(20*var(--u) + env(safe-area-inset-bottom))}
 .tb[data-a=block]{width:calc(70*var(--u));height:calc(70*var(--u));right:calc(230*var(--u) + env(safe-area-inset-right));bottom:calc(28*var(--u) + env(safe-area-inset-bottom))}
+.tb[data-a=roll]{width:calc(64*var(--u));height:calc(64*var(--u));right:calc(310*var(--u) + env(safe-area-inset-right));bottom:calc(24*var(--u) + env(safe-area-inset-bottom))}
+.tb svg{width:calc(30*var(--u));height:calc(30*var(--u));fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .tb[data-a=jump]{width:calc(74*var(--u));height:calc(74*var(--u));right:calc(32*var(--u) + env(safe-area-inset-right));bottom:calc(136*var(--u) + env(safe-area-inset-bottom))}
 .tb[data-a=ink]{width:calc(64*var(--u));height:calc(64*var(--u));right:calc(132*var(--u) + env(safe-area-inset-right));bottom:calc(118*var(--u) + env(safe-area-inset-bottom))}
 .tb[data-a=power1]{width:calc(64*var(--u));height:calc(64*var(--u));right:calc(222*var(--u) + env(safe-area-inset-right));bottom:calc(112*var(--u) + env(safe-area-inset-bottom))}.tb.off{display:none}
@@ -136,13 +138,14 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
   <div class="panel dim off" id="help" role="dialog" aria-labelledby="hTitle"><h2 id="hTitle">The Way of the Stroke</h2>
     <div class="keys tc"><b>Joystick</b><span>Drag left or right to move — pulling away from the enemy blocks</span><b>Joystick up · down</b><span>Up jumps over low attacks · down crouches under high ones</span>
     <b>斬 Slash</b><span>Tap three times to combo · with joystick forward: lunge · down: low cut · in the air: overhead</span><b>蹴 Kick</b><span>Pushes away · forward: roundhouse (knockdown) · down: sweep</span>
-    <b>守 Block</b><span>Hold to stand your ground · hold with joystick down to block low attacks</span><b>跳 Jump</b><span>Same as pushing the joystick up</span><b>墨 Ink · 閃 Issen</b><span>Ink wave costs one bar · Issen needs all three — it glows red when ready</span><b>Power (e.g. 月)</b><span>Appears once you absorb a shadow’s power · costs ink, then cools down</span></div>
+    <b>守 Block</b><span>Hold to stand your ground · hold with joystick down to block low attacks</span><b>跳 Jump</b><span>Same as pushing the joystick up</span><b>Roll (swirl)</b><span>A quick tumble that slips through attacks — safe only mid-roll, open to hits as you rise · rolls away, or toward where you push · 0.7 s to recover</span><b>墨 Ink · 閃 Issen</b><span>Ink wave costs one bar · Issen needs all three — it glows red when ready</span><b>Power (e.g. 月)</b><span>Appears once you absorb a shadow’s power · costs ink, then cools down</span></div>
     <div class="keys kb"><b>← →  /  A D</b><span>Move — walking away from the enemy blocks</span><b>↑  /  W</b><span>Jump — leaps over low attacks</span><b>↓  /  S</b><span>Crouch — ducks high attacks; crouch + back blocks low ones</span>
     <b>H  /  Shift</b><span>Block — hold to guard where you stand, even as a shadow appears behind you · with ↓ it guards low</span>
+    <b>Space</b><span>Roll — a quick tumble that slips through attacks: safe only mid-roll, open to hits as you rise · rolls away, or toward ← → · 0.7 s to recover</span>
     <b>J  /  Z</b><span>Slash — tap three times to combo · → J lunge · ↓ J low cut · in the air: overhead</span><b>K  /  X</b><span>Kick — pushes away · → K roundhouse (knockdown) · ↓ K sweep</span>
     <b>L  /  C</b><span>Ink wave — a thrown brushstroke, costs one ink bar</span><b>I  /  V</b><span>Issen — all three ink bars: an unblockable single stroke</span><b>U  /  O</b><span>Absorbed powers in slots 1 and 2 — each costs ink, then cools down</span><b>Esc · F · M</b><span>Pause · fullscreen · sound</span></div>
     <div class="keys gp"><b>Left stick · D-pad</b><span>Move — walking away blocks · up jumps · down crouches</span><b>LB</b><span>Block — hold to guard in place · with down it guards low</span>
-    <b>A</b><span>Jump</span><b>X</b><span>Slash — press three times to combo · forward: lunge · down: low cut · in the air: overhead</span><b>Y</b><span>Kick — pushes away · forward: roundhouse · down: sweep</span>
+    <b>A · B</b><span>Jump · roll (safe only mid-roll; 0.7 s to recover)</span><b>X</b><span>Slash — press three times to combo · forward: lunge · down: low cut · in the air: overhead</span><b>Y</b><span>Kick — pushes away · forward: roundhouse · down: sweep</span>
     <b>RB · RT</b><span>Ink wave (one bar) · Issen (all three bars)</span><b>LT · R3</b><span>Absorbed powers in slots 1 and 2</span><b>Start</b><span>Pause · in menus the stick moves, A selects, B goes back</span></div>
     <p>Hits and blocks fill your ink. Win two rounds to defeat a shadow.</p><button class="big" id="hClose">Understood</button></div>
   <div id="bar" class="off">
@@ -159,6 +162,7 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
   <button class="tb" data-a="slash" aria-label="Slash"><b>斬</b><i>Slash</i></button>
   <button class="tb" data-a="kick" aria-label="Kick"><b>蹴</b><i>Kick</i></button>
   <button class="tb" data-a="block" aria-label="Block (hold)"><b>守</b><i>Block</i></button>
+  <button class="tb" data-a="roll" id="tbRoll" aria-label="Roll"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12.5a7.5 7.5 0 1 1-2.6-5.7"/><path d="M18.5 3.5v4h-4"/></svg><i>Roll</i></button>
   <button class="tb" data-a="jump" aria-label="Jump"><b>跳</b><i>Jump</i></button>
   <button class="tb dis" data-a="ink" id="tbInk" aria-label="Ink wave"><b>墨</b><i>Ink</i></button>
   <button class="tb dis" data-a="issen" id="tbIssen" aria-label="Issen"><b>閃</b><i>Issen</i></button>
@@ -177,6 +181,10 @@ body.touch .kb,body:not(.touch) .tc,body.pad .kb,body.pad .tc,body:not(.pad) .gp
   "tetsugoro":{"xp":1300,"skill_points":1,"mon":200,"power":"iron_resolve"},
   "shirasagi":{"xp":1700,"skill_points":1,"mon":250,"power":"phantom_edge"},
   "akuma":{"xp":2200,"skill_points":2,"mon":400,"power":"demon_sovereignty"}}}
+</script>
+<script type="application/json" id="data-movement">
+{"schema_version":1,
+ "roll":{"dur":0.34,"dist":240,"travel":0.26,"inv":[0.05,0.22],"cd":0.7}}
 </script>
 <script type="application/json" id="data-powers">
 {"schema_version":1,
@@ -742,6 +750,7 @@ const CR={tl:.35,hd:-.1,th1:1.35,sh1:-.25,th2:.7,sh2:-.95},JMP={tl:.3,th1:1.6,sh
 const KG=P({tl:.28,hd:-.15,ua1:.95,fa1:1.95,ua2:.55,fa2:1.7,sw:2.4,sw2:2.7,sheath:0,th1:.6,sh1:.05,th2:-.6,sh2:-.5});
 const KS1=P(KG,{ua1:1.55,fa1:1.62,sw:1.62,tl:.42,th1:.95,sh1:.1,th2:-.8,sh2:-.9}),KS2=P(KG,{ua2:1.55,fa2:1.62,sw2:1.6,ua1:.5,fa1:1.0,tl:.42,th1:.95,sh1:.1,th2:-.8,sh2:-.9});
 const SPLL=P(SPL,{sw:1.95,tl:.7,th1:1.4,sh1:.3,th2:-1.1,sh2:-1.5}),SPUP=P(SPG,{ua1:2.4,fa1:2.8,sw:3.9,tl:-.1});
+const ROLLP={tl:.95,hd:.55,ua1:1.15,fa1:2.25,ua2:1.0,fa2:2.0,th1:2.35,sh1:-.35,th2:2.1,sh2:-.6,sw:-2.5,g2:0}; // the roll's tuck
 const ARENA=900,GRAV=2700,ZY={high:-200,mid:-135,low:-45};
 // moves: dur, hit windows [start,end], reach, dmg, zone (high=duck it, low=jump it / crouch-block), kd=knockdown, fr=pose keyframes from guard g
 const MV={
@@ -841,9 +850,13 @@ function amb(w,r,ru){if(!AU.ctx)return;const now=AU.ctx.currentTime;AU.wind.gain
 function mkF(def,isP){const moves=Object.create(MV);for(const id of def.powers||[])if(id)moves[POWERS[id].move]=HERO_MV[POWERS[id].move];
  return{def,isP,moves,maxHp:def.hp,hp:def.hp,lag:def.hp,lagHold:0,ink:0,wins:0,x:0,y:0,vx:0,vy:0,f:1,st:'idle',stT:0,mv:null,mvT:0,mvId:0,mask:0,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},ai:{t:1,pt:0,blk:0,plan:'hold'},hitFlash:0,d:{}}}
 const setSt=(F,s)=>{F.st=s;F.stT=0};
+// dodge roll (data-movement.roll): invulnerable only inside inv, then a vulnerable rise; ends facing the opponent
+const rollInv=F=>F.st==='roll'&&F.stT>=MOVE.roll.inv[0]&&F.stT<MOVE.roll.inv[1];
+function startRoll(F,O,inp){if((F.rollCd||0)>G.t)return false;const dir=inp.mx||-F.f;
+ F.roll={x0:F.x,dir};F.rollCd=G.t+MOVE.roll.cd;F.block=F.crouch=false;F.vx=0;setSt(F,'roll');fxAdd({k:'dust',x:F.x,y:0});snd('whoosh',.35);return true}
 const isFree=F=>F.st==='idle'||F.st==='walk'||F.st==='crouch';
 function fxAdd(o){o.t0=G.t;o.seed=Math.random()*1000;G.fx.push(o);if(o.persist){const ps=G.fx.filter(f=>f.persist);if(ps.length>16)G.fx.splice(G.fx.indexOf(ps[0]),1)}}
-function heroMove(F,a,inp){const fwd=inp.mx===F.f;if(a==='power1'||a==='power2'){const id=(F.def.powers||[])[a==='power1'?0:1];return id?POWERS[id].move:null}if(a==='slash')return F.air?'air':inp.down?'low':fwd?'lunge':'slash';if(a==='kick')return F.air?'airKick':inp.down?'sweepK':fwd?'round':'kick';if(a==='ink')return F.ink>=33.3?'wave':null;return F.ink>=99.5?'issen':null}
+function heroMove(F,a,inp){const fwd=inp.mx===F.f;if(a==='power1'||a==='power2'){const id=(F.def.powers||[])[a==='power1'?0:1];return id?POWERS[id].move:null}if(a==='slash')return F.air?'air':inp.down?'low':fwd?'lunge':'slash';if(a==='kick')return F.air?'airKick':inp.down?'sweepK':fwd?'round':'kick';if(a==='ink')return F.ink>=33.3?'wave':null;return a==='issen'&&F.ink>=99.5?'issen':null}
 function startMove(F,n){const m=F.moves[n];if(!m||m.cd&&(F.cd[n]||0)>G.t)return false;const O=F===G.P?G.B:G.P;
  if(m.cost){if(F.ink<m.cost*33.3-.5)return false;F.ink=Math.max(0,F.ink-m.cost*33.34)}
  F.mv=m;F.mvT=0;F.mask=0;F.mvId=++G.mvId;F.next=null;F.d={};setSt(F,'move');F.block=false;F.crouch=!!m.crouch;
@@ -858,7 +871,7 @@ function stepMove(F,O,dt){const m=F.mv,a=F.mvT,b=a+dt;F.mvT=b;
  if(F.mv!==m)return;
  if(m.air&&!F.air&&b>.08){F.mv=null;setSt(F,'idle');return}
  if(b>=m.dur){F.mv=null;F.manual=false;F.alpha=1;const n=F.next;F.next=null;if(n&&startMove(F,n))return;setSt(F,F.air?'jump':'idle')}}
-function tryHit(A,Dd,m,proj){if(Dd.inv>0||Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')return false;
+function tryHit(A,Dd,m,proj){if(Dd.inv>0||rollInv(Dd)||Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')return false;
  if(!proj){const dx=(Dd.x-A.x)*A.f;if(dx<-40||dx>m.reach*A.def.s+20*Dd.def.s)return false}
  const dAir=Dd.y<-50,dir=proj?Math.sign(m.vx)||A.f:A.f;
  if(!proj&&(m.zone==='high'&&Dd.crouch&&!dAir||m.zone==='low'&&dAir))return false;
@@ -887,10 +900,13 @@ function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;if(F.hitFlash>0)F.hitFlash-=
   case 'hit':case 'bstun':F.vx*=Math.pow(.015,dt);if(F.stT>=F.stun)setSt(F,'idle');break;
   case 'down':F.vx*=Math.pow(.04,dt);if(F.stT>.95&&!F.air&&F.hp>0)setSt(F,'getup');break;
   case 'getup':F.inv=.15;F.vx=0;if(F.stT>.42)setSt(F,'idle');break;
+  case 'roll':{const R=MOVE.roll,d=F.roll.dir,min=58*(F.def.s+O.def.s)/2;let x=F.roll.x0+d*R.dist*E.out(clamp(F.stT/R.travel));if(F.isP)G.buf=null; // presses during a roll are dropped: no attacking out of it
+   if((O.x-F.roll.x0)*d>0)x=d>0?Math.min(x,O.x-min):Math.max(x,O.x+min);F.x=x;F.vx=0;if(F.stT>=R.dur){F.f=O.x>=F.x?1:-1;setSt(F,'idle');fxAdd({k:'dust',x:F.x,y:0})}break}
   case 'dead':case 'win':F.vx*=Math.pow(.04,dt);break;
   case 'jump':if(inp.atk){const n=F.isP?heroMove(F,inp.atk,inp):inp.atk;if(F.isP)G.buf=null;if(n&&F.moves[n]&&F.moves[n].air)startMove(F,n)}break;
   default:{F.f=O.x>=F.x?1:-1;F.crouch=inp.down;F.block=inp.mx===-F.f||!!inp.block;
-   if(inp.atk){const n=F.isP?heroMove(F,inp.atk,inp):inp.atk;if(F.isP)G.buf=null;if(n&&startMove(F,n))break}
+   if(inp.atk==='roll'){if(F.isP)G.buf=null;if(startRoll(F,O,inp))break}
+   else if(inp.atk){const n=F.isP?heroMove(F,inp.atk,inp):inp.atk;if(F.isP)G.buf=null;if(n&&startMove(F,n))break}
    if(inp.up){F.vy=-1000;F.vx=inp.mx*sp*.95;F.air=true;F.crouch=false;F.block=false;setSt(F,'jump');snd('whoosh',.25);if(F.isP)G.jb=-9;break}
    F.vx=F.crouch||inp.block?0:inp.mx*sp*(F.block?.6:1);const ns=F.crouch?'crouch':inp.mx?'walk':'idle';if(F.st!==ns)setSt(F,ns)}}
  if(!F.manual){F.x+=F.vx*dt;if(F.air||F.y<0){F.vy+=GRAV*dt;F.y+=F.vy*dt;if(F.y>=0){F.y=0;F.vy=0;F.air=false;if(F.st==='jump')setSt(F,'idle');fxAdd({k:'dust',x:F.x,y:0})}}}
@@ -916,7 +932,7 @@ const STEP=1/60;
 function stepGame(dt){G.acc=Math.min(G.acc+dt,.1);while(G.acc>=STEP-1e-9){G.acc-=STEP;for(const F of[G.P,G.B]){F.px=F.x;F.py=F.y}for(const p of G.proj)p.px=p.x;updGame(STEP)}G.ia=clamp(G.acc/STEP)}
 const ip=(v,pv)=>pv==null||Math.abs(v-pv)>150?v:lerp(pv,v,G.ia);
 function readIn(){const k=G.keys;return{mx:(k.right?1:0)-(k.left?1:0),up:fresh(G.jb,.15),down:!!k.down,block:!!k.block,atk:G.buf&&fresh(G.buf.t,.28)?G.buf.a:null}}
-function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
+function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},rollCd:0,roll:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
  G.proj=[];G.fx=[];G.timer=60;G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
  G.ban=G.round===1?{k:G.def.jp,sub:`${G.def.name}, ${G.def.title}`,t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
 function endRound(){G.rw.wins++;if(G.rw.wins>=2)matchEnd(G.rw===G.P);else{G.round++;newRound()}}
@@ -947,13 +963,15 @@ function poseOf(F){const d=F.def,g=d.guard;let p;
   case 'hit':p=mixv(P(g,STAG),g,ss(0,F.stun,F.stT));break;
   case 'down':case 'dead':p=P(DOWNP,{rot:-lerp(.2,1.5,ss(0,.35,F.stT))});break;
   case 'getup':p=mixv(P(DOWNP,{rot:-1.5}),g,ss(0,.42,F.stT));break;
+  case 'roll':{const R=MOVE.roll,u=clamp(F.stT/R.travel),k=Math.min(ss(0,.05,F.stT),1-ss(R.travel-.02,R.dur,F.stT));p=mixv(P(g,CR),P(g,ROLLP),k);p.rot=(F.roll.dir===F.f?1:-1)*(E.io(u)*6.2832%6.2832);break}
   case 'win':p=d.win||g;break;
   default:p=P(g,{tl:g.tl+Math.sin(G.t*2.6+d.s*3)*.025})}
  if(isFree(F)&&F.block){const wl=walk(F.x*.04*F.f,.6);p=F.crouch?P(g,CR,BLKL):P(g,BLK,F.st==='walk'?{th1:wl.th1,sh1:wl.sh1,th2:wl.th2,sh2:wl.sh2}:{})}
  p=Object.assign(P(),p,d.wk);p.x=ip(F.x,F.px);p.f=F.f;p.s=d.s;p.lift=(p.lift||0)-ip(F.y,F.py);p.rage=F.rage?1:0;p.stream=0;return p}
 function drawF(g,F){const p=poseOf(F);if(F.hitFlash>0)p.x+=noise(G.t*90)*8;if(F.alpha<.03)return;
  if(F.rage){g.globalAlpha=.4+.15*Math.sin(G.t*9);g.drawImage(GLOW,p.x-170*p.s,-p.lift-330*p.s,340*p.s,380*p.s)}
- g.globalAlpha=F.alpha;fig(g,p,F.def.kind,G.t);g.globalAlpha=1;
+ if(F.st==='roll'&&F.stT<MOVE.roll.travel){const d=F.roll.dir,a=1-F.stT/MOVE.roll.travel;g.fillStyle=INK;for(let k=0;k<3;k++){const y=-40-k*42,x=p.x-d*(70+k*24);g.globalAlpha=.35*a;brush(g,[[x,y],[x-d*(90+k*30)*a,y+3]],7-k*1.5,{taper:u=>1-u})}}
+ g.globalAlpha=F.alpha*(rollInv(F)?.5:1);fig(g,p,F.def.kind,G.t);g.globalAlpha=1;
  if(F.st==='move'&&F.mv.tell&&F.mvT>F.mv.tell[0]&&F.mvT<F.mv.tell[1]){const q=bladePt(p,F.def.kind,130),u=(F.mvT-F.mv.tell[0])/(F.mv.tell[1]-F.mv.tell[0]);g.globalAlpha=Math.sin(u*Math.PI);g.drawImage(MIST,q[0]-50,q[1]-50,100,100);g.fillStyle=RED;g.save();g.translate(q[0],q[1]);g.rotate(u*3);for(let k=0;k<4;k++){g.rotate(Math.PI/2);tri(g,[-3,0],[3,0],[0,-26])}g.restore();g.globalAlpha=1}}
 function drawFx(c){camT(c,1);for(const f of G.fx){const age=G.t-f.t0;
  if(f.k==='slash')slashMark(c,f.x,f.y,f.a,230,age,13);
@@ -989,7 +1007,7 @@ function hud(c){screen(c);const pl=G.P,bo=G.B;c.globalAlpha=.85;c.drawImage(MIST
  c.fillStyle=INK;c.textAlign='center';c.textBaseline='middle';c.font='600 50px "Cormorant Garamond", serif';c.fillText(Math.max(0,Math.ceil(G.timer)),cx,cy+2);
  c.font='500 20px "Cormorant Garamond", serif';c.fillStyle=ink(.6);c.fillText(['FIRST','SECOND','THIRD','FOURTH','FIFTH'][G.lv]+' SHADOW · '+ARENAS[G.def.arena].name.toUpperCase(),cx,184);
  if(G.hint>0&&G.state!=='ko'&&G.state!=='absorb'){const a=clamp(G.hint);c.globalAlpha=a*.86;c.fillStyle=PAPER;c.beginPath();c.roundRect(W/2-850,H-112,1700,96,48);c.fill();c.globalAlpha=a;c.fillStyle=INK;c.font='500 25px "Cormorant Garamond", "Yuji Boku", serif';
-  c.fillText(PAD.on?'Stick  move  ·  LB  block  ·  A  jump  ·  down  crouch  ·  X  slash  ·  Y  kick  ·  RB  ink wave  ·  RT  issen  ·  Start  pause':TOUCH.on?'Joystick  move  ·  pull back or 守  block  ·  up  jump  ·  down  crouch  ·  斬  slash  ·  蹴  kick  ·  墨  ink wave  ·  閃  issen':'← →  move  ·  H or hold back  block  ·  ↑  jump  ·  ↓  crouch  ·  J  slash  ·  K  kick  ·  L  ink wave  ·  I  issen  ·  Esc  pause',W/2,H-72);c.font='italic 23px "Cormorant Garamond", serif';c.fillStyle=ink(.7,a);c.fillText(G.def.tip,W/2,H-38);c.globalAlpha=1}
+  c.fillText(PAD.on?'Stick  move  ·  LB  block  ·  A  jump  ·  B  roll  ·  down  crouch  ·  X  slash  ·  Y  kick  ·  RB  ink wave  ·  RT  issen  ·  Start  pause':TOUCH.on?'Joystick  move  ·  pull back or 守  block  ·  up  jump  ·  down  crouch  ·  roll button  dodge  ·  斬  slash  ·  蹴  kick  ·  墨  ink wave  ·  閃  issen':'← →  move  ·  H or hold back  block  ·  ↑  jump  ·  ↓  crouch  ·  Space  roll  ·  J  slash  ·  K  kick  ·  L  ink wave  ·  I  issen  ·  Esc  pause',W/2,H-72);c.font='italic 23px "Cormorant Garamond", serif';c.fillStyle=ink(.7,a);c.fillText(G.def.tip,W/2,H-38);c.globalAlpha=1}
  c.textBaseline='alphabetic'}
 const BANB={}; // banner glyph + its blurred shadow, built once (a blur filter every frame is slow on phones)
 function banner(c){const b=G.ban;if(!b)return;const u=G.rt-b.t0;if(u>b.dur){G.ban=null;return}
@@ -1023,11 +1041,12 @@ function renderMenu(t){setCam({x:-60+Math.sin(t*.05)*60,y:-270,z:1.05},0,t);clif
 /* --- progression: save v2, XP and levels, boss rewards, absorbed powers. Pure logic (no DOM); storage goes through `store`.
    Save format: docs/save-format.md · numbers: docs/balance.md --- */
 const DATA=id=>JSON.parse(document.getElementById(id).textContent);
-const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,BOSS_IDS=BOSSES.map(b=>b.id);
+const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,MOVE=DATA('data-movement'),BOSS_IDS=BOSSES.map(b=>b.id);
 function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
  ok(PROG.schema_version===1,'progression.schema_version');ok(DATA('data-powers').schema_version===1,'powers.schema_version');
  ok(PROG.xp.base>0&&PROG.xp.exponent>0&&PROG.xp.level_cap>=2&&PROG.xp.repeat_share>=0&&PROG.xp.repeat_share<=1,'xp curve');
  ok(PROG.power_slots.unlock_levels.length===2&&PROG.level_up.attr_points>=0,'slots / level-up');
+ {const r=MOVE.roll;ok(MOVE.schema_version===1&&r.dur>0&&r.dist>0&&r.travel>0&&r.travel<=r.dur&&r.inv[0]>=0&&r.inv[0]<r.inv[1]&&r.inv[1]<=r.dur&&r.cd>=r.dur,'movement.roll')}
  for(const id of BOSS_IDS){const r=PROG.rewards[id];ok(r&&r.xp>=0&&r.skill_points>=0&&r.mon>=0&&POWERS[r.power],'reward '+id)}
  for(const[id,p]of Object.entries(POWERS)){ok(/^[a-z_]+$/.test(id)&&BOSS_IDS.includes(p.boss)&&p.name&&p.jp&&p.short,'power '+id);if(p.ready)ok(HERO_MV[p.move]&&HERO_MV[p.move].cost>=0&&HERO_MV[p.move].cd>0,'power move '+id)}
  return e}
@@ -1147,16 +1166,16 @@ function openChar(mode){const p=SV.profile,l=levelOf(p.xp),rom=['I','II','III','
    [['Load it',()=>{d.rev=Math.max(d.rev,SV.rev);SV=d;writeSave(SV);openChar()},1],['Cancel',()=>openChar('import')]])});
  show('char');if(mode)code.focus()}
 function togglePause(){if(MODE!=='game'||G.state==='over')return;if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;show(G.paused?'pause':null);G.keys={}}
-const KMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',KeyH:'block',ShiftLeft:'block',ShiftRight:'block',Escape:'pause',KeyP:'pause'};
+const KMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',KeyH:'block',ShiftLeft:'block',ShiftRight:'block',Space:'roll',Escape:'pause',KeyP:'pause'};
 function gameKey(e,down){if(down)usePad(false);if(e.code==='KeyF'&&down){document.getElementById('fs').click();return}if(e.code==='KeyM'&&down){document.getElementById('snd').click();return}
  if(MODE==='game'&&G.state==='absorb'){if(down&&!e.repeat&&G.st>.8){e.preventDefault();absorbDone()}return}
  const a=KMAP[e.code];if(!a||MODE!=='game')return;e.preventDefault();if(a==='pause'){if(down&&!e.repeat)togglePause();return}if(G.paused)return;
- if(a==='slash'||a==='kick'||a==='ink'||a==='issen'||a==='power1'||a==='power2'){if(down&&!e.repeat)G.buf={a,t:G.t};return}
+ if(a==='slash'||a==='kick'||a==='ink'||a==='issen'||a==='power1'||a==='power2'||a==='roll'){if(down&&!e.repeat)G.buf={a,t:G.t};return}
  if(a==='up'&&down&&!e.repeat)G.jb=G.t;G.keys[a]=down}
 addEventListener('blur',()=>{G.keys={}});
 /* --- gamepad (Gamepad API, standard mapping), polled once per frame; hot-plug works because getGamepads() is re-read each frame.
    It writes G.keys only when its own state changes, so the keyboard and touch keep working beside it. --- */
-const PADB={0:'jump',2:'slash',3:'kick',4:'block',5:'ink',6:'power1',7:'issen',11:'power2',9:'pause',8:'pause'},PAD={on:false,prev:{},held:{},nav:0};
+const PADB={0:'jump',1:'roll',2:'slash',3:'kick',4:'block',5:'ink',6:'power1',7:'issen',11:'power2',9:'pause',8:'pause'},PAD={on:false,prev:{},held:{},nav:0};
 const usePad=v=>{if(PAD.on===v)return;PAD.on=v;document.body.classList.toggle('pad',v);if(v&&TOUCH.on)setTouch(false)};
 function pollPad(){const ps=navigator.getGamepads?[...navigator.getGamepads()].filter(p=>p&&p.connected):[],gp=ps.find(p=>p.mapping==='standard')||ps[0];
  if(!gp){for(const k in PAD.held)if(PAD.held[k])G.keys[k]=false;PAD.held={};PAD.prev={};return}
@@ -1203,7 +1222,7 @@ $('mChar').onclick=()=>openChar();$('cExport').onclick=()=>openChar('export');$(
 $('mHelp').onclick=()=>{helpBack='menu';show('help')};$('pHelp').onclick=()=>{helpBack='pause';show('help')};$('hClose').onclick=()=>show(helpBack);
 $('pResume').onclick=togglePause;$('pRestart').onclick=()=>startFight(G.lv);$('pQuit').onclick=toMenu;
 /* --- touch controls: floating joystick + multi-touch buttons feed the same G.keys / G.buf as the keyboard --- */
-const tEls={touch:$('touch'),pause:$('tPause'),ink:$('tbInk'),issen:$('tbIssen'),p1:$('tbP1')},capture=(el,id)=>{try{el.setPointerCapture(id)}catch(e){}};
+const tEls={touch:$('touch'),pause:$('tPause'),ink:$('tbInk'),issen:$('tbIssen'),p1:$('tbP1'),roll:$('tbRoll')},capture=(el,id)=>{try{el.setPointerCapture(id)}catch(e){}};
 const setTouch=v=>{TOUCH.on=v;document.body.classList.toggle('touch',v)};setTouch(TOUCH.on);
 addEventListener('pointerdown',e=>{if(e.pointerType==='touch'){usePad(false);if(!TOUCH.on)setTouch(true)}},true);
 {const zone=$('stickZone'),stk=$('stick'),knob=$('knob');let id=null,sx=0,sy=0,up=false;
@@ -1217,7 +1236,7 @@ addEventListener('pointerdown',e=>{if(e.pointerType==='touch'){usePad(false);if(
   b.addEventListener('pointerup',rel);b.addEventListener('pointercancel',rel);b.addEventListener('contextmenu',e=>e.preventDefault())}}
 tEls.pause.onclick=togglePause;
 function syncTouch(){const fight=MODE==='game'&&G.state!=='over'&&G.state!=='absorb'&&!G.paused;tEls.touch.classList.toggle('off',!(TOUCH.on&&fight));tEls.pause.classList.toggle('off',!fight);document.body.classList.toggle('gm',MODE!=='film');
- if(fight&&TOUCH.on){tEls.ink.classList.toggle('dis',G.P.ink<33.3);tEls.issen.classList.toggle('dis',G.P.ink<99.5);tEls.issen.classList.toggle('ready',G.P.ink>=99.5);
+ if(fight&&TOUCH.on){tEls.roll.classList.toggle('dis',(G.P.rollCd||0)>G.t);tEls.ink.classList.toggle('dis',G.P.ink<33.3);tEls.issen.classList.toggle('dis',G.P.ink<99.5);tEls.issen.classList.toggle('ready',G.P.ink>=99.5);
   const id=G.P.def.powers[0];if(id){const n=POWERS[id].move,m=G.P.moves[n];tEls.p1.classList.toggle('dis',G.P.ink<m.cost*33.3-.5||(G.P.cd[n]||0)>G.t)}}}
 function goFull(){const el=document.documentElement,o=window.screen.orientation;if(document.fullscreenElement||!el.requestFullscreen)return;el.requestFullscreen({navigationUI:'hide'}).then(()=>o&&o.lock&&o.lock('landscape').catch(()=>{})).catch(()=>{})}
 stage.addEventListener('pointerdown',poke);stage.addEventListener('pointerdown',()=>{if(MODE==='game'&&G.state==='absorb'&&G.st>.8)absorbDone()});
@@ -1235,7 +1254,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 // debug hooks (tests, console scrubbing) exist only with ?debug in the URL or when a test harness sets ISSEN_DEBUG: never in normal play or the APK
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
- window.game={G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}}}
+ window.game={G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}}}
 (async()=>{try{await Promise.race([Promise.all([document.fonts.load('380px "Yuji Boku"','一閃終師'),document.fonts.load('46px "Cormorant Garamond"')]),new Promise(r=>setTimeout(r,3500))])}catch(e){}
  build();st.ready=true;const q=new URLSearchParams(location.search);
  if(q.has('t')){seek(+q.get('t'));cover.classList.add('off')}else{render(3.4);st.dirty=false} // poster = finished title card; playback still starts at 0
