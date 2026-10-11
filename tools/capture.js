@@ -1,59 +1,35 @@
 // Review sheets for every move (spec §6.9 "Capture"): renders each move's sheet (12 frames + the §6.6 checklist) to
-// docs/animation-review/<move>.webp with headless Edge or Chrome, and writes docs/animation-review/index.md.
+// docs/animation-review/<move>.webp in headless Edge or Chrome, and writes docs/animation-review/index.md.
 // Usage: node tools/capture.js [move ...]      (set CHROME=<path> to pick the browser). No dependencies.
 'use strict';
-const http = require('http'), fs = require('fs'), path = require('path'), os = require('os'), vm = require('vm'), { spawn } = require('child_process');
+const fs = require('fs'), path = require('path'), vm = require('vm');
 const { boot, ROOT } = require('./harness');
+const { serve, launch, findBrowser } = require('./browser');
 const OUT = path.join(ROOT, 'docs', 'animation-review');
-const BROWSERS = [process.env.CHROME, 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Google/Chrome/Application/chrome.exe',
-  '/usr/bin/chromium', '/usr/bin/google-chrome', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'].filter(Boolean);
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.woff2': 'font/woff2', '.png': 'image/png', '.json': 'application/json', '.webmanifest': 'application/manifest+json' };
 
 (async () => {
   const { win } = await boot();
   vm.runInContext(fs.readFileSync(path.join(__dirname, 'poselab.js'), 'utf8'), win);
   const lab = win.poseLab, ids = process.argv.slice(2).length ? process.argv.slice(2) : [...new Set(lab.FIGHTERS.flatMap(f => f.moves))];
-  const browser = BROWSERS.find(b => fs.existsSync(b));
   fs.mkdirSync(OUT, { recursive: true });
-  let server, port;
-  if (browser) { // a tiny static server: the sheet page needs http for its fonts and tools/poselab.js
-    server = http.createServer((q, r) => {
-      const f = path.join(ROOT, decodeURIComponent(q.url.split('?')[0]).replace(/^\/+/, '') || 'index.html');
-      if (!f.startsWith(ROOT) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { r.writeHead(404); return r.end(); }
-      r.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' }); fs.createReadStream(f).pipe(r);
-    });
-    await new Promise(r => server.listen(0, '127.0.0.1', r)); port = server.address().port;
-  } else console.log('No Edge / Chrome found: writing the checklist index without images.');
-  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'issen-capture-')), rows = [];
-  let proc, send;
-  if (browser) { // one headless browser driven over the DevTools protocol (Node's built-in WebSocket): navigate, wait, screenshot
-    proc = spawn(browser, ['--headless=new', '--hide-scrollbars', '--mute-audio', '--no-first-run', '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank']);
-    const wsUrl = await new Promise((res, rej) => { let err = ''; proc.stderr.on('data', d => { err += d; const m = err.match(/ws:\/\/[^\s]+/); if (m) res(m[0]); }); setTimeout(() => rej(new Error('browser did not start')), 20000); });
-    const page = (await (await fetch(`http://${new URL(wsUrl).host}/json/list`)).json()).find(t => t.type === 'page');
-    const ws = new WebSocket(page.webSocketDebuggerUrl), pend = new Map(); let n = 0;
-    await new Promise(r => ws.onopen = r);
-    ws.onmessage = e => { const m = JSON.parse(e.data); if (pend.has(m.id)) { pend.get(m.id)(m.result || {}); pend.delete(m.id); } };
-    send = (method, params = {}) => new Promise(r => { pend.set(++n, r); ws.send(JSON.stringify({ id: n, method, params })); });
-    await send('Emulation.setDeviceMetricsOverride', { width: 1920, height: 1080, deviceScaleFactor: 1, mobile: false });
-  }
+  let server, br;
+  if (findBrowser()) { server = await serve(ROOT); br = await launch(); } else console.log('No Edge / Chrome found: writing the checklist index without images.');
+  const rows = [];
   for (const id of ids) {
-    const png = path.join(OUT, id + '.webp');
-    if (send) {
-      await send('Page.navigate', { url: `http://127.0.0.1:${port}/index.html?debug&sheet=${id}` });
-      for (let t = 0; t < 150; t++) { const r = await send('Runtime.evaluate', { expression: 'document.title', returnByValue: true }); if (String(r.result && r.result.value).startsWith('sheet ')) break; await new Promise(r => setTimeout(r, 100)); }
-      fs.writeFileSync(png, Buffer.from((await send('Page.captureScreenshot', { format: 'webp', quality: 82 })).data, 'base64'));
+    const img = path.join(OUT, id + '.webp');
+    if (br) {
+      await br.page(`http://127.0.0.1:${server.port}/index.html?debug&sheet=${id}`, "document.title.startsWith('sheet ')");
+      fs.writeFileSync(img, Buffer.from((await br.send('Page.captureScreenshot', { format: 'webp', quality: 82 })).data, 'base64'));
     }
-    rows.push({ id, owner: lab.FIGHTERS.find(f => f.moves.includes(id)).name, cl: lab.checklist(id), png: fs.existsSync(png) });
+    rows.push({ id, owner: lab.FIGHTERS.find(f => f.moves.includes(id)).name, cl: lab.checklist(id), img: fs.existsSync(img) });
     process.stdout.write(id + ' ');
   }
-  if (proc) { await send('Browser.close').catch(() => {}); proc.kill(); }
-  if (server) server.close();
-  try { fs.rmSync(profile, { recursive: true, force: true }); } catch (e) {} // the browser may still hold a file for a moment
+  if (br) { await br.close(); server.close(); }
   const mark = r => r.ok === true ? 'pass' : r.ok === false ? '**needs work**' : 'review';
   const L = ['# Animation review sheets', '', `Generated by \`node tools/capture.js\` (${new Date().toISOString().slice(0, 10)}). Each sheet shows 12 frames of the move (the contact frame exact), the striking point's path (red while active, circled where it jumps more than 60 px in a frame) and the §6.6 checklist. "review" items need eyes, not a script. Comment by move id (for example "slash2: windup too short") and the next pass iterates; the Pose Lab (\`?debug&lab=<move>\`) shows the same overlays live.`, '',
     '| move | fighter | needs work | sheet |', '|---|---|---|---|'];
-  for (const r of rows) L.push(`| ${r.id} | ${r.owner} | ${r.cl.filter(c => c.ok === false).map(c => c.name).join(', ') || '—'} | ${r.png ? `[${r.id}.webp](${r.id}.webp)` : '(not rendered)'} |`);
+  for (const r of rows) L.push(`| ${r.id} | ${r.owner} | ${r.cl.filter(c => c.ok === false).map(c => c.name).join(', ') || '—'} | ${r.img ? `[${r.id}.webp](${r.id}.webp)` : '(not rendered)'} |`);
   for (const r of rows) { L.push('', `## ${r.id} (${r.owner})`, ''); for (const c of r.cl) L.push(`- ${mark(c)} · ${c.n} ${c.name}: ${c.detail}`); }
   fs.writeFileSync(path.join(OUT, 'index.md'), L.join('\n') + '\n');
-  console.log(`\n${rows.length} moves, ${rows.filter(r => r.png).length} sheets → docs/animation-review/`);
+  console.log(`\n${rows.length} moves, ${rows.filter(r => r.img).length} sheets → docs/animation-review/`);
 })();
