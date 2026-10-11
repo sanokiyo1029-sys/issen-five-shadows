@@ -830,7 +830,7 @@ const ARENAS=[
  {name:'the Moonlit Lake',jp:'月湖',wind:.08,rain:0,bpm:92,notes:[N.D4,N.Eb4,N.A4,N.Bb4,N.D5],bg:lakeBG,fg:lakeFG},
  {name:'the Oni Castle',jp:'鬼城',wind:.35,rain:0,rumb:.35,bpm:136,notes:[N.D4,N.Eb4,N.A3,N.Bb3,N.D5],bg:castleBG,fg:castleFG}];
 /* --- state & combat --- */
-const G={P:null,B:null,def:null,lv:0,proj:[],fx:[],t:0,rt:0,mt:0,rdt:0,st:0,state:'',round:1,timer:60,freeze:0,slow:1,slowT:0,shake:0,cam:{x:0,y:-240,z:1.2},keys:{},buf:null,jb:-9,paused:false,ban:null,nb:0,step:0,hint:0,mvId:0};
+const G={P:null,B:null,def:null,lv:0,proj:[],fx:[],t:0,rt:0,mt:0,rdt:0,st:0,state:'',round:1,timer:60,freeze:0,slow:1,slowT:0,shake:0,cam:{x:0,y:-240,z:1.2},keys:{},buf:null,jb:-9,paused:false,ban:null,nb:0,step:0,hint:0,mvId:0,seed:0,rand:Math.random,acc:0,ia:1};
 const NOIN={mx:0,up:false,down:false,atk:null};
 const snd=(n,v)=>{if(AU.ctx&&AU.ctx.state==='running')try{S[n](AU.ctx.currentTime+.01,v)}catch(e){}};
 function amb(w,r,ru){if(!AU.ctx)return;const now=AU.ctx.currentTime;AU.wind.gain.setTargetAtTime(w*.5,now,.4);AU.rain.gain.setTargetAtTime(r*.35,now,.4);AU.rumb.gain.setTargetAtTime(ru,now,.4);AU.lp.frequency.setTargetAtTime(16000,now,.1)}
@@ -894,18 +894,23 @@ function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;if(F.hitFlash>0)F.hitFlash-=
 function separate(a,b){if(a.air||b.air||a.manual||b.manual||a.mv&&a.mv.issen||b.mv&&b.mv.issen||a.st==='dead'||b.st==='dead')return;const min=58*(a.def.s+b.def.s)/2,d=b.x-a.x;
  if(Math.abs(d)<min){const p=(min-Math.abs(d))/2*(d>=0?1:-1);a.x=clamp(a.x-p,-ARENA,ARENA);b.x=clamp(b.x+p,-ARENA,ARENA)}}
 function ai(B,Pl,dt){const A=B.def.ai,d=Math.abs(Pl.x-B.x),inp={mx:0,up:false,down:false,atk:null},toward=Pl.x>B.x?1:-1,R=B.rage?.7:1,s=B.def.s;
- if(Pl.st==='move'&&!Pl.mv.issen&&B.ai.seen!==Pl.mvId){B.ai.seen=Pl.mvId;if(d<(Pl.mv.reach||300)+130&&Math.random()<A.block*(B.rage?1.2:1)){B.ai.blk=.42;B.ai.low=Pl.mv.zone==='low'}}
- for(const p of G.proj)if(p.o===Pl&&!p.seen&&Math.abs(p.x-B.x)<420&&Math.sign(B.x-p.x)===Math.sign(p.vx)){p.seen=1;if(Math.random()<A.block+.25){B.ai.blk=.5;B.ai.low=p.zone==='low'}}
+ if(Pl.st==='move'&&!Pl.mv.issen&&B.ai.seen!==Pl.mvId){B.ai.seen=Pl.mvId;if(d<(Pl.mv.reach||300)+130&&G.rand()<A.block*(B.rage?1.2:1)){B.ai.blk=.42;B.ai.low=Pl.mv.zone==='low'}}
+ for(const p of G.proj)if(p.o===Pl&&!p.seen&&Math.abs(p.x-B.x)<420&&Math.sign(B.x-p.x)===Math.sign(p.vx)){p.seen=1;if(G.rand()<A.block+.25){B.ai.blk=.5;B.ai.low=p.zone==='low'}}
  if(B.ai.blk>0){B.ai.blk-=dt;inp.mx=-toward;inp.down=B.ai.low;return inp}
  B.ai.t-=dt;
- if(B.ai.t<=0&&isFree(B)){B.ai.t=A.think*R*(.6+Math.random()*.8);
+ if(B.ai.t<=0&&isFree(B)){B.ai.t=A.think*R*(.6+G.rand()*.8);
   const opts=B.def.moves.filter(n=>{const m=B.moves[n];return(!m.cd||(B.cd[n]||0)<=G.t)&&d>=m.ai[0]*s&&d<=m.ai[1]*s});
   if(Pl.air&&d<280){const aa=opts.find(n=>B.moves[n].zone==='high');if(aa){inp.atk=aa;return inp}}
-  if(opts.length&&Math.random()<A.aggr+(B.rage?.15:0)){let tw=0;for(const n of opts)tw+=B.moves[n].w;let r=Math.random()*tw;for(const n of opts){r-=B.moves[n].w;if(r<=0){inp.atk=n;break}}return inp}
-  const r=Math.random();B.ai.plan=d>A.range*s*1.1?'in':d<A.range*s*.55?'out':r<(A.jump||.06)?'jump':r<.45?'hold':r<.72?'in':'out';B.ai.pt=.25+Math.random()*.5}
+  if(opts.length&&G.rand()<A.aggr+(B.rage?.15:0)){let tw=0;for(const n of opts)tw+=B.moves[n].w;let r=G.rand()*tw;for(const n of opts){r-=B.moves[n].w;if(r<=0){inp.atk=n;break}}return inp}
+  const r=G.rand();B.ai.plan=d>A.range*s*1.1?'in':d<A.range*s*.55?'out':r<(A.jump||.06)?'jump':r<.45?'hold':r<.72?'in':'out';B.ai.pt=.25+G.rand()*.5}
  if(B.ai.pt>0){B.ai.pt-=dt;if(B.ai.plan==='in')inp.mx=toward;else if(B.ai.plan==='out')inp.mx=-toward;else if(B.ai.plan==='jump'){inp.up=true;inp.mx=toward;B.ai.plan='hold'}}
  return inp}
 const fresh=(t0,win)=>G.t>=t0&&G.t-t0<win;
+// fixed 1/60 s simulation steps; rendering interpolates positions between the last two steps (G.ia).
+// A jump of more than 150 px in one step (teleport, new round, Issen dash) is drawn as a cut, not a smear.
+const STEP=1/60;
+function stepGame(dt){G.acc=Math.min(G.acc+dt,.1);while(G.acc>=STEP-1e-9){G.acc-=STEP;for(const F of[G.P,G.B]){F.px=F.x;F.py=F.y}for(const p of G.proj)p.px=p.x;updGame(STEP)}G.ia=clamp(G.acc/STEP)}
+const ip=(v,pv)=>pv==null||Math.abs(v-pv)>150?v:lerp(pv,v,G.ia);
 function readIn(){const k=G.keys;return{mx:(k.right?1:0)-(k.left?1:0),up:fresh(G.jb,.15),down:!!k.down,block:!!k.block,atk:G.buf&&fresh(G.buf.t,.28)?G.buf.a:null}}
 function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
  G.proj=[];G.fx=[];G.timer=60;G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
@@ -941,9 +946,9 @@ function poseOf(F){const d=F.def,g=d.guard;let p;
   case 'win':p=d.win||g;break;
   default:p=P(g,{tl:g.tl+Math.sin(G.t*2.6+d.s*3)*.025})}
  if(isFree(F)&&F.block){const wl=walk(F.x*.04*F.f,.6);p=F.crouch?P(g,CR,BLKL):P(g,BLK,F.st==='walk'?{th1:wl.th1,sh1:wl.sh1,th2:wl.th2,sh2:wl.sh2}:{})}
- p=Object.assign(P(),p,d.wk);p.x=F.x;p.f=F.f;p.s=d.s;p.lift=(p.lift||0)-F.y;p.rage=F.rage?1:0;p.stream=0;return p}
+ p=Object.assign(P(),p,d.wk);p.x=ip(F.x,F.px);p.f=F.f;p.s=d.s;p.lift=(p.lift||0)-ip(F.y,F.py);p.rage=F.rage?1:0;p.stream=0;return p}
 function drawF(g,F){const p=poseOf(F);if(F.hitFlash>0)p.x+=noise(G.t*90)*8;if(F.alpha<.03)return;
- if(F.rage){g.globalAlpha=.4+.15*Math.sin(G.t*9);g.drawImage(GLOW,F.x-170*p.s,F.y-330*p.s,340*p.s,380*p.s)}
+ if(F.rage){g.globalAlpha=.4+.15*Math.sin(G.t*9);g.drawImage(GLOW,p.x-170*p.s,-p.lift-330*p.s,340*p.s,380*p.s)}
  g.globalAlpha=F.alpha;fig(g,p,F.def.kind,G.t);g.globalAlpha=1;
  if(F.st==='move'&&F.mv.tell&&F.mvT>F.mv.tell[0]&&F.mvT<F.mv.tell[1]){const q=bladePt(p,F.def.kind,130),u=(F.mvT-F.mv.tell[0])/(F.mv.tell[1]-F.mv.tell[0]);g.globalAlpha=Math.sin(u*Math.PI);g.drawImage(MIST,q[0]-50,q[1]-50,100,100);g.fillStyle=RED;g.save();g.translate(q[0],q[1]);g.rotate(u*3);for(let k=0;k<4;k++){g.rotate(Math.PI/2);tri(g,[-3,0],[3,0],[0,-26])}g.restore();g.globalAlpha=1}}
 function drawFx(c){camT(c,1);for(const f of G.fx){const age=G.t-f.t0;
@@ -956,7 +961,7 @@ function drawFx(c){camT(c,1);for(const f of G.fx){const age=G.t-f.t0;
  else if(f.k==='moon'&&age<.4){const u=age/.4;c.save();c.translate(f.x,f.y);c.scale(f.f,1);c.fillStyle=RED; // Red Moon: a crescent at full reach + the thrust streak
   c.globalAlpha=(1-u)*.85;c.beginPath();c.arc(150+u*30,0,120,-1.25,1.25);c.arc(120+u*30,0,108,1.18,-1.18,true);c.fill();
   c.globalAlpha=1-u;brush(c,[[0,0],[140,-3],[265+u*40,0]],12*(1-u*.6),{taper:x=>1-x*.85});c.restore();c.globalAlpha=1}}}
-function drawProj(c){camT(c,1);for(const p of G.proj){const d=Math.sign(p.vx);
+function drawProj(c){camT(c,1);for(const q of G.proj){const p=Object.assign({},q,{x:ip(q.x,q.px)}),d=Math.sign(p.vx);
  if(p.type==='wave'){const s=p.big?1.35:1,pts=[];for(let i=0;i<=14;i++){const u=i/14;pts.push([p.x+d*Math.sin(u*Math.PI)*34*s-d*20*s,p.y+(u-.5)*170*s])}c.fillStyle=INK;brush(c,pts,26*s,{taper:u=>Math.sin(Math.PI*u)});c.strokeStyle=INK;dry(c,pts.map(q=>[q[0]-d*40*s,q[1]]),34*s,p.t*9|0,{dry:.9,alpha:.5});if(p.big){c.strokeStyle=RED;c.lineWidth=3;c.beginPath();pts.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]));c.stroke()}}
  else if(p.type==='star'){c.save();c.translate(p.x,p.y);c.rotate(p.t*30);c.fillStyle=INK;for(let k=0;k<4;k++){c.rotate(Math.PI/2);tri(c,[-4,0],[4,0],[0,-16])}circ(c,0,0,5);c.restore();c.strokeStyle=ink(.6,.6);c.lineWidth=2;line(c,[p.x-d*14,p.y],[p.x-d*70,p.y])}
  else if(p.type==='quake'){for(let k=0;k<5;k++){const x=p.x-d*k*26,h=(60-k*10)*(.7+.3*Math.sin(p.t*30+k));c.fillStyle=ink(.9-k*.12);tri(c,[x-14,2],[x+14,2],[x+d*6,-h])}c.globalAlpha=.4;c.drawImage(PUFF,p.x-70,-40,140,50);c.globalAlpha=1}
@@ -990,9 +995,9 @@ function banner(c){const b=G.ban;if(!b)return;const u=G.rt-b.t0;if(u>b.dur){G.ba
  c.globalAlpha=a*.35;c.drawImage(bb,W/2-bw/2,y+6-sz*.8);c.globalAlpha=a;c.fillText(b.k,W/2,y);c.restore();
  if(b.seal){const s=clamp((u-.25)/.12),k=lerp(1.4,1,E.out(s));c.globalAlpha=a*s;c.save();c.translate(W/2+c.measureText(b.k).width/2+sz*.5,y+sz*.32);c.scale(k*.7,k*.7);c.drawImage(SEAL,-75,-75);c.restore()}
  if(b.sub){c.globalAlpha=a;c.fillStyle=ink(.82);c.textAlign='center';c.textBaseline='middle';c.font='italic 46px "Cormorant Garamond", serif';c.fillText(b.sub,W/2,y+sz*.62)}c.globalAlpha=1;c.textBaseline='alphabetic'}
-function renderGame(){const ar=ARENAS[G.def.arena],pl=G.P,bo=G.B,t=G.t,dt=Math.min(.05,G.rdt);
- const mid=(pl.x+bo.x)/2,tz=clamp(1750/(Math.abs(pl.x-bo.x)+640),.85,1.42);G.cam.z+=(tz-G.cam.z)*Math.min(1,dt*3);
- const hw=W/2/G.cam.z,lo=-ARENA-160+hw,hi=ARENA+160-hw;G.cam.x+=((lo>hi?0:clamp(mid,lo,hi))-G.cam.x)*Math.min(1,dt*4);G.cam.y=-330/G.cam.z+Math.min(0,pl.y,bo.y)*.35;
+function renderGame(){const ar=ARENAS[G.def.arena],pl=G.P,bo=G.B,t=G.t,dt=Math.min(.05,G.rdt),px=ip(pl.x,pl.px),bx=ip(bo.x,bo.px);
+ const mid=(px+bx)/2,tz=clamp(1750/(Math.abs(px-bx)+640),.85,1.42);G.cam.z+=(tz-G.cam.z)*Math.min(1,dt*3);
+ const hw=W/2/G.cam.z,lo=-ARENA-160+hw,hi=ARENA+160-hw;G.cam.x+=((lo>hi?0:clamp(mid,lo,hi))-G.cam.x)*Math.min(1,dt*4);G.cam.y=-330/G.cam.z+Math.min(0,ip(pl.y,pl.py),ip(bo.y,bo.py))*.35;
  setCam(G.cam,G.shake,G.rt);ar.bg(X,t);
  const iss=pl.st==='move'&&pl.mv.issen?pl.mvT:-1;if(iss>=0){screen(X);X.globalAlpha=ss(0,.18,iss)*(1-ss(.85,1.2,iss))*.88;X.fillStyle='#f6f1e6';X.fillRect(0,0,W,H);X.globalAlpha=1}
  figLayer(X,g=>{drawF(g,bo);drawF(g,pl)});drawFx(X);drawProj(X);ar.fg(X,t);if(G.state==='absorb')drawAbsorb(X);
@@ -1098,7 +1103,7 @@ function buildMenu(){const box=document.getElementById('levels');box.innerHTML='
  el.className='card'+(open?'':' locked');el.disabled=!open;el.setAttribute('aria-label',`${b.name}, ${b.title}. ${done?'Defeated':open?'Challenge':'Locked'}`);
  el.innerHTML=`<span class="n">${['First','Second','Third','Fourth','Fifth'][i]} shadow</span><span class="kj">${b.jp}</span><span class="nm">${b.name}</span><span class="ti">${b.title}</span><span class="ar">${ARENAS[b.arena].name}</span><span class="stt">${done?'Defeated · fight again':open?'Challenge':'Locked'}</span>${done?'<span class="seal">討</span>':''}`;
  el.onclick=()=>startFight(i);box.appendChild(el)})}
-function startFight(lv){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.lv=lv;G.def=BOSSES[lv];G.P=mkF(heroDef(),true);G.B=mkF(G.def,false);G.matchId=BOSS_IDS[lv]+':'+Date.now();G.res=null;G.rv=0;
+function startFight(lv,seed){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.lv=lv;G.seed=(seed??SEED_Q??Math.random()*4294967296)>>>0;G.rand=rng(G.seed);G.acc=0;G.ia=1;G.def=BOSSES[lv];G.P=mkF(heroDef(),true);G.B=mkF(G.def,false);G.matchId=BOSS_IDS[lv]+':'+Date.now();G.res=null;G.rv=0;
  const p1=G.P.def.powers[0];tEls.p1.classList.toggle('off',!p1);if(p1)tEls.p1.innerHTML=`<b>${POWERS[p1].jp}</b><i>${POWERS[p1].short}</i>`;G.round=1;G.t=0;G.mvId=0;G.hint=lv===0?14:7;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2};
  MODE='game';show(null);const ar=ARENAS[G.def.arena];amb(ar.wind,ar.rain,ar.rumb||0);newRound()}
 // victory: rewards are computed and SAVED first, then the (skippable) absorption ceremony, then the result panel
@@ -1164,7 +1169,7 @@ const AQ={n:0,slow:0,t:0};
 function adapt(raw){if(raw>.25)return;AQ.n++;AQ.t+=raw;if(raw>.026)AQ.slow++;if(AQ.t<2)return;if(AQ.slow>AQ.n/2&&QS>.4)setQS(Math.max(.4,QS*.82));AQ.n=AQ.slow=AQ.t=0}
 function frame(now){const raw=(now-st.last)/1000||0,dt=Math.min(.1,raw);st.last=now;
  syncTouch();
- if(MODE!=='film'){if(st.ready){G.rdt=dt;G.rt+=dt;if(MODE==='game'){if(!G.paused){adapt(raw);for(let r=dt;r>1e-6;r-=.05)updGame(Math.min(.05,r));renderGame()}}else{adapt(raw);G.mt+=dt;renderMenu(G.mt)}}requestAnimationFrame(frame);return}
+ if(MODE!=='film'){if(st.ready){G.rdt=dt;G.rt+=dt;if(MODE==='game'){if(!G.paused){adapt(raw);stepGame(dt);renderGame()}}else{adapt(raw);G.mt+=dt;renderMenu(G.mt)}}requestAnimationFrame(frame);return}
  if(st.playing){adapt(raw);const a=st.t;st.t=Math.min(DUR,st.t+dt);audioTick(a,st.t);if(st.t>=DUR){st.playing=false;audioSilence();setPP();endc.classList.remove('off');$('skip').classList.add('off');poke();$('enterGame').focus()}st.dirty=true}
  if(st.dirty&&st.ready){render(st.t);st.dirty=false;fill.style.width=(st.t/DUR*100)+'%';tm.textContent=`${fmt(st.t)} / ${fmt(DUR)}`;$('prog').setAttribute('aria-valuenow',st.t.toFixed(1))}requestAnimationFrame(frame)}
 $('playBig').onclick=play;$('replayBig').onclick=replay;$('enterGame').onclick=enterGame;$('toGame').onclick=enterGame;$('skip').onclick=enterGame;
@@ -1203,9 +1208,9 @@ stage.addEventListener('mousemove',poke);
 addEventListener('keyup',e=>gameKey(e,false));
 addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code==='Space'){e.preventDefault();st.playing?pause():play()}else if(e.key==='r'||e.key==='R')replay();else if(e.key==='f'||e.key==='F')$('fs').click();else if(e.key==='m'||e.key==='M')$('snd').click();else if(e.key==='ArrowRight')seek(st.t+5);else if(e.key==='ArrowLeft')seek(st.t-5)});
 // debug hooks (tests, console scrubbing) exist only with ?debug in the URL or when a test harness sets ISSEN_DEBUG: never in normal play or the APK
-const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search);
+const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
- window.game={G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,renderGame,syncTouch,get mode(){return MODE}}}
+ window.game={G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,levelOf,validateData,exportCode,importCode,heroDef,absorbDone,openChar,startFight,toMenu,enterGame,updGame,stepGame,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}}}
 (async()=>{try{await Promise.race([Promise.all([document.fonts.load('380px "Yuji Boku"','一閃終師'),document.fonts.load('46px "Cormorant Garamond"')]),new Promise(r=>setTimeout(r,3500))])}catch(e){}
  build();st.ready=true;const q=new URLSearchParams(location.search);
  if(q.has('t')){seek(+q.get('t'));cover.classList.add('off')}else{render(3.4);st.dirty=false} // poster = finished title card; playback still starts at 0
