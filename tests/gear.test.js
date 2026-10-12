@@ -90,7 +90,7 @@ module.exports = {
     for (const w of ['yari', 'kodachi', 'kanabo', 'naginata', 'nodachi']) for (let lv = 0; lv < 5; lv++) {
       const { game } = await boot({ seed: lv + 40 }), G = game.G; game.SV = prof(game, w); game.startFight(lv, 9 + lv);
       run(game, 400, (G, i) => { const d = G.B.x - G.P.x; G.keys.right = d > 200; G.keys.left = d < -200; if (i % 18 === 0 && Math.abs(d) < 260) G.buf = { a: G.P.ink >= 99.5 ? 'issen' : i % 72 === 0 ? 'kick' : 'slash', t: G.t }; });
-      assert.strictEqual(G.state, 'over', `${w} vs ${game.BOSSES[lv].id}`); assert.deepStrictEqual(Object.keys(G.B.moves), []);
+      assert.ok(['over', 'sun'].includes(G.state), `${w} vs ${game.BOSSES[lv].id}`); assert.deepStrictEqual(Object.keys(G.B.moves), []);
     }
   },
 };

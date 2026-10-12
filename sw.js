@@ -1,5 +1,5 @@
 // Network-first so updates always arrive; the cache is only the offline fallback.
-const CACHE = 'issen-v2';
+const CACHE = 'issen-v3'; // 1.7
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png',
   'fonts/yuji-boku.woff2', 'fonts/cormorant.woff2', 'fonts/cormorant-italic.woff2'];
 

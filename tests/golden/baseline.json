@@ -1051,6 +1051,166 @@
    "snd": "whoosh",
    "fr": "fn g=>[[0,g],[.42,P(PS.high,{tl:-.12})],[.54,P(PS.cutLow,{sw:.85}),'o5'],[.95,g]]"
   },
+  "h_pillar": {
+   "dur": 1.25,
+   "cd": 5,
+   "mark": [
+    0.05,
+    0.55
+   ],
+   "markHold": 0.35,
+   "lock": 1,
+   "dest": "fn (F,O)=>O.x",
+   "proj": {
+    "t": 0.85,
+    "type": "pillar",
+    "hue": "fire",
+    "v": 0,
+    "dmg": 12,
+    "zone": "mid",
+    "y": -20,
+    "ground": 1,
+    "unblock": 1,
+    "life": 0.3,
+    "wide": 58,
+    "at": "px",
+    "kd": 1
+   },
+   "tell": [
+    0.05,
+    0.8
+   ],
+   "ai": [
+    0,
+    1300
+   ],
+   "w": 2,
+   "answers": [
+    "jump",
+    "roll"
+   ],
+   "fr": "fn g=>[[0,g],[.4,P(PS.high,{tl:-.15,hd:-.4})],[.8,P(PS.high,{tl:-.22,hd:-.5})],[.88,P(PS.cutLow,{sw:.6,tl:.6,th1:1.2,sh1:.2,th2:-1,sh2:-1.3}),'o5'],[1.25,g]]",
+   "tick": "fn tick(F,O,a,b){if(a<this.mark[1]&&b>=this.mark[1])F.d.px=O.x}"
+  },
+  "h_sentence": {
+   "dur": 1.4,
+   "cd": 6,
+   "mark": [
+    0.05,
+    0.6
+   ],
+   "markHold": 0.35,
+   "lock": 1,
+   "dest": "fn (F,O)=>O.x",
+   "proj": {
+    "t": 0.9,
+    "type": "pillar",
+    "hue": "fire",
+    "v": 0,
+    "dmg": 14,
+    "zone": "mid",
+    "y": -20,
+    "ground": 1,
+    "unblock": 1,
+    "life": 0.32,
+    "wide": 110,
+    "at": "px",
+    "kd": 1
+   },
+   "tell": [
+    0.05,
+    0.85
+   ],
+   "ai": [
+    0,
+    1300
+   ],
+   "w": 3,
+   "answers": [
+    "jump",
+    "roll"
+   ],
+   "fr": "fn g=>[[0,g],[.45,P(PS.high,{tl:-.18,hd:-.45})],[.85,P(PS.high,{tl:-.25,hd:-.55})],[.94,P(PS.cutLow,{sw:.5,tl:.7,th1:1.3,sh1:.2,th2:-1.1,sh2:-1.4}),'o5'],[1.4,g]]",
+   "tick": "fn tick(F,O,a,b){if(a<this.mark[1]&&b>=this.mark[1])F.d.px=O.x;if(a<.9&&b>=.9){G.shake=Math.max(G.shake,16);snd('boom',.5)}}"
+  },
+  "w_pillar": {
+   "dur": 1.2,
+   "cd": 4.5,
+   "mark": [
+    0.05,
+    0.55
+   ],
+   "markHold": 0.35,
+   "lock": 1,
+   "dest": "fn (F,O)=>O.x",
+   "proj": {
+    "t": 0.85,
+    "type": "pillar",
+    "hue": "light",
+    "v": 0,
+    "dmg": 11,
+    "zone": "mid",
+    "y": -20,
+    "ground": 1,
+    "unblock": 1,
+    "life": 0.3,
+    "wide": 58,
+    "at": "px"
+   },
+   "tell": [
+    0.05,
+    0.8
+   ],
+   "ai": [
+    0,
+    1300
+   ],
+   "w": 2,
+   "answers": [
+    "jump",
+    "roll"
+   ],
+   "fr": "fn g=>[[0,g],[.4,P(PS.high,{tl:-.1,hd:-.45,ua2:2.4,fa2:2.6})],[.8,P(PS.high,{tl:-.15,hd:-.5,ua2:2.5,fa2:2.7})],[.88,P(PS.cutSide,{tl:.3}),'o5'],[1.2,g]]",
+   "tick": "fn tick(F,O,a,b){if(a<this.mark[1]&&b>=this.mark[1])F.d.px=O.x}"
+  },
+  "w_bloom": {
+   "dur": 1.05,
+   "cd": 4,
+   "proj": {
+    "t": 0.62,
+    "type": "bloom",
+    "v": 720,
+    "dmg": 10,
+    "zone": "low",
+    "y": -20,
+    "ground": 1
+   },
+   "proj2": {
+    "t": 0.62,
+    "type": "bloom",
+    "v": 720,
+    "dmg": 10,
+    "zone": "low",
+    "y": -20,
+    "ground": 1,
+    "back": 1
+   },
+   "tell": [
+    0.05,
+    0.6
+   ],
+   "ai": [
+    0,
+    1200
+   ],
+   "w": 3,
+   "answers": [
+    "block",
+    "jump",
+    "roll"
+   ],
+   "fr": "fn g=>[[0,g],[.32,SPUP],[.66,P(SPL,{sw:1.3}),'o5'],[1.05,g]]"
+  },
   "g_twin": {
    "dur": 1.25,
    "hit": [
@@ -1906,6 +2066,74 @@
    ],
    "bg": "fn function ashenBG(c,t){WIND={x:-1,y:.08,s:.4};screen(c);const sk=c.createLinearGradient(0,0,0,H);sk.addColorStop(0,ink(.46));sk.addColorStop(.55,ink(.2));sk.addColorStop(1,PAPER);c.fillStyle=sk;c.fillRect(0,0,W,H);\r\n camT(c,.05);c.globalAlpha=.55;c.drawImage(STORM,-1800+t*6,-1100);c.globalAlpha=1;camT(c,.18);c.drawImage(HILLS,-1800,-600);mistBand(c,.25,-120,t,.4);\r\n camT(c,.42);c.drawImage(VIL_D.img,-1300,-330);for(const[sx,sy]of VIL_D.smokes)smoke(c,-1300+sx,-330+sy,t,sx,.85,2.2,.55);\r\n camT(c,1);const gr=c.createLinearGradient(0,-6,0,500);gr.addColorStop(0,ink(.46));gr.addColorStop(1,ink(.16));c.fillStyle=gr;c.fillRect(CAM.x-2400,-6,4800,900);tiles(c,FLOOR,1,-14);\r\n c.fillStyle=ink(.86);for(const x of[-780,700]){brush(c,[[x,4],[x+3,-120],[x-4,-236]],26,{taper:u=>1-u*.3});brush(c,[[x-80,-226],[x,-232],[x+70,-222]],16,{taper:()=>1})}}",
    "fg": "fn function ashenFG(c,t){camT(c,1);c.fillStyle=ink(.5);for(let i=0;i<44;i++){const age=(t*.22+hash(i))%1,x=CAM.x-1100+hash(i*3)*2200-age*220+Math.sin(t+i)*20,y=-900+age*1000;c.globalAlpha=.55*(1-age);c.fillRect(x,y,4,4)}\r\n screen(c);c.fillStyle=RED;for(let i=0;i<20;i++){const y=H-((t*(40+hash(i)*60)+hash(i*3)*H)%H),x=((hash(i*5)*W+Math.sin(t+i)*50)%W+W)%W;c.globalAlpha=.6*(y/H);circ(c,x,y,1.5+hash(i*9)*2)}c.globalAlpha=1}"
+  },
+  {
+   "name": "the Ash Gate",
+   "dark": 1,
+   "jp": "鬼",
+   "wind": 0.3,
+   "rain": 0,
+   "rumb": 0.4,
+   "bpm": 140,
+   "notes": [
+    293.66,
+    311.13,
+    220,
+    233.08,
+    587.33
+   ],
+   "bg": "fn (c,t)=>hellBG(c,t,0)",
+   "fg": "fn function hellFG(c,t){screen(c);for(let i=0;i<42;i++){const y=H-((t*(50+hash(i)*80)+hash(i*3)*H)%H),x=((hash(i*5)*W+Math.sin(t*1.3+i)*60)%W+W)%W;c.globalAlpha=.75*(y/H);c.fillStyle=i%3?'#ff7a3a':'#ffd08a';circ(c,x,y,1.4+hash(i*9)*2.4)}\r\n camT(c,1);c.fillStyle='rgba(30,10,8,.6)';for(let i=0;i<30;i++){const age=(t*.2+hash(i+7))%1,x=CAM.x-1100+hash(i*11)*2200-age*160,y=-900+age*1000;c.globalAlpha=.6*(1-age);c.fillRect(x,y,4,4)}c.globalAlpha=1}"
+  },
+  {
+   "name": "the Ninth Gate",
+   "dark": 1,
+   "jp": "鬼",
+   "wind": 0.35,
+   "rain": 0,
+   "rumb": 0.5,
+   "bpm": 148,
+   "notes": [
+    146.83,
+    311.13,
+    220,
+    233.08,
+    293.66
+   ],
+   "bg": "fn (c,t)=>hellBG(c,t,1)",
+   "fg": "fn function hellFG(c,t){screen(c);for(let i=0;i<42;i++){const y=H-((t*(50+hash(i)*80)+hash(i*3)*H)%H),x=((hash(i*5)*W+Math.sin(t*1.3+i)*60)%W+W)%W;c.globalAlpha=.75*(y/H);c.fillStyle=i%3?'#ff7a3a':'#ffd08a';circ(c,x,y,1.4+hash(i*9)*2.4)}\r\n camT(c,1);c.fillStyle='rgba(30,10,8,.6)';for(let i=0;i<30;i++){const age=(t*.2+hash(i+7))%1,x=CAM.x-1100+hash(i*11)*2200-age*160,y=-900+age*1000;c.globalAlpha=.6*(1-age);c.fillRect(x,y,4,4)}c.globalAlpha=1}"
+  },
+  {
+   "name": "the Celestial Sanctuary",
+   "jp": "白",
+   "wind": 0.1,
+   "rain": 0,
+   "bpm": 96,
+   "notes": [
+    293.66,
+    392,
+    440,
+    587.33,
+    622.25
+   ],
+   "bg": "fn (c,t)=>whiteBG(c,t,0)",
+   "fg": "fn function whiteFG(c,t){camT(c,1);for(let i=0;i<34;i++){const life=5+hash(i)*4,u=((t+hash(i*7)*life)%life)/life,x=CAM.x-1100+hash(i*3)*2200+Math.sin(t*.7+i)*30,y=60-u*1000;c.globalAlpha=Math.sin(u*Math.PI)*.8;c.fillStyle=i%4?'#d8b866':'#fff8e3';circ(c,x,y,2+hash(i*9)*2.4)}c.globalAlpha=1}"
+  },
+  {
+   "name": "the Pale Sun",
+   "jp": "光",
+   "wind": 0.08,
+   "rain": 0,
+   "bpm": 88,
+   "notes": [
+    440,
+    587.33,
+    392,
+    440,
+    622.25
+   ],
+   "bg": "fn (c,t)=>whiteBG(c,t,1)",
+   "fg": "fn function whiteFG(c,t){camT(c,1);for(let i=0;i<34;i++){const life=5+hash(i)*4,u=((t+hash(i*7)*life)%life)/life,x=CAM.x-1100+hash(i*3)*2200+Math.sin(t*.7+i)*30,y=60-u*1000;c.globalAlpha=Math.sin(u*Math.PI)*.8;c.fillStyle=i%4?'#d8b866':'#fff8e3';circ(c,x,y,2+hash(i*9)*2.4)}c.globalAlpha=1}"
   }
  ],
  "HERO_D": {

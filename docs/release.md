@@ -1,10 +1,12 @@
-# Release 1.6: Android APK and PC (M9)
+# Release 1.7 (Ultimate Edition): Android APK and PC
+
+What 1.7 adds is listed in `docs/changelog.md`. The packaging is unchanged from 1.6 (M9), except that the Android shell now exposes `IssenNative.exit()` for the main menu's Quit.
 
 ## How to play
 
 | Platform | How | Save lives in |
 |---|---|---|
-| **Android** | Install `Issen-FiveShadows.apk` (sideload; versionCode 7). Updates install over 1.0–1.5 because they are signed with the same key. | The WebView's DOM storage in the app's data directory (`app_webview/`). |
+| **Android** | Install `Issen-FiveShadows.apk` (sideload; versionCode 8). It installs over 1.0–1.6 and keeps the save, because every build is signed with the same key. | The WebView's DOM storage in the app's data directory (`app_webview/`). |
 | **PC: browser / installed app** | Open https://sanokiyo1029-sys.github.io/issen-five-shadows/ in Chrome or Edge, then "Install the app" (the install hint on the cover, or the browser's install icon). It runs in its own window and works offline. | That origin's storage. The game asks `navigator.storage.persist()`, which installed apps are normally granted. |
 | **PC: fully local** | Run `node tools/serve.js`, then open http://localhost:8779/ (it can be installed from there too). | `localhost:8779` storage |
 | **iPhone / iPad** | Open the site in Safari, then Share › Add to Home Screen. | Safari's storage for the site |
@@ -32,7 +34,7 @@ Revisit if a store release (Steam and similar) is wanted. The native port (M10) 
 
 ```
 cd issen-android
-python build.py 7 1.6
+python build.py 8 1.7
 ```
 
 This writes `samurai-film/Issen-FiveShadows.apk`. The APK carries only `index.html`, `fonts/` and `icons/`; `tools/` (the Pose Lab, tests) never ships.
@@ -51,11 +53,14 @@ Shell behavior (`MainActivity`):
 
 ## What could not be tested here (spec §17.3)
 
+The same limits apply to 1.7, plus its new screens on a real phone: the map's drag, the editor's taps, and the touch size of the shop and challenge cards.
+
 This PC has no Android device, emulator or system image attached, and no physical gamepad. The following are **untested**:
 
 1. **Install and update:**
    - A fresh install.
-   - An update over 1.5 that keeps the save.
+   - An update over 1.6 that keeps the save (and pays the crystals already earned).
+   - Quit from the main menu closing the app (the new `IssenNative` bridge).
    - Reinstall after uninstall (the save is lost, unless Auto Backup restores it).
 2. **Process death:**
    - Under "Don't keep activities".
@@ -69,7 +74,7 @@ This PC has no Android device, emulator or system image attached, and no physica
    - The Burning Field GPU spike (see `docs/performance.md`).
    - Low quality.
 6. **A physical gamepad** (Xbox / PlayStation, wired and Bluetooth), including hot-plugging. The mapping logic is covered with a simulated pad in `tests/input.test.js`.
-7. **Audio:** the steel "ting" tells and all new sounds by ear.
+7. **Audio:** the steel "ting" tells, the menu music, the sun's chord and all new sounds by ear; the separate music / effects volumes.
 8. **iOS:** Add to Home Screen, landscape, safe areas, audio unlock.
 
 Everything else in the §17.2 list has automated evidence: see `docs/acceptance.md`.

@@ -1,4 +1,4 @@
-# Acceptance checklist (spec §17.2): release 1.6
+# Acceptance checklist: release 1.7 (Ultimate Edition) and the §17.2 list
 
 `node tests/run.js` runs the 89 headless tests. `node tools/smoke.js` walks every screen in headless Edge and fails on any console error. Both passed on 2026-10-12.
 
@@ -27,3 +27,32 @@
 - The XP targets: level 11 after the campaign, level 19 with every trial.
 - Font coverage: every kanji on screen is in the subset.
 - Replay determinism.
+
+## 1.7: the Ultimate Edition test list (brief §13)
+
+`node tests/run.js` and `node tools/smoke.js` both pass. The smoke test walks the main menu, shop, inventory, challenges, training, world map, workshop and editor, a custom map, Hell, White and Ashen Village in headless Edge, with no console errors.
+
+| Requirement | Evidence | State |
+|---|---|---|
+| The game launches successfully | `tools/smoke.js` (boot to the end of the walk); every test boots the page | ✅ |
+| The main menu buttons work | `menu.test.js` (each entry opens its screen; locked ones explain); `modes.test.js` (Hell / White entries); smoke | ✅ |
+| Mon and shadow crystals update correctly | `menu.test.js` (crystals once per claim, backfill); `shop.test.js`; `challenges.test.js`; `world.test.js`; `modes.test.js` | ✅ |
+| Purchases deduct the correct amount | `shop.test.js` (exact price, once; refusals take nothing; an unsaved purchase is undone; never negative) | ✅ |
+| Rewards are granted once per intended event | Claims for bosses, steps, trials, missions, dailies, achievements, drills and the sun; `lastWin` replays; tests in `menu`, `challenges`, `world`, `training` and `modes` | ✅ |
+| Save data survives restarting the app | Restart tests in `menu`, `shop`, `world`, `workshop` and `modes`; the 1.6 save tests | ✅ logic; ⚠️ a real Android process death untested |
+| The first boss triggers the sun event exactly as intended | `modes.test.js` (after the ceremony; untouchable for 2.4 s; once; Later; old saves; the map's sun) | ✅ |
+| Clicking the sun opens the Hell / White choice | `modes.test.js`, smoke | ✅ |
+| Both modes load their correct missions and visual themes | `modes.test.js` (all 14 missions, their arenas, Hell / White rules); screenshots reviewed | ✅ |
+| The training room works without damaging campaign progression | `training.test.js` (the save is byte-identical after free practice; no stats; drills pay once) | ✅ |
+| Custom maps can be created, saved, loaded and played | `workshop.test.js` (editor, storage, codes, validation, play, waves) | ✅ |
+| Locked areas cannot be entered prematurely | `world.test.js` (locked markers, missions in order), `modes.test.js` (sealed modes), `shop.test.js` (closed stock), the 1.6 ladder tests | ✅ |
+| Android navigation and screen scaling work | Back on every new screen (`release.test.js` plus each panel's Back); layouts checked at 1920×1080 and 800×360 | ✅ logic; ⚠️ device untested |
+| No major crashes, missing assets or broken transitions | Smoke walk with no console errors; fairness audit (41 moves); golden baseline: only additions | ✅ |
+
+**Design guarantees, also automated:**
+
+- The 2.0× effective-power budget with every armour, charm and weapon variant.
+- Variants never beat their class.
+- Cosmetics change no number.
+- Every new attack carries a tell and at least two simulated answers.
+- The campaign is unchanged: golden baseline, sim and fairness tests.

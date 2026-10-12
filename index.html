@@ -143,6 +143,14 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
 .hb .bd{display:inline-block;min-width:1.25em;padding:0 .3em;border-radius:99px;background:var(--red);color:var(--paper);font-size:.6em;text-align:center;line-height:1.25em;margin-left:.6em;vertical-align:.25em;letter-spacing:0}
 #home .lnk{color:rgba(236,229,214,.82);border-color:rgba(236,229,214,.35)}#home .lnk:hover{color:#fff;border-color:var(--red)}#home .ver{color:var(--paper)}
 .purse{font-style:normal;font-weight:600;letter-spacing:.06em}
+.sunbtn{all:unset;position:absolute;left:50%;top:26%;width:15cqw;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;cursor:pointer;border:2px dashed rgba(246,231,184,.85);animation:sunring 1.4s ease-in-out infinite alternate;z-index:5}
+.sunbtn.off{display:none}.sunbtn:focus-visible{outline:3px solid var(--red);outline-offset:6px}@keyframes sunring{from{box-shadow:0 0 1cqw rgba(246,231,184,.4)}to{box-shadow:0 0 4cqw rgba(246,231,184,.95)}}
+#sunp{background:radial-gradient(ellipse 70% 60% at 50% 28%,rgba(246,231,184,.6),rgba(12,11,10,.9) 72%);color:var(--paper);gap:1cqw}#sunp h2{color:#f6e7b8}#sunp .tag{color:rgba(236,229,214,.9)}
+.mcard{all:unset;box-sizing:border-box;cursor:pointer;width:28cqw;padding:1.6cqw 1.4cqw;display:flex;flex-direction:column;align-items:center;gap:.5cqw;text-align:center;border:2px solid;transition:transform .25s,box-shadow .25s}
+.mcard:hover,.mcard:focus-visible{transform:translateY(-.5cqw)}.mcard:focus-visible{outline:3px solid var(--red);outline-offset:4px}
+.mcard .kj{font:6cqw/1 'Yuji Boku',serif}.mcard .nm{font:600 max(1.9cqw,15px)/1.1 'Cormorant Garamond',serif;letter-spacing:.2em;text-transform:uppercase}.mcard .ti{font:italic max(1.1cqw,11px)/1.45 'Cormorant Garamond',serif}.mcard .stt{font:600 max(.9cqw,10px) 'Cormorant Garamond',serif;letter-spacing:.2em;text-transform:uppercase}
+.mcard.hell{background:linear-gradient(#170907,#3a0e09);color:#f3c1b3;border-color:#8a2416}.mcard.hell:hover{box-shadow:0 0 3cqw rgba(181,48,28,.7)}
+.mcard.white{background:linear-gradient(#f7f4ec,#e2e8f1);color:#24304d;border-color:#b09650}.mcard.white:hover{box-shadow:0 0 3cqw rgba(246,231,184,.9)}
 #workshop{gap:.55cqw}#workshop h2{font-size:max(2.4cqw,16px)}#workshop .big{padding:7px 26px}
 #editor{justify-content:flex-end;padding:0;gap:0;pointer-events:none}#editor .dock{pointer-events:auto;width:100%;background:rgba(236,229,214,.95);border-top:1.5px solid rgba(21,19,15,.5);padding:.6cqw 1.6cqw .7cqw;display:flex;flex-direction:column;gap:.35cqw;text-align:left}
 #editor .erow{display:flex;flex-wrap:wrap;gap:.3cqw 1.1cqw;align-items:center;font:500 max(.95cqw,10px)/1.3 'Cormorant Garamond',serif}#editor .erow b{font-weight:700;letter-spacing:.05em}
@@ -166,6 +174,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
     <button class="lnk" id="replayBig" aria-label="Replay film">Replay the film</button>
   </div>
   <button id="skip" class="skip off">Skip intro ›</button>
+  <button id="sunBtn" class="sunbtn off" aria-label="Touch the mysterious sun"></button>
   <div class="panel off" id="home" role="navigation" aria-label="Main menu">
     <div class="mt"><span class="kj">一閃</span><span class="en">Five Shadows</span></div>
     <p class="hst" id="hStat"></p><div class="xpbar" aria-hidden="true"><i id="hXp"></i></div>
@@ -201,6 +210,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
     <div class="levels wrap" id="wkBody"></div><p class="rw" id="wkMore"></p><div class="row" id="wkBtns"></div><p class="rw" id="wkMsg" role="status"></p><textarea id="wkCode" class="code off" rows="2" spellcheck="false" aria-label="Map code"></textarea>
     <button class="big" id="wkClose">Back</button></div>
   <div class="panel off" id="editor" role="dialog" aria-label="Map editor"><div class="etop" id="edTop"></div><div class="dock" id="edDock"></div></div>
+  <div class="panel off" id="sunp" role="dialog" aria-labelledby="suTitle"><h2 id="suTitle">Choose what lies beyond</h2><p class="tag" id="suText"></p><div class="levels" id="suCards"></div><div class="row" id="suBtns"></div></div>
   <div class="panel dim off" id="region" role="dialog" aria-labelledby="gTitle"><div class="mt"><span class="kj" id="gKanji"></span><span class="en" id="gTitle"></span></div><p class="tag" id="gText"></p>
     <div class="levels" id="gNodes"></div><div class="row"><button class="lnk" id="gChar">Character</button><button class="lnk" id="gBack">Back to the map</button></div></div>
   <div class="panel dim off" id="settings" role="dialog" aria-labelledby="sTitle"><h2 id="sTitle">Settings</h2><div class="row tabs" id="sTabs"><button class="lnk" data-st="game">Sound, screen &amp; play</button><button class="lnk" data-st="keys">Keyboard keys</button></div>
@@ -323,7 +333,8 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   "iron_bead":{"name":"Iron Bead","rarity":"legendary","source":"Tetsugorō’s Ink Trial","stats":{"hp":0.06,"defence":0.03}},
   "pale_ribbon":{"name":"Pale Ribbon","rarity":"legendary","source":"Shirasagi’s Ink Trial","stats":{"ink":0.1,"cooldown":0.06}},
   "oni_horn":{"name":"Oni Horn","rarity":"legendary","source":"Akuma’s Ink Trial","stats":{"attack":0.06}},
-  "ash_charm":{"name":"Ash Charm","rarity":"rare","source":"Ashen Village: the Ash Ronin","stats":{"ink":0.05,"roll":0.08}}},
+  "ash_charm":{"name":"Ash Charm","rarity":"rare","source":"Ashen Village: the Ash Ronin","stats":{"ink":0.05,"roll":0.08}},
+  "ember_heart":{"name":"Ember Heart","rarity":"epic","source":"Hell Mode: the Wraith Captain","stats":{"attack":0.04,"cooldown":0.05,"hp":-0.03}}},
  "armour":{
   "travel_haori":{"name":"Travel Haori","rarity":"common","stats":{"speed":0.06,"roll":0.08},"desc":"Light cloth for the road: a quicker walk and roll."},
   "lamellar_do":{"name":"Lamellar Dō","rarity":"rare","stats":{"defence":0.06,"attack":-0.06,"speed":-0.04},"desc":"Laced iron scales: you take less, deal less, and walk slower."},
@@ -437,24 +448,25 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   {"id":"wanderer","name":"Wanderer","text":"Find the hidden village","check":"secret","crystals":15},
   {"id":"architect","name":"Architect","text":"Save a custom map that passes validation","stat":"mapsMade","n":1,"crystals":10},
   {"id":"hell_first","name":"Through the Gate","text":"Win a duel in Hell Mode","stat":"hellWins","n":1,"crystals":10},
-  {"id":"hell_done","name":"Lord of Ash","text":"Conquer the Ninth Gate","check":"claim:hell:7","crystals":50},
+  {"id":"hell_done","name":"Lord of Ash","text":"Conquer the Ninth Gate","check":"claim:hell:6","crystals":50},
   {"id":"white_first","name":"Into the Light","text":"Win a duel in White Mode","stat":"whiteWins","n":1,"crystals":10},
-  {"id":"white_done","name":"Dawnbringer","text":"Face the Pale Sun and win","check":"claim:white:7","crystals":50}]}
+  {"id":"white_done","name":"Dawnbringer","text":"Face the Pale Sun and win","check":"claim:white:6","crystals":50}]}
 </script>
 <script type="application/json" id="data-world">
 {"schema_version":1,"width":3000,
  "places":[
   {"id":"dojo","kind":"dojo","name":"Forgotten Dojo","jp":"師","at":[250,780],"desc":"An empty hall where an old master once taught. Practise here: nothing you do changes your journey."},
-  {"id":"workshop","kind":"workshop","name":"Ink Workshop","jp":"墨","at":[330,990],"desc":"Draw your own arenas: platforms, obstacles, hazards, foes in waves, light and weather. Test them, then play them."},
+  {"id":"workshop","kind":"workshop","name":"Ink Workshop","jp":"墨","at":[430,900],"desc":"Draw your own arenas: platforms, obstacles, hazards, foes in waves, light and weather. Test them, then play them."},
   {"id":"burning_field","kind":"region","lv":0,"at":[640,640]},
   {"id":"bamboo_grove","kind":"region","lv":1,"at":[1060,470]},
   {"id":"mountain_shrine","kind":"region","lv":2,"at":[1480,300]},
   {"id":"moonlit_lake","kind":"region","lv":3,"at":[1900,560]},
   {"id":"oni_castle","kind":"region","lv":4,"at":[2350,370]},
-  {"id":"ashen","kind":"loc","at":[800,930],"secret":true},
+  {"id":"ashen","kind":"loc","at":[830,880],"secret":true},
   {"id":"white","kind":"loc","at":[1050,165]},
-  {"id":"hell","kind":"loc","at":[1500,930]}],
+  {"id":"hell","kind":"loc","at":[1500,870]}],
  "roads":[["dojo","burning_field"],["dojo","workshop"],["burning_field","bamboo_grove"],["bamboo_grove","mountain_shrine"],["mountain_shrine","moonlit_lake"],["moonlit_lake","oni_castle"],["burning_field","ashen"],["burning_field","white"],["burning_field","hell"]],
+ "sun":[640,330],
  "secret":{"beaten":2,"region":"burning_field","text":"A hidden road: smoke still rises south of the Burning Field. Ashen Village is on your map."}}
 </script>
 <script type="application/json" id="data-modes">
@@ -465,7 +477,29 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
    "missions":[
     {"name":"The Empty Well","kind":"duel","foe":"ash_bandit","rounds":1,"hp":1.1,"xp":600,"mon":60,"desc":"A looter among the ruins."},
     {"name":"Smoke on the Road","kind":"gauntlet","waves":["ash_bandit","cutthroat","thrower"],"hp":1.15,"xp":900,"mon":90,"crystals":5,"desc":"Three in a row; your health carries from one to the next."},
-    {"name":"The Ash Ronin","kind":"duel","foe":"ash_ronin","rounds":2,"xp":1600,"mon":200,"crystals":15,"item":"ash_charm","boss":true,"desc":"The one who lit the fire, and stayed.","after":"The Ash Ronin kneels in the ash. The smoke over the village finally thins."}]}}}
+    {"name":"The Ash Ronin","kind":"duel","foe":"ash_ronin","rounds":2,"xp":1600,"mon":200,"crystals":15,"item":"ash_charm","boss":true,"desc":"The one who lit the fire, and stayed.","after":"The Ash Ronin kneels in the ash. The smoke over the village finally thins."}]},
+  "hell":{"name":"Hell Mode","jp":"鬼","arena":7,"diff":5,"final":"Hell is conquered","lock":"Touch the mysterious sun and choose the dark path.",
+   "desc":"The Infernal Realm: a brutal path of ash and fire. Demons strike back at what they block and chain what lands; healing is halved, wounds carry between rounds, and the vents flare. The rewards are worth it.",
+   "story":["Beneath the dark sun the ground opens, and the road goes down.","Below, the fires the war lit never went out, and those who fed them are waiting."],
+   "missions":[
+    {"name":"The Ash Gate","kind":"duel","foe":"h_ghoul","rounds":1,"xp":900,"mon":120,"crystals":5,"desc":"A ghoul of ash. It strikes back at what it blocks.","story":"The gate is a mouth of ash, and something inside it is still hungry."},
+    {"name":"River of Embers","kind":"duel","foe":"h_imp","rounds":1,"xp":1000,"mon":130,"crystals":5,"desc":"Fire vents flare along the river: watch for the glow.","layout":{"hazards":[{"x":-460,"w":160,"kind":"fire","period":4,"dmg":8},{"x":460,"w":160,"kind":"fire","period":4.5,"dmg":8}]}},
+    {"name":"The Bone Bridge","kind":"gauntlet","waves":["h_ghoul","h_imp","h_brute"],"arena":8,"xp":1400,"mon":180,"crystals":10,"item":"onigane_plate","desc":"Three demons in a row; your wounds carry from one to the next."},
+    {"name":"The Wraith Captain","kind":"duel","foe":"h_wraith","rounds":2,"xp":1600,"mon":200,"crystals":10,"item":"ember_heart","desc":"An elite of the drowned dead: it fades and returns beside you.","layout":{"hazards":[{"x":0,"w":180,"kind":"fire","period":5,"dmg":9}]}},
+    {"name":"Enra, the Ember Judge","kind":"duel","foe":"h_enra","rounds":2,"boss":true,"arena":8,"xp":2400,"mon":300,"crystals":20,"skill_points":1,"item":"ember_katana","desc":"The judge of the burning: fire rises where you stand.","story":"A judge in a robe of coals weighs every soul that comes down the stair. He has weighed yours.","after":"Enra’s fire gutters out. His blade, still warm, is yours."},
+    {"name":"The Burning Stair","kind":"survive","foe":"h_brute","time":45,"xp":1500,"mon":200,"crystals":10,"desc":"Endure 45 seconds on the stair: an Oni Brute, and the vents.","layout":{"hazards":[{"x":-520,"w":160,"kind":"fire","period":3.5,"dmg":9},{"x":0,"w":160,"kind":"spikes","period":4,"dmg":9},{"x":520,"w":160,"kind":"fire","period":3,"dmg":9}]}},
+    {"name":"The Ninth Gate","kind":"duel","foe":"h_akuma","rounds":2,"boss":true,"final":true,"arena":8,"xp":3500,"mon":600,"crystals":50,"skill_points":1,"item":["hellmaw_kanabo","trail_hellfire"],"desc":"The warlord, unbound by death, at the last gate.","story":"At the bottom of everything stands a gate, and before it the warlord you killed, whole again and burning.","after":"The Ninth Gate closes behind you. The warlord’s fury is ash at last.","layout":{"hazards":[{"x":-580,"w":160,"kind":"fire","period":5,"dmg":10},{"x":580,"w":160,"kind":"fire","period":5.5,"dmg":10}]}}]},
+  "white":{"name":"White Mode","jp":"白","arena":9,"diff":4,"parry":true,"final":"The light is answered","lock":"Touch the mysterious sun and choose the path of light.",
+   "desc":"The Celestial Sanctuary: a luminous path of precision. Its guardians wear a ward that turns plain blows aside; only a perfect parry, a punish or an Issen breaks it. Falling light, a reflection, a pale sun.",
+   "story":["Above the bright sun the sky opens, and the road climbs into light.","The sanctuary’s guardians do not hate you. They simply will not let a careless blade pass."],
+   "missions":[
+    {"name":"Gate of Dawn","kind":"duel","foe":"w_warden","rounds":1,"xp":900,"mon":120,"crystals":5,"desc":"Its ward turns plain blows aside (gold sparks): parry — block just as it strikes — or punish a miss.","story":"A lantern burns without oil at the gate. Its keeper raises a staff, not in anger: in question."},
+    {"name":"The Mirror Pool","kind":"duel","foe":"w_mirror","rounds":2,"xp":1100,"mon":140,"crystals":5,"desc":"Your reflection steps out of the water.","story":"The pool shows you as you are. Then it shows you as you fight."},
+    {"name":"Falling Light","kind":"survive","foe":"w_archer","time":30,"xp":1200,"mon":150,"crystals":10,"desc":"Survive 30 seconds: a ring of gold marks where the light will fall."},
+    {"name":"The Bell Tower","kind":"duel","foe":"w_bellmonk","rounds":2,"xp":1600,"mon":200,"crystals":10,"item":"celestial_haori","desc":"An elite monk whose bell shakes the stones; its ward holds firm.","story":"The bell has rung once in a hundred years. It rings now."},
+    {"name":"Hakuren, the White Lotus","kind":"duel","foe":"w_hakuren","rounds":2,"boss":true,"arena":10,"xp":2400,"mon":300,"crystals":20,"skill_points":1,"item":"dawn_blade","desc":"The sanctuary’s blade: light falls where you stand, and hurt, she blooms in waves.","story":"Hakuren has guarded the stair since before the war. She asks one thing: show her a clean stroke.","after":"Hakuren lowers her blade and bows. The Dawn Blade is offered, not taken."},
+    {"name":"Three Lanterns","kind":"gauntlet","waves":["w_warden","w_mirror","w_warden"],"xp":1500,"mon":200,"crystals":10,"desc":"Three guardians in a row; your health carries over."},
+    {"name":"The Pale Sun","kind":"duel","foe":"w_sunwarden","rounds":2,"boss":true,"final":true,"arena":10,"xp":3500,"mon":600,"crystals":50,"skill_points":1,"item":["sunlit_naginata","trail_dawn"],"desc":"The warden of the sun that rose over the Burning Field.","story":"The sun that rose over the field was never the sun. Its warden waits inside the light.","after":"The pale sun sets. Where it hung, the sky is only sky."}]}}}
 </script>
 <script type="application/json" id="data-powers">
 {"schema_version":3,
@@ -733,7 +767,7 @@ function fig(c,p,k,t,col){const L=k.L,J=joints(p,L),ty=k.type,ik_=col?col[0]:k.i
  if(ty==='lord'){blob(c,[add(add(hd,fw,-hr*.3),up,hr*.55),add(add(hd,fw,-hr*1.8),up,-hr*.55),add(add(hd,fw,-hr*1.3),up,-hr*1.1),add(add(hd,fw,-hr*.1),up,-hr*.5)]);circ(c,...add(hd,up,hr*.25),hr*1.14);
   if(p.horn>.5)brush(c,qpts(add(add(hd,fw,hr*.5),up,hr*.8),add(add(hd,fw,hr*2.3),up,hr*2.0),add(add(hd,fw,hr*1.0),up,hr*3.5),12),7,{taper:u=>1-u*.85});
   brush(c,qpts(add(add(hd,fw,hr*.1),up,hr*.9),add(add(hd,fw,-hr*1.3),up,hr*2.3),add(add(hd,fw,-hr*.3),up,hr*3.4),12),6,{taper:u=>1-u*.85})}
- circ(c,hd[0],hd[1],hr);
+ circ(c,hd[0],hd[1],hr);if(k.horns)for(const sd of[-.55,.55])brush(c,qpts(add(add(hd,fw,hr*sd),up,hr*.6),add(add(hd,fw,hr*sd*1.5),up,hr*1.5),add(add(hd,fw,hr*sd*.7),up,hr*2.25),8),6,{taper:u=>1-u*.85});
  tri(c,add(add(hd,fw,hr*.8),up,hr*.25),add(add(hd,fw,hr*1.28),up,-hr*.18),add(add(hd,fw,hr*.78),up,-hr*.45));
  blob(c,[add(add(hd,fw,hr*.92),up,-hr*.4),add(add(hd,fw,hr*.75),up,-hr*1.05),add(add(hd,fw,hr*.1),up,-hr*.95),add(hd,up,-hr*.3)]);
  if(ty==='ninja'){blob(c,[add(add(hd,fw,-hr*1.15),up,hr*.15),add(add(hd,fw,-hr*.2),up,hr*1.25),add(add(hd,fw,hr*.95),up,hr*.6),add(add(hd,fw,hr*.65),up,-hr*1.1),add(add(hd,fw,-hr*.95),up,-hr*.95)]);c.strokeStyle=PAPER;c.lineWidth=2.6;line(c,add(add(hd,fw,hr*.15),up,hr*.18),add(add(hd,fw,hr*1.02),up,hr*.12))}
@@ -1018,6 +1052,8 @@ const S={tell(w,v=1){const o=osc('sine',2350,w,.35);o.frequency.exponentialRampT
  click(w,v=.8){const g=gain();env(g,w,.001,v*.12,.05);toOut(chain(osc('square',2600,w,.1),g),.4);const g2=gain();env(g2,w,.001,v*.3,.03);toOut(chain(nsrc(w,.05),flt('highpass',4000),g2),.3)},
  caw(w,v=.4){for(let k=0;k<2;k++){const t0=w+k*.22,o=osc('sawtooth',620,t0,.25);o.frequency.exponentialRampToValueAtTime(430,t0+.16);const g=gain();env(g,t0,.01,v*.3,.15);toOut(chain(o,flt('bandpass',1300,3),g),.4)}},
  gong(w,v=.7){[98,147,203,262,331,415].forEach((f,i)=>{const g=gain();env(g,w,.01,v*.18/(1+i*.4),4.5-i*.4);toOut(chain(osc('sine',f,w,6),g),.7)})},
+ sun(w,v=.8){[261.6,392,523.3,784,1046.5,1568].forEach((f,i)=>{const o=osc('sine',f*(1+(i%2?.003:-.003)),w,6.5),l=osc('sine',.6+i*.17,w,6.5),lg=gain();lg.gain.value=f*.006;chain(l,lg).connect(o.frequency);const g=gain();g.gain.setValueAtTime(.0001,w);g.gain.exponentialRampToValueAtTime(v*.09/(1+i*.35),w+1.2+i*.15);g.gain.exponentialRampToValueAtTime(.0001,w+6);toOut(chain(o,g),.9)});
+  const h=osc('triangle',55,w,6),g=gain();g.gain.setValueAtTime(.0001,w);g.gain.exponentialRampToValueAtTime(v*.25,w+1.5);g.gain.exponentialRampToValueAtTime(.0001,w+6);toOut(chain(h,flt('lowpass',300),g),.5)},
  growl(w,v=.7){const o=osc('sawtooth',78,w,1);o.frequency.linearRampToValueAtTime(64,w+.8);const g=gain();env(g,w,.06,v*.45,.75);toOut(chain(o,flt('lowpass',500),g),.4)}};
 const N={D3:146.83,A3:220,Bb3:233.08,D4:293.66,Eb4:311.13,G4:392,A4:440,Bb4:466.16,D5:587.33,Eb5:622.25};
 const EV=[[.55,w=>{S.boom(w,.55);S.pluck(w,N.D3,.6)}],[1.1,w=>S.flute(w,N.D4,2.6,.5)],[2.0,w=>S.pluck(w,N.A3,.4)],[2.5,w=>S.pluck(w,N.Bb3,.4)],[2.9,w=>{S.drum(w,.45);S.pluck(w,N.D4,.45)}],
@@ -1115,6 +1151,16 @@ const MV={
  r_jab:{dur:.38,hit:[[.13,.19]],reach:140,dmg:4,zone:'mid',push:70,ai:[0,155],w:3,answers:['block','roll'],snd:'slash',fr:g=>[[0,g],[.13,KS1,'o5'],[.38,g]]},
  r_knife:{dur:.5,cd:1.6,proj:{t:.24,type:'star',v:1150,dmg:5,zone:'mid',y:-140},ai:[250,1200],w:4,answers:['block','jump','roll'],fr:g=>[[0,g],[.12,P(g,{ua1:-.6,fa1:-.2,tl:0})],[.24,KS1,'o5'],[.5,g]]},
  r_bash:{dur:.95,hit:[[.5,.6]],reach:200,dmg:12,zone:'high',kd:1,push:260,armor:[0,.52],tell:[.14,.48],ai:[0,215],w:3,answers:['block','crouch','roll'],snd:'whoosh',fr:g=>[[0,g],[.42,P(PS.high,{tl:-.12})],[.54,P(PS.cutLow,{sw:.85}),'o5'],[.95,g]]},
+ // 1.7, Hell and White: a pillar rises where a ring marked the hero (the ring follows until it locks, then waits); the sentence is
+ // a wider one; the bloom sends ground waves both ways. Each pillar is a still projectile: unblockable, ground only (jump, or roll clear)
+ h_pillar:{dur:1.25,cd:5,mark:[.05,.55],markHold:.35,lock:1,dest:(F,O)=>O.x,proj:{t:.85,type:'pillar',hue:'fire',v:0,dmg:12,zone:'mid',y:-20,ground:1,unblock:1,life:.3,wide:58,at:'px',kd:1},tell:[.05,.8],ai:[0,1300],w:2,answers:['jump','roll'],
+  fr:g=>[[0,g],[.4,P(PS.high,{tl:-.15,hd:-.4})],[.8,P(PS.high,{tl:-.22,hd:-.5})],[.88,P(PS.cutLow,{sw:.6,tl:.6,th1:1.2,sh1:.2,th2:-1,sh2:-1.3}),'o5'],[1.25,g]],tick(F,O,a,b){if(a<this.mark[1]&&b>=this.mark[1])F.d.px=O.x}},
+ h_sentence:{dur:1.4,cd:6,mark:[.05,.6],markHold:.35,lock:1,dest:(F,O)=>O.x,proj:{t:.9,type:'pillar',hue:'fire',v:0,dmg:14,zone:'mid',y:-20,ground:1,unblock:1,life:.32,wide:110,at:'px',kd:1},tell:[.05,.85],ai:[0,1300],w:3,answers:['jump','roll'],
+  fr:g=>[[0,g],[.45,P(PS.high,{tl:-.18,hd:-.45})],[.85,P(PS.high,{tl:-.25,hd:-.55})],[.94,P(PS.cutLow,{sw:.5,tl:.7,th1:1.3,sh1:.2,th2:-1.1,sh2:-1.4}),'o5'],[1.4,g]],tick(F,O,a,b){if(a<this.mark[1]&&b>=this.mark[1])F.d.px=O.x;if(a<.9&&b>=.9){G.shake=Math.max(G.shake,16);snd('boom',.5)}}},
+ w_pillar:{dur:1.2,cd:4.5,mark:[.05,.55],markHold:.35,lock:1,dest:(F,O)=>O.x,proj:{t:.85,type:'pillar',hue:'light',v:0,dmg:11,zone:'mid',y:-20,ground:1,unblock:1,life:.3,wide:58,at:'px'},tell:[.05,.8],ai:[0,1300],w:2,answers:['jump','roll'],
+  fr:g=>[[0,g],[.4,P(PS.high,{tl:-.1,hd:-.45,ua2:2.4,fa2:2.6})],[.8,P(PS.high,{tl:-.15,hd:-.5,ua2:2.5,fa2:2.7})],[.88,P(PS.cutSide,{tl:.3}),'o5'],[1.2,g]],tick(F,O,a,b){if(a<this.mark[1]&&b>=this.mark[1])F.d.px=O.x}},
+ w_bloom:{dur:1.05,cd:4,proj:{t:.62,type:'bloom',v:720,dmg:10,zone:'low',y:-20,ground:1},proj2:{t:.62,type:'bloom',v:720,dmg:10,zone:'low',y:-20,ground:1,back:1},tell:[.05,.6],ai:[0,1200],w:3,answers:['block','jump','roll'],
+  fr:g=>[[0,g],[.32,SPUP],[.66,P(SPL,{sw:1.3}),'o5'],[1.05,g]]},
  // second-phase moves (below 50% health; BOSSES[].phase): each answerable two ways, heavy steps telegraphed
  g_twin:{dur:1.25,hit:[[.3,.38],[.78,.88]],reach:255,dmg:7,zone:'mid',push:110,win:[null,{zone:'low',dmg:10,kd:1,push:220,reach:245}],tell:[.52,.76],tellZone:'low',ai:[100,270],w:4,answers:['block','roll'],snd:'whoosh',
   fr:g=>[[0,g],[.22,P(SPG,{tl:-.05,ua1:.5,fa1:1.0})],[.34,SPL,'o5'],[.5,P(SPG,{tl:.1})],[.72,P(SPG,CR,{sw:-1.4,ua1:-.4,fa1:-.2})],[.84,SPLL,'o5'],[1.25,g]]},
@@ -1254,6 +1300,45 @@ function skyFx(c,L,t){if(L.weather==='rain')rain(c,t,.6);else if(L.weather==='pe
  else if(L.weather==='ash'||L.weather==='snow'){camT(c,1);c.fillStyle=L.weather==='ash'?ink(.5):'#f7f3ea';for(let i=0;i<60;i++){const age=(t*.18+hash(i))%1,x=CAM.x-1100+hash(i*3)*2200-age*180+Math.sin(t+i)*24,y=-900+age*1000;c.globalAlpha=.7*(1-age*.6);circ(c,x,y,2+hash(i*7)*2.5)}c.globalAlpha=1}
  else if(L.weather==='mist')mistBand(c,1.1,-60,t,.55);
  if(L.light!=='day'){screen(c);c.globalCompositeOperation='multiply';c.fillStyle=L.light==='night'?'#5d6378':'#e2b48f';c.fillRect(0,0,W,H);c.globalCompositeOperation='source-over'}}
+/* --- Hell Mode's demons (1.7): the existing rigs in black ink with horns, read against the fire. ai.counter: the chance to strike
+   back right after blocking the hero; ai.follow: the cut it chains after one lands; ai.read: it favours low cuts against a
+   standing guard and mid cuts against a crouch. White Mode's guardians: indigo ink with a radiant ward (def.ward). --- */
+K.h_ghoul=Object.assign({},K.bandit,{ink:'#120807',back:'#4a1a12',horns:1});K.h_imp=Object.assign({},K.thrower,{ink:'#1a0806',back:'#5e1a10',horns:1});K.h_brute=Object.assign({},K.monk,{ink:'#140806',back:'#4a1810',horns:1});
+K.h_wraith=Object.assign({},K.ghost,{ink:'#2a0a07',back:'#6e2418'});K.h_enra=Object.assign({},K.lord,{ink:'#0d0504',back:'#561a10'});K.h_akuma=Object.assign({},K.lord,{ink:'#050302',back:'#3d0d08'});
+const HM='#ff7a45'; // a hell ring reads on the dark floor
+Object.assign(FOES,{
+ h_ghoul:{id:'h_ghoul',name:'Ash Ghoul',title:'hungry at the gate',jp:'鬼',kind:K.h_ghoul,s:1.02,hp:75,speed:320,guard:PS.guard,wk:{},moves:['r_slash','r_low','r_jab','b_kick'],ai:{think:.6,aggr:.7,block:.3,range:180,counter:.55,read:1,follow:{r_jab:'r_slash',r_slash:'r_low'}},markCol:HM,win:PS.stand,
+  tip:'It strikes back at what it blocks and chains a second cut after a hit: block, wait out the string, then punish.'},
+ h_imp:{id:'h_imp',name:'Ember Imp',title:'quick as a spark',jp:'鬼',kind:K.h_imp,s:.96,hp:60,speed:400,guard:KG,wk:{sheath:0},moves:['k_stab','k_star','r_jab','k_vanish','h_pillar'],ai:{think:.5,aggr:.66,block:.3,range:160,jump:.15,counter:.35,read:1,follow:{k_stab:'k_star'}},markCol:HM,win:P(KG,{tl:0,hd:-.2}),
+  tip:'Fire rises where an orange ring locks onto you: jump it or roll clear. Duck its stars.'},
+ h_brute:{id:'h_brute',name:'Oni Brute',title:'iron and spite',jp:'鬼',kind:K.h_brute,s:1.25,hp:120,speed:210,guard:P(PS.guard,{sw:2.6,tl:.06}),wk:{gl:20,sheath:0},moves:['m_swing','m_low','r_bash','m_slam'],ai:{think:.8,aggr:.62,block:.25,range:205,counter:.45,read:1},markCol:HM,win:P(PS.high,{tl:-.1}),
+  tip:'Armored through its windups and quick to punish a blocked cut: jump the quake, duck the bash, strike in its recovery.'},
+ h_wraith:{id:'h_wraith',name:'Wraith Captain',title:'of the drowned dead',jp:'鬼',kind:K.h_wraith,s:1.06,hp:110,speed:290,guard:P(SPG,{sw:1.8,tl:.1}),wk:{gl:45,sheath:0},moves:['y_thrust','y_sweep','y_phase','y_wisp'],ai:{think:.55,aggr:.66,block:.35,range:235,counter:.4,read:1,follow:{y_thrust:'y_sweep'}},markCol:HM,win:P(SPG,{tl:-.05,hd:-.25}),
+  tip:'A thrust, then the sweep: crouch-block the second cut. A pale ring marks where it returns.'},
+ h_enra:{id:'h_enra',name:'Enra',title:'the Ember Judge',jp:'鬼',kind:K.h_enra,s:1.22,hp:180,speed:270,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_cut','a_crush','a_sweep','h_pillar','b_kick'],
+  ai:{think:.5,aggr:.7,block:.4,range:225,counter:.5,read:1,follow:{a_cut:'a_crush'}},phase:{at:.5,move:'h_sentence',k:'鬼',sub:'The judge passes sentence',think:.9,aggr:.05},markCol:HM,win:P(PS.high,{tl:-.2,hd:-.4}),
+  tip:'Fire rises where the orange ring locks: jump or roll. His cut leads into a crush; hurt, the pillar grows wide — jump it or roll well clear.'},
+ h_akuma:{id:'h_akuma',name:'Akuma Unbound',title:'at the Ninth Gate',jp:'怒',kind:K.h_akuma,s:1.3,hp:230,speed:290,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_cut','a_crush','a_sweep','a_wave','a_leap','h_pillar','b_kick'],
+  ai:{think:.45,aggr:.72,block:.45,range:225,rage:1,counter:.6,read:1,follow:{a_cut:'a_sweep',a_sweep:'a_crush'}},phase:{at:.5,move:'h_sentence',k:'怒',sub:'Unbound fury',think:.95,aggr:0},markCol:HM,win:P(PS.high,{tl:-.2,hd:-.4}),
+  tip:'Every string has an end: block it out, then punish. Fire marks where you stand; the leap crashes down — move.'}});
+K.w_warden=Object.assign({},K.monk,{ink:'#1d2742',back:'#5b6a8f'});K.w_mirror=Object.assign({},K.hero,{ink:'#24304d',back:'#7b8bb0'});K.w_archer=Object.assign({},K.thrower,{ink:'#22304f',back:'#6f80a6'});
+K.w_bellmonk=Object.assign({},K.monk,{ink:'#18213a',back:'#4f5e82'});K.w_hakuren=Object.assign({},K.ghost,{ink:'#1f2a48',back:'#6c7ba0'});K.w_sunwarden=Object.assign({},K.lord,{ink:'#16203a',back:'#8a7a4a'});
+const WM_='#a8862a';
+Object.assign(FOES,{
+ w_warden:{id:'w_warden',name:'Lantern Warden',title:'keeper of the gate',jp:'白',kind:K.w_warden,s:1.05,hp:70,speed:220,guard:P(PS.guard,{sw:2.6,tl:.06}),wk:{gl:20,sheath:0},ward:1,moves:['m_swing','r_slash','b_kick'],ai:{think:.8,aggr:.55,block:.2,range:200},markCol:WM_,win:P(PS.high,{tl:-.1}),
+  tip:'Its ward turns plain blows aside (gold sparks). Parry — start blocking just as it strikes — or punish a miss; then cut while the ward is broken.'},
+ w_mirror:{id:'w_mirror',name:'The Reflection',title:'your own form, in light',jp:'白',kind:K.w_mirror,s:1,hp:90,speed:340,guard:PS.guard,wk:{},moves:['r_slash','r_high','r_low','k_stab','a_wave','b_kick'],ai:{think:.55,aggr:.62,block:.38,range:185},markCol:WM_,win:PS.stand,
+  tip:'It fights as you do: read the height of each cut, block its ink wave, punish what it misses.'},
+ w_archer:{id:'w_archer',name:'Sky Archer',title:'who calls the light down',jp:'光',kind:K.w_archer,s:.98,hp:70,speed:330,guard:PS.guard,wk:{sheath:0},moves:['w_pillar','k_star','r_jab'],ai:{think:.5,aggr:.7,block:.2,range:420},markCol:WM_,win:PS.stand,
+  tip:'A gold ring follows you, locks, then the light falls: jump or roll clear. Duck the stars.'},
+ w_bellmonk:{id:'w_bellmonk',name:'Bell Monk',title:'of the hundred-year bell',jp:'白',kind:K.w_bellmonk,s:1.18,hp:110,speed:200,guard:P(PS.guard,{sw:2.6,tl:.06}),wk:{gl:20,sheath:0},ward:1,moves:['m_smash','m_slam','r_bash','w_pillar'],ai:{think:.85,aggr:.55,block:.2,range:205},markCol:WM_,win:P(PS.high,{tl:-.1}),
+  tip:'Warded and armored: parry the bash or the smash to break the ward, jump the quake, leave the gold ring.'},
+ w_hakuren:{id:'w_hakuren',name:'Hakuren',title:'the White Lotus',jp:'白',kind:K.w_hakuren,s:1.06,hp:160,speed:300,guard:P(SPG,{sw:1.8,tl:.1}),wk:{gl:45,sheath:0},ward:1,moves:['y_thrust','y_sweep','y_rise','y_phase','w_pillar'],
+  ai:{think:.55,aggr:.66,block:.4,range:235},phase:{at:.5,move:'w_bloom',k:'白',sub:'The lotus blooms',think:.9,aggr:.05},markCol:WM_,win:P(SPG,{tl:-.05,hd:-.25}),
+  tip:'Parry to break her ward. Light falls on the gold ring; hurt, she sends ground waves both ways — jump them or crouch-block.'},
+ w_sunwarden:{id:'w_sunwarden',name:'Warden of the Pale Sun',title:'inside the light',jp:'光',kind:K.w_sunwarden,s:1.24,hp:200,speed:280,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},ward:1,moves:['a_cut','a_crush','a_wave','w_pillar','y_phase','b_kick'],
+  ai:{think:.5,aggr:.66,block:.42,range:225},phase:{at:.5,move:'w_bloom',k:'光',sub:'The pale sun burns',think:.9,aggr:.05},markCol:WM_,win:P(PS.high,{tl:-.2,hd:-.4}),
+  tip:'Only a parry, a punish or an Issen passes its ward. The light falls where the ring locks; hurt, it blooms in ground waves.'}});
 // the training partner (1.7): an oak-and-straw dummy with a wooden sword and a retainer's readable cuts
 K.dummy={L:LH,ink:'#4a3b2a',back:'#8a7452',jit:.3,type:'bandit',sword:1,blen:96};
 FOES.dummy={id:'dummy',name:'Training Dummy',title:'oak and straw',jp:'守',kind:K.dummy,s:1.02,hp:100,speed:150,guard:PS.guard,wk:{},moves:['r_slash','r_high','r_low','b_kick'],ai:{think:.9,aggr:.5,block:.3,range:190},win:PS.stand,
@@ -1305,6 +1390,28 @@ function ashenBG(c,t){WIND={x:-1,y:.08,s:.4};screen(c);const sk=c.createLinearGr
  c.fillStyle=ink(.86);for(const x of[-780,700]){brush(c,[[x,4],[x+3,-120],[x-4,-236]],26,{taper:u=>1-u*.3});brush(c,[[x-80,-226],[x,-232],[x+70,-222]],16,{taper:()=>1})}}
 function ashenFG(c,t){camT(c,1);c.fillStyle=ink(.5);for(let i=0;i<44;i++){const age=(t*.22+hash(i))%1,x=CAM.x-1100+hash(i*3)*2200-age*220+Math.sin(t+i)*20,y=-900+age*1000;c.globalAlpha=.55*(1-age);c.fillRect(x,y,4,4)}
  screen(c);c.fillStyle=RED;for(let i=0;i<20;i++){const y=H-((t*(40+hash(i)*60)+hash(i*3)*H)%H),x=((hash(i*5)*W+Math.sin(t+i)*50)%W+W)%W;c.globalAlpha=.6*(y/H);circ(c,x,y,1.5+hash(i*9)*2)}c.globalAlpha=1}
+// the Infernal Realm (Hell Mode, 1.7): a black sky burning crimson-orange at the height of the fighters, so their ink reads as
+// silhouettes against the fire; black spires, lava cracks, embers rising and ash falling. v=1: the Ninth Gate, a vast black gate
+function hellBG(c,t,v){WIND={x:-1,y:-.25,s:.5};screen(c);const sk=c.createLinearGradient(0,0,0,H);sk.addColorStop(0,'#0c0605');sk.addColorStop(.3,'#2a0b07');sk.addColorStop(.5,'#8a2a12');sk.addColorStop(.66,'#e2692b');sk.addColorStop(.75,'#c54a1f');sk.addColorStop(.81,'#3c1009');sk.addColorStop(1,'#130605');c.fillStyle=sk;c.fillRect(0,0,W,H);
+ camT(c,.04);c.fillStyle='#050202';circ(c,520,-430,v?150:110);c.globalAlpha=.55;c.drawImage(GLOW,520-(v?330:260),-430-(v?330:260),v?660:520,v?660:520);c.globalAlpha=1; // the dark sun
+ camT(c,.18);c.fillStyle='#1b0906';for(let i=0;i<16;i++){const x=-2000+i*260+hash(i+v)*110,h=240+hash(i*3+v)*420;tri(c,[x-100,60],[x+100,60],[x+(hash(i*5)-.5)*60,-h])}
+ if(v){camT(c,.4);c.fillStyle='#0a0403';c.fillRect(-520,-760,150,800);c.fillRect(370,-760,150,800);c.fillRect(-640,-820,1280,110);c.fillStyle='rgba(226,105,43,.5)';c.fillRect(-370,-700,740,10);for(let i=0;i<5;i++)c.fillRect(-300+i*150,-700,8,700)}
+ else{camT(c,.42);c.fillStyle='#120605';for(const x of[-900,-380,420,950]){c.fillRect(x-22,-520,44,560);c.beginPath();c.arc(x,-520,40,3.1416,0);c.fill()}}
+ camT(c,1);const gr=c.createLinearGradient(0,-6,0,420);gr.addColorStop(0,'#2c0d07');gr.addColorStop(1,'#0e0504');c.fillStyle=gr;c.fillRect(CAM.x-2400,-6,4800,900);
+ c.strokeStyle='rgba(235,105,40,.9)';c.lineWidth=3;for(let i=0;i<18;i++){const x=-1900+i*220+hash(i)*90;c.globalAlpha=.35+.3*Math.sin(t*2+i);c.beginPath();c.moveTo(x,6);c.lineTo(x+40,40+hash(i*2)*40);c.lineTo(x+10,90+hash(i*4)*70);c.stroke()}c.globalAlpha=1}
+function hellFG(c,t){screen(c);for(let i=0;i<42;i++){const y=H-((t*(50+hash(i)*80)+hash(i*3)*H)%H),x=((hash(i*5)*W+Math.sin(t*1.3+i)*60)%W+W)%W;c.globalAlpha=.75*(y/H);c.fillStyle=i%3?'#ff7a3a':'#ffd08a';circ(c,x,y,1.4+hash(i*9)*2.4)}
+ camT(c,1);c.fillStyle='rgba(30,10,8,.6)';for(let i=0;i<30;i++){const age=(t*.2+hash(i+7))%1,x=CAM.x-1100+hash(i*11)*2200-age*160,y=-900+age*1000;c.globalAlpha=.6*(1-age);c.fillRect(x,y,4,4)}c.globalAlpha=1}
+// the Celestial Sanctuary (White Mode, 1.7): a pale blue-white sky warming to gold at the horizon, floating islands and torii,
+// cloud below a white stone floor edged in gold, light motes rising. The fighters stay dark ink: high contrast. v=1: the pale sun
+function island(c,x,y,w,col){c.fillStyle=col;c.beginPath();c.moveTo(x-w,y);c.quadraticCurveTo(x,y-w*.12,x+w,y);c.quadraticCurveTo(x+w*.3,y+w*.4,x,y+w*.95);c.quadraticCurveTo(x-w*.35,y+w*.4,x-w,y);c.fill()}
+function whiteBG(c,t,v){WIND={x:-1,y:.04,s:.3};screen(c);const sk=c.createLinearGradient(0,0,0,H);sk.addColorStop(0,'#c9d6ea');sk.addColorStop(.5,'#eef0ef');sk.addColorStop(.78,'#f7efd9');sk.addColorStop(1,'#e6dcc4');c.fillStyle=sk;c.fillRect(0,0,W,H);
+ if(v){camT(c,.03);c.save();c.translate(0,-380);c.rotate(t*.03);c.fillStyle='rgba(240,215,150,.22)';for(let k=0;k<18;k++){c.rotate(Math.PI/9);tri(c,[-40,0],[40,0],[0,-1500])}c.restore();c.globalAlpha=.8;c.drawImage(MIST,-520,-900,1040,1040);c.globalAlpha=1;c.fillStyle='#fbf3dc';circ(c,0,-380,250);c.strokeStyle='rgba(181,48,28,.5)';c.lineWidth=5;c.beginPath();c.arc(0,-380,262,0,6.2832);c.stroke()}
+ camT(c,.12);for(let i=0;i<8;i++){const x=-1700+i*480+Math.sin(t*.08+i)*30,y=-470+hash(i)*220+Math.sin(t*.3+i)*12;island(c,x,y,80+hash(i*3)*80,'rgba(150,165,190,.4)')}
+ camT(c,.32);for(const[x,y,s]of[[-760,-330,.42],[820,-380,.36]]){const yy=y+Math.sin(t*.4+x)*10;island(c,x,yy+30,260*s*2.2,'rgba(120,135,165,.6)');c.globalAlpha=.55;c.drawImage(TORII,x-210*s,yy-330*s,420*s,330*s);c.globalAlpha=1}
+ mistBand(c,.6,40,t,.75);
+ camT(c,1);const gr=c.createLinearGradient(0,-6,0,320);gr.addColorStop(0,'#efe9da');gr.addColorStop(1,'#cfc5ae');c.fillStyle=gr;c.fillRect(CAM.x-2400,-6,4800,900);
+ c.strokeStyle='#b09650';c.lineWidth=5;line(c,[CAM.x-2400,-3],[CAM.x+2400,-3]);c.strokeStyle='rgba(120,110,90,.35)';c.lineWidth=2;for(let x=Math.floor((CAM.x-1600)/200)*200;x<CAM.x+1600;x+=200){line(c,[x,0],[x-40,90]);line(c,[x+100,90],[x+80,220])}line(c,[CAM.x-2400,90],[CAM.x+2400,90])}
+function whiteFG(c,t){camT(c,1);for(let i=0;i<34;i++){const life=5+hash(i)*4,u=((t+hash(i*7)*life)%life)/life,x=CAM.x-1100+hash(i*3)*2200+Math.sin(t*.7+i)*30,y=60-u*1000;c.globalAlpha=Math.sin(u*Math.PI)*.8;c.fillStyle=i%4?'#d8b866':'#fff8e3';circ(c,x,y,2+hash(i*9)*2.4)}c.globalAlpha=1}
 const ARENAS=[
  {name:'the Burning Field',jp:'焼野',wind:.32,rain:.4,rumb:.25,bpm:116,notes:[N.D4,N.Eb4,N.G4,N.A4,N.Bb4],bg:(c,t)=>{WIND={x:-1,y:.08,s:1};fieldBG(c,t,t,{storm:1,sun:0,fire:1})},fg:(c,t)=>{fgGrass(c,t);rain(c,t,.55)}},
  {name:'the Bamboo Grove',jp:'竹林',wind:.18,rain:0,bpm:128,notes:[N.D4,N.G4,N.A4,N.D5,N.Eb5],bg:(c,t)=>{WIND={x:-1,y:.1,s:.45};bambooBG(c,t)},fg:leaves},
@@ -1312,7 +1419,11 @@ const ARENAS=[
  {name:'the Moonlit Lake',jp:'月湖',wind:.08,rain:0,bpm:92,notes:[N.D4,N.Eb4,N.A4,N.Bb4,N.D5],bg:lakeBG,fg:lakeFG},
  {name:'the Oni Castle',jp:'鬼城',wind:.35,rain:0,rumb:.35,bpm:136,notes:[N.D4,N.Eb4,N.A3,N.Bb3,N.D5],bg:castleBG,fg:castleFG},
  {name:'the Forgotten Dojo',jp:'師',wind:.02,rain:0,bpm:84,notes:[N.A3,N.D4,N.Eb4,N.G4,N.A4],bg:dojoBG,fg:dojoFG},
- {name:'Ashen Village',jp:'焼',wind:.25,rain:0,rumb:.12,bpm:104,notes:[N.D4,N.Eb4,N.G4,N.Bb4,N.D5],bg:ashenBG,fg:ashenFG}];
+ {name:'Ashen Village',jp:'焼',wind:.25,rain:0,rumb:.12,bpm:104,notes:[N.D4,N.Eb4,N.G4,N.Bb4,N.D5],bg:ashenBG,fg:ashenFG},
+ {name:'the Ash Gate',dark:1,jp:'鬼',wind:.3,rain:0,rumb:.4,bpm:140,notes:[N.D4,N.Eb4,N.A3,N.Bb3,N.D5],bg:(c,t)=>hellBG(c,t,0),fg:hellFG},
+ {name:'the Ninth Gate',dark:1,jp:'鬼',wind:.35,rain:0,rumb:.5,bpm:148,notes:[N.D3,N.Eb4,N.A3,N.Bb3,N.D4],bg:(c,t)=>hellBG(c,t,1),fg:hellFG},
+ {name:'the Celestial Sanctuary',jp:'白',wind:.1,rain:0,bpm:96,notes:[N.D4,N.G4,N.A4,N.D5,N.Eb5],bg:(c,t)=>whiteBG(c,t,0),fg:whiteFG},
+ {name:'the Pale Sun',jp:'光',wind:.08,rain:0,bpm:88,notes:[N.A4,N.D5,N.G4,N.A4,N.Eb5],bg:(c,t)=>whiteBG(c,t,1),fg:whiteFG}];
 /* --- state & combat --- */
 const DOJO_A=5; // ARENAS index of the Forgotten Dojo (pushed after the five)
 const G={P:null,B:null,def:null,lv:0,proj:[],fx:[],t:0,rt:0,mt:0,rdt:0,st:0,state:'',round:1,timer:60,freeze:0,slow:1,slowT:0,shake:0,cam:{x:0,y:-240,z:1.2},keys:{},buf:null,jb:-9,paused:false,ban:null,nb:0,step:0,hint:0,mvId:0,seed:0,rand:Math.random,acc:0,ia:1};
@@ -1366,12 +1477,14 @@ function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')
  const assist=!canBlock&&Dd.isP&&SV.settings.assist&&!proj&&!m.unblock&&facing&&!dAir&&Dd.st==='idle'&&!Dd.crouch&&m.zone!=='low'&&!(G.trial&&G.trial.no_block); // Guard Assist (§5.8b): an idle hero raises the guard on mid / high
  if(canBlock&&Dd.isP&&G.parry&&G.t-(Dd.blockT??-9)<=MOVE.parry.win+(Dd.mod.parry||0))return parry(A,Dd,m,proj,hx,hy);
  if(canBlock||assist){if(m.chip)Dd.hp=Math.max(1,Dd.hp-m.dmg*m.chip*A.mod.dmg); // Moon Pierce: a share through the guard
-  setSt(Dd,'bstun');Dd.stun=.2;Dd.vx=dir*(m.push||90)*.9*(m.blockPush||1)*(assist?.6:1);fxAdd({k:'clash',x:hx,y:hy,sz:.7});snd('clang',.55);inkUp(A,3);inkUp(Dd,5);if(Dd.isP)note('blocks');G.freeze=.04;G.shake=Math.max(G.shake,5);return true}
+  setSt(Dd,'bstun');Dd.stun=.2;Dd.vx=dir*(m.push||90)*.9*(m.blockPush||1)*(assist?.6:1);fxAdd({k:'clash',x:hx,y:hy,sz:.7});snd('clang',.55);inkUp(A,3);inkUp(Dd,5);if(Dd.isP)note('blocks');else if(Dd.def.ai&&Dd.def.ai.counter)Dd.ai.cnt=G.t+.5; /* Hell: ready to strike back */G.freeze=.04;G.shake=Math.max(G.shake,5);return true}
  // damage: rage, then the attacker's modifiers (attack, chain hits 2-3, a crit drawn from the fight RNG only if crit > 0), then the defender's
  let dmg=m.dmg*(A.rage?1.2:1)*(A.sov?A.sov.dmg:1)*A.mod.dmg*(!proj&&(A.mvn==='slash2'||A.mvn==='slash3'||A.mvn==='slash4')?A.mod.combo:1);const crit=A.mod.crit>0&&G.rand()<A.mod.crit;if(crit)dmg*=A.mod.critDmg;
  const tr=A.mod.tr;if(tr){if(tr.first&&!A.firstHit)dmg*=1+tr.first;if(tr.momentum)dmg*=1+Math.min(tr.momentum[1],(A.mom||0)*tr.momentum[0])} // weapon traits: first strike, momentum
  const punish=A.isP&&!proj&&Dd.st==='move'&&!!Dd.mv.hit&&Dd.mvT>Dd.mv.hit[Dd.mv.hit.length-1][1]; // whiff punish (§5.8a): a hit into the foe's recovery
  if(punish){dmg*=MOVE.punish.dmg;inkUp(A,MOVE.punish.ink);fxAdd({k:'punish',x:hx,y:hy});snd('clang',.4)}
+ const ward=!!Dd.def.ward&&G.t>=(Dd.wardOff||0)&&!m.unblock; // White Mode: a punish breaks the ward; anything else but a parry or an Issen glances off
+ if(ward){if(punish){Dd.wardOff=G.t+2.5;fxAdd({k:'parry',x:hx,y:hy})}else{dmg*=.15;fxAdd({k:'ward',x:hx,y:hy});snd('clang',.5)}}
  const skin=Dd.mod.skin&&G.t>=Dd.skinT;if(skin){dmg*=1-Dd.mod.skin.reduce;Dd.skinT=G.t+Dd.mod.skin.every;fxAdd({k:'clash',x:hx,y:hy,sz:.5})} /* Iron Skin echo */
  const iron=Dd.iron;if(iron){if(!m.kd){iron.absorbed+=dmg;iron.cnt=G.t+.5}dmg*=1-iron.mit;fxAdd({k:'clash',x:hx,y:hy,sz:.6})} // Iron Resolve: absorbed blows feed the counter
  if(A.sov&&A.sov.bleed)Dd.bleed={until:G.t+3,dps:A.sov.bleed};
@@ -1379,19 +1492,20 @@ function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')
  const hp0=Dd.hp;Dd.hp=Math.max(0,Dd.hp-dmg*(1-Dd.mod.mit));Dd.lagHold=.6;Dd.hitFlash=.14;Dd.hurtT=G.t;
  if(Dd.isP&&G.tea&&Dd.hp>0&&Dd.hp<Dd.maxHp*GEAR.items.healing_tea.effect.below){G.tea=false;Dd.hp=Math.min(Dd.maxHp,Dd.hp+GEAR.items.healing_tea.effect.heal*Dd.mod.heal);fxAdd({k:'ring',x:Dd.x,y:0});snd('gong',.3)} // Healing Tea, once
  const foot=m.kd&&Dd.mod.footing&&!Dd.footUsed&&Dd.hp>0,kd=m.kd&&!foot;if(foot)Dd.footUsed=1; // Oni-gane Plate: the first knockdown each round only staggers
- const armored=(Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.pierceArmor||skin||iron)&&!kd&&Dd.hp>0;if(iron&&kd)Dd.iron=null;
+ const armored=(Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.pierceArmor||skin||iron||ward&&!punish)&&!kd&&Dd.hp>0;if(iron&&kd)Dd.iron=null;
  if(!armored){Dd.mv=null;Dd.manual=false;Dd.alpha=1;Dd.next=null;Dd.crouch=false;Dd.block=false;
   if(kd||Dd.hp<=0){setSt(Dd,'down');Dd.vx=dir*(m.push||220)*1.2;Dd.vy=-520;Dd.air=true;fxAdd({k:'splash',x:Dd.x+dir*40,y:-2,sz:46,dir:0,persist:1})}
   else{setSt(Dd,'hit');Dd.stun=m.stun||.3;Dd.vx=dir*(m.push||90);Dd.hz=m.zone||'mid';Dd.hk=m.dmg>=10;Dd.hn=(Dd.hn||0)+1}}
  fxAdd({k:'slash',x:hx,y:hy,a:m.zone==='high'?-.75:m.zone==='low'?.35:(Math.random()-.5)*.5});if(crit)fxAdd({k:'slash',x:hx,y:hy,a:.9}); /* a crit crosses the mark */fxAdd({k:'splash',x:hx,y:hy,sz:m.kd?70:46,dir:dir>0?0:Math.PI});
  G.freeze=m.kd?.09:.055;G.shake=Math.max(G.shake,m.kd?18:9);snd('drum',m.kd?.9:.55);if(m.kd)snd('boom',.3);if(Dd.isP&&SV.settings.haptics&&navigator.vibrate)navigator.vibrate(m.kd?45:18);G.punch=Math.max(G.punch||0,m.kd?.03:m.dmg>=10?.02:.008); // impact tiers
  inkUp(A,9);inkUp(Dd,5);scoreHit(A,Dd,hp0-Dd.hp,punish,crit,kd,proj);
+ {const fo=!A.isP&&!proj&&A.def&&A.def.ai&&A.def.ai.follow;if(fo&&fo[A.mvn]&&A.st==='move'&&!A.next)A.next=fo[A.mvn]} // Hell: the follow-up cut
  if(Dd.def.ai&&Dd.def.ai.rage&&!Dd.rage&&Dd.hp<Dd.maxHp*.5&&Dd.hp>0){Dd.rage=true;G.ban={k:'怒',sub:'The warlord’s fury awakens',t0:G.rt,dur:1.6};snd('growl',1)}
  const ph=Dd.def.phase;if(ph&&!Dd.phase&&Dd.hp<Dd.maxHp*ph.at&&Dd.hp>0){Dd.phase=true;if(ph.k){G.ban={k:ph.k,sub:ph.sub,t0:G.rt,dur:1.5,size:240};snd('gong',.5)}} // the boss's second phase
  return true}
 // the perfect parry: the attacker reels (melee), a projectile breaks, the hero gains ink (and heals with the parry-heal trait)
 function parry(A,Dd,m,proj,hx,hy){if(!proj&&A.st==='move'){A.mv=null;A.manual=false;A.alpha=1;A.next=null;A.crouch=false;setSt(A,'hit');A.stun=MOVE.parry.stun;A.vx=-A.f*160;A.hz='mid';A.hk=true;A.hn=(A.hn||0)+1}
- if(A.ward)A.wardOff=G.t+3; // a celestial ward shatters (White Mode)
+ if(A.def&&A.def.ward)A.wardOff=G.t+3; // a celestial ward shatters (White Mode)
  const tr=Dd.mod.tr;if(tr&&tr.parryHeal)Dd.hp=Math.min(Dd.maxHp,Dd.hp+tr.parryHeal*Dd.mod.heal);
  inkUp(Dd,MOVE.parry.ink);note('parries');fxAdd({k:'parry',x:hx,y:hy});snd('clang',.9);snd('tell',.5);G.freeze=.09;G.shake=Math.max(G.shake,6);return true}
 // fight tallies (1.7): drills, daily challenges and achievements read them; nothing in a fight depends on them
@@ -1402,14 +1516,14 @@ function scoreHit(A,Dd,d,punish,crit,kd,proj){if(!G.tally)return;
  else if(Dd===G.P)note('hurt',d)}
 // ink gain: the fighter's ink modifier, faster below half health with the Ember of Rage echo
 const inkUp=(F,v)=>{F.ink=Math.min(100,F.ink+v*F.mod.ink*(F.sov?1.5:1)*(F.mod.ember&&F.hp<F.maxHp*F.mod.ember.below?1+F.mod.ember.ink:1))};
-function spawnProj(F,pd){const wave=pd.type==='wave';G.proj.push({o:F,x:F.x+F.f*80*F.def.s,y:(F.gy||0)+pd.y*F.def.s,gy:F.gy||0,vx:pd.v*F.f*(wave&&F.mod.waveV||1),pierce:wave&&!!F.mod.pierce,ground:pd.ground,wide:pd.wide,ret:pd.ret,type:pd.type,dmg:pd.dmg,zone:pd.zone,kd:pd.kd,push:140,t:0,big:F.def.s>1.2});snd(pd.type==='star'||pd.type==='wisp'?'whoosh':'slash',.5)}
-function updProj(dt){for(const p of G.proj){p.t+=dt;p.x+=p.vx*dt;const Dd=p.o===G.P?G.B:G.P,top=Dd.y-246*Dd.def.s*(Dd.crouch?.62:1);
+function spawnProj(F,pd){const wave=pd.type==='wave';G.proj.push({o:F,x:pd.at?F.d[pd.at]??F.x:F.x+F.f*80*F.def.s,unblock:pd.unblock,life:pd.life,hue:pd.hue,y:(F.gy||0)+pd.y*F.def.s,gy:F.gy||0,vx:pd.v*F.f*(pd.back?-1:1)*(wave&&F.mod.waveV||1),pierce:wave&&!!F.mod.pierce||pd.type==='pillar',ground:pd.ground,wide:pd.wide,ret:pd.ret,type:pd.type,dmg:pd.dmg,zone:pd.zone,kd:pd.kd,push:140,t:0,big:F.def.s>1.2});snd(pd.type==='star'||pd.type==='wisp'?'whoosh':'slash',.5)}
+function updProj(dt){for(const p of G.proj){p.t+=dt;p.x+=p.vx*dt;if(p.life&&p.t>p.life){p.dead=1;continue}const Dd=p.o===G.P?G.B:G.P,top=Dd.y-246*Dd.def.s*(Dd.crouch?.62:1);
   if(p.type==='ghost'){if(p.t>=p.fuse){if(Math.abs(Dd.x-p.x)<150*Dd.def.s)tryHit(p.o,Dd,{dmg:p.dmg,zone:'mid',push:90,vx:Math.sign(Dd.x-p.x)||1},true);fxAdd({k:'smoke',x:p.x,y:0});p.dead=1}continue} // Miststep's afterimage bursts
   const over=!p.done&&Math.abs(p.x-Dd.x)<46*Dd.def.s+20+(p.wide||0)&&(p.ground?Math.abs(Dd.y-(p.gy||0))<40:p.y>top&&p.y<Dd.y+10);
   if(over&&Dd.iron&&Dd.iron.reflect){p.o=Dd;p.vx=-p.vx;p.seen=0;fxAdd({k:'clash',x:p.x,y:p.y,sz:.8});snd('clang',.5);continue} // Iron Resolve IV: sent back
   if(over&&tryHit(p.o,Dd,p,true)){if(p.ret)G.proj.push({o:p.o,x:Dd.x+Math.sign(p.vx)*90,y:-120,vx:0,type:'ghost',fuse:.3,dmg:p.dmg*p.ret,t:0}); // Phantom Edge IV: it returns from behind
    if(p.pierce)p.done=1;else p.dead=1} /* a piercing wave hits once and flies on */if(Math.abs(p.x)>ARENA+500)p.dead=1}
- for(const a of G.proj)for(const b of G.proj)if(a.o!==b.o&&!a.dead&&!b.dead&&a.type!=='ghost'&&b.type!=='ghost'&&Math.abs(a.x-b.x)<40&&Math.abs(a.y-b.y)<(a.ground||b.ground?170:90)){a.dead=!(a.pierce||a.ground);b.dead=!(b.pierce||b.ground);fxAdd({k:'clash',x:(a.x+b.x)/2,y:(a.y+b.y)/2,sz:1});snd('clang',.6)}
+ for(const a of G.proj)for(const b of G.proj)if(a.o!==b.o&&!a.dead&&!b.dead&&a.type!=='ghost'&&b.type!=='ghost'&&a.type!=='pillar'&&b.type!=='pillar'&&Math.abs(a.x-b.x)<40&&Math.abs(a.y-b.y)<(a.ground||b.ground?170:90)){a.dead=!(a.pierce||a.ground);b.dead=!(b.pierce||b.ground);fxAdd({k:'clash',x:(a.x+b.x)/2,y:(a.y+b.y)/2,sz:1});snd('clang',.6)}
  let k=0;for(const p of G.proj)if(!p.dead)G.proj[k++]=p;G.proj.length=k} // in place: no allocation per frame
 function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;
  if(F.sov&&G.t>=F.sov.until){F.burn=G.t+F.sov.burn;F.sov=null}if(F.iron&&G.t>=F.iron.until)F.iron=null;
@@ -1438,8 +1552,11 @@ function ai(B,Pl,dt){if(G.train&&G.train.behav!=='fight')return trainAI(B,Pl,dt)
  if(Pl.st==='move'&&!Pl.mv.issen&&B.ai.seen!==Pl.mvId){B.ai.seen=Pl.mvId;if(d<(Pl.mv.reach||300)+130&&G.rand()<A.block*(B.rage?1.2:1)+(Pl.sov?.2:0)){B.ai.blk=.42;B.ai.low=Pl.mv.zone==='low'}}
  for(const p of G.proj)if(p.o===Pl&&!p.seen&&Math.abs(p.x-B.x)<420&&Math.sign(B.x-p.x)===Math.sign(p.vx)){p.seen=1;if(G.rand()<A.block+.25){B.ai.blk=.5;B.ai.low=p.zone==='low'}}
  if(B.ai.blk>0){B.ai.blk-=dt;inp.mx=-toward;inp.down=B.ai.low;return inp}
+ if(A.counter&&B.ai.cnt>G.t&&isFree(B)){B.ai.cnt=0;if(G.rand()<A.counter){const c=B.def.moves.filter(n=>{const m=B.moves[n];return m.hit&&(!m.cd||(B.cd[n]||0)<=G.t)&&d>=m.ai[0]*s&&d<=m.ai[1]*s});
+  if(c.length){inp.atk=c.reduce((a,b)=>B.moves[a].hit[0][0]<=B.moves[b].hit[0][0]?a:b);return inp}}} // Hell: the fastest cut in reach, right after a block
  B.ai.t-=dt;
- const PH=B.phase&&B.def.phase,wt=n=>B.moves[n].w*(Pl.iron&&B.moves[n].kd?3:1); // knockdowns break Iron Resolve
+ const read=n=>{if(!A.read)return 1;const m=B.moves[n],z=m.zone||m.proj&&m.proj.zone;return Pl.block&&!Pl.crouch&&z==='low'||Pl.crouch&&z==='mid'?2.2:1}; // Hell: low against a standing guard, mid against a crouch
+ const PH=B.phase&&B.def.phase,wt=n=>B.moves[n].w*(Pl.iron&&B.moves[n].kd?3:1)*read(n); // knockdowns break Iron Resolve
  if(B.ai.t<=0&&isFree(B)){B.ai.t=A.think*R*(PH?PH.think:1)*(.6+G.rand()*.8);
   const opts=(PH?B.def.moves.concat(PH.move):B.def.moves).filter(n=>{const m=B.moves[n];return(!m.cd||(B.cd[n]||0)<=G.t)&&d>=m.ai[0]*s&&d<=m.ai[1]*s});
   if(Pl.air&&d<280){const aa=opts.find(n=>B.moves[n].zone==='high');if(aa){inp.atk=aa;return inp}}
@@ -1454,8 +1571,8 @@ const STEP=1/60;
 function stepGame(dt){G.acc=Math.min(G.acc+dt,.1);while(G.acc>=STEP-1e-9){G.acc-=STEP;for(const F of[G.P,G.B]){F.px=F.x;F.py=F.y}for(const p of G.proj)p.px=p.x;updGame(STEP)}G.ia=clamp(G.acc/STEP)}
 const ip=(v,pv)=>pv==null||Math.abs(v-pv)>150?v:lerp(pv,v,G.ia);
 function readIn(){const k=G.keys;return{mx:(k.right?1:0)-(k.left?1:0),up:fresh(G.jb,.15),down:!!k.down,block:!!k.block,atk:G.buf&&fresh(G.buf.t,.28)?G.buf.a:null}}
-function newRound(){for(const[F,x,f]of[[G.P,G.L?G.L.spawns.hero:-300,1],[G.B,G.L?G.L.spawns.foe:300,-1]]){Object.assign(F,{x,y:0,gy:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},once:{},sov:null,iron:null,burn:0,bleed:null,phase:false,firstHit:0,mom:0,footUsed:0,trail:null,rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
- G.proj=[];G.fx=[];G.clone=null;G.timer=G.roundTime||60;if(G.L)for(const k of G.L.pickups)k.taken=false;if(G.item==='focus_incense')G.P.ink=Math.max(G.P.ink,GEAR.items.focus_incense.effect.ink);
+function newRound(){const carry=G.hell&&G.round>1&&G.P?G.P.hp:null;for(const[F,x,f]of[[G.P,G.L?G.L.spawns.hero:-300,1],[G.B,G.L?G.L.spawns.foe:300,-1]]){Object.assign(F,{x,y:0,gy:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},once:{},sov:null,iron:null,burn:0,bleed:null,phase:false,firstHit:0,mom:0,footUsed:0,trail:null,rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
+ G.proj=[];G.fx=[];G.clone=null;G.timer=G.roundTime||60;if(carry!=null)G.P.hp=G.P.lag=Math.min(G.P.maxHp,carry+(G.P.maxHp-carry)*.5);if(G.L)for(const k of G.L.pickups)k.taken=false;if(G.item==='focus_incense')G.P.ink=Math.max(G.P.ink,GEAR.items.focus_incense.effect.ink);
  if(G.trial){if(G.trial.hero_hp)G.P.hp=G.P.lag=G.P.maxHp*G.trial.hero_hp;if(G.trial.phase)G.B.phase=true;if(G.trial.rage)G.B.rage=true} /* Ink Trial modifiers */G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
  G.ban=G.round===1?{k:G.train?'師':G.trial?'墨':G.def.jp,sub:G.train?`Training · ${G.def.name}`:(G.trial?`Ink Trial · ${G.trial.name}: ${G.trial.desc}`:`${G.def.name}, ${G.def.title}`)+(G.item?` · ${GEAR.items[G.item].name} at hand`:''),t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
 function endRound(){G.rw.wins++;if(G.waves&&G.rw===G.P&&G.wave<G.waves.length-1)return nextWave();if(G.rw.wins>=(G.need||2))matchEnd(G.rw===G.P);else{G.round++;newRound()}}
@@ -1463,7 +1580,7 @@ function endRound(){G.rw.wins++;if(G.waves&&G.rw===G.P&&G.wave<G.waves.length-1)
 const WAVEK=['壱','弐','参','墨','墨'];
 function nextWave(){const P=G.P,hp=P.hp,ink_=P.ink;G.wave++;G.def=G.waves[G.wave];G.B=mkF(G.def,false);P.wins=0;G.round=1;newRound();Object.assign(P,{hp,lag:hp,ink:ink_});
  G.ban={k:WAVEK[G.wave],sub:`Wave ${G.wave+1} of ${G.waves.length}: ${G.def.name}, ${G.def.title}`,t0:G.rt,dur:1.9,size:220}}
-function updGame(dt){if(G.paused||G.state==='over')return;G.shake*=Math.pow(.004,dt);if(G.hint>0&&G.state==='fight')G.hint-=dt;
+function updGame(dt){if(G.paused||G.state==='over'||G.state==='chosen')return;G.shake*=Math.pow(.004,dt);if(G.hint>0&&G.state==='fight')G.hint-=dt;
  if(G.freeze>0){G.freeze-=dt;return}
  if(G.slowT>0){G.slowT-=dt;if(G.slowT<=0)G.slow=1}
  const sdt=dt*G.slow,pl=G.P,bo=G.B,live=G.state==='fight';G.t+=sdt;G.st+=sdt;
@@ -1476,6 +1593,7 @@ function updGame(dt){if(G.paused||G.state==='over')return;G.shake*=Math.pow(.004
   if(pk||bk||to){const pw=bk||!pk&&to&&(G.survive||pl.hp/pl.maxHp>=bo.hp/bo.maxHp),L=pw?bo:pl;G.rw=pw?pl:bo;G.state='ko';G.st=0;if(L.hp<=0){fxAdd({k:'smoke',x:L.x,y:0,pale:L.def.kind.type==='ghost'?1:0});fxAdd({k:'splash',x:L.x,y:-120*L.def.s,sz:90,dir:-1.57,persist:1});L.mv=null;L.manual=false;L.alpha=1;if(L.st!=='down')setSt(L,'dead');else L.st='dead'}
    G.slow=.3;G.slowT=.9;const timeUp=to&&!pk&&!bk;G.ban={k:timeUp?'時':pw?'勝':'敗',sub:timeUp?(pw?'Time — you lead':'Time — you trail'):pw?'Victory':'Defeat',t0:G.rt,dur:2.2,seal:pw};snd('boom',.8);snd(pw?'gong':'drum',.6)}}
  else if(G.state==='ko'){if(G.st>1.1&&isFree(G.rw))setSt(G.rw,'win');if(G.st>2.9)endRound()}
+ else if(G.state==='sun'){if(G.st>2.4&&$('sunBtn').classList.contains('off')){$('sunBtn').classList.remove('off');$('sunBtn').focus()}}
  else if(G.state==='absorb'){bo.alpha=1-ss(.6,2.8,G.st);if(!G.rv&&G.st>2.9){const p=POWERS[G.res.r.power];G.rv=1;G.ban={k:p.jp,sub:p.name,t0:G.rt,dur:2.4,size:300,seal:true};fxAdd({k:'ring',x:pl.x,y:0});snd('gong',.8);snd('drum',.9)}if(G.st>=ABSORB)absorbDone()}
  music(dt)}
 function music(dt){if(!AU.ctx||G.state==='ko')return;const ar=ARENAS[G.map?G.music:G.arena];G.nb-=dt;if(G.nb>0)return;G.nb+=60/ar.bpm/2;const s=G.step++%16,w=AU.ctx.currentTime+.02;
@@ -1515,7 +1633,9 @@ function drawF(g,F){const p=poseOf(F);if(F.hitFlash>0)p.x+=noise(G.t*90)*8;if(F.
  if(F.def.aura&&SV.settings.quality!=='low'){const a=AURA[F.def.aura]||(AURA[F.def.aura]=sprite(F.def.aura));g.globalAlpha=(.38+.1*Math.sin(G.t*2.4))*F.alpha;g.drawImage(a,p.x-170*p.s,-p.lift-330*p.s,340*p.s,380*p.s);g.globalAlpha=1} // cosmetic aura
  if(F.rage||F.sov){g.globalAlpha=.4+.15*Math.sin(G.t*9);g.drawImage(GLOW,p.x-170*p.s,-p.lift-330*p.s,340*p.s,380*p.s)}
  if(F.st==='roll'&&F.stT<MOVE.roll.travel){const d=F.roll.dir,a=1-F.stT/MOVE.roll.travel;g.fillStyle=INK;for(let k=0;k<3;k++){const y=-40-k*42,x=p.x-d*(70+k*24);g.globalAlpha=.35*a;brush(g,[[x,y],[x-d*(90+k*30)*a,y+3]],7-k*1.5,{taper:u=>1-u})}}
+ if(ARENAS[G.arena].dark&&!F.isP){g.globalAlpha=(.28+.08*Math.sin(G.t*3))*F.alpha;g.drawImage(GLOW,p.x-160*p.s,-p.lift-320*p.s,320*p.s,360*p.s);g.globalAlpha=1} // a demon's red rim
  g.globalAlpha=F.alpha*(rollInv(F)?.5:1);fig(g,p,F.def.kind,G.t);g.globalAlpha=1;
+ if(F.def.ward){const on=G.t>=(F.wardOff||0);g.strokeStyle='#c49a3c';g.lineWidth=on?5:2;g.globalAlpha=(on?.7+.2*Math.sin(G.t*5):.35)*F.alpha;if(!on)g.setLineDash([10,16]);g.beginPath();g.ellipse(p.x,-p.lift-140*p.s,100*p.s,175*p.s,0,0,6.2832);g.stroke();g.setLineDash([]);g.globalAlpha=1} // the radiant ward (dashed while broken)
  const m=F.st==='move'&&F.mv;
  // iron sheen: Iron Resolve's stance, and a boss's hyper-armor frames (light hits will not stagger it)
  if(F.iron||m&&m.armor&&F.mvT<=m.armor[1]&&!F.isP){g.globalAlpha=(.25+.12*Math.sin(G.t*14))*F.alpha;fig(g,Object.assign({},p,{x:p.x-3*p.f}),F.def.kind,G.t,['#aaa498','#aaa498']);g.globalAlpha=1}
@@ -1525,9 +1645,9 @@ function drawF(g,F){const p=poseOf(F);if(F.hitFlash>0)p.x+=noise(G.t*90)*8;if(F.
  if(m&&m.tell&&F.mvT>m.tell[0]&&F.mvT<m.tell[1]){const z=m.tellZone||m.zone||m.proj&&m.proj.zone||'mid',q=F.isP?bladePt(p,F.def.kind,130):[p.x+F.f*70*p.s,ip(F.y,F.py)+ZY[z]*p.s],u=(F.mvT-m.tell[0])/(m.tell[1]-m.tell[0]),r=26*(m.kd||m.proj&&m.proj.kd?1.3:1);
   g.globalAlpha=Math.sin(u*Math.PI);g.drawImage(MIST,q[0]-50,q[1]-50,100,100);g.fillStyle=RED;g.save();g.translate(q[0],q[1]);g.rotate(u*3);for(let k=0;k<4;k++){g.rotate(Math.PI/2);tri(g,[-3,0],[3,0],[0,-r])}g.restore();g.globalAlpha=1}}
 // reposition attacks: a closing ink ring where the boss will reappear, from the moment it vanishes (it tracks the player until the teleport)
-function drawMarks(c){camT(c,1);for(const F of[G.B,G.P]){const m=F.st==='move'&&F.mv;if(!m||!m.mark||F.mvT<m.mark[0]||F.mvT>m.mark[1]+.1)continue;
- const O=F===G.P?G.B:G.P,x=F.mvT<m.mark[1]?m.dest(F,O):ip(F.x,F.px),u=clamp((F.mvT-m.mark[0])/(m.mark[1]-m.mark[0])),r=lerp(190,52,E.io(u))*F.def.s,fade=1-clamp((F.mvT-m.mark[1])/.1);
- c.globalAlpha=(.35+.5*u)*fade;c.strokeStyle=F.def.kind.ink;c.lineWidth=3+5*u;c.beginPath();c.ellipse(x,-2,r,r*.17,0,0,6.2832);c.stroke();
+function drawMarks(c){camT(c,1);for(const F of[G.B,G.P]){const m=F.st==='move'&&F.mv;if(!m||!m.mark||F.mvT<m.mark[0]||F.mvT>m.mark[1]+(m.markHold||.1))continue;
+ const O=F===G.P?G.B:G.P,x=F.mvT<m.mark[1]?m.dest(F,O):m.lock?F.d.px:ip(F.x,F.px),u=clamp((F.mvT-m.mark[0])/(m.mark[1]-m.mark[0])),r=lerp(190,52,E.io(u))*F.def.s,fade=1-clamp((F.mvT-m.mark[1])/(m.markHold||.1));
+ c.globalAlpha=(.35+.5*u)*fade;c.strokeStyle=F.def.markCol||F.def.kind.ink;c.lineWidth=3+5*u;c.beginPath();c.ellipse(x,-2,r,r*.17,0,0,6.2832);c.stroke();
  for(let k=0;k<4;k++){const a=k*1.5708+u*1.2,dx=Math.cos(a)*r,dy=Math.sin(a)*r*.17;c.beginPath();c.moveTo(x+dx,dy-2);c.lineTo(x+dx*1.25,dy*1.25-2);c.stroke()}
  if(u>.8){c.globalAlpha=(u-.8)*5*fade;c.fillStyle=RED;circ(c,x,-2,6)}c.globalAlpha=1}}
 function drawFx(c){camT(c,1);for(const f of G.fx){const age=G.t-f.t0;
@@ -1539,6 +1659,7 @@ function drawFx(c){camT(c,1);for(const f of G.fx){const age=G.t-f.t0;
  else if(f.k==='ring'&&age<.6){c.strokeStyle=ink(.8,1-age/.6);c.lineWidth=6*(1-age/.6)+1;c.beginPath();c.ellipse(f.x,f.y,40+age*600,(40+age*600)*.16,0,0,6.3);c.stroke()}
  else if(f.k==='num'&&age<.9){c.globalAlpha=1-age/.9;c.fillStyle=f.crit?RED:INK;c.font='600 44px "Cormorant Garamond", serif';c.textAlign='center';c.fillText(f.v,f.x,f.y-age*110);c.globalAlpha=1} // training: damage dealt
  else if(f.k==='parry'&&age<.45){const u=age/.45;c.strokeStyle='#c49a3c';c.globalAlpha=1-u;c.lineWidth=8*(1-u)+1;c.beginPath();c.arc(f.x,f.y,24+u*240,0,6.2832);c.stroke();c.lineWidth=4*(1-u)+1;for(let k=0;k<8;k++){const a=k*.785+.3,r0=40+u*120,r1=70+u*230;line(c,[f.x+Math.cos(a)*r0,f.y+Math.sin(a)*r0],[f.x+Math.cos(a)*r1,f.y+Math.sin(a)*r1])}c.globalAlpha=1} // the perfect parry: a gold burst
+ else if(f.k==='ward'&&age<.28){c.strokeStyle='#c49a3c';c.lineWidth=3;c.globalAlpha=1-age/.28;for(let k=0;k<6;k++){const a=k*1.047+f.seed,r0=14+age*80,r1=34+age*160;line(c,[f.x+Math.cos(a)*r0,f.y+Math.sin(a)*r0],[f.x+Math.cos(a)*r1,f.y+Math.sin(a)*r1])}c.globalAlpha=1} // a blow turned aside by the ward
  else if(f.k==='punish'&&age<.3){c.strokeStyle=RED;c.globalAlpha=1-age/.3;c.lineWidth=7*(1-age/.3)+1;c.beginPath();c.arc(f.x,f.y,24+age*220,0,6.2832);c.stroke();c.globalAlpha=1}
  else if(f.k==='lance'&&age<.3){c.strokeStyle=RED;c.globalAlpha=1-age/.3;c.lineWidth=5*(1-age/.3)+1;line(c,[f.x,f.y],[f.x+f.f*f.len,f.y+4]);c.globalAlpha=1}
  else if(f.k==='moon'&&age<.4){const u=age/.4;c.save();c.translate(f.x,f.y);c.scale(f.f,1);c.fillStyle=RED; // Red Moon: a crescent at full reach + the thrust streak
@@ -1548,8 +1669,11 @@ function drawProj(c){camT(c,1);for(const q of G.proj){const p=Object.assign({},q
  if(p.type==='wave'){const s=p.big?1.35:1,pts=[];for(let i=0;i<=14;i++){const u=i/14;pts.push([p.x+d*Math.sin(u*Math.PI)*34*s-d*20*s,p.y+(u-.5)*170*s])}c.fillStyle=INK;brush(c,pts,26*s,{taper:u=>Math.sin(Math.PI*u)});c.strokeStyle=INK;dry(c,pts.map(q=>[q[0]-d*40*s,q[1]]),34*s,p.t*9|0,{dry:.9,alpha:.5});if(p.big){c.strokeStyle=RED;c.lineWidth=3;c.beginPath();pts.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]));c.stroke()}}
  else if(p.type==='star'){c.save();c.translate(p.x,p.y);c.rotate(p.t*30);c.fillStyle=INK;for(let k=0;k<4;k++){c.rotate(Math.PI/2);tri(c,[-4,0],[4,0],[0,-16])}circ(c,0,0,5);c.restore();c.strokeStyle=ink(.6,.6);c.lineWidth=2;line(c,[p.x-d*14,p.y],[p.x-d*70,p.y])}
  else if(p.type==='phantom'){const pts=[];for(let i=0;i<=16;i++){const u=i/16;pts.push([p.x+d*Math.sin(u*Math.PI)*(46+(p.wide||0)*.5)-d*24,-u*262])}c.globalAlpha=.85;c.drawImage(MIST,p.x-110,-300,220,330);c.fillStyle='#f4efe6';brush(c,pts,30,{taper:u=>Math.sin(Math.PI*u)});c.strokeStyle=ink(.5);dry(c,pts,30,p.t*9|0,{dry:.8,alpha:.6});c.globalAlpha=1}
+ else if(p.type==='pillar'){const fire=p.hue==='fire',w=(46+20+(p.wide||0))*2,u=clamp(p.t/(p.life||.3)),a=Math.sin(Math.PI*clamp(u*1.1));c.globalAlpha=a*.9;c.drawImage(fire?GLOW:MIST,p.x-w,-760,w*2,860);
+  c.fillStyle=fire?'#ff8a3a':'#fff6dc';c.fillRect(p.x-w*.3,-720,w*.6,724);c.fillStyle=fire?RED:'#d8b866';for(let k=0;k<7;k++){const x=p.x-w/2+k*w/6,h=500+200*Math.sin(G.t*30+k);brush(c,[[x,0],[x+(fire?8:0),-h*.5],[x,-h]],fire?16:10,{taper:v=>1-v*.8})}c.globalAlpha=1} // a pillar of fire or light
+ else if(p.type==='bloom'){c.strokeStyle='#c49a3c';c.lineWidth=5;c.globalAlpha=.85;for(let k=0;k<3;k++){c.beginPath();c.ellipse(p.x-d*k*22,-6,40-k*8,26-k*5,0,3.1416,0);c.stroke()}c.globalAlpha=1} // a lotus wave along the floor
  else if(p.type==='ghost'){c.globalAlpha=.5*(1-p.t/p.fuse);for(let k=0;k<5;k++)c.drawImage(PUFF,p.x-42-k*3,-70-k*42,84,84);c.globalAlpha=1}
- else if(p.type==='quake'){for(let k=0;k<5;k++){const x=p.x-d*k*26,h=(60-k*10)*(.7+.3*Math.sin(p.t*30+k));c.fillStyle=ink(.9-k*.12);tri(c,[x-14,2],[x+14,2],[x+d*6,-h])}c.globalAlpha=.4;c.drawImage(PUFF,p.x-70,-40,140,50);c.globalAlpha=1}
+ else if(p.type==='quake'){if(ARENAS[G.arena].dark){c.globalAlpha=.6;c.drawImage(MIST,p.x-80,-90,160,110);c.globalAlpha=1}for(let k=0;k<5;k++){const x=p.x-d*k*26,h=(60-k*10)*(.7+.3*Math.sin(p.t*30+k));c.fillStyle=ink(.9-k*.12);tri(c,[x-14,2],[x+14,2],[x+d*6,-h])}c.globalAlpha=.4;c.drawImage(PUFF,p.x-70,-40,140,50);c.globalAlpha=1}
  else{c.globalAlpha=.9;c.drawImage(MIST,p.x-46,p.y-46,92,92);c.fillStyle='#f6f2ea';circ(c,p.x,p.y,12+Math.sin(p.t*14)*2);c.globalAlpha=.6;for(let k=1;k<5;k++)circ(c,p.x-d*k*14,p.y+Math.sin(p.t*10+k)*6,10-k*2);c.globalAlpha=1}}}
 function hbar(c,x,y,w,F,rev){const pts=[[x,y],[x+w*.5,y-5],[x+w,y+1]],o={taper:u=>.8+.2*Math.sin(Math.PI*clamp(u*.96+.02))};c.fillStyle=ink(.17);brush(c,pts,40,o);
  const seg=(f,col)=>{if(f<=0)return;c.save();c.beginPath();if(rev)c.rect(x+w*(1-f),y-40,w*f+4,80);else c.rect(x-4,y-40,w*f+4,80);c.clip();c.fillStyle=col;brush(c,pts,40,o);c.restore()};
@@ -1589,11 +1713,11 @@ function renderGame(){const ar=ARENAS[G.arena],pl=G.P,bo=G.B,t=G.t,dt=Math.min(.
  const hw=W/2/G.cam.z,lo=-ARENA-160+hw,hi=ARENA+160-hw;G.cam.x+=((lo>hi?0:clamp(mid,lo,hi))-G.cam.x)*Math.min(1,dt*4);G.cam.y=-330/G.cam.z+Math.min(0,ip(pl.y,pl.py),ip(bo.y,bo.py))*.35;
  const sk=SHK[SV.settings.shake];G.punch=(G.punch||0)*Math.pow(.002,dt);setCam(Object.assign({},G.cam,{z:G.cam.z*(1+G.punch*sk)}),G.shake*sk,G.rt);ar.bg(X,t); // shake and camera punch honor Reduce Shake
  const iss=pl.st==='move'&&pl.mv.issen?pl.mvT:-1;if(iss>=0){screen(X);X.globalAlpha=ss(0,.18,iss)*(1-ss(.85,1.2,iss))*.88*FLK[SV.settings.flash];X.fillStyle='#f6f1e6';X.fillRect(0,0,W,H);X.globalAlpha=1}
- if(G.L)drawLayout(X,G.L,G.t);drawMarks(X);camT(X,1);for(const F of[bo,pl]){const y=ip(F.y,F.py),gy=F.gy||0,w=72*F.def.s*(1-Math.min(.6,(gy-y)/400));X.fillStyle=ink(.9,.16*(1-Math.min(.7,(gy-y)/350)));X.beginPath();X.ellipse(ip(F.x,F.px),gy+2,w,w*.16,0,0,6.2832);X.fill()} // contact shadows
+ if(G.L)drawLayout(X,G.L,G.t);drawMarks(X);camT(X,1);for(const F of[bo,pl]){const y=ip(F.y,F.py),gy=F.gy||0,w=72*F.def.s*(1-Math.min(.6,(gy-y)/400));X.fillStyle=ink(.9,.16*(1-Math.min(.7,(gy-y)/350)));if(F.alpha>.03){X.beginPath();X.ellipse(ip(F.x,F.px),gy+2,w,w*.16,0,0,6.2832);X.fill()}} // contact shadows
  figLayer(X,g=>{drawF(g,bo);if(G.clone)drawClone(g);drawF(g,pl)},SV.settings.quality==='low'?0:3);drawFx(X);drawProj(X);ar.fg(X,t);if(G.L)skyFx(X,G.L,t);if(G.train&&G.train.boxes)drawBoxes(X);if(G.state==='absorb')drawAbsorb(X);
  if(iss>=.4&&iss<1.25){const pr=clamp((iss-.4)/.22),al=1-ss(.85,1.25,iss),y=scr(0,-150*bo.def.s)[1];screen(X);const pts=[];for(let i=0;i<=50;i++){const u=i/50;pts.push([lerp(120,lerp(120,W-120,E.out(pr)),u),y+Math.sin(u*3)*10+40-u*90])}
   X.fillStyle=INK;X.globalAlpha=al;brush(X,pts,34,{taper:u=>Math.pow(Math.sin(Math.PI*clamp(u*.96+.02)),.45)});X.strokeStyle=INK;dry(X,pts,60,7,{dry:.9,alpha:al*.8});X.globalAlpha=1}
- grain(X);hud(X);if(G.train)trainHUD(X);banner(X);if(G.state==='absorb')absorbText(X);if(G.overlay)G.overlay(X)} // G.overlay: debug frame-data overlay
+ grain(X);if(G.state==='sun'||G.state==='chosen')sunScene(X);else hud(X);if(G.train)trainHUD(X);banner(X);if(G.state==='absorb')absorbText(X);if(G.overlay)G.overlay(X)} // G.overlay: debug frame-data overlay
 // victory ceremony: the defeated boss's ink streams into the hero, then the power is named (ABSORB s; a key or tap skips after 0.8 s)
 const ABSORB=5.4;
 function drawAbsorb(c){const pl=G.P,bo=G.B,a=[bo.x,-150*bo.def.s],b=[pl.x,-150],m=[(a[0]+b[0])/2,-420],q=e=>[(1-e)*(1-e)*a[0]+2*(1-e)*e*m[0]+e*e*b[0],(1-e)*(1-e)*a[1]+2*(1-e)*e*m[1]+e*e*b[1]];camT(c,1);
@@ -1621,7 +1745,7 @@ function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
  ok(PROG.xp.base>0&&PROG.xp.exponent>0&&PROG.xp.level_cap>=2&&PROG.xp.repeat_share>=0&&PROG.xp.repeat_share<=1,'xp curve');
  ok(PROG.power_slots.unlock_levels.length===2&&PROG.level_up.attr_points>=0,'slots / level-up');
  ok(WORLD.schema_version===1&&WORLD.places.every(p=>p.id&&p.at&&(p.kind!=='region'||BOSSES[p.lv])&&(p.kind!=='loc'||!MODES[p.id]||MODES[p.id].name))&&WORLD.roads.every(r=>r.every(id=>WORLD.places.some(p=>p.id===id))),'world');
- for(const[loc,L]of Object.entries(MODES))ok(L.name&&L.jp&&ARENAS[L.arena]&&L.diff>=0&&L.story&&L.missions.length&&L.missions.every(M=>M.name&&M.desc&&M.xp>0&&['duel','gauntlet','survive'].includes(M.kind)&&(M.kind==='gauntlet'?M.waves.length>=2&&M.waves.length<=5&&M.waves.every(id=>FOES[id]||BOSS_IDS.includes(id)):FOES[M.foe]||BOSS_IDS.includes(M.foe))&&(!M.item||GEAR.weapons[M.item]||GEAR.charms[M.item]||GEAR.armour[M.item]||GEAR.cosmetics[M.item])),'missions '+loc);
+ for(const[loc,L]of Object.entries(MODES))ok(L.name&&L.jp&&ARENAS[L.arena]&&L.diff>=0&&L.story&&L.missions.length&&L.missions.every(M=>M.name&&M.desc&&M.xp>0&&['duel','gauntlet','survive'].includes(M.kind)&&(M.kind==='gauntlet'?M.waves.length>=2&&M.waves.length<=5&&M.waves.every(id=>FOES[id]||BOSS_IDS.includes(id)):FOES[M.foe]||BOSS_IDS.includes(M.foe))&&[].concat(M.item||[]).every(id=>GEAR.weapons[id]||GEAR.charms[id]||GEAR.armour[id]||GEAR.cosmetics[id])&&(!M.layout||Array.isArray(M.layout.hazards))),'missions '+loc);
  ok(CHAL.schema_version===1&&CHAL.daily.count>0&&CHAL.daily.pool.length>=CHAL.daily.count+3&&CHAL.daily.pool.every(d=>d.id&&d.text&&d.stat&&d.n>0&&(d.mon>0||d.crystals>0))&&CHAL.achievements.every(a=>a.id&&a.name&&a.text&&(a.stat&&a.n>0||a.check)&&a.crystals>0)&&new Set(CHAL.achievements.map(a=>a.id)).size===CHAL.achievements.length,'challenges');
  ok(MOVE.parry.win>0&&MOVE.parry.win<=.25&&MOVE.parry.stun>0&&MOVE.parry.ink>=0,'movement.parry');ok(TRAIN.schema_version===1&&TRAIN.reward_mon>=0&&TRAIN.drills.every(d=>d.id&&d.name&&d.hint&&d.goal&&d.goal.n>0&&['idle','block','attack','fight'].includes(d.behav)),'training drills');
  ok(['state','move','hit','fall','turn','land'].every(k=>MOVE.blend[k]>0&&MOVE.blend[k]<=.2)&&MOVE.blend.step_px>0,'movement.blend');
@@ -1649,7 +1773,7 @@ const ACTIONS=['left','right','up','down','slash','kick','block','roll','ink','i
 function cleanSettings(o){const pick=(v,ok,d)=>ok.includes(v)?v:d,num=(v,lo,hi,d)=>typeof v==='number'&&Number.isFinite(v)?clamp(v,lo,hi):d;
  return{volume:num(o.volume,0,1,1),music:num(o.music,0,1,.8),sfx:num(o.sfx,0,1,1),sens:num(o.sens,.6,1.6,1),lang:pick(o.lang,['en'],'en'),shake:pick(o.shake,['full','reduced','off'],'full'),flash:pick(o.flash,['full','reduced'],'full'),haptics:o.haptics!==false,quality:pick(o.quality,['high','low'],'high'),
   assist:o.assist===true,scale:num(o.scale,.8,1.4,1),lefty:o.lefty===true,keys:Object.fromEntries(Object.entries(obj(o.keys)).filter(([c,a])=>/^[A-Za-z0-9]{2,20}$/.test(c)&&ACTIONS.includes(a)))}}
-const newSave=()=>({v:2,rev:0,savedAt:0,profile:{level:1,xp:0,attrPts:0,skillPts:0,attrs:{assault:0,survival:0,shadowcraft:0},mon:0,materials:0,crystals:0},world:{at:-1,loc:'',secret:0},stats:{},daily:{day:'',ids:[],base:{}},
+const newSave=()=>({v:2,rev:0,savedAt:0,profile:{level:1,xp:0,attrPts:0,skillPts:0,attrs:{assault:0,survival:0,shadowcraft:0},mon:0,materials:0,crystals:0},world:{at:-1,loc:'',secret:0},modes:{sun:0,hell:false,white:false},stats:{},daily:{day:'',ids:[],base:{}},
  progress:{beaten:0,defeated:[],ladder:{},regionsUnlocked:1,trialsDone:[],lastWin:null},powers:{},loadout:{powers:[null,null],echoes:[null,null]},
  gear:{owned:['katana'],equipped:{weapon:'katana',charm:null,armour:null,item:null},tiers:{katana:1},items:{},cos:{finish:null,trail:null,aura:null,robe:null}},settings:Object.assign({},SET_D,{keys:{}}),rewardsClaimed:{},story:{pending:[],seen:[]},legacy:null});
 // every field is re-validated and clamped on load, so bad data never reaches the game (in v1, {"beaten":"abc"} locked every boss)
@@ -1674,8 +1798,9 @@ function cleanSave(r){r=obj(r);const s=newSave(),p=obj(r.profile),a=obj(p.attrs)
    items:Object.fromEntries(Object.keys(GEAR.items).map(id=>[id,int(obj(gr.items)[id],0,GEAR.items[id].max,0)]).filter(e=>e[1]>0)),
    cos:Object.fromEntries(COSK.map(k=>[k,own.includes(cos[k])&&GEAR.cosmetics[cos[k]]&&GEAR.cosmetics[cos[k]].kind===k?cos[k]:null]))}}s.settings=cleanSettings(obj(r.settings));
  for(const[k,v]of Object.entries(obj(r.rewardsClaimed)))if(v)s.rewardsClaimed[k]=typeof v==='number'?v:1;
- s.story=Object.assign({},sto,{seen:strs(sto.seen,[...LAD.regions.map(R=>R.id),...Object.keys(MODES)]),pending:(Array.isArray(sto.pending)?sto.pending:[]).filter(n=>obj(n).kind==='power'?!!POWERS[n.id]:['migrated','corrupt','ach'].includes(obj(n).kind)&&typeof n.text==='string').slice(0,8)});
+ s.story=Object.assign({},sto,{seen:strs(sto.seen,[...LAD.regions.map(R=>R.id),...Object.keys(MODES),...Object.entries(MODES).flatMap(([l,L])=>L.missions.map((m,i)=>`${l}:${i}`))]),pending:(Array.isArray(sto.pending)?sto.pending:[]).filter(n=>obj(n).kind==='power'?!!POWERS[n.id]:['migrated','corrupt','ach'].includes(obj(n).kind)&&typeof n.text==='string').slice(0,8)});
  s.legacy=typeof lg.raw==='string'?{raw:lg.raw.slice(0,200),migratedAt:int(lg.migratedAt,0,1e15)}:null;
+ {const md=obj(r.modes);s.modes={sun:md.sun?1:0,hell:md.hell===true,white:md.white===true};if(!s.modes.sun)s.modes.hell=s.modes.white=false}
  {const w=obj(r.world);s.world={at:int(w.at,-1,BOSSES.length-1,-1),loc:typeof w.loc==='string'&&MODES[w.loc]?w.loc:'',secret:w.secret?1:0}}{const d=obj(r.daily),pool=CHAL.daily.pool.map(x=>x.id);s.daily={day:typeof d.day==='string'&&/^\d{4}-\d\d-\d\d$/.test(d.day)?d.day:'',ids:strs(d.ids,pool).slice(0,CHAL.daily.count),base:Object.fromEntries(Object.entries(obj(d.base)).filter(([k])=>/^[a-zA-Z]{1,24}$/.test(k)).map(([k,v])=>[k,int(v,0,1e9)]))}}s.stats=Object.fromEntries(Object.entries(obj(r.stats)).filter(([k])=>/^[a-zA-Z]{1,24}$/.test(k)).map(([k,v])=>[k,int(v,0,1e9)]));
  points(s);backfillCr(s);return s}
 // shadow crystals are paid per claim, once: the "cr:<claim>" flag makes every payout idempotent, and lets 1.7 pay what a
@@ -1805,7 +1930,7 @@ function applySettings(){const st=SV.settings;vols();document.body.classList.tog
  document.documentElement.style.setProperty('--k',st.scale);KMAP=Object.assign({},KMAP0);for(const[c,a]of Object.entries(st.keys))KMAP[c]=a}
 /* --- flow & menus --- */
 let MODE='film',helpBack='menu',VIEW='home'; // VIEW: the hub screen the menus return to ('home' = main menu, 'map' = world map)
-const PANELS=['home','shop','train','chal','workshop','editor','menu','result','pause','help','char','notice','region','settings'];
+const PANELS=['sunp','home','shop','train','chal','workshop','editor','menu','result','pause','help','char','notice','region','settings'];
 const show=id=>{for(const p of PANELS)document.getElementById(p).classList.toggle('off',p!==id)};
 function buildMenu(){const box=document.getElementById('levels');box.innerHTML='';const todo=SV.profile.attrPts>0||Object.keys(SV.powers).some(id=>!tierBlock(SV,id));$('mChar').textContent=`Character · level ${SV.profile.level}${todo?' · points to spend':''}`;BOSSES.forEach((b,i)=>{const done=SV.progress.beaten>i,open=SV.progress.regionsUnlocked>i,ns=ladderNodes(SV,i).filter(n=>n.kind==='step'),c=ns.filter(n=>n.cleared).length,el=document.createElement('button');
  el.className='card'+(open?'':' locked');el.disabled=!open;el.setAttribute('aria-label',`${ARENAS[b.arena].name}: ${b.name}, ${b.title}. ${done?'Defeated':open?'Open':'Locked'}`);
@@ -1834,7 +1959,7 @@ function startFight(lv,seed,node={kind:'boss'}){prep(seed);G.lv=lv;G.node=node;G
  G.hint=lv===0&&node.kind==='step'&&!node.i?14:7;go()}
 const noMission=()=>{G.hell=G.white=G.survive=false;G.waves=null;G.wave=0;G.map=null;G.L=null;ARENA=900};
 function prep(seed){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.seed=(seed??SEED_Q??Math.random()*4294967296)>>>0;G.rand=rng(G.seed);G.acc=0;G.ia=1}
-function fighters(def,hero){G.def=def;G.P=mkF(hero||heroDef(),true);G.B=mkF(def,false);G.res=null;G.rv=0;G.tally={};G.combo={n:0,dmg:0,t:-9};G.item=null;G.tea=false;
+function fighters(def,hero){G.sunSeen=0;G.def=def;G.P=mkF(hero||heroDef(),true);G.B=mkF(def,false);G.res=null;G.rv=0;G.tally={};G.combo={n:0,dmg:0,t:-9};G.item=null;G.tea=false;
  G.P.def.powers.forEach((id,i)=>{const el=tEls['p'+(i+1)];el.classList.toggle('off',!id);if(id)el.innerHTML=`<b>${POWERS[id].jp}</b><i>${POWERS[id].short}</i>`});G.round=1;G.t=0;G.mvId=0;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2}}
 function go(){MODE='game';show(null);const ar=ARENAS[G.arena];amb(ar.wind,ar.rain,ar.rumb||0);newRound()}
 /* --- the Training Room (1.7): the Forgotten Dojo. A dummy or any foe already met, idle, blocking, attacking (every move or one
@@ -1944,7 +2069,7 @@ function takeSupply(rewarding){const id=SV.gear.equipped.item;G.item=rewarding&&
  if(G.item==='whetstone')G.P.mod=Object.assign({},G.P.mod,{dmg:G.P.mod.dmg*(1+GEAR.items.whetstone.effect.dmg)})}
 function useSupply(){if(!G.item)return;SV.gear.items[G.item]=Math.max(0,(SV.gear.items[G.item]||0)-1);if(!SV.gear.items[G.item])delete SV.gear.items[G.item];G.item=null;writeSave(SV)}
 function absorbDone(){if(G.state!=='absorb')return;G.state='over';const id=G.res.r.power;SV.story.pending=SV.story.pending.filter(n=>!(n.kind==='power'&&n.id===id));writeSave(SV);showResult()}
-function showResult(){const{win,r}=G.res,lv=G.lv,last=lv===BOSSES.length-1,kind=G.node.kind;
+function showResult(){const{win,r}=G.res,lv=G.lv,last=lv===BOSSES.length-1,kind=G.node.kind;if(win&&kind==='boss'&&lv===0&&!SV.modes.sun&&!G.sunSeen){G.sunSeen=1;return startSun('result')}
  if(kind==='mission')return showMissionResult(win,r);if(kind==='custom')return showCustomResult(win);if(kind!=='boss')return showLadderResult(win,r);
  $('rRewards').textContent=r?rewardText([r])+(r.slot>=0?` — ready in power slot ${r.slot+1} (${TOUCH.on?'the '+POWERS[r.power].jp+' button':['U','O'][r.slot]+' key'})`:''):'No rewards for a defeat — and nothing is lost.';purse();
  document.getElementById('rKanji').textContent=win?(last?'終':'勝'):'敗';document.getElementById('rTitle').textContent=win?(last?'The Five Shadows are no more':'Victory'):'Defeat';
@@ -2063,6 +2188,35 @@ function startCustom(m,test){const L=compileMap(m);prep();noMission();G.lv=0;G.n
 function showCustomResult(win){const m=G.map;$('rRewards').textContent='Custom maps pay no rewards: this was for play and practice.';purse();$('rKanji').textContent=win?'勝':'敗';$('rTitle').textContent=win?'Map cleared':'Defeat';
  $('rText').textContent=win?`${m.name}: every foe has fallen.`:`${m.name} holds. Try again, or change the map.`;const bt=$('rBtns');bt.innerHTML='';const mkb=(txt,fn,big)=>{const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=txt;e.onclick=fn;bt.appendChild(e)};
  mkb('Play again',()=>startCustom(m,G.node.test),1);if(G.node.test)mkb('Back to the editor',()=>openEditor(m));mkb('The workshop',()=>{MODE='menu';openWorkshop()});mkb('World map',toMenu);show('result');amb(.08,0,0);bt.firstChild.focus()}
+/* --- the mysterious sun (1.7): the first time Gekkō falls, a sun that is not the sun rises over the field, with a sound like no
+   other. Touch it to choose Hell Mode or White Mode; neither opens by itself, and the choice is saved at once. The sun then
+   hangs over the Burning Field on the world map until both paths are open (saves from before 1.7 find it there). --- */
+const sunWaits=s=>!!s.rewardsClaimed['boss:gekko']&&!(s.modes.hell&&s.modes.white);
+function drawSun(c,x,y,r,t,a=1){c.save();c.translate(x,y);c.globalAlpha=a*.5;c.drawImage(MIST,-r*5,-r*5,r*10,r*10);c.rotate(t*.06);c.fillStyle='rgba(240,214,150,.28)';
+ for(let k=0;k<16;k++){c.rotate(Math.PI/8);c.globalAlpha=a*(.45+.35*Math.sin(t*1.7+k));tri(c,[-r*.18,0],[r*.18,0],[0,-r*(3.2+(k%2)*1.4)])}
+ c.globalAlpha=a;const s=1+.05*Math.sin(t*4);c.fillStyle='#f6e7b8';circ(c,0,0,r*s);c.strokeStyle=RED;c.lineWidth=Math.max(2,r*.06);c.beginPath();c.arc(0,0,r*s*1.06,0,6.2832);c.stroke();
+ c.fillStyle='rgba(181,48,28,.25)';circ(c,0,0,r*.55*s);c.restore()}
+let SUN={draw(c,t){if(sunWaits(SV)){const[x,y]=WORLD.sun;drawSun(c,x,y,58,t)}}};
+function sunScene(c){const u=E.out(clamp(G.st/1.4)),y=lerp(-260,H*.26,u);screen(c);c.globalAlpha=.4*u;c.fillStyle=INK;c.fillRect(0,0,W,H);c.globalAlpha=1;drawSun(c,W/2,y,118,G.rt,u);
+ const a=ss(1.4,2.2,G.st);if(a>0){c.globalAlpha=a*.45;c.fillStyle=INK;c.fillRect(0,H*.62-56,W,128);c.globalAlpha=a;c.textAlign='center';c.textBaseline='middle';c.fillStyle='#f6e7b8';c.font='italic 54px "Cormorant Garamond", serif';c.fillText('The light has awakened. Choose what lies beyond.',W/2,H*.62);
+  if(G.st>2.4){c.globalAlpha=.55+.25*Math.sin(G.rt*3);c.font='500 26px "Cormorant Garamond", serif';c.fillText(TOUCH.on?'touch the sun':PAD.on?'press A on the sun':'click the sun, or press Enter',W/2,H*.62+56)}c.globalAlpha=1}}
+function startSun(after){G.sunAfter=after;G.state='sun';G.st=0;G.ban=null;G.paused=false;show(null);$('sunBtn').classList.add('off');MODE='game';try{AU.route=AU.mu;S.sun(AU.ctx.currentTime+.05,.9)}catch(e){}AU.route=null}
+// from the map: the scene in the Burning Field (the first time), or straight to the choice for the path still closed
+function startSunScene(){if(!sunWaits(SV))return toMenu();if(SV.modes.sun){G.sunAfter='map';return openSunChoice()}prep();noMission();G.lv=0;G.node={kind:'sun'};G.train=null;G.trial=null;G.arena=0;
+ fighters(FOES.dummy);go();G.B.alpha=0;startSun('map')}
+function openSunChoice(){$('sunBtn').classList.add('off');if(MODE==='game')G.state='chosen';const box=$('suCards'),bt=$('suBtns');box.innerHTML='';bt.innerHTML='';
+ $('suText').textContent=SV.modes.sun?'The other path still waits beyond the light.':'Two roads open beyond it. Neither opens unless you choose; the other will still wait on the world map.';
+ for(const[mode,kj,nm,txt]of[['hell','鬼','Hell Mode','A dark, brutal path: demons that counter and chain, burning hazards, halved healing, wounds that carry. Greater rewards.'],['white','白','White Mode','A luminous path of precision: guardians whose ward only a perfect parry, a punish or an Issen breaks; falling light; your reflection.']]){
+  const open=SV.modes[mode],e=document.createElement('button');e.className='mcard '+mode;e.innerHTML=`<span class="kj">${kj}</span><span class="nm">${nm}</span><span class="ti">${txt}</span><span class="stt">${open?'Open · enter':'Choose this path'}</span>`;
+  e.onclick=()=>open?(endSun(),openLoc(mode)):chooseMode(mode);box.appendChild(e)}
+ const l=document.createElement('button');l.className='lnk';l.textContent='Not yet: the sun will wait on the world map';l.onclick=()=>sunDone();bt.appendChild(l);show('sunp');box.firstChild.focus()}
+function chooseMode(mode){const s=SV;s.modes.sun=1;s.modes[mode]=true;if(!s.rewardsClaimed['event:sun'])s.rewardsClaimed['event:sun']=Date.now();const g=award(s);writeSave(s);const L=MODES[mode];
+ notice(L.jp,`${L.name} is open`,`${L.desc}${g.length?' '+gotText(g)+'.':''}`,[[`Enter ${mode==='hell'?'the Infernal Realm':'the Celestial Sanctuary'}`,()=>{endSun();openLoc(mode)},1],['Later',()=>sunDone()]])}
+const endSun=()=>{$('sunBtn').classList.add('off');if(MODE==='game')G.state='over'};
+function sunDone(){const a=G.sunAfter;endSun();if(a==='result'&&G.res)showResult();else toMenu()}
+// a locked mode explains how it opens, and takes you to the sun when it waits
+function modeLocked(mode){const L=MODES[mode],w=sunWaits(SV);notice(L.jp,`${L.name} is sealed`,w?'The mysterious sun waits above the Burning Field. Touch it and choose this path.':'Defeat Gekkō, the first shadow. A mysterious sun will rise over the field: touch it, and choose.',
+ w?[['Go to the sun',()=>startSunScene(),1],['Back',toHome]]:[['Back',toHome,1]])}
 /* --- missions (1.7): Ashen Village, Hell Mode and White Mode share one system. A location's missions open in order; each is a
    duel (rounds), a gauntlet (waves, health carried over) or a survival (outlast the clock). First clears pay once (claim
    <loc>:<i>), repeats pay a quarter of the XP, a loss changes nothing. --- */
@@ -2071,10 +2225,10 @@ function locNodes(s,loc){let prev=true;return MODES[loc].missions.map((m,i)=>{co
 function grantMission(s,loc,i,winId){const g=s.progress,p=s.profile;if(winId&&g.lastWin&&g.lastWin.id===winId)return g.lastWin.result;
  const M=MODES[loc].missions[i],claim=`${loc}:${i}`,first=!s.rewardsClaimed[claim],L0=p.level,sp0=p.skillPts;
  const r={kind:'mission',loc,i,first,xp:first?M.xp:Math.round(M.xp*PROG.xp.repeat_share),mon:first?M.mon||0:0,materials:first?M.materials||0:0,sp:0,power:null,slot:-1};
- if(first){s.rewardsClaimed[claim]=Date.now();if(M.item&&!s.gear.owned.includes(M.item)){s.gear.owned.push(M.item);if(GEAR.weapons[M.item])s.gear.tiers[M.item]=1;r.item=M.item;r.itemName=itemOf(M.item).name}}
+ if(first){s.rewardsClaimed[claim]=Date.now();const got=[].concat(M.item||[]).filter(id=>!s.gear.owned.includes(id));for(const id of got){s.gear.owned.push(id);if(GEAR.weapons[id])s.gear.tiers[id]=1}if(got.length){r.item=got[0];r.itemName=got.map(id=>itemOf(id).name).join(', ')}}
  r.crystals=payCr(s,claim,crOf(claim));p.xp=Math.min(1e9,p.xp+r.xp);p.mon+=r.mon;p.materials+=r.materials;p.level=levelOf(p.xp).level;points(s);r.sp=p.skillPts-sp0;r.levelFrom=L0;r.levelTo=p.level;
  if(winId)g.lastWin={id:winId,result:r};return r}
-let REGL=null,SUN=null; // the location a region-style panel shows (null: a ladder region)
+let REGL=null; // the location a region-style panel shows (null: a ladder region)
 function openLoc(loc){const L=MODES[loc];MODE='menu';REGL=loc;if(!locOpen(SV,loc))return toMenu();if(SV.world.loc!==loc){SV.world.loc=loc;writeSave(SV)}
  if(!SV.story.seen.includes(loc)){SV.story.seen.push(loc);writeSave(SV);return notice(L.jp,L.name,L.story.join(' '),[['Continue',()=>openLoc(loc),1]])}
  $('gKanji').textContent=L.jp;$('gTitle').textContent=L.name;$('gText').textContent=L.desc;const box=$('gNodes');box.innerHTML='';
@@ -2083,10 +2237,13 @@ function openLoc(loc){const L=MODES[loc];MODE='menu';REGL=loc;if(!locOpen(SV,loc
   el.innerHTML=`<span class="n">${lab}</span><span class="kj">${M.jp||L.jp}</span><span class="nm">${M.name}</span><span class="ti">${M.desc}</span><span class="stt">${n.cleared?'Cleared · again':n.open?'Fight':'Locked'}</span>${n.cleared?'<span class="seal">討</span>':''}`;
   el.onclick=()=>startMission(loc,n.i);box.appendChild(el)}
  show('region');amb(.1,0,0);box.firstChild&&box.firstChild.focus()}
-function startMission(loc,i,seed){const L=MODES[loc],M=L.missions[i];prep(seed);noMission();G.lv=0;G.node={kind:'mission',loc,i};G.train=null;G.trial=null;G.parry=!!L.parry;G.hell=loc==='hell';G.white=loc==='white';
+function startMission(loc,i,seed){const L=MODES[loc],M=L.missions[i],sk=`${loc}:${i}`;
+ if(M.story&&!SV.story.seen.includes(sk)){SV.story.seen.push(sk);writeSave(SV);return notice(M.jp||L.jp,M.name,M.story,[['Begin',()=>startMission(loc,i,seed),1],['Not yet',()=>openLoc(loc)]])}
+ prep(seed);noMission();G.lv=0;G.node={kind:'mission',loc,i};G.train=null;G.trial=null;G.parry=!!L.parry;G.hell=loc==='hell';G.white=loc==='white';
  G.arena=M.arena??L.arena;G.need=M.rounds||1;G.roundTime=M.time||60;G.survive=M.kind==='survive';
  const mk=id=>{const d=FOES[id]||BOSSES.find(b=>b.id===id);return Object.assign({},d,{hp:Math.round(d.hp*(M.hp||1))})};
- G.waves=M.waves?M.waves.map(mk):null;G.wave=0;fighters(G.waves?G.waves[0]:mk(M.foe));takeSupply(true);G.matchId=`${loc}:${i}:`+Date.now();G.hint=0;go();
+ if(M.layout){G.L=compileMap(cleanMap(Object.assign({width:900,waves:['dummy']},M.layout)));ARENA=G.L.width}
+ G.waves=M.waves?M.waves.map(mk):null;G.wave=0;fighters(G.waves?G.waves[0]:mk(M.foe));takeSupply(true);if(G.hell)G.P.mod=Object.assign({},G.P.mod,{heal:G.P.mod.heal*.5});G.matchId=`${loc}:${i}:`+Date.now();G.hint=0;go();
  if(G.waves)G.ban={k:WAVEK[0],sub:`${M.name} · wave 1 of ${G.waves.length}: ${G.def.name}`,t0:G.rt,dur:2.3,size:230}}
 function showMissionResult(win,r){const{loc,i}=G.node,L=MODES[loc],M=L.missions[i],next=locNodes(SV,loc).find(n=>n.open&&!n.cleared);
  $('rRewards').textContent=r?rewardText([r]):'No rewards for a defeat — and nothing is lost.';purse();$('rKanji').textContent=win?'勝':'敗';$('rTitle').textContent=win?(M.final&&L.final||'Victory'):'Defeat';
@@ -2100,11 +2257,12 @@ function discover(s){const S=WORLD.secret,R=LAD.regions.find(R=>R.id===S.region)
    a marker for every place, locked or open, with difficulty, completion, boss and mission counts; roads open with the
    journey; a hidden road; the hero stands where you last went. Choosing a marker previews its rewards. --- */
 const WM={x:0,tx:null,drag:null,sel:null,sig:'',img:null,px:-1,first:true};
-const placeOf=id=>WORLD.places.find(p=>p.id===id);
-const placesFor=s=>WORLD.places.filter(p=>p.kind!=='loc'||MODES[p.id]&&(!p.secret||s.world.secret)&&(!['hell','white'].includes(p.id)||s.modes&&s.modes.sun));
+const placeOf=id=>id==='sun'?{id:'sun',kind:'sun',at:WORLD.sun}:WORLD.places.find(p=>p.id===id);
+const placesFor=s=>[...WORLD.places.filter(p=>p.kind!=='loc'||MODES[p.id]&&(!p.secret||s.world.secret)&&(!['hell','white'].includes(p.id)||s.modes[p.id])),...(sunWaits(s)?[{id:'sun',kind:'sun',at:WORLD.sun}]:[])];
 function remaining(list){const a={xp:0,mon:0,cr:0,items:[]};for(const x of list){a.xp+=x.xp||0;a.mon+=x.mon||0;a.cr+=x.crystals||0;if(x.item)a.items.push(x.item)}
  return a.xp||a.mon||a.cr||a.items.length?`Still to earn here: ${fmtN(a.xp)} XP${a.mon?` · ${fmtN(a.mon)} mon`:''}${a.cr?` · ${a.cr} shadow crystals`:''}${a.items.length?' · '+a.items.join(', '):''}.`:'Everything here is earned: fights again pay a quarter of their XP.'}
-function placeInfo(s,p){if(p.kind==='dojo'){const d=TRAIN.drills.filter(x=>s.rewardsClaimed['drill:'+x.id]).length;return{name:p.name,jp:p.jp,open:true,pct:null,diff:0,desc:p.desc,rew:`Drills done: ${d} of ${TRAIN.drills.length} (each pays ${TRAIN.reward_mon} mon the first time).`,act:()=>startTraining(),go:'Train'}}
+function placeInfo(s,p){if(p.kind==='sun')return{name:'The mysterious sun',jp:'光',open:true,pct:null,diff:0,desc:s.modes.sun?'The other path still waits beyond the light.':'Above the Burning Field hangs a sun that is not the sun. Touch it.',rew:'It opens Hell Mode or White Mode — your choice.',act:()=>startSunScene(),go:'Touch the sun'};
+ if(p.kind==='dojo'){const d=TRAIN.drills.filter(x=>s.rewardsClaimed['drill:'+x.id]).length;return{name:p.name,jp:p.jp,open:true,pct:null,diff:0,desc:p.desc,rew:`Drills done: ${d} of ${TRAIN.drills.length} (each pays ${TRAIN.reward_mon} mon the first time).`,act:()=>startTraining(),go:'Train'}}
  if(p.kind==='workshop')return{name:p.name,jp:p.jp,open:true,pct:null,diff:0,desc:p.desc,rew:'Custom maps pay no XP or currency: they are for play and practice.',act:()=>openWorkshop('menu'),go:'Open the workshop'};
  if(p.kind==='region'){const lv=p.lv,b=BOSSES[lv],ar=ARENAS[b.arena],R=LAD.regions[lv],ns=ladderNodes(s,lv),d=ns.filter(n=>n.cleared).length,rw=PROG.rewards[b.id],T=LAD.trials[b.id];
   const left=[...R.steps.filter((st,i)=>!s.rewardsClaimed[`step:${R.id}:${i}`]).map(st=>({xp:st.xp,mon:st.mon,crystals:st.elite?ECON.crystals.elite:0,item:st.item&&itemOf(st.item).name})),
@@ -2113,7 +2271,7 @@ function placeInfo(s,p){if(p.kind==='dojo'){const d=TRAIN.drills.filter(x=>s.rew
    rew:remaining(left),act:()=>openRegion(lv),go:'Enter',lock:lv?`Defeat ${BOSSES[lv-1].name} to open this road.`:''}}
  const L=MODES[p.id],ns=locNodes(s,p.id),d=ns.filter(n=>n.cleared).length;
  return{name:L.name,jp:L.jp,sub:`${L.missions.length} missions`,open:locOpen(s,p.id),done:d===ns.length,pct:Math.round(d/ns.length*100),diff:L.diff,desc:L.desc,cls:p.id==='hell'||p.id==='white'?p.id:'',
-  rew:remaining(ns.filter(n=>!n.cleared).map(n=>({xp:n.m.xp,mon:n.m.mon,crystals:n.m.crystals,item:n.m.item&&itemOf(n.m.item).name}))),act:()=>openLoc(p.id),go:'Enter',lock:L.lock||''}}
+  rew:remaining(ns.filter(n=>!n.cleared).map(n=>({xp:n.m.xp,mon:n.m.mon,crystals:n.m.crystals,item:n.m.item&&[].concat(n.m.item).map(id=>itemOf(id).name).join(', ')}))),act:()=>openLoc(p.id),go:'Enter',lock:L.lock||''}}
 function mapDone(s){let n=0,d=0;LAD.regions.forEach((R,i)=>{for(const x of ladderNodes(s,i)){n++;if(x.cleared)d++}});for(const loc in MODES)if(placesFor(s).some(p=>p.id===loc))for(const x of locNodes(s,loc)){n++;if(x.cleared)d++}return Math.round(d/n*100)}
 const herePlace=s=>s.world.loc&&locOpen(s,s.world.loc)?s.world.loc:s.world.at>=0?LAD.regions[s.world.at].id:'dojo';
 const panTo=()=>{$('wpins').style.transform=`translateX(${-WM.x/WORLD.width*100}%)`};
@@ -2132,18 +2290,18 @@ function selPlace(id){const p=placeOf(id),I=placeInfo(SV,p),b=$('wiBtns');WM.sel
  const go=document.createElement('button');go.className='big';go.textContent=I.open?I.go:'Locked';go.disabled=!I.open;go.onclick=I.act;b.appendChild(go);
  const x=document.createElement('button');x.className='lnk';x.textContent='Close';x.onclick=()=>{WM.sel=null;$('wInfo').hidden=true;for(const e of $('wpins').children)e.classList.remove('sel')};b.appendChild(x);
  $('wInfo').hidden=false;WM.tx=clamp(p.at[0]-W/2+W*.12,0,WORLD.width-W);if(MODE==='menu')(I.open?go:x).focus()}
-const worldSig=s=>[s.progress.regionsUnlocked,s.progress.beaten,s.world.secret,s.modes&&s.modes.sun,s.modes&&s.modes.hell,s.modes&&s.modes.white].join();
-function roadOpen(s,a,b){const q=placeOf(b);return q.kind==='region'?s.progress.regionsUnlocked>q.lv:q.kind==='loc'?placesFor(s).includes(q):true}
+const worldSig=s=>[s.progress.regionsUnlocked,s.progress.beaten,s.world.secret,s.modes.sun,s.modes.hell,s.modes.white,sunWaits(s)].join();
+function roadOpen(s,a,b){const q=placeOf(b);return q.kind==='region'?s.progress.regionsUnlocked>q.lv:q.kind==='loc'?placesFor(s).some(p=>p.id===b):true}
 // the map's ink: mountains, a river to the sea, the roads (dotted where not yet open), a small picture for every place
 function worldLayer(s){return pre(WORLD.width,H,g=>{const r=rng(77),at=id=>placeOf(id).at;g.fillStyle=PAPER;g.fillRect(0,0,WORLD.width,H);
  g.globalAlpha=.42;g.drawImage(M_FAR,-300,-360,3600,900);g.globalAlpha=.3;g.drawImage(M_MID,-200,-170,3600,800);g.globalAlpha=1;
  const sea=g.createLinearGradient(2600,0,3000,0);sea.addColorStop(0,'rgba(21,19,15,0)');sea.addColorStop(1,ink(.28));g.fillStyle=sea;g.fillRect(2580,0,420,H);
  g.strokeStyle=ink(.4);g.lineWidth=2.4;for(let i=0;i<30;i++){const x=2660+r()*320,y=60+r()*980;g.beginPath();g.arc(x,y,16,3.5,5.9);g.stroke()}
  g.strokeStyle=ink(.3);dry(g,qpts([1240,0],[1560,700],[1900,600],34),24,3,{dry:.55,alpha:.4,even:1});dry(g,qpts([1960,610],[2300,840],[3000,720],34),22,4,{dry:.55,alpha:.35,even:1});
- for(const[a,b]of WORLD.roads){const q=placeOf(b);if(!placesFor(s).includes(q)&&q.kind==='loc')continue;const A=at(a),B=at(b),m=[(A[0]+B[0])/2+50,(A[1]+B[1])/2-50],pts=qpts(A,m,B,30);
+ for(const[a,b]of WORLD.roads){const q=placeOf(b);if(q.kind==='loc'&&!placesFor(s).some(p=>p.id===b))continue;const A=at(a),B=at(b),m=[(A[0]+B[0])/2+50,(A[1]+B[1])/2-50],pts=qpts(A,m,B,30);
   if(q.kind==='loc'&&b!=='ashen'){g.strokeStyle=b==='hell'?'rgba(140,30,18,.7)':'rgba(176,150,80,.8)';g.lineWidth=4;g.setLineDash([14,12]);g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.stroke();g.setLineDash([]);continue} // spirit roads from the sun
   if(roadOpen(s,a,b)){g.strokeStyle=ink(.78);dry(g,pts,11,a.length+b.length,{dry:.4,even:1})}else{g.fillStyle=ink(.42);for(let i=0;i<pts.length;i+=2)circ(g,pts[i][0],pts[i][1],3.2)}}
- const v=(id,fn)=>{const p=placeOf(id);if(p&&placesFor(s).includes(p)){g.save();g.translate(p.at[0],p.at[1]);fn(g);g.restore()}};
+ const v=(id,fn)=>{const p=placeOf(id);if(p&&placesFor(s).some(q=>q.id===id)){g.save();g.translate(p.at[0],p.at[1]);fn(g);g.restore()}};
  v('dojo',g=>{g.fillStyle=ink(.45);g.fillRect(-70,-64,140,46);roof(g,0,-60,170,58,ink(.75));});
  v('burning_field',g=>{g.strokeStyle=ink(.6);for(let i=0;i<26;i++){const x=-170+r()*340,y=-20+r()*60;g.lineWidth=2;line(g,[x,y],[x+(r()-.5)*10,y-18-r()*22])}if(s.progress.beaten<1){g.fillStyle='rgba(181,48,28,.75)';for(let i=0;i<5;i++){const x=-120+i*60;brush(g,[[x,0],[x+6,-40],[x-4,-80]],22,{taper:u=>1-u})}}});
  v('bamboo_grove',g=>{for(let i=0;i<11;i++){const x=-170+i*32+(r()-.5)*16,h=110+r()*90,l=(r()-.5)*14,tn=.35+r()*.4;g.fillStyle=ink(tn);brush(g,[[x,8],[x+l*.5,-h*.5],[x+l,-h]],4+r()*3,{taper:u=>1-u*.3});
@@ -2338,11 +2496,12 @@ function openSettings(back,tab){if(back)setBack=back;if(tab)setTab=tab;const st=
    const w=document.createElement('span');w.textContent=codes+' ';w.appendChild(b);add(a,w)}
  if(setTab==='keys'){const r=document.createElement('button');r.className='lnk';r.textContent='Reset keys';r.onclick=()=>{st.keys={};save();openSettings()};add('',r)}
  show('settings')}
-function togglePause(){if(MODE!=='game'||G.state==='over')return;if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;G.keys={};if(G.paused&&G.train)openTrain();else show(G.paused?'pause':null)}
+function togglePause(){if(MODE!=='game'||G.state==='over'||G.state==='chosen')return;if(G.state==='sun'){if(G.st>2.4)openSunChoice();return}if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;G.keys={};if(G.paused&&G.train)openTrain();else show(G.paused?'pause':null)}
 const KMAP0={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',KeyH:'block',ShiftLeft:'block',ShiftRight:'block',Space:'roll',Escape:'pause',KeyP:'pause'};
 let KMAP=KMAP0; // the default keys plus the player's own bindings (settings.keys)
 function gameKey(e,down){if(down&&KEYCAP){KEYCAP(e);return}if(e.target&&/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName||''))return;if(down&&e.code==='Escape'&&MODE!=='game'){window.issenApp.back();return}if(down)usePad(false);if(e.code==='KeyF'&&down){document.getElementById('fs').click();return}if(e.code==='KeyM'&&down){document.getElementById('snd').click();return}
  if(MODE==='game'&&G.state==='absorb'){if(down&&!e.repeat&&G.st>.8){e.preventDefault();absorbDone()}return}
+ if(MODE==='game'&&(G.state==='sun'||G.state==='chosen')){if(down&&!e.repeat&&G.state==='sun'&&G.st>2.4&&(e.code==='Enter'||e.code==='Space'||e.code==='Escape')){e.preventDefault();openSunChoice()}else if(down&&!e.repeat&&G.state==='chosen'&&e.code==='Escape')sunDone();return}
  const a=KMAP[e.code];if(!a||MODE!=='game')return;e.preventDefault();if(a==='pause'){if(down&&!e.repeat)togglePause();return}if(G.paused)return;
  if(a==='slash'||a==='kick'||a==='ink'||a==='issen'||a==='power1'||a==='power2'||a==='roll'){if(down&&!e.repeat)G.buf={a,t:G.t};return}
  if(a==='up'&&down&&!e.repeat)G.jb=G.t;G.keys[a]=down}
@@ -2357,7 +2516,7 @@ function pollPad(){const ps=navigator.getGamepads?[...navigator.getGamepads()].f
  const nx=a0*k,ny=a1*k,held={left:b(14)||nx<-.4,right:b(15)||nx>.4,down:b(13)||ny>.55,block:b(4)},up=b(12)||ny<-.6,edge=[];
  for(const i in PADB)if(b(i)&&!PAD.prev[i])edge.push(PADB[i]);const upE=up&&!PAD.prev.up;PAD.prev={up};for(const i in PADB)PAD.prev[i]=b(i);
  if(edge.length||upE||held.left||held.right||held.down)usePad(true);
- const fight=MODE==='game'&&!G.paused&&G.state!=='over'&&G.state!=='absorb';
+ const fight=MODE==='game'&&!G.paused&&G.state!=='over'&&G.state!=='absorb'&&G.state!=='sun'&&G.state!=='chosen';
  for(const k in held)if(held[k]!==!!PAD.held[k])G.keys[k]=fight&&held[k];PAD.held=fight?held:{};
  if(fight){if(upE)G.jb=G.t;for(const a of edge){if(a==='pause')togglePause();else if(a==='jump')G.jb=G.t;else if(a!=='block')G.buf={a,t:G.t}}return}
  if(MODE==='game'&&G.state==='absorb'){if(edge.length&&G.st>.8)absorbDone();return}
@@ -2394,14 +2553,15 @@ function frame(now){const raw=(now-st.last)/1000||0,dt=Math.min(.1,raw);st.last=
 $('playBig').onclick=play;$('replayBig').onclick=replay;$('enterGame').onclick=enterGame;$('toGame').onclick=enterGame;$('skip').onclick=enterGame;
 $('hFilm').onclick=watchFilm;$('mHome').onclick=toHome;$('hChar').onclick=()=>openChar(null,'home');$('hHelp').onclick=()=>{helpBack='home';show('help')};
 $('mChar').onclick=()=>openChar(null,'menu');$('mSet').onclick=()=>openSettings('menu');$('pSet').onclick=()=>openSettings('pause');
-$('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(setBack==='home')toHome();else{buildMenu();show('menu')}};for(const b of $('sTabs').children)b.onclick=()=>{setTab=b.dataset.st;openSettings()};$('gBack').onclick=toMenu;$('mShop').onclick=()=>openShop('menu');$('wkClose').onclick=()=>WK.back==='home'?toHome():toMenu();$('wL').onclick=()=>{WM.tx=clamp(WM.x-760,0,WORLD.width-W)};$('wR').onclick=()=>{WM.tx=clamp(WM.x+760,0,WORLD.width-W)};
+$('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(setBack==='home')toHome();else{buildMenu();show('menu')}};for(const b of $('sTabs').children)b.onclick=()=>{setTab=b.dataset.st;openSettings()};$('gBack').onclick=toMenu;$('mShop').onclick=()=>openShop('menu');$('sunBtn').onclick=openSunChoice;$('wkClose').onclick=()=>WK.back==='home'?toHome():toMenu();$('wL').onclick=()=>{WM.tx=clamp(WM.x-760,0,WORLD.width-W)};$('wR').onclick=()=>{WM.tx=clamp(WM.x+760,0,WORLD.width-W)};
 {const m=$('wmap'),k=()=>W/(stage.clientWidth||W);m.addEventListener('pointerdown',e=>{WM.drag={x0:e.clientX,wx:WM.x};WM.moved=false;m.classList.add('drag')});
  addEventListener('pointermove',e=>{if(!WM.drag)return;const dx=(e.clientX-WM.drag.x0)*k();if(Math.abs(dx)>8)WM.moved=true;WM.x=clamp(WM.drag.wx-dx,0,WORLD.width-W);WM.tx=null});
  addEventListener('pointerup',()=>{if(WM.drag){WM.drag=null;m.classList.remove('drag');setTimeout(()=>{WM.moved=false},0)}});
  m.addEventListener('wheel',e=>{e.preventDefault();WM.tx=null;WM.x=clamp(WM.x+(Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY)*1.4,0,WORLD.width-W)},{passive:false})}$('gChar').onclick=()=>openChar(null,'region');$('cClose').onclick=()=>{if(CH.back==='result')show('result');else if(CH.back==='region')REGL?openLoc(REGL):openRegion(REG);else if(CH.back==='home')toHome();else{buildMenu();show('menu')}};
 for(const b of $('cTabs').children)b.onclick=()=>{CH.tab=b.dataset.tab;CH.slot=null;openChar()};
 for(const b of $('shTabs').children)b.onclick=()=>openShop(null,b.dataset.sh);for(const b of $('chTabs').children)b.onclick=()=>openChal(null,b.dataset.ch);$('chClose').onclick=()=>CHS.back==='menu'?toMenu():toHome();$('shClose').onclick=()=>{if(SH.back==='result')show('result');else if(SH.back==='menu')toMenu();else toHome()};
-HOME_X.push(()=>['Training Room',()=>startTraining(),{note:`${TRAIN.drills.filter(d=>SV.rewardsClaimed['drill:'+d.id]).length} of ${TRAIN.drills.length} drills`}],()=>['Shop',()=>openShop('home'),{note:`${fmtN(SV.profile.mon)} mon · ${fmtN(SV.profile.crystals)} crystals`}],()=>['Inventory',()=>{CH.tab='gear';openChar(null,'home')}],()=>{rollDaily(SV);const n=SV.daily.ids.filter(id=>!SV.rewardsClaimed[`daily:${SV.daily.day}:${id}`]).length;return['Challenges',()=>openChal('home'),{note:n?`${n} of ${SV.daily.ids.length} today`:'today’s are done'}]});
+HOME_X.push(()=>['Training Room',()=>startTraining(),{note:`${TRAIN.drills.filter(d=>SV.rewardsClaimed['drill:'+d.id]).length} of ${TRAIN.drills.length} drills`}],()=>['Shop',()=>openShop('home'),{note:`${fmtN(SV.profile.mon)} mon · ${fmtN(SV.profile.crystals)} crystals`}],()=>['Inventory',()=>{CH.tab='gear';openChar(null,'home')}],
+ ...['hell','white'].map(mode=>()=>{const on=SV.modes[mode],L=MODES[mode],ns=locNodes(SV,mode),d=ns.filter(n=>n.cleared).length;return[L.name,()=>on?openLoc(mode):modeLocked(mode),{lock:!on,note:on?`${Math.round(d/ns.length*100)}% · ${d} of ${ns.length}`:sunWaits(SV)?'the sun waits':'locked'}]}),()=>{rollDaily(SV);const n=SV.daily.ids.filter(id=>!SV.rewardsClaimed[`daily:${SV.daily.day}:${id}`]).length;return['Challenges',()=>openChal('home'),{note:n?`${n} of ${SV.daily.ids.length} today`:'today’s are done'}]});
 $('mHelp').onclick=()=>{helpBack='menu';show('help')};$('pHelp').onclick=()=>{helpBack='pause';show('help')};$('hClose').onclick=()=>show(helpBack);
 $('pResume').onclick=togglePause;$('tResume').onclick=togglePause;$('tReset').onclick=()=>{trainReset();togglePause()};$('tHelp').onclick=()=>{helpBack='train';show('help')};$('tLeave').onclick=()=>{G.train=null;G.paused=false;toHome()};$('pRestart').onclick=()=>startFight(G.lv,undefined,G.node);$('pQuit').onclick=toMenu;
 /* --- touch controls: floating joystick + multi-touch buttons feed the same G.keys / G.buf as the keyboard --- */
@@ -2418,7 +2578,7 @@ addEventListener('pointerdown',e=>{if(e.pointerType==='touch'){usePad(false);if(
   b.addEventListener('pointerdown',e=>{e.preventDefault();capture(b,e.pointerId);b.classList.add('down');if(MODE!=='game'||G.paused)return;if(a==='jump')G.jb=G.t;else if(a==='block')G.keys.block=true;else G.buf={a,t:G.t}});
   b.addEventListener('pointerup',rel);b.addEventListener('pointercancel',rel);b.addEventListener('contextmenu',e=>e.preventDefault())}}
 tEls.pause.onclick=togglePause;
-function syncTouch(){const fight=MODE==='game'&&G.state!=='over'&&G.state!=='absorb'&&!G.paused;tEls.touch.classList.toggle('off',!(TOUCH.on&&fight));tEls.pause.classList.toggle('off',!fight);document.body.classList.toggle('gm',MODE!=='film');
+function syncTouch(){const fight=MODE==='game'&&G.state!=='over'&&G.state!=='absorb'&&G.state!=='sun'&&G.state!=='chosen'&&!G.paused;tEls.touch.classList.toggle('off',!(TOUCH.on&&fight));tEls.pause.classList.toggle('off',!fight);document.body.classList.toggle('gm',MODE!=='film');
  if(fight&&TOUCH.on){tEls.roll.classList.toggle('dis',(G.P.rollCd||0)>G.t);tEls.ink.classList.toggle('dis',G.P.ink<33.3);tEls.issen.classList.toggle('dis',G.P.ink<99.5&&!G.P.sov);tEls.issen.classList.toggle('ready',G.P.ink>=99.5||!!G.P.sov);
   G.P.def.powers.forEach((id,i)=>{if(!id)return;const n=POWERS[id].move,m=G.P.moves[n];tEls['p'+(i+1)].classList.toggle('dis',G.P.ink<m.cost*33.3-.5||(G.P.cd[n]||0)>G.t||m.once&&G.P.once[n]||G.P.burn>G.t)})}}
 function goFull(){const el=document.documentElement,o=window.screen.orientation;if(document.fullscreenElement||!el.requestFullscreen)return;el.requestFullscreen({navigationUI:'hide'}).then(()=>o&&o.lock&&o.lock('landscape').catch(()=>{})).catch(()=>{})}
@@ -2430,7 +2590,7 @@ function bgResume(){try{AU.ctx&&AU.ctx.resume()}catch(e){}}
 document.addEventListener('visibilitychange',()=>document.hidden?bgPause():bgResume());
 // Android Back (and Esc outside a fight): closes the open screen, pauses or leaves a fight; returns 0 only on the map or the film (the app may exit)
 window.issenApp={pause:bgPause,resume:bgResume,back(){const open=PANELS.find(p=>!$(p).classList.contains('off'));if(open==='menu'){toHome();return 1}
- if(open==='settings'){$('sClose').click();return 1}if(open==='shop'){$('shClose').click();return 1}if(open==='workshop'){$('wkClose').click();return 1}if(open==='editor'){edBack();return 1}if(open==='chal'){$('chClose').click();return 1}if(open==='char'){$('cClose').click();return 1}if(open==='help'){show(helpBack);return 1}
+ if(open==='settings'){$('sClose').click();return 1}if(open==='shop'){$('shClose').click();return 1}if(open==='sunp'){sunDone();return 1}if(open==='workshop'){$('wkClose').click();return 1}if(open==='editor'){edBack();return 1}if(open==='chal'){$('chClose').click();return 1}if(open==='char'){$('cClose').click();return 1}if(open==='help'){show(helpBack);return 1}
  if(open==='region'){toMenu();return 1}if(open==='notice'){const b=$('nBtns').firstChild;if(b)b.click();return 1}
  if(MODE==='game'){if(G.state==='over')toMenu();else togglePause();return 1}return 0}};$('pp').onclick=()=>st.playing?pause():play();$('rp').onclick=replay;
 $('snd').onclick=()=>{AU.on=!AU.on;vols();$('sndi').style.opacity=AU.on?1:.35};
@@ -2443,7 +2603,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
  // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
- window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,cleanMap,validateMap,compileMap,maps,saveMaps,loadMaps,storeMap,openWorkshop,openEditor,edPlace,edDock,ED,WK,startCustom,blankMap,renderEditor,get ARENA(){return ARENA},onTop,landY,hzState,startMission,openLoc,locNodes,locOpen,grantMission,MODES,WORLD,WM,buildMenu,selPlace,placeInfo,placesFor,mapDone,renderWorld,discover,nextWave,award,rollDaily,dailyOf,dailyProg,achProg,CHAL,openChal,tallyEnd,setToday:f=>{TODAY=f},startTraining,trainSetup,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,useSupply,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,startSun,startSunScene,openSunChoice,chooseMode,sunWaits,sunDone,modeLocked,cleanMap,validateMap,compileMap,maps,saveMaps,loadMaps,storeMap,openWorkshop,openEditor,edPlace,edDock,ED,WK,startCustom,blankMap,renderEditor,get ARENA(){return ARENA},onTop,landY,hzState,startMission,openLoc,locNodes,locOpen,grantMission,MODES,WORLD,WM,buildMenu,selPlace,placeInfo,placesFor,mapDone,renderWorld,discover,nextWave,award,rollDaily,dailyOf,dailyProg,achProg,CHAL,openChal,tallyEnd,setToday:f=>{TODAY=f},startTraining,trainSetup,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,useSupply,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
  if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 applySettings();
 // keep the save: ask the browser not to evict this site's storage (an installed PWA usually gets it; spec §14.4)

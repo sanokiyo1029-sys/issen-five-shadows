@@ -13,7 +13,7 @@ const first = m => m.hit ? m.hit[0][0] : m.proj.t;
 async function verifier() {
   const { game } = await boot(), G = game.G, MV = game.MV;
   const lvOf = id => game.BOSSES.findIndex(b => b.moves.includes(id) || b.phase && b.phase.move === id);
-  const foeOf = id => Object.values(game.FOES).find(f => f.moves.includes(id)); // retainer moves: fought in region 1 by their foe
+  const foeOf = id => Object.values(game.FOES).find(f => f.moves.includes(id) || f.phase && f.phase.move === id); // retainer moves: fought in region 1 by their foe
 
   // one trial: boss `id` at distance d; `act(G, tick)` drives the hero; returns the damage the hero took
   function trial(id, d, act) {
@@ -56,7 +56,7 @@ async function verifier() {
 module.exports = { verifier, ANSWERS, MIN_WINDOW, first };
 
 if (require.main === module) (async () => {
-  const v = await verifier(), ids = [...new Set([...v.game.BOSSES.flatMap(b => [...b.moves, b.phase && b.phase.move].filter(Boolean)), ...Object.values(v.game.FOES).flatMap(f => f.moves)])];
+  const v = await verifier(), ids = [...new Set([...v.game.BOSSES.flatMap(b => [...b.moves, b.phase && b.phase.move].filter(Boolean)), ...Object.values(v.game.FOES).flatMap(f => [...f.moves, f.phase && f.phase.move].filter(Boolean))])];
   for (const id of ids) {
     const d = v.distance(id);
     console.log(id.padEnd(9), d == null ? 'NEVER HITS AN IDLE HERO' : 'd=' + Math.round(d), d == null ? '' : ANSWERS.filter(a => v.works(id, a, d)).join(' '), ' declared:', (v.MV[id].answers || []).join(' '));

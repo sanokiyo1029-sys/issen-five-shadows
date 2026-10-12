@@ -43,7 +43,7 @@ function flags(f) {
 
 async function audit({ verify = true } = {}) {
   const v = await verifier(), bosses = v.game.BOSSES, rows = [];
-  const seen = new Set(), owners = [...bosses.map(b => [b, [...b.moves, b.phase && b.phase.move].filter(Boolean)]), ...Object.values(v.game.FOES).map(f => [f, f.moves])];
+  const seen = new Set(), owners = [...bosses.map(b => [b, [...b.moves, b.phase && b.phase.move].filter(Boolean)]), ...Object.values(v.game.FOES).map(f => [f, [...f.moves, f.phase && f.phase.move].filter(Boolean)])]; // 1.7: foes with a second phase (Hell, White) are audited for it too
   for (const [b, list] of owners) for (const id of list) {
     if (!b.arena && b.arena !== 0 && seen.has(id)) continue; seen.add(id); // a retainer's borrowed boss move is audited once, with its boss
     const f = Object.assign(frameData(v.MV, id), { boss: b.id, phase: !!b.phase && b.phase.move === id }), d = v.distance(id);

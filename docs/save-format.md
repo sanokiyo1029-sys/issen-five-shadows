@@ -1,4 +1,4 @@
-# Save format v2
+# Save format v2 (with the 1.7 additions)
 
 ## Storage keys (localStorage)
 
@@ -43,6 +43,44 @@
   - Mon and materials are stored (spent on tiers), not derived.
 - **`lastWin`** records the last victory processed, keyed by the match id. A victory reported twice replays the stored result and grants nothing again.
 - **`story.pending`** holds one-time messages shown on the map and removed once read. It also covers a reveal ceremony interrupted by an app kill.
+
+## Additions in 1.7 (still `v: 2`)
+
+Every field below is optional on load and gets its default when missing, so a 1.6 save loads unchanged. 1.6 itself would read a 1.7 save and drop these fields, never fail on them.
+
+| Field | Contents |
+|---|---|
+| `profile.crystals` | Shadow crystals, 0 to 1e9 |
+| `gear.equipped.armour`, `gear.equipped.item` | The worn armour (owned only) and the supply carried into fights (an id from `data-gear.items`) |
+| `gear.items` | `{supply_id: count}`, each count clamped to that supply's `max` |
+| `gear.cos` | `{finish, trail, aura, robe}`: worn cosmetics. Each must be owned and of that kind. |
+| `gear.owned` | Now also holds armour, weapon variants and cosmetic ids |
+| `world` | `{at: region index or -1, loc: a mission location id or '', secret: 0/1}`: where Continue goes and whether the hidden road is found |
+| `modes` | `{sun: 0/1, hell, white}`: the sun answered and each mode opened. A mode cannot be open while `sun` is 0. |
+| `daily` | `{day: 'YYYY-MM-DD', ids: [3 challenge ids], base: {stat: value at the day's start}}` |
+| `stats` | Lifetime counters: `wins`, `losses`, `perfect`, `punishes`, `parries`, `blocks`, `evades`, `chains`, `issen`, `knockdowns`, `powerHits`, `rollsThrough`, `bigWins`, `hellWins`, `whiteWins`, `dailies`, `drills`, `purchases`, `mapsMade` |
+| `story.seen` | Also holds mission location ids and `<loc>:<i>` for mission story cards |
+
+**New claims in `rewardsClaimed`, each paid once:**
+
+- `cr:<claim>`: the crystals of a claim (idempotent; also backfills older saves).
+- `<loc>:<i>`: a mission's first clear (`ashen`, `hell`, `white`).
+- `daily:<day>:<id>`: a daily challenge. Older days are pruned when the day turns.
+- `ach:<id>`: an achievement.
+- `drill:<id>`: a training drill.
+- `event:sun`: the sun answered.
+- `made:<map id>`: a valid custom map counted once.
+
+**Mission skill points:** derived like the others, as earned (claims) minus spent (tiers).
+
+### Other keys (localStorage)
+
+| Key | Contents |
+|---|---|
+| `issen-five-shadows.maps` | `{sum, maps: [...]}`: up to 24 custom maps, checksummed. Each map is clamped by `cleanMap` on load; a damaged store loads as empty. |
+| `issen-five-shadows.before-new-game` | The sealed save from before the last New Game, for Restore |
+
+Custom maps are not part of the save code. Share them one at a time from the workshop (`ISSENMAP1-…`).
 
 ## Load order (`loadSave`)
 

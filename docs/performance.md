@@ -45,3 +45,22 @@ M3 to M8 added powers, phases, ladders, weapon classes, trails, contact shadows 
 - It is most likely the GPU stalling the canvas in the arena with the most full-screen layers (storm, hills, burning village, smoke, gradient, grain).
 
 It predates M2. Adaptive resolution (`adapt`) already shrinks the canvas on a device that cannot keep up. It needs profiling on a real phone (M9).
+
+## 1.7: the new arenas
+
+`node tools/perf.js` now also plays the new arenas: the dojo, Ashen Village, the two Hell gates, the two White arenas, and custom maps. These are CPU timings in headless Edge on this PC, mean / p95 in ms per rendered frame:
+
+| Arena | Render, mean / p95 |
+|---|---|
+| Forgotten Dojo | 0.35 / 0.60 |
+| Ashen Village | 0.48 / 0.60 |
+| Ash Gate (Hell) | 0.62 / 0.70 |
+| Ninth Gate (Hell) | 0.58 / 0.90 |
+| Celestial Sanctuary (White) | 0.76 / 1.70 |
+| Pale Sun (White) | 0.99 / 3.30 |
+| Custom map: dojo theme, rain, dusk, ledge and two hazards | 1.32 / 3.60 |
+| Custom map: Burning Field theme, empty | 6.85 / 50.4 |
+
+The new arenas, the layout engine (ledges, obstacles, hazards, pickups) and the weather and light passes are cheap.
+
+The one spike is the Burning Field's own background, already known from 1.6 (Gekkō: p95 about 36 ms here). A custom map that picks that theme inherits it, even with nothing placed. It remains on the list for a phone check.

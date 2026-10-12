@@ -291,3 +291,97 @@ First clears only: repeats pay XP, never mon or materials, so nothing is grindab
   - Never against low hits, projectiles or unblockable cuts.
   - Never while attacking, rolling or airborne, and never in the no-blocking Ink Trial.
 - **Anti-turtle (§5.8c):** not added. There is no evidence yet that blocking is the dominant strategy; the spec asks for evidence first.
+
+## The 1.7 economy (Ultimate Edition)
+
+There are two currencies. Neither can be bought with money, and everything is earned in play.
+
+| | Mon (ordinary) | Shadow crystals (rare) |
+|---|---|---|
+| **Pays for** | Weapons, armour, charms, supplies, upgrade material and power and weapon tiers | Blade finishes, swing trails, auras, robe dyes and the Moonlit Katana (a sidegrade). No crystal item is needed to progress. |
+| **One-time supply** | About 7,430 from first clears: campaign 3,460, Ashen Village 350, Hell 1,730, White 1,710, drills 180 | About 860: bosses 130, elites 25, trials 75, Ashen 20, Hell 110, White 110, achievements 390 |
+| **Repeatable** | Daily challenges: 50–120 each, three a day | The hardest dailies: 5 each |
+| **Demand** | Tiers 11,000+ (more with the variants); shop weapons 5,800; armour 1,500; charms 750; supplies 40–60 each; material 300 | Everything in the crystal stall: 655 |
+
+So mon stays a choice: you cannot max everything from one-time rewards. Every cosmetic, though, can be earned through play.
+
+**Rules that hold the economy together:**
+
+- Repeats pay a quarter of the XP and no currency.
+- Custom maps and training pay nothing (a drill pays 20 mon once).
+- Every payout is a claim, paid once.
+
+### Prices
+
+| Item | Price | Opens |
+|---|---|---|
+| Yari, Kodachi, Kanabō, Naginata, Nodachi | 600 mon | After that region's shadow falls. Its elite still gives the weapon free. |
+| Storm Yari / Hundred-cut Kodachi | 1,400 mon | After the third / fourth shadow |
+| Travel Haori | 150 mon | Always |
+| Lamellar Dō, Shinobi Garb | 450 mon | The Bamboo Grove |
+| Monk's Kesa | 450 mon | The Mountain Shrine |
+| Common charms | 150 mon | Their region |
+| Healing Tea / Focus Incense / Whetstone | 40 / 50 / 60 mon | Up to 9 of each |
+| Upgrade material | 300 mon | After Gekkō |
+| Finishes | 30–60 crystals | Always |
+| Trails | 30–60 crystals | Always |
+| Auras | 80 crystals | Always |
+| Robe dyes | 25–35 crystals | Always |
+| Moonlit Katana | 150 crystals | Always |
+
+### Armour and variants are sidegrades (the 2.0× budget)
+
+The best 1.6 build already sat at 1.99× effective power, so nothing in 1.7 may add raw power. `tests/shop.test.js` searches every weapon × armour × charm × allocation × echo pair and checks two things:
+
+- A katana-class build stays ≤ 2.0×.
+- No variant beats its own base class.
+
+**Armour:** each piece trades one thing for another.
+
+| Armour | Gain | Cost |
+|---|---|---|
+| Travel Haori | Faster walk and roll | — (power-neutral) |
+| Lamellar Dō | −6% damage taken | −6% damage dealt, slower walk |
+| Shinobi Garb | +5% damage, shorter roll cooldown | −5% health |
+| Monk's Kesa | +12% ink, −8% power cooldowns | −3% damage |
+| Oni-gane Plate (Hell) | −10% damage taken, iron footing | −10% damage dealt |
+| Celestial Haori (White) | +10% ink, a parry window 0.05 s longer, a lighter walk | — |
+
+**Weapon rarity means traits, not bigger numbers:**
+
+- Common: the katana.
+- Rare: the class's own identity.
+- Epic: one trait.
+- Legendary: two traits.
+
+**The traits and their costs:**
+
+| Trait | Effect | Cost | Weapon |
+|---|---|---|---|
+| First strike | +25% on the first hit each round | −3% damage | Storm Yari |
+| Momentum | +3% per hit in a row, up to 12% | −8% health | Hundred-cut Kodachi |
+| First-hit ink | The first hit each round fills an ink bar | — | Moonlit Katana |
+| Burn | 1/s for 2 s, never kills | +10% damage taken | Ember Katana |
+| Parry heal | A parry heals 6 | +10% ink | Dawn Blade |
+| Two traits each | — | — | Hellmaw Kanabō, Sunlit Naginata |
+
+The budget estimate counts each trait's share of a fight's damage: the first hit is about 10% of a round, momentum averages 60% of its cap, and a burn is measured against about 12 damage a second.
+
+**Supplies** are one-fight boosts outside the permanent budget:
+
+- Whetstone: +6% damage.
+- Tea: heals 20, once, below 30% health; none in Hell.
+- Incense: one ink bar at each round's start.
+
+## The modes (1.7)
+
+| | Hell Mode | White Mode |
+|---|---|---|
+| **Opens** | The mysterious sun, after Gekkō | The same |
+| **Difficulty** | ●●●●● | ●●●●○ |
+| **Foes** | Demons: they counter what they block (35–60%), chain a follow-up after a hit, and read the guard (low against a standing guard, mid against a crouch) | Guardians with a radiant ward. Plain blows deal 15% and do not stagger. A perfect parry breaks the ward for 3 s, a whiff punish for 2.5 s, and an Issen passes it. |
+| **Rules** | Healing halved, no Healing Tea, half of the lost health returns between rounds, fire vents | The perfect parry is on (0.15 s, +12 ink, the attacker reels 0.6 s) |
+| **New attacks** | The fire pillar (12, knockdown; jump or roll); the Judge's sentence (14, wider; jump or roll) | The light pillar (11; jump or roll); the lotus bloom (two ground waves, 10; block low, jump or roll) |
+| **Rewards** | XP 900 → 3,500 per mission; mon 120 → 600; crystals 5 → 50; one skill point each from Enra and the Ninth Gate | The same scale; one skill point each from Hakuren and the Pale Sun |
+
+Both modes' foes use the existing moves plus these four, and the four are audited in `docs/fairness.md` like every boss move.

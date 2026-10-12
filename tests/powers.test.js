@@ -100,7 +100,7 @@ module.exports = {
         const d = G.B.x - G.P.x, k = G.keys; k.right = d > 165; k.left = d < -165;
         if (i % 18 === 0) G.buf = { a: i % 54 === 0 ? 'power1' : Math.abs(d) < 200 ? (G.P.ink >= 99.5 ? 'issen' : 'slash') : 'power1', t: G.t };
       });
-      assert.strictEqual(G.state, 'over', `${id} vs ${game.BOSSES[lv].id} finished`); assert.ok(Math.max(G.P.wins, G.B.wins) === 2);
+      assert.ok(['over', 'sun'].includes(G.state), `${id} vs ${game.BOSSES[lv].id} finished`); assert.ok(Math.max(G.P.wins, G.B.wins) === 2);
     }
   },
 

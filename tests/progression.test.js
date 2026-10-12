@@ -44,6 +44,7 @@ module.exports = {
     assert.strictEqual((await boot({ storage: copy(storage) })).game.SV.story.pending.length, 1);
 
     step(game, 60 * 6); // ceremony plays out (5.4 s) and hands over to the result panel
+    assert.strictEqual(G.state, 'sun', '1.7: the mysterious sun rises after the ceremony'); game.openSunChoice(); el('suBtns').children[0].click(); // Not yet
     assert.strictEqual(G.state, 'over'); assert.match(el('rRewards').textContent, /\+600 XP · level 3 .*\+1 skill point · \+100 mon · \+20 shadow crystals · absorbed 月 Spear of the Red Moon — ready in power slot 1/);
     eq(game.SV.story.pending, []);
 
@@ -83,7 +84,7 @@ module.exports = {
         const d = G.B.x - G.P.x; G.keys.right = d > 260; G.keys.left = d < -260;
         if (i % 18 === 0) { const pw = G.P.ink >= 34 && (G.P.cd.p_red_moon || 0) <= G.t; if (pw) used++; G.buf = { a: pw ? 'power1' : 'slash', t: G.t }; }
       });
-      assert.ok(G.state === 'over' || G.state === 'absorb', `boss ${lv} fight did not finish (${G.state})`); assert.ok(used > 0, 'power was used');
+      assert.ok(G.state === 'over' || G.state === 'absorb' || G.state === 'sun', `boss ${lv} fight did not finish (${G.state})`); assert.ok(used > 0, 'power was used');
     }
   },
 
