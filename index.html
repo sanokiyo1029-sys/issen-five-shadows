@@ -142,7 +142,13 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
 .hb.lock{opacity:.5}.hb small{font-size:.6em;letter-spacing:.06em;opacity:.78;margin-left:.7em;text-transform:none;font-style:italic}
 .hb .bd{display:inline-block;min-width:1.25em;padding:0 .3em;border-radius:99px;background:var(--red);color:var(--paper);font-size:.6em;text-align:center;line-height:1.25em;margin-left:.6em;vertical-align:.25em;letter-spacing:0}
 #home .lnk{color:rgba(236,229,214,.82);border-color:rgba(236,229,214,.35)}#home .lnk:hover{color:#fff;border-color:var(--red)}#home .ver{color:var(--paper)}
-.purse{font-style:normal;font-weight:600;letter-spacing:.06em}#chal{gap:.55cqw}#chal h2{font-size:max(2.4cqw,16px)}#chal .big{padding:7px 26px}.card.chc{width:13.4cqw;padding:.55cqw .5cqw;gap:.15cqw}.card.chc .ti{font-size:max(.85cqw,9px);line-height:1.25}.card.chc .nm{font-size:max(1.15cqw,11px)}.card.done{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}#train{gap:.5cqw}#train .sgrid{gap:.25cqw 1.6cqw;max-width:92cqw}#train .sgrid .lnk{font-size:max(.95cqw,10px)}#train .sgrid b{font-size:max(1cqw,10px)}
+.purse{font-style:normal;font-weight:600;letter-spacing:.06em}
+#workshop{gap:.55cqw}#workshop h2{font-size:max(2.4cqw,16px)}#workshop .big{padding:7px 26px}
+#editor{justify-content:flex-end;padding:0;gap:0;pointer-events:none}#editor .dock{pointer-events:auto;width:100%;background:rgba(236,229,214,.95);border-top:1.5px solid rgba(21,19,15,.5);padding:.6cqw 1.6cqw .7cqw;display:flex;flex-direction:column;gap:.35cqw;text-align:left}
+#editor .erow{display:flex;flex-wrap:wrap;gap:.3cqw 1.1cqw;align-items:center;font:500 max(.95cqw,10px)/1.3 'Cormorant Garamond',serif}#editor .erow b{font-weight:700;letter-spacing:.05em}
+#editor select,#editor input[type=text]{font:inherit;background:rgba(255,255,255,.6);border:1px solid rgba(21,19,15,.4);padding:1px 4px;color:var(--ink);max-width:16cqw}#editor input[type=range]{width:9cqw;min-width:80px;accent-color:var(--ink)}
+#editor .lnk{font-size:max(.95cqw,10px)}#editor .lnk.on{color:var(--red);border-color:var(--red)}#editor .emsg{color:var(--red);font-style:italic}#editor .eok{color:#2c5a36;font-style:italic}
+#editor .etop{pointer-events:auto;position:absolute;left:1.5cqw;top:1.2cqw;background:rgba(236,229,214,.9);padding:.35cqw 1cqw;border-radius:99px;font:600 max(1.1cqw,11px)/1.2 'Cormorant Garamond',serif;color:var(--ink)}#chal{gap:.55cqw}#chal h2{font-size:max(2.4cqw,16px)}#chal .big{padding:7px 26px}.card.chc{width:13.4cqw;padding:.55cqw .5cqw;gap:.15cqw}.card.chc .ti{font-size:max(.85cqw,9px);line-height:1.25}.card.chc .nm{font-size:max(1.15cqw,11px)}.card.done{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}#train{gap:.5cqw}#train .sgrid{gap:.25cqw 1.6cqw;max-width:92cqw}#train .sgrid .lnk{font-size:max(.95cqw,10px)}#train .sgrid b{font-size:max(1cqw,10px)}
 .card .pr{font:600 max(.9cqw,10px) 'Cormorant Garamond',serif;letter-spacing:.08em;margin-top:.3cqw}.card .pr.short{color:var(--red)}#shop{gap:.55cqw}#shop h2{font-size:max(2.4cqw,16px)}#shop .big{padding:7px 26px}
 </style>
 </head>
@@ -191,6 +197,10 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   <div class="panel dim off" id="chal" role="dialog" aria-labelledby="chTitle"><h2 id="chTitle">Challenges</h2><p class="rw purse" id="chPurse"></p>
     <div class="row tabs" id="chTabs"><button class="lnk" data-ch="daily">Today</button><button class="lnk" data-ch="trials">Ink Trials</button><button class="lnk" data-ch="ach">Achievements</button></div>
     <div class="levels wrap" id="chBody"></div><p class="rw" id="chMore"></p><button class="big" id="chClose">Back</button></div>
+  <div class="panel dim off" id="workshop" role="dialog" aria-labelledby="wkTitle"><h2 id="wkTitle">The Ink Workshop</h2><p class="rw" id="wkSub"></p>
+    <div class="levels wrap" id="wkBody"></div><p class="rw" id="wkMore"></p><div class="row" id="wkBtns"></div><p class="rw" id="wkMsg" role="status"></p><textarea id="wkCode" class="code off" rows="2" spellcheck="false" aria-label="Map code"></textarea>
+    <button class="big" id="wkClose">Back</button></div>
+  <div class="panel off" id="editor" role="dialog" aria-label="Map editor"><div class="etop" id="edTop"></div><div class="dock" id="edDock"></div></div>
   <div class="panel dim off" id="region" role="dialog" aria-labelledby="gTitle"><div class="mt"><span class="kj" id="gKanji"></span><span class="en" id="gTitle"></span></div><p class="tag" id="gText"></p>
     <div class="levels" id="gNodes"></div><div class="row"><button class="lnk" id="gChar">Character</button><button class="lnk" id="gBack">Back to the map</button></div></div>
   <div class="panel dim off" id="settings" role="dialog" aria-labelledby="sTitle"><h2 id="sTitle">Settings</h2><div class="row tabs" id="sTabs"><button class="lnk" data-st="game">Sound, screen &amp; play</button><button class="lnk" data-st="keys">Keyboard keys</button></div>
@@ -435,6 +445,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
 {"schema_version":1,"width":3000,
  "places":[
   {"id":"dojo","kind":"dojo","name":"Forgotten Dojo","jp":"師","at":[250,780],"desc":"An empty hall where an old master once taught. Practise here: nothing you do changes your journey."},
+  {"id":"workshop","kind":"workshop","name":"Ink Workshop","jp":"墨","at":[330,990],"desc":"Draw your own arenas: platforms, obstacles, hazards, foes in waves, light and weather. Test them, then play them."},
   {"id":"burning_field","kind":"region","lv":0,"at":[640,640]},
   {"id":"bamboo_grove","kind":"region","lv":1,"at":[1060,470]},
   {"id":"mountain_shrine","kind":"region","lv":2,"at":[1480,300]},
@@ -443,7 +454,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   {"id":"ashen","kind":"loc","at":[800,930],"secret":true},
   {"id":"white","kind":"loc","at":[1050,165]},
   {"id":"hell","kind":"loc","at":[1500,930]}],
- "roads":[["dojo","burning_field"],["burning_field","bamboo_grove"],["bamboo_grove","mountain_shrine"],["mountain_shrine","moonlit_lake"],["moonlit_lake","oni_castle"],["burning_field","ashen"],["burning_field","white"],["burning_field","hell"]],
+ "roads":[["dojo","burning_field"],["dojo","workshop"],["burning_field","bamboo_grove"],["bamboo_grove","mountain_shrine"],["mountain_shrine","moonlit_lake"],["moonlit_lake","oni_castle"],["burning_field","ashen"],["burning_field","white"],["burning_field","hell"]],
  "secret":{"beaten":2,"region":"burning_field","text":"A hidden road: smoke still rises south of the Burning Field. Ashen Village is on your map."}}
 </script>
 <script type="application/json" id="data-modes">
@@ -1047,7 +1058,8 @@ const KS1=P(KG,{ua1:1.55,fa1:1.62,sw:1.62,tl:.42,th1:.95,sh1:.1,th2:-.8,sh2:-.9}
 const SPLL=P(SPL,{sw:1.95,tl:.7,th1:1.4,sh1:.3,th2:-1.1,sh2:-1.5}),SPUP=P(SPG,{ua1:2.4,fa1:2.8,sw:3.9,tl:-.1});
 const NOTRAIL=new Set(['kick','round','sweepK','airKick','b_kick','k_low']),tipLen=k=>k.spear?132:k.club?150:k.nagi?170:k.blen||112; // swing trails follow blades, not feet
 const ROLLP={tl:.95,hd:.55,ua1:1.15,fa1:2.25,ua2:1.0,fa2:2.0,th1:2.35,sh1:-.35,th2:2.1,sh2:-.6,sw:-2.5,g2:0}; // the roll's tuck
-const ARENA=900,GRAV=2700,ZY={high:-200,mid:-135,low:-45,arc:-150};
+let ARENA=900; // half-width of the floor: 900 in the campaign, the custom map's width otherwise
+const GRAV=2700,ZY={high:-200,mid:-135,low:-45,arc:-150};
 // moves: dur, hit windows [start,end], reach, dmg, zone (high=duck it, low=jump it / crouch-block), kd=knockdown, fr=pose keyframes from guard g
 const MV={
  slash:{dur:.34,hit:[[.1,.18]],reach:170,dmg:7,zone:'mid',push:70,chain:'slash2',cw:.15,snd:'slash',fr:g=>[[0,g],[.09,PS.wind],[.16,PS.cutSide,'o5'],[.34,g]]},
@@ -1205,6 +1217,43 @@ FOES.ash_bandit={id:'ash_bandit',name:'Ash Looter',title:'picking through the ru
  tip:'A desperate blade: block the cuts, crouch-block the low one, then punish its recovery.'};
 FOES.ash_ronin={id:'ash_ronin',name:'Ash Ronin',title:'who lit the fire, and stayed',jp:'焼',kind:K.ash_ronin,s:1.06,hp:135,speed:300,guard:PS.guard,wk:{sheath:0},moves:['a_cut','r_high','a_sweep','a_wave','b_kick'],ai:{think:.55,aggr:.62,block:.38,range:220},
  phase:{at:.5,move:'a_rend',k:'焼',sub:'The embers flare',think:.9,aggr:.05},win:P(PS.high,{tl:-.15}),tip:'He cuts high, sweeps low and throws ink: duck the high cut, jump or crouch-block the sweep, block the wave. Hurt, he adds a cut-and-crush.'};
+/* --- the layout engine (1.7, custom maps): one-way platforms (land from above, walk off the edge), solid obstacles (low enough
+   to jump onto or over), periodic hazards with a telegraph (they hurt both fighters, unblockable; roll through or step off),
+   pickups (tea heals, an ink bar). The campaign has no layout: every check below is skipped and the fight is unchanged. --- */
+const onTop=F=>G.L.solids.some(o=>F.x>=o.x0&&F.x<=o.x1&&Math.abs(F.y+o.h)<.5);
+function landY(F,y0){let best=0;for(const o of G.L.solids)if(F.x>=o.x0&&F.x<=o.x1&&y0<=-o.h+.01&&F.y>=-o.h&&-o.h<best)best=-o.h;return best}
+function solidPush(F){const r=40*F.def.s;for(const o of G.L.solids)if(o.solid&&F.y>-o.h+2&&F.x>o.x0-r&&F.x<o.x1+r){const px=F.x-F.vx/60;F.x=px<(o.x0+o.x1)/2?o.x0-r:o.x1+r}}
+const hzState=(h,t)=>{const u=((t+h.off)%h.period+h.period)%h.period;return{n:Math.floor((t+h.off)/h.period),tele:u>=h.period-1.4&&u<h.period-.5,soon:u>=h.period-.62,live:u>=h.period-.5}};
+function layoutTick(dt){const L=G.L;for(const h of L.hazards){const s=hzState(h,G.t);if(!s.live)continue;
+  for(const F of[G.P,G.B]){if(F.hzn&&F.hzn[h.i]===s.n||F.x<h.x0||F.x>h.x1||F.y<-30)continue;(F.hzn||(F.hzn={}))[h.i]=s.n;
+   tryHit({def:{s:1},mod:NEUTRAL,f:F.x>=(h.x0+h.x1)/2?1:-1,isP:false,ink:0},F,{dmg:h.dmg,zone:'low',push:160,unblock:1},true)}}
+ for(const k of L.pickups)if(!k.taken&&Math.abs(G.P.x-k.x)<60&&Math.abs(G.P.y+k.h)<80){k.taken=true;if(k.kind==='tea'){G.P.hp=Math.min(G.P.maxHp,G.P.hp+20);G.P.lag=Math.max(G.P.lag,G.P.hp)}else inkUp(G.P,33.4);fxAdd({k:'ring',x:k.x,y:-k.h});snd('gong',.25)}}
+// the foe steps onto ledges after a hero who climbs, hops obstacles in its way, and steps off a hazard about to flare
+function terrainAI(B,Pl,inp){const toward=Pl.x>B.x?1:-1,L=G.L;if(B.air||!isFree(B))return inp;
+ for(const h of L.hazards){const s=hzState(h,G.t);if((s.tele||s.live)&&B.x>=h.x0-30&&B.x<=h.x1+30){inp.mx=B.x<(h.x0+h.x1)/2?-1:1;inp.atk=null;if(s.soon&&B.x>=h.x0-20&&B.x<=h.x1+20)inp.up=true;return inp}} // walk out in the telegraph; jump if still in it as it flares
+ const ob=L.solids.find(o=>o.solid&&(o.x0-B.x)*toward>-10&&Math.min(Math.abs(o.x0-B.x),Math.abs(o.x1-B.x))<150&&(Pl.x-o.x0)*toward>0);
+ if(ob&&inp.mx===toward&&!inp.atk||Pl.y<B.y-80&&Math.abs(Pl.x-B.x)<260&&!inp.atk){inp.up=true;inp.mx=toward}return inp}
+function compileMap(m){const sol=[...m.platforms.map(p=>({x0:p.x-p.w/2,x1:p.x+p.w/2,h:p.h,solid:false})),...m.obstacles.map(o=>({x0:o.x-o.w/2,x1:o.x+o.w/2,h:o.h,solid:true}))];
+ return{width:m.width,spawns:m.spawns,solids:sol,platforms:m.platforms,obstacles:m.obstacles,floor:m.floor,light:m.light,weather:m.weather,
+  hazards:m.hazards.map((h,i)=>({i,x0:h.x-h.w/2,x1:h.x+h.w/2,x:h.x,w:h.w,kind:h.kind,period:h.period,dmg:h.dmg,off:i*.77})),pickups:m.pickups.map(k=>({x:k.x,h:k.h||0,kind:k.kind,taken:false}))}}
+function drawLayout(c,L,t,edit){camT(c,1);
+ if(L.floor==='wood'){c.strokeStyle=ink(.5);c.lineWidth=2;for(const y of[14,34,62,100])line(c,[-L.width-200,y],[L.width+200,y])}else if(L.floor==='stone'){c.strokeStyle=ink(.45);c.lineWidth=2;for(let x=-L.width;x<L.width;x+=120){line(c,[x,0],[x-30,60]);line(c,[x+60,60],[x+40,140])}line(c,[-L.width-200,60],[L.width+200,60])}
+ for(const s of[-1,1]){const x=s*(L.width+46);c.fillStyle=ink(.8);c.fillRect(s<0?x-260:x,-640,260,660);c.strokeStyle=ink(.5);c.lineWidth=3;for(let y=-600;y<0;y+=80)line(c,[s<0?x-260:x,y],[s<0?x:x+260,y])} // the end walls
+ for(const p of L.platforms){c.fillStyle=ink(.62);c.fillRect(p.x-p.w/2+16,-p.h,10,p.h);c.fillRect(p.x+p.w/2-26,-p.h,10,p.h);c.fillStyle=ink(.85);brush(c,[[p.x-p.w/2,-p.h+4],[p.x,-p.h-2],[p.x+p.w/2,-p.h+4]],16,{taper:()=>1})}
+ for(const o of L.obstacles){c.fillStyle=ink(.58);c.fillRect(o.x-o.w/2,-o.h,o.w,o.h);c.strokeStyle=ink(.92);c.lineWidth=5;c.strokeRect(o.x-o.w/2,-o.h,o.w,o.h);c.lineWidth=3;line(c,[o.x-o.w/2,-o.h],[o.x+o.w/2,0]);line(c,[o.x+o.w/2,-o.h],[o.x-o.w/2,0])}
+ for(const h of L.hazards){const s=edit?{tele:false,live:false}:hzState(h,t),x0=h.x0??h.x-h.w/2,x1=h.x1??h.x+h.w/2,w=x1-x0;
+  if(h.kind==='fire'){c.fillStyle=ink(.85);c.fillRect(x0,-6,w,10);if(s.tele||s.live){c.globalAlpha=s.live?.9:.45+.3*Math.sin(t*30);c.drawImage(GLOW,x0-40,-160,w+80,220);c.globalAlpha=1}
+   if(s.live){c.fillStyle=RED;for(let k=0;k<w/30;k++){const x=x0+15+k*30,hh=90+40*Math.sin(t*25+k);brush(c,[[x,0],[x+6,-hh*.5],[x-4,-hh]],20,{taper:u=>1-u})}}}
+  else if(h.kind==='spikes'){c.fillStyle=ink(.9);const hh=s.live?70:s.tele?22:8;for(let x=x0+10;x<x1;x+=24)tri(c,[x-10,2],[x+10,2],[x,-hh])}
+  else{c.fillStyle=ink(.82);c.beginPath();c.ellipse((x0+x1)/2,2,w/2,12,0,0,6.2832);c.fill();if(s.tele){c.globalAlpha=.5;c.drawImage(PUFF,x0,-40,w,50);c.globalAlpha=1}if(s.live){c.fillStyle=INK;for(let k=0;k<6;k++)circ(c,x0+w*(k+.5)/6,-40-Math.abs(Math.sin(t*14+k))*90,9)}}}
+ for(const k of L.pickups){if(k.taken)continue;const y=-(k.h||0)-50+Math.sin(t*3+k.x)*8;c.globalAlpha=.5;c.drawImage(MIST,k.x-40,y-40,80,80);c.globalAlpha=1;
+  if(k.kind==='tea'){c.fillStyle=ink(.85);c.beginPath();c.ellipse(k.x,y,18,13,0,0,3.1416);c.fill();c.fillRect(k.x-18,y-4,36,5)}else{c.fillStyle=RED;c.fillRect(k.x-15,y-15,30,30);c.fillStyle=PAPER;c.font='22px "Yuji Boku", serif';c.textAlign='center';c.textBaseline='middle';c.fillText('墨',k.x,y+1)}}
+ c.textBaseline='alphabetic'}
+// light and weather over the arena (custom maps)
+function skyFx(c,L,t){if(L.weather==='rain')rain(c,t,.6);else if(L.weather==='petals'){camT(c,1);petalField(c,t,30,CAM.x-1200,CAM.x+1200,-950,10,4,8)}
+ else if(L.weather==='ash'||L.weather==='snow'){camT(c,1);c.fillStyle=L.weather==='ash'?ink(.5):'#f7f3ea';for(let i=0;i<60;i++){const age=(t*.18+hash(i))%1,x=CAM.x-1100+hash(i*3)*2200-age*180+Math.sin(t+i)*24,y=-900+age*1000;c.globalAlpha=.7*(1-age*.6);circ(c,x,y,2+hash(i*7)*2.5)}c.globalAlpha=1}
+ else if(L.weather==='mist')mistBand(c,1.1,-60,t,.55);
+ if(L.light!=='day'){screen(c);c.globalCompositeOperation='multiply';c.fillStyle=L.light==='night'?'#5d6378':'#e2b48f';c.fillRect(0,0,W,H);c.globalCompositeOperation='source-over'}}
 // the training partner (1.7): an oak-and-straw dummy with a wooden sword and a retainer's readable cuts
 K.dummy={L:LH,ink:'#4a3b2a',back:'#8a7452',jit:.3,type:'bandit',sword:1,blen:96};
 FOES.dummy={id:'dummy',name:'Training Dummy',title:'oak and straw',jp:'守',kind:K.dummy,s:1.02,hp:100,speed:150,guard:PS.guard,wk:{},moves:['r_slash','r_high','r_low','b_kick'],ai:{think:.9,aggr:.5,block:.3,range:190},win:PS.stand,
@@ -1308,7 +1357,8 @@ function stepMove(F,O,dt){const m=F.mv,a=F.mvT,b=a+dt;F.mvT=b;
  if(b>=m.dur+(m.whiffLag&&m.hit&&!F.mask?m.whiffLag:0)){if(!F.isP&&m.hit&&!F.mask){const P=G.P;if(P&&Math.abs(P.x-F.x)<m.reach*F.def.s+60&&!P.block&&P.st!=='roll'&&P.st!=='hit'&&P.st!=='down')note('evades')}F.mv=null;F.manual=false;F.alpha=1;const n=F.next;F.next=null;if(n&&startMove(F,n))return;setSt(F,F.air?'jump':'idle')}}
 function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')return false;
  if(!proj){const dx=(Dd.x-A.x)*A.f;if(dx<-40||dx>m.reach*A.def.s+20*Dd.def.s)return false}
- const dAir=Dd.y<-50,dir=proj?Math.sign(m.vx)||A.f:A.f;
+ if(!proj&&G.L&&Math.abs(A.y-Dd.y)>190*Dd.def.s)return false; // custom maps: no cut reaches from the floor to a high ledge
+ const dAir=Dd.y<(Dd.gy||0)-50,dir=proj?Math.sign(m.vx)||A.f:A.f;
  if(!proj&&(m.zone==='high'&&Dd.crouch&&!dAir||m.zone==='low'&&dAir))return false;
  if(invul(Dd)){if(Dd.isP&&Dd.st==='roll'&&!proj&&G.rtSeen!==A.mvId){G.rtSeen=A.mvId;note('rollsThrough')} /* rolled through a blow that would have landed */if(Dd.st==='move'&&Dd.mv.dodgeInk&&!Dd.d.dodged){Dd.d.dodged=1;inkUp(Dd,Dd.mv.dodgeInk)}return false} // Miststep III: ink for slipping a live attack
  const hx=Dd.x-dir*14*Dd.def.s,hy=Dd.y+ZY[m.zone||'mid']*Dd.def.s*(Dd.crouch&&m.zone!=='low'?.7:1);
@@ -1352,10 +1402,10 @@ function scoreHit(A,Dd,d,punish,crit,kd,proj){if(!G.tally)return;
  else if(Dd===G.P)note('hurt',d)}
 // ink gain: the fighter's ink modifier, faster below half health with the Ember of Rage echo
 const inkUp=(F,v)=>{F.ink=Math.min(100,F.ink+v*F.mod.ink*(F.sov?1.5:1)*(F.mod.ember&&F.hp<F.maxHp*F.mod.ember.below?1+F.mod.ember.ink:1))};
-function spawnProj(F,pd){const wave=pd.type==='wave';G.proj.push({o:F,x:F.x+F.f*80*F.def.s,y:pd.y*F.def.s,vx:pd.v*F.f*(wave&&F.mod.waveV||1),pierce:wave&&!!F.mod.pierce,ground:pd.ground,wide:pd.wide,ret:pd.ret,type:pd.type,dmg:pd.dmg,zone:pd.zone,kd:pd.kd,push:140,t:0,big:F.def.s>1.2});snd(pd.type==='star'||pd.type==='wisp'?'whoosh':'slash',.5)}
+function spawnProj(F,pd){const wave=pd.type==='wave';G.proj.push({o:F,x:F.x+F.f*80*F.def.s,y:(F.gy||0)+pd.y*F.def.s,gy:F.gy||0,vx:pd.v*F.f*(wave&&F.mod.waveV||1),pierce:wave&&!!F.mod.pierce,ground:pd.ground,wide:pd.wide,ret:pd.ret,type:pd.type,dmg:pd.dmg,zone:pd.zone,kd:pd.kd,push:140,t:0,big:F.def.s>1.2});snd(pd.type==='star'||pd.type==='wisp'?'whoosh':'slash',.5)}
 function updProj(dt){for(const p of G.proj){p.t+=dt;p.x+=p.vx*dt;const Dd=p.o===G.P?G.B:G.P,top=Dd.y-246*Dd.def.s*(Dd.crouch?.62:1);
   if(p.type==='ghost'){if(p.t>=p.fuse){if(Math.abs(Dd.x-p.x)<150*Dd.def.s)tryHit(p.o,Dd,{dmg:p.dmg,zone:'mid',push:90,vx:Math.sign(Dd.x-p.x)||1},true);fxAdd({k:'smoke',x:p.x,y:0});p.dead=1}continue} // Miststep's afterimage bursts
-  const over=!p.done&&Math.abs(p.x-Dd.x)<46*Dd.def.s+20+(p.wide||0)&&(p.ground?Dd.y>-40:p.y>top&&p.y<Dd.y+10);
+  const over=!p.done&&Math.abs(p.x-Dd.x)<46*Dd.def.s+20+(p.wide||0)&&(p.ground?Math.abs(Dd.y-(p.gy||0))<40:p.y>top&&p.y<Dd.y+10);
   if(over&&Dd.iron&&Dd.iron.reflect){p.o=Dd;p.vx=-p.vx;p.seen=0;fxAdd({k:'clash',x:p.x,y:p.y,sz:.8});snd('clang',.5);continue} // Iron Resolve IV: sent back
   if(over&&tryHit(p.o,Dd,p,true)){if(p.ret)G.proj.push({o:p.o,x:Dd.x+Math.sign(p.vx)*90,y:-120,vx:0,type:'ghost',fuse:.3,dmg:p.dmg*p.ret,t:0}); // Phantom Edge IV: it returns from behind
    if(p.pierce)p.done=1;else p.dead=1} /* a piercing wave hits once and flies on */if(Math.abs(p.x)>ARENA+500)p.dead=1}
@@ -1379,7 +1429,8 @@ function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;
    else if(inp.atk){const n=F.isP?heroMove(F,inp.atk,inp):inp.atk;if(F.isP)G.buf=null;if(n&&startMove(F,n))break}
    if(inp.up){F.vy=-1000;F.vx=inp.mx*sp*.95;F.air=true;F.crouch=false;F.block=false;setSt(F,'jump');snd('whoosh',.25);if(F.isP)G.jb=-9;break}
    F.vx=F.crouch||inp.block?0:inp.mx*sp*(F.block?.6:1);const ns=F.crouch?'crouch':inp.mx?'walk':'idle';if(F.st!==ns)setSt(F,ns)}}
- if(!F.manual){F.x+=F.vx*dt;if(F.air||F.y<0){F.vy+=GRAV*dt;F.y+=F.vy*dt;if(F.y>=0){F.y=0;F.vy=0;F.air=false;F.landT=G.t;if(F.st==='jump')setSt(F,'idle');fxAdd({k:'dust',x:F.x,y:0})}}}
+ if(!F.manual){F.x+=F.vx*dt;if(G.L)solidPush(F);const top=G.L&&onTop(F);if(G.L&&!top&&!F.air&&F.y<0){F.air=true;if(isFree(F))setSt(F,'jump')} /* walked off a ledge */
+  if(F.air||F.y<0&&!top){F.vy+=GRAV*dt;const y0=F.y;F.y+=F.vy*dt;const gy=G.L?landY(F,y0):0;if(F.y>=gy){F.y=gy;F.gy=gy;F.vy=0;F.air=false;F.landT=G.t;if(F.st==='jump')setSt(F,'idle');fxAdd({k:'dust',x:F.x,y:gy})}}}
  F.x=clamp(F.x,-ARENA,ARENA)}
 function separate(a,b){if(a.air||b.air||a.manual||b.manual||a.mv&&a.mv.issen||b.mv&&b.mv.issen||a.st==='dead'||b.st==='dead')return;const min=58*(a.def.s+b.def.s)/2,d=b.x-a.x;
  if(Math.abs(d)<min){const p=(min-Math.abs(d))/2*(d>=0?1:-1);a.x=clamp(a.x-p,-ARENA,ARENA);b.x=clamp(b.x+p,-ARENA,ARENA)}}
@@ -1395,7 +1446,7 @@ function ai(B,Pl,dt){if(G.train&&G.train.behav!=='fight')return trainAI(B,Pl,dt)
   if(opts.length&&G.rand()<A.aggr+(B.rage?.15:0)+(PH?PH.aggr:0)){let tw=0;for(const n of opts)tw+=wt(n);let r=G.rand()*tw;for(const n of opts){r-=wt(n);if(r<=0){inp.atk=n;break}}return inp}
   const r=G.rand();B.ai.plan=d>A.range*s*1.1?'in':d<A.range*s*.55?'out':r<(A.jump||.06)?'jump':r<.45?'hold':r<.72?'in':'out';B.ai.pt=.25+G.rand()*.5}
  if(B.ai.pt>0){B.ai.pt-=dt;if(B.ai.plan==='in')inp.mx=toward;else if(B.ai.plan==='out')inp.mx=-toward;else if(B.ai.plan==='jump'){inp.up=true;inp.mx=toward;B.ai.plan='hold'}}
- return inp}
+ return G.L?terrainAI(B,Pl,inp):inp}
 const fresh=(t0,win)=>G.t>=t0&&G.t-t0<win;
 // fixed 1/60 s simulation steps; rendering interpolates positions between the last two steps (G.ia).
 // A jump of more than 150 px in one step (teleport, new round, Issen dash) is drawn as a cut, not a smear.
@@ -1403,8 +1454,8 @@ const STEP=1/60;
 function stepGame(dt){G.acc=Math.min(G.acc+dt,.1);while(G.acc>=STEP-1e-9){G.acc-=STEP;for(const F of[G.P,G.B]){F.px=F.x;F.py=F.y}for(const p of G.proj)p.px=p.x;updGame(STEP)}G.ia=clamp(G.acc/STEP)}
 const ip=(v,pv)=>pv==null||Math.abs(v-pv)>150?v:lerp(pv,v,G.ia);
 function readIn(){const k=G.keys;return{mx:(k.right?1:0)-(k.left?1:0),up:fresh(G.jb,.15),down:!!k.down,block:!!k.block,atk:G.buf&&fresh(G.buf.t,.28)?G.buf.a:null}}
-function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},once:{},sov:null,iron:null,burn:0,bleed:null,phase:false,firstHit:0,mom:0,footUsed:0,trail:null,rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
- G.proj=[];G.fx=[];G.clone=null;G.timer=G.roundTime||60;if(G.item==='focus_incense')G.P.ink=Math.max(G.P.ink,GEAR.items.focus_incense.effect.ink);
+function newRound(){for(const[F,x,f]of[[G.P,G.L?G.L.spawns.hero:-300,1],[G.B,G.L?G.L.spawns.foe:300,-1]]){Object.assign(F,{x,y:0,gy:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},once:{},sov:null,iron:null,burn:0,bleed:null,phase:false,firstHit:0,mom:0,footUsed:0,trail:null,rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
+ G.proj=[];G.fx=[];G.clone=null;G.timer=G.roundTime||60;if(G.L)for(const k of G.L.pickups)k.taken=false;if(G.item==='focus_incense')G.P.ink=Math.max(G.P.ink,GEAR.items.focus_incense.effect.ink);
  if(G.trial){if(G.trial.hero_hp)G.P.hp=G.P.lag=G.P.maxHp*G.trial.hero_hp;if(G.trial.phase)G.B.phase=true;if(G.trial.rage)G.B.rage=true} /* Ink Trial modifiers */G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
  G.ban=G.round===1?{k:G.train?'師':G.trial?'墨':G.def.jp,sub:G.train?`Training · ${G.def.name}`:(G.trial?`Ink Trial · ${G.trial.name}: ${G.trial.desc}`:`${G.def.name}, ${G.def.title}`)+(G.item?` · ${GEAR.items[G.item].name} at hand`:''),t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
 function endRound(){G.rw.wins++;if(G.waves&&G.rw===G.P&&G.wave<G.waves.length-1)return nextWave();if(G.rw.wins>=(G.need||2))matchEnd(G.rw===G.P);else{G.round++;newRound()}}
@@ -1417,7 +1468,7 @@ function updGame(dt){if(G.paused||G.state==='over')return;G.shake*=Math.pow(.004
  if(G.slowT>0){G.slowT-=dt;if(G.slowT<=0)G.slow=1}
  const sdt=dt*G.slow,pl=G.P,bo=G.B,live=G.state==='fight';G.t+=sdt;G.st+=sdt;
  pl.in=live?readIn():NOIN;bo.in=live?ai(bo,pl,sdt):NOIN;{const bw=!!pl.in.block||!!pl.in.mx&&pl.in.mx===-pl.f;if(bw&&!G.bw)pl.blockT=G.t;G.bw=bw}
- upd(pl,bo,sdt);upd(bo,pl,sdt);separate(pl,bo);updProj(sdt);updClone(sdt);
+ upd(pl,bo,sdt);upd(bo,pl,sdt);separate(pl,bo);updProj(sdt);updClone(sdt);if(G.L&&live)layoutTick(sdt);
  {let k=0;for(const f of G.fx)if(f.persist||G.t-f.t0<2)G.fx[k++]=f;G.fx.length=k}
  if(G.state==='intro'&&G.st>(G.round===1?2.5:1.7)){G.state='fight';G.st=0;G.ban={k:'始',sub:'Begin',t0:G.rt,dur:.9,size:260};snd('drum',1);snd('slash',.6)}
  else if(live&&G.train)trainTick(sdt);
@@ -1427,7 +1478,7 @@ function updGame(dt){if(G.paused||G.state==='over')return;G.shake*=Math.pow(.004
  else if(G.state==='ko'){if(G.st>1.1&&isFree(G.rw))setSt(G.rw,'win');if(G.st>2.9)endRound()}
  else if(G.state==='absorb'){bo.alpha=1-ss(.6,2.8,G.st);if(!G.rv&&G.st>2.9){const p=POWERS[G.res.r.power];G.rv=1;G.ban={k:p.jp,sub:p.name,t0:G.rt,dur:2.4,size:300,seal:true};fxAdd({k:'ring',x:pl.x,y:0});snd('gong',.8);snd('drum',.9)}if(G.st>=ABSORB)absorbDone()}
  music(dt)}
-function music(dt){if(!AU.ctx||G.state==='ko')return;const ar=ARENAS[G.arena];G.nb-=dt;if(G.nb>0)return;G.nb+=60/ar.bpm/2;const s=G.step++%16,w=AU.ctx.currentTime+.02;
+function music(dt){if(!AU.ctx||G.state==='ko')return;const ar=ARENAS[G.map?G.music:G.arena];G.nb-=dt;if(G.nb>0)return;G.nb+=60/ar.bpm/2;const s=G.step++%16,w=AU.ctx.currentTime+.02;
  AU.route=AU.mu;try{if(s===0||s===6||s===8||s===11||s===14)S.drum(w,s===0?.55:.3);if(s%4===2&&hash(G.step*1.7)<.7)S.pluck(w,ar.notes[hash(G.step*3.1)*ar.notes.length|0],.18);if(s===0&&G.step%64===1)S.flute(w,ar.notes[0]*2,2.2,.22)}catch(e){}AU.route=null}
 // the main menu's score: a slow pentatonic koto line over a low string, now and then a flute
 const MNOTE=[N.D4,N.Eb4,N.G4,N.A4,N.Bb4,N.D5],MM={nb:0,step:0};
@@ -1538,8 +1589,8 @@ function renderGame(){const ar=ARENAS[G.arena],pl=G.P,bo=G.B,t=G.t,dt=Math.min(.
  const hw=W/2/G.cam.z,lo=-ARENA-160+hw,hi=ARENA+160-hw;G.cam.x+=((lo>hi?0:clamp(mid,lo,hi))-G.cam.x)*Math.min(1,dt*4);G.cam.y=-330/G.cam.z+Math.min(0,ip(pl.y,pl.py),ip(bo.y,bo.py))*.35;
  const sk=SHK[SV.settings.shake];G.punch=(G.punch||0)*Math.pow(.002,dt);setCam(Object.assign({},G.cam,{z:G.cam.z*(1+G.punch*sk)}),G.shake*sk,G.rt);ar.bg(X,t); // shake and camera punch honor Reduce Shake
  const iss=pl.st==='move'&&pl.mv.issen?pl.mvT:-1;if(iss>=0){screen(X);X.globalAlpha=ss(0,.18,iss)*(1-ss(.85,1.2,iss))*.88*FLK[SV.settings.flash];X.fillStyle='#f6f1e6';X.fillRect(0,0,W,H);X.globalAlpha=1}
- drawMarks(X);camT(X,1);for(const F of[bo,pl]){const y=ip(F.y,F.py),w=72*F.def.s*(1-Math.min(.6,-y/400));X.fillStyle=ink(.9,.16*(1-Math.min(.7,-y/350)));X.beginPath();X.ellipse(ip(F.x,F.px),2,w,w*.16,0,0,6.2832);X.fill()} // contact shadows
- figLayer(X,g=>{drawF(g,bo);if(G.clone)drawClone(g);drawF(g,pl)},SV.settings.quality==='low'?0:3);drawFx(X);drawProj(X);ar.fg(X,t);if(G.train&&G.train.boxes)drawBoxes(X);if(G.state==='absorb')drawAbsorb(X);
+ if(G.L)drawLayout(X,G.L,G.t);drawMarks(X);camT(X,1);for(const F of[bo,pl]){const y=ip(F.y,F.py),gy=F.gy||0,w=72*F.def.s*(1-Math.min(.6,(gy-y)/400));X.fillStyle=ink(.9,.16*(1-Math.min(.7,(gy-y)/350)));X.beginPath();X.ellipse(ip(F.x,F.px),gy+2,w,w*.16,0,0,6.2832);X.fill()} // contact shadows
+ figLayer(X,g=>{drawF(g,bo);if(G.clone)drawClone(g);drawF(g,pl)},SV.settings.quality==='low'?0:3);drawFx(X);drawProj(X);ar.fg(X,t);if(G.L)skyFx(X,G.L,t);if(G.train&&G.train.boxes)drawBoxes(X);if(G.state==='absorb')drawAbsorb(X);
  if(iss>=.4&&iss<1.25){const pr=clamp((iss-.4)/.22),al=1-ss(.85,1.25,iss),y=scr(0,-150*bo.def.s)[1];screen(X);const pts=[];for(let i=0;i<=50;i++){const u=i/50;pts.push([lerp(120,lerp(120,W-120,E.out(pr)),u),y+Math.sin(u*3)*10+40-u*90])}
   X.fillStyle=INK;X.globalAlpha=al;brush(X,pts,34,{taper:u=>Math.pow(Math.sin(Math.PI*clamp(u*.96+.02)),.45)});X.strokeStyle=INK;dry(X,pts,60,7,{dry:.9,alpha:al*.8});X.globalAlpha=1}
  grain(X);hud(X);if(G.train)trainHUD(X);banner(X);if(G.state==='absorb')absorbText(X);if(G.overlay)G.overlay(X)} // G.overlay: debug frame-data overlay
@@ -1754,7 +1805,7 @@ function applySettings(){const st=SV.settings;vols();document.body.classList.tog
  document.documentElement.style.setProperty('--k',st.scale);KMAP=Object.assign({},KMAP0);for(const[c,a]of Object.entries(st.keys))KMAP[c]=a}
 /* --- flow & menus --- */
 let MODE='film',helpBack='menu',VIEW='home'; // VIEW: the hub screen the menus return to ('home' = main menu, 'map' = world map)
-const PANELS=['home','shop','train','chal','menu','result','pause','help','char','notice','region','settings'];
+const PANELS=['home','shop','train','chal','workshop','editor','menu','result','pause','help','char','notice','region','settings'];
 const show=id=>{for(const p of PANELS)document.getElementById(p).classList.toggle('off',p!==id)};
 function buildMenu(){const box=document.getElementById('levels');box.innerHTML='';const todo=SV.profile.attrPts>0||Object.keys(SV.powers).some(id=>!tierBlock(SV,id));$('mChar').textContent=`Character · level ${SV.profile.level}${todo?' · points to spend':''}`;BOSSES.forEach((b,i)=>{const done=SV.progress.beaten>i,open=SV.progress.regionsUnlocked>i,ns=ladderNodes(SV,i).filter(n=>n.kind==='step'),c=ns.filter(n=>n.cleared).length,el=document.createElement('button');
  el.className='card'+(open?'':' locked');el.disabled=!open;el.setAttribute('aria-label',`${ARENAS[b.arena].name}: ${b.name}, ${b.title}. ${done?'Defeated':open?'Open':'Locked'}`);
@@ -1781,7 +1832,7 @@ function startFight(lv,seed,node={kind:'boss'}){prep(seed);G.lv=lv;G.node=node;G
  const st=node.kind==='step'&&LAD.regions[lv].steps[node.i];G.trial=node.kind==='trial'?LAD.trials[BOSS_IDS[lv]]:null;G.arena=BOSSES[lv].arena;G.need=st&&!st.elite?1:2;G.roundTime=G.trial&&G.trial.timer||60;
  fighters(st?Object.assign({},FOES[st.foe],{hp:Math.round(FOES[st.foe].hp*(1+LAD.hp_per_region*lv))}):BOSSES[lv]);takeSupply(true);G.matchId=`${node.kind}:${lv}:${node.i??''}:`+Date.now();
  G.hint=lv===0&&node.kind==='step'&&!node.i?14:7;go()}
-const noMission=()=>{G.hell=G.white=G.survive=false;G.waves=null;G.wave=0;G.map=null};
+const noMission=()=>{G.hell=G.white=G.survive=false;G.waves=null;G.wave=0;G.map=null;G.L=null;ARENA=900};
 function prep(seed){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.seed=(seed??SEED_Q??Math.random()*4294967296)>>>0;G.rand=rng(G.seed);G.acc=0;G.ia=1}
 function fighters(def,hero){G.def=def;G.P=mkF(hero||heroDef(),true);G.B=mkF(def,false);G.res=null;G.rv=0;G.tally={};G.combo={n:0,dmg:0,t:-9};G.item=null;G.tea=false;
  G.P.def.powers.forEach((id,i)=>{const el=tEls['p'+(i+1)];el.classList.toggle('off',!id);if(id)el.innerHTML=`<b>${POWERS[id].jp}</b><i>${POWERS[id].short}</i>`});G.round=1;G.t=0;G.mvId=0;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2}}
@@ -1908,6 +1959,110 @@ function showLadderResult(win,r){const lv=G.lv,T=G.trial,next=ladderNodes(SV,lv)
  if(!win)mkb('Retry',()=>startFight(lv,undefined,G.node),1);else if(next)mkb(`Next · ${next.kind==='trial'?next.trial.name:next.foe.name}`,()=>startFight(lv,undefined,next.kind==='step'?{kind:'step',i:next.i}:{kind:next.kind}),1);
  mkb('Character & loadout',()=>openChar(null,'result'));mkb('Back to '+ARENAS[G.arena].name.replace(/^the /,''),()=>openRegion(lv));
  show('result');amb(.08,0,0);bt.firstChild.focus()}
+/* --- the Ink Workshop (1.7): custom maps are kept in their own storage key (up to 24, checksummed), validated so that every
+   layout can be played (spawns on open floor, ledges low enough to reach, obstacles low and narrow enough to jump, hazards
+   that leave room), edited live over a preview, test-played, duplicated, deleted, published to the map, shared as a code.
+   They pay no XP or currency. --- */
+const MKEY=SKEY+'.maps',MAXMAPS=24,LIGHTS=['day','dusk','night'],WEATHERS=['none','rain','ash','petals','snow','mist'],FLOORS=['theme','wood','stone'],HZK=['fire','spikes','ink'];
+const THEMES=()=>ARENAS.map((a,i)=>[i,a.name.replace(/^the /,'')]).filter(([i])=>!ARENAS[i].hidden);
+const blankMap=()=>({v:1,id:'m'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36),name:'New arena',theme:0,width:900,floor:'theme',light:'day',weather:'none',music:0,difficulty:1,time:90,
+ spawns:{hero:-300,foe:300},platforms:[],obstacles:[],hazards:[],pickups:[],waves:['dummy'],published:false,made:Date.now()});
+// clamp every field to something the engine can draw and run (maps come from storage or a pasted code: never trusted)
+function cleanMap(r){r=obj(r);const m=blankMap(),W2=w=>clamp(+w||0,-m.width,m.width),num=(v,lo,hi,d)=>typeof v==='number'&&Number.isFinite(v)?clamp(v,lo,hi):d,arr=(v,n)=>(Array.isArray(v)?v:[]).slice(0,n).map(obj);
+ m.id=typeof r.id==='string'&&/^[a-z0-9]{2,24}$/.test(r.id)?r.id:m.id;m.name=String(r.name||'Untitled').replace(/[<>&"]/g,'').slice(0,24)||'Untitled';m.theme=int(r.theme,0,ARENAS.length-1,0);m.width=num(r.width,600,1400,900);
+ m.floor=FLOORS.includes(r.floor)?r.floor:'theme';m.light=LIGHTS.includes(r.light)?r.light:'day';m.weather=WEATHERS.includes(r.weather)?r.weather:'none';m.music=int(r.music,0,ARENAS.length-1,m.theme);
+ m.difficulty=num(r.difficulty,.75,1.5,1);m.time=num(r.time,45,120,90);m.published=r.published===true;m.made=int(r.made,0,1e15,Date.now());
+ const sp=obj(r.spawns);m.spawns={hero:num(sp.hero,-1400,1400,-300),foe:num(sp.foe,-1400,1400,300)};
+ m.platforms=arr(r.platforms,6).map(p=>({x:num(p.x,-1400,1400,0),w:num(p.w,120,600,240),h:num(p.h,60,170,120)}));
+ m.obstacles=arr(r.obstacles,6).map(o=>({x:num(o.x,-1400,1400,0),w:num(o.w,40,200,90),h:num(o.h,40,150,80)}));
+ m.hazards=arr(r.hazards,6).map(h=>({x:num(h.x,-1400,1400,0),w:num(h.w,80,360,160),kind:HZK.includes(h.kind)?h.kind:'fire',period:num(h.period,2,8,4),dmg:num(h.dmg,4,15,8)}));
+ m.pickups=arr(r.pickups,6).map(k=>({x:num(k.x,-1400,1400,0),h:num(k.h,0,170,0),kind:k.kind==='ink'?'ink':'tea'}));
+ m.waves=(Array.isArray(r.waves)?r.waves:[]).filter(id=>typeof id==='string'&&(FOES[id]||BOSS_IDS.includes(id))).slice(0,5);if(!m.waves.length)m.waves=['dummy'];return m}
+// what makes a layout playable; each problem is a sentence the editor shows
+function validateMap(m,s=SV){const e=[],W_=m.width-60,inside=x=>x>=-W_&&x<=W_,over=(x,a,w)=>x>a-w/2-50&&x<a+w/2+50,ok=partners();
+ if(!m.name.trim())e.push('Give the map a name.');
+ for(const[k,x]of[['Your start',m.spawns.hero],['The foe\'s start',m.spawns.foe]]){if(!inside(x))e.push(`${k} is outside the walls.`);if(m.obstacles.some(o=>over(x,o.x,o.w)))e.push(`${k} is inside an obstacle.`);if(m.hazards.some(h=>over(x,h.x,h.w)))e.push(`${k} is on a hazard.`)}
+ if(Math.abs(m.spawns.hero-m.spawns.foe)<250)e.push('The two starts are closer than 250: move them apart.');
+ m.platforms.forEach((p,i)=>{if(!inside(p.x-p.w/2)||!inside(p.x+p.w/2))e.push(`Ledge ${i+1} pokes through a wall.`);if(p.h>170)e.push(`Ledge ${i+1} is too high to reach.`)});
+ m.obstacles.forEach((o,i)=>{if(!inside(o.x-o.w/2)||!inside(o.x+o.w/2))e.push(`Obstacle ${i+1} pokes through a wall.`);if(o.h>150||o.w>200)e.push(`Obstacle ${i+1} is too big to jump.`)});
+ m.hazards.forEach((h,i)=>{if(!inside(h.x-h.w/2)||!inside(h.x+h.w/2))e.push(`Hazard ${i+1} pokes through a wall.`)});
+ if(m.hazards.reduce((a,h)=>a+h.w,0)>m.width*2*.4)e.push('Hazards cover more than 40% of the floor.');
+ if(!m.waves.length||m.waves.length>5)e.push('Add one to five foes.');for(const id of m.waves)if(!ok.includes(id))e.push(`${partnerDef(id).name} is not met yet: defeat them in the journey first.`);
+ return e}
+function loadMaps(){try{const w=JSON.parse(store.get(MKEY)||'null');if(w&&Array.isArray(w.maps)&&w.sum===fnv(JSON.stringify(w.maps)))return w.maps.slice(0,MAXMAPS).map(cleanMap)}catch(e){}return[]}
+function saveMaps(list){return store.set(MKEY,JSON.stringify({sum:fnv(JSON.stringify(list)),maps:list}))}
+let MAPS=null;const maps=()=>MAPS||(MAPS=loadMaps());
+const WK={sel:null,back:'menu',msg:''},ED={m:null,tool:'platform',item:null,back:'workshop'};
+function openWorkshop(back){if(back)WK.back=back;const list=maps(),box=$('wkBody'),b=$('wkBtns');box.innerHTML='';b.innerHTML='';$('wkCode').classList.add('off');
+ $('wkSub').textContent=`${list.length} of ${MAXMAPS} maps · custom maps are for play and practice: they pay no XP, mon or crystals.`;$('wkMsg').textContent=WK.msg;WK.msg='';
+ const btn=(t,fn,dis)=>{const e=document.createElement('button');e.className='lnk';e.textContent=t;e.disabled=!!dis;e.onclick=fn;b.appendChild(e);return e};
+ for(const m of list){const errs=validateMap(m),e=document.createElement('button');e.className='card qcard'+(WK.sel===m.id?' sel':'');
+  e.innerHTML=`<span class="n">${m.published?'Published':'Draft'}${errs.length?' · needs work':''}</span><span class="nm">${m.name}</span><span class="ti">${ARENAS[m.theme].name.replace(/^the /,'')} · ${m.waves.length} foe${m.waves.length>1?'s':''} · ${m.platforms.length+m.obstacles.length+m.hazards.length} pieces</span>`;
+  e.onclick=()=>{WK.sel=m.id;openWorkshop()};box.appendChild(e)}
+ btn('New map',()=>{if(list.length>=MAXMAPS){WK.msg=`The workshop holds ${MAXMAPS} maps: delete one first.`;return openWorkshop()}openEditor(blankMap())},list.length>=MAXMAPS);
+ const m=list.find(x=>x.id===WK.sel);
+ if(m){const errs=validateMap(m);$('wkMore').textContent=errs.length?'To play it: '+errs.join(' '):`${m.name}: ${m.width*2} wide, ${m.light}, ${m.weather==='none'?'clear':m.weather}, difficulty ×${m.difficulty}.`;
+  btn('Play',()=>startCustom(m),errs.length);btn('Edit',()=>openEditor(JSON.parse(JSON.stringify(m))));btn('Duplicate',()=>{if(list.length>=MAXMAPS){WK.msg='The workshop is full.';return openWorkshop()}const c=cleanMap(Object.assign({},m,{id:'',name:(m.name+' copy').slice(0,24),published:false}));list.push(c);WK.sel=c.id;saveMaps(list);openWorkshop()});
+  btn(m.published?'Unpublish':'Publish to the map',()=>{if(!m.published&&errs.length){WK.msg='Only a valid map can be published.';return openWorkshop()}m.published=!m.published;saveMaps(list);openWorkshop()});
+  btn('Share as code',()=>{const c=$('wkCode');c.value='ISSENMAP1-'+btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(m))));c.classList.remove('off');c.readOnly=true;c.select()});
+  btn('Delete',()=>notice('墨','Delete this map?',`“${m.name}” will be gone for good.`,[['Delete it',()=>{MAPS=list.filter(x=>x.id!==m.id);saveMaps(MAPS);WK.sel=null;openWorkshop()},1],['Cancel',()=>openWorkshop()]]))}
+ else $('wkMore').textContent=list.length?'Choose a map to play, edit, duplicate, publish, share or delete it.':'No maps yet: make one, test it, then publish it to the world map.';
+ btn('Load a code',()=>{const c=$('wkCode');c.readOnly=false;c.value='';c.classList.remove('off');c.focus();WK.msg='Paste a map code, then choose Load it.';$('wkMsg').textContent=WK.msg;WK.msg='';
+  btn('Load it',()=>{let d=null;try{d=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(c.value.trim().replace(/^ISSENMAP1-/,'')),x=>x.charCodeAt(0))))}catch(e){}
+   if(!d){$('wkMsg').textContent='That code could not be read: check it was copied in full.';return}const n=cleanMap(Object.assign(d,{id:'',published:false}));if(list.length>=MAXMAPS){$('wkMsg').textContent='The workshop is full.';return}list.push(n);saveMaps(list);WK.sel=n.id;WK.msg=`Loaded “${n.name}”.`;openWorkshop()})});
+ MODE='menu';show('workshop');(b.firstChild||$('wkClose')).focus()}
+function storeMap(m){const list=maps(),i=list.findIndex(x=>x.id===m.id),fresh=i<0;if(fresh&&list.length>=MAXMAPS)return'The workshop is full.';const c=cleanMap(m);if(fresh)list.push(c);else list[i]=c;
+ if(!saveMaps(list))return'The map could not be saved (storage full?).';if(!validateMap(c).length&&!SV.rewardsClaimed['made:'+c.id]){SV.rewardsClaimed['made:'+c.id]=1;SV.stats.mapsMade=(SV.stats.mapsMade||0)+1;awardQuiet();writeSave(SV)}return''}
+// the editor: the arena is drawn live above a dock of controls; tapping the preview places the chosen piece where you tap
+function openEditor(m){ED.m=cleanMap(m);ED.item=null;MODE='edit';edDock();show('editor')}
+const edCam=()=>{const m=ED.m,z=W/(2*m.width+700);setCam({x:0,y:-60/z,z},0,G.mt)}; // the floor sits above the dock
+function renderEditor(t){const m=ED.m;edCam();WIND={x:-1,y:.1,s:.4};ARENAS[m.theme].bg(X,t);const L=compileMap(m);drawLayout(X,L,t,true);ARENAS[m.theme].fg(X,t);skyFx(X,L,t);camT(X,1);
+ const mark=(x,col,lab)=>{X.globalAlpha=.8;X.fillStyle=col;X.fillRect(x-4,-260,8,260);X.beginPath();X.arc(x,-280,24,0,6.2832);X.fill();X.fillStyle=PAPER;X.font='600 26px "Cormorant Garamond", serif';X.textAlign='center';X.textBaseline='middle';X.fillText(lab,x,-279);X.globalAlpha=1};
+ mark(m.spawns.hero,INK,'You');mark(m.spawns.foe,RED,'Foe');
+ if(ED.item){const it=ED.item,list=m[it[0]],p=list&&list[it[1]];if(p){X.strokeStyle=RED;X.lineWidth=5;X.setLineDash([16,10]);X.strokeRect(p.x-(p.w||60)/2-10,-(p.h||40)-20,(p.w||60)+20,(p.h||40)+30);X.setLineDash([])}}
+ grain(X)}
+const EDTOOLS=[['platform','Ledge'],['obstacle','Obstacle'],['fire','Fire vent'],['spikes','Spikes'],['ink','Ink geyser'],['tea','Tea (heal)'],['inkp','Ink bar'],['hero','Your start'],['foe','Foe start'],['erase','Erase']];
+function edPlace(wx,wy){const m=ED.m,x=Math.round(clamp(wx,-m.width+60,m.width-60)),t=ED.tool,h=Math.round(clamp(-wy,60,170));
+ if(t==='platform'){if(m.platforms.length<6){m.platforms.push({x,w:240,h});ED.item=['platforms',m.platforms.length-1]}}
+ else if(t==='obstacle'){if(m.obstacles.length<6){m.obstacles.push({x,w:90,h:80});ED.item=['obstacles',m.obstacles.length-1]}}
+ else if(HZK.includes(t)){if(m.hazards.length<6){m.hazards.push({x,w:160,kind:t,period:4,dmg:8});ED.item=['hazards',m.hazards.length-1]}}
+ else if(t==='tea'||t==='inkp'){if(m.pickups.length<6){m.pickups.push({x,h:0,kind:t==='tea'?'tea':'ink'});ED.item=['pickups',m.pickups.length-1]}}
+ else if(t==='hero'||t==='foe')m.spawns[t]=x;
+ else{for(const k of['platforms','obstacles','hazards','pickups']){const i=m[k].findIndex(p=>Math.abs(p.x-x)<(p.w||80)/2+20);if(i>=0){m[k].splice(i,1);ED.item=null;break}}}
+ edDock()}
+function edDock(){const m=ED.m,d=$('edDock'),errs=validateMap(m);d.innerHTML='';$('edTop').textContent=`Ink Workshop · ${m.name} · tap the arena to place: ${(EDTOOLS.find(x=>x[0]===ED.tool)||[])[1]}`;
+ const row=()=>{const r=document.createElement('div');r.className='erow';d.appendChild(r);return r};
+ const lab=(r,t)=>{const b=document.createElement('b');b.textContent=t;r.appendChild(b)};
+ const sel=(r,t,opts,v,fn)=>{lab(r,t);const s=document.createElement('select');s.setAttribute('aria-label',t);for(const[k,l]of opts){const o=document.createElement('option');o.value=k;o.textContent=l;if(String(k)===String(v))o.selected=true;s.appendChild(o)}s.value=String(v);s.onchange=()=>{fn(s.value);edDock()};r.appendChild(s);return s};
+ const rng_=(r,t,lo,hi,st,v,fn)=>{lab(r,t);const i=document.createElement('input');i.type='range';i.min=lo;i.max=hi;i.step=st;i.value=v;i.setAttribute('aria-label',t);i.oninput=()=>{fn(+i.value);$('edTop').textContent=`${t}: ${i.value}`};i.onchange=()=>edDock();r.appendChild(i);return i};
+ const lnk=(r,t,fn,on,dis)=>{const b=document.createElement('button');b.className='lnk'+(on?' on':'');b.textContent=t;b.disabled=!!dis;b.onclick=fn;r.appendChild(b);return b};
+ let r=row();lab(r,'Name');const nm=document.createElement('input');nm.type='text';nm.value=m.name;nm.maxLength=24;nm.setAttribute('aria-label','Map name');nm.oninput=()=>{m.name=nm.value};nm.onchange=()=>edDock();r.appendChild(nm);
+ sel(r,'Theme',THEMES(),m.theme,v=>{m.theme=+v;m.music=+v});rng_(r,'Width',600,1400,50,m.width,v=>{m.width=v});sel(r,'Floor',FLOORS.map(f=>[f,f==='theme'?'the theme\'s':f]),m.floor,v=>{m.floor=v});
+ sel(r,'Light',LIGHTS.map(x=>[x,x]),m.light,v=>{m.light=v});sel(r,'Weather',WEATHERS.map(x=>[x,x]),m.weather,v=>{m.weather=v});sel(r,'Music',THEMES(),m.music,v=>{m.music=+v});
+ rng_(r,'Difficulty ×',.75,1.5,.05,m.difficulty,v=>{m.difficulty=v});sel(r,'Time',[[45,'45 s'],[60,'60 s'],[90,'90 s'],[120,'120 s']],m.time,v=>{m.time=+v});
+ r=row();lab(r,'Place');for(const[k,l]of EDTOOLS)lnk(r,l,()=>{ED.tool=k;edDock()},ED.tool===k);
+ r=row();lab(r,'Pieces');const all=[];for(const k of['platforms','obstacles','hazards','pickups'])m[k].forEach((p,i)=>all.push([k,i,p]));
+ if(!all.length)r.appendChild(document.createTextNode('none yet — choose a piece above, then tap the arena'));
+ for(const[k,i,p]of all)lnk(r,`${k==='hazards'?p.kind:k==='pickups'?(p.kind==='tea'?'tea':'ink bar'):k.slice(0,-1)} ${i+1} @${Math.round(p.x)}`,()=>{ED.item=[k,i];edDock()},ED.item&&ED.item[0]===k&&ED.item[1]===i);
+ const it=ED.item&&m[ED.item[0]][ED.item[1]];if(it){r=row();lab(r,'Selected');rng_(r,'x',-m.width+60,m.width-60,10,it.x,v=>{it.x=v});
+  if(it.w!=null)rng_(r,'width',ED.item[0]==='obstacles'?40:ED.item[0]==='hazards'?80:120,ED.item[0]==='obstacles'?200:ED.item[0]==='hazards'?360:600,10,it.w,v=>{it.w=v});
+  if(ED.item[0]==='platforms'||ED.item[0]==='obstacles')rng_(r,'height',ED.item[0]==='obstacles'?40:60,ED.item[0]==='obstacles'?150:170,5,it.h,v=>{it.h=v});
+  if(ED.item[0]==='pickups')rng_(r,'height',0,170,10,it.h,v=>{it.h=v});
+  if(ED.item[0]==='hazards'){rng_(r,'every (s)',2,8,.5,it.period,v=>{it.period=v});rng_(r,'damage',4,15,1,it.dmg,v=>{it.dmg=v})}
+  lnk(r,'Remove',()=>{m[ED.item[0]].splice(ED.item[1],1);ED.item=null;edDock()})}
+ r=row();lab(r,'Foes in order');m.waves.forEach((id,i)=>lnk(r,`${i+1}. ${partnerDef(id).name} ✕`,()=>{m.waves.splice(i,1);edDock()},false,m.waves.length<2));
+ if(m.waves.length<5)sel(r,'add',[['','—'],...partners().map(id=>[id,partnerDef(id).name])],'',v=>{if(v)m.waves.push(v)});
+ r=row();const msg=document.createElement('span');msg.className=errs.length?'emsg':'eok';msg.textContent=errs.length?errs.join(' '):'Valid: ready to play and publish.';
+ lnk(r,'Save',()=>{const e=storeMap(m);WK.sel=m.id;ED.saved=e||`Saved “${m.name}”.`;edDock()});lnk(r,'Test play',()=>{storeMap(m);startCustom(m,true)},false,errs.length);lnk(r,'Back to the workshop',()=>edBack());
+ if(ED.saved){const s=document.createElement('span');s.className='eok';s.textContent=ED.saved;r.appendChild(s);ED.saved=''}r.appendChild(msg)}
+function edBack(){MODE='menu';MAPS=null;openWorkshop()}
+// a custom map in play: its layout, its foes in waves (health and damage × difficulty), no rewards
+function startCustom(m,test){const L=compileMap(m);prep();noMission();G.lv=0;G.node={kind:'custom',test:!!test};G.train=null;G.trial=null;G.parry=false;G.map=m;G.L=L;ARENA=m.width;
+ G.arena=m.theme;G.music=m.music;G.need=1;G.roundTime=m.time;const mk=id=>{const d=partnerDef(id);return Object.assign({},d,{hp:Math.round(d.hp*m.difficulty),mod:Object.assign({},NEUTRAL,{dmg:m.difficulty})})};
+ G.waves=m.waves.length>1?m.waves.map(mk):null;G.wave=0;fighters(G.waves?G.waves[0]:mk(m.waves[0]));G.matchId='custom:'+Date.now();G.hint=0;go()}
+function showCustomResult(win){const m=G.map;$('rRewards').textContent='Custom maps pay no rewards: this was for play and practice.';purse();$('rKanji').textContent=win?'勝':'敗';$('rTitle').textContent=win?'Map cleared':'Defeat';
+ $('rText').textContent=win?`${m.name}: every foe has fallen.`:`${m.name} holds. Try again, or change the map.`;const bt=$('rBtns');bt.innerHTML='';const mkb=(txt,fn,big)=>{const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=txt;e.onclick=fn;bt.appendChild(e)};
+ mkb('Play again',()=>startCustom(m,G.node.test),1);if(G.node.test)mkb('Back to the editor',()=>openEditor(m));mkb('The workshop',()=>{MODE='menu';openWorkshop()});mkb('World map',toMenu);show('result');amb(.08,0,0);bt.firstChild.focus()}
 /* --- missions (1.7): Ashen Village, Hell Mode and White Mode share one system. A location's missions open in order; each is a
    duel (rounds), a gauntlet (waves, health carried over) or a survival (outlast the clock). First clears pay once (claim
    <loc>:<i>), repeats pay a quarter of the XP, a loss changes nothing. --- */
@@ -2186,7 +2341,7 @@ function openSettings(back,tab){if(back)setBack=back;if(tab)setTab=tab;const st=
 function togglePause(){if(MODE!=='game'||G.state==='over')return;if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;G.keys={};if(G.paused&&G.train)openTrain();else show(G.paused?'pause':null)}
 const KMAP0={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',KeyH:'block',ShiftLeft:'block',ShiftRight:'block',Space:'roll',Escape:'pause',KeyP:'pause'};
 let KMAP=KMAP0; // the default keys plus the player's own bindings (settings.keys)
-function gameKey(e,down){if(down&&KEYCAP){KEYCAP(e);return}if(down&&e.code==='Escape'&&MODE!=='game'){window.issenApp.back();return}if(down)usePad(false);if(e.code==='KeyF'&&down){document.getElementById('fs').click();return}if(e.code==='KeyM'&&down){document.getElementById('snd').click();return}
+function gameKey(e,down){if(down&&KEYCAP){KEYCAP(e);return}if(e.target&&/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName||''))return;if(down&&e.code==='Escape'&&MODE!=='game'){window.issenApp.back();return}if(down)usePad(false);if(e.code==='KeyF'&&down){document.getElementById('fs').click();return}if(e.code==='KeyM'&&down){document.getElementById('snd').click();return}
  if(MODE==='game'&&G.state==='absorb'){if(down&&!e.repeat&&G.st>.8){e.preventDefault();absorbDone()}return}
  const a=KMAP[e.code];if(!a||MODE!=='game')return;e.preventDefault();if(a==='pause'){if(down&&!e.repeat)togglePause();return}if(G.paused)return;
  if(a==='slash'||a==='kick'||a==='ink'||a==='issen'||a==='power1'||a==='power2'||a==='roll'){if(down&&!e.repeat)G.buf={a,t:G.t};return}
@@ -2233,13 +2388,13 @@ function adapt(raw){if(raw>.25)return;AQ.n++;AQ.t+=raw;if(raw>.026)AQ.slow++;if(
 function frame(now){const raw=(now-st.last)/1000||0,dt=Math.min(.1,raw);st.last=now;
  if(G.lab){if(st.ready)G.lab(dt);requestAnimationFrame(frame);return} // the debug Pose Lab (tools/poselab.js) takes over the canvas
  pollPad();syncTouch();
- if(MODE!=='film'){if(st.ready){G.rdt=dt;G.rt+=dt;if(MODE==='game'){if(!G.paused){adapt(raw);stepGame(dt);renderGame()}}else{adapt(raw);G.mt+=dt;renderMenu(G.mt);menuMusic(dt)}}requestAnimationFrame(frame);return}
+ if(MODE!=='film'){if(st.ready){G.rdt=dt;G.rt+=dt;if(MODE==='edit'){G.mt+=dt;renderEditor(G.mt)}else if(MODE==='game'){if(!G.paused){adapt(raw);stepGame(dt);renderGame()}}else{adapt(raw);G.mt+=dt;renderMenu(G.mt);menuMusic(dt)}}requestAnimationFrame(frame);return}
  if(st.playing){adapt(raw);const a=st.t;st.t=Math.min(DUR,st.t+dt);audioTick(a,st.t);if(st.t>=DUR){st.playing=false;audioSilence();setPP();endc.classList.remove('off');$('skip').classList.add('off');poke();$('enterGame').focus()}st.dirty=true}
  if(st.dirty&&st.ready){render(st.t);st.dirty=false;fill.style.width=(st.t/DUR*100)+'%';tm.textContent=`${fmt(st.t)} / ${fmt(DUR)}`;$('prog').setAttribute('aria-valuenow',st.t.toFixed(1))}requestAnimationFrame(frame)}
 $('playBig').onclick=play;$('replayBig').onclick=replay;$('enterGame').onclick=enterGame;$('toGame').onclick=enterGame;$('skip').onclick=enterGame;
 $('hFilm').onclick=watchFilm;$('mHome').onclick=toHome;$('hChar').onclick=()=>openChar(null,'home');$('hHelp').onclick=()=>{helpBack='home';show('help')};
 $('mChar').onclick=()=>openChar(null,'menu');$('mSet').onclick=()=>openSettings('menu');$('pSet').onclick=()=>openSettings('pause');
-$('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(setBack==='home')toHome();else{buildMenu();show('menu')}};for(const b of $('sTabs').children)b.onclick=()=>{setTab=b.dataset.st;openSettings()};$('gBack').onclick=toMenu;$('mShop').onclick=()=>openShop('menu');$('wL').onclick=()=>{WM.tx=clamp(WM.x-760,0,WORLD.width-W)};$('wR').onclick=()=>{WM.tx=clamp(WM.x+760,0,WORLD.width-W)};
+$('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(setBack==='home')toHome();else{buildMenu();show('menu')}};for(const b of $('sTabs').children)b.onclick=()=>{setTab=b.dataset.st;openSettings()};$('gBack').onclick=toMenu;$('mShop').onclick=()=>openShop('menu');$('wkClose').onclick=()=>WK.back==='home'?toHome():toMenu();$('wL').onclick=()=>{WM.tx=clamp(WM.x-760,0,WORLD.width-W)};$('wR').onclick=()=>{WM.tx=clamp(WM.x+760,0,WORLD.width-W)};
 {const m=$('wmap'),k=()=>W/(stage.clientWidth||W);m.addEventListener('pointerdown',e=>{WM.drag={x0:e.clientX,wx:WM.x};WM.moved=false;m.classList.add('drag')});
  addEventListener('pointermove',e=>{if(!WM.drag)return;const dx=(e.clientX-WM.drag.x0)*k();if(Math.abs(dx)>8)WM.moved=true;WM.x=clamp(WM.drag.wx-dx,0,WORLD.width-W);WM.tx=null});
  addEventListener('pointerup',()=>{if(WM.drag){WM.drag=null;m.classList.remove('drag');setTimeout(()=>{WM.moved=false},0)}});
@@ -2267,14 +2422,15 @@ function syncTouch(){const fight=MODE==='game'&&G.state!=='over'&&G.state!=='abs
  if(fight&&TOUCH.on){tEls.roll.classList.toggle('dis',(G.P.rollCd||0)>G.t);tEls.ink.classList.toggle('dis',G.P.ink<33.3);tEls.issen.classList.toggle('dis',G.P.ink<99.5&&!G.P.sov);tEls.issen.classList.toggle('ready',G.P.ink>=99.5||!!G.P.sov);
   G.P.def.powers.forEach((id,i)=>{if(!id)return;const n=POWERS[id].move,m=G.P.moves[n];tEls['p'+(i+1)].classList.toggle('dis',G.P.ink<m.cost*33.3-.5||(G.P.cd[n]||0)>G.t||m.once&&G.P.once[n]||G.P.burn>G.t)})}}
 function goFull(){const el=document.documentElement,o=window.screen.orientation;if(document.fullscreenElement||!el.requestFullscreen)return;el.requestFullscreen({navigationUI:'hide'}).then(()=>o&&o.lock&&o.lock('landscape').catch(()=>{})).catch(()=>{})}
-stage.addEventListener('pointerdown',poke);stage.addEventListener('pointerdown',()=>{if(MODE==='game'&&G.state==='absorb'&&G.st>.8)absorbDone()});
+stage.addEventListener('pointerdown',poke);
+stage.addEventListener('pointerdown',e=>{if(MODE!=='edit'||e.target.closest('.dock,.etop'))return;const r=stage.getBoundingClientRect(),lx=(e.clientX-r.left)/r.width*W,ly=(e.clientY-r.top)/r.height*H;edCam();edPlace(CAM.x+(lx-W/2)/CAM.z,CAM.y+(ly-H/2)/CAM.z)}); // the editor: place where tappedstage.addEventListener('pointerdown',()=>{if(MODE==='game'&&G.state==='absorb'&&G.st>.8)absorbDone()});
 // leaving the tab/app pauses the fight and silences audio; the Android shell calls these too (Back = pause toggle)
 function bgPause(){if(MODE==='game'&&!G.paused&&G.state!=='over')togglePause();else if(MODE==='film'&&st.playing)pause();try{AU.ctx&&AU.ctx.suspend()}catch(e){}}
 function bgResume(){try{AU.ctx&&AU.ctx.resume()}catch(e){}}
 document.addEventListener('visibilitychange',()=>document.hidden?bgPause():bgResume());
 // Android Back (and Esc outside a fight): closes the open screen, pauses or leaves a fight; returns 0 only on the map or the film (the app may exit)
 window.issenApp={pause:bgPause,resume:bgResume,back(){const open=PANELS.find(p=>!$(p).classList.contains('off'));if(open==='menu'){toHome();return 1}
- if(open==='settings'){$('sClose').click();return 1}if(open==='shop'){$('shClose').click();return 1}if(open==='chal'){$('chClose').click();return 1}if(open==='char'){$('cClose').click();return 1}if(open==='help'){show(helpBack);return 1}
+ if(open==='settings'){$('sClose').click();return 1}if(open==='shop'){$('shClose').click();return 1}if(open==='workshop'){$('wkClose').click();return 1}if(open==='editor'){edBack();return 1}if(open==='chal'){$('chClose').click();return 1}if(open==='char'){$('cClose').click();return 1}if(open==='help'){show(helpBack);return 1}
  if(open==='region'){toMenu();return 1}if(open==='notice'){const b=$('nBtns').firstChild;if(b)b.click();return 1}
  if(MODE==='game'){if(G.state==='over')toMenu();else togglePause();return 1}return 0}};$('pp').onclick=()=>st.playing?pause():play();$('rp').onclick=replay;
 $('snd').onclick=()=>{AU.on=!AU.on;vols();$('sndi').style.opacity=AU.on?1:.35};
@@ -2287,7 +2443,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
  // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
- window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,startMission,openLoc,locNodes,locOpen,grantMission,MODES,WORLD,WM,buildMenu,selPlace,placeInfo,placesFor,mapDone,renderWorld,discover,nextWave,award,rollDaily,dailyOf,dailyProg,achProg,CHAL,openChal,tallyEnd,setToday:f=>{TODAY=f},startTraining,trainSetup,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,useSupply,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,cleanMap,validateMap,compileMap,maps,saveMaps,loadMaps,storeMap,openWorkshop,openEditor,edPlace,edDock,ED,WK,startCustom,blankMap,renderEditor,get ARENA(){return ARENA},onTop,landY,hzState,startMission,openLoc,locNodes,locOpen,grantMission,MODES,WORLD,WM,buildMenu,selPlace,placeInfo,placesFor,mapDone,renderWorld,discover,nextWave,award,rollDaily,dailyOf,dailyProg,achProg,CHAL,openChal,tallyEnd,setToday:f=>{TODAY=f},startTraining,trainSetup,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,useSupply,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
  if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 applySettings();
 // keep the save: ask the browser not to evict this site's storage (an installed PWA usually gets it; spec §14.4)

@@ -14,7 +14,7 @@ function opened(game) { const s = game.SV; game.setToday(() => '2000-01-01'); s.
 module.exports = {
   async 'the map: a marker per place, locked ones dashed and explained, a preview with the rewards still to earn'() {
     const { game, el } = await boot(); game.enterGame(); game.toMenu();
-    assert.deepStrictEqual(el('wpins').children.map(p => p.dataset.place), ['dojo', 'burning_field', 'bamboo_grove', 'mountain_shrine', 'moonlit_lake', 'oni_castle'], 'the secret and the modes stay hidden');
+    assert.deepStrictEqual(el('wpins').children.map(p => p.dataset.place), ['dojo', 'workshop', 'burning_field', 'bamboo_grove', 'mountain_shrine', 'moonlit_lake', 'oni_castle'], 'the secret and the modes stay hidden');
     assert.ok(pin(el, 'bamboo_grove').className.includes('locked')); assert.ok(pin(el, 'burning_field').className.includes('next'), 'the next road pulses');
     pin(el, 'bamboo_grove').click(); assert.match(el('wiText').textContent, /Defeat Gekkō to open this road/); assert.strictEqual(el('wiBtns').children[0].disabled, true);
     pin(el, 'burning_field').click(); assert.match(el('wiRew').textContent, /Still to earn here: 7,650 XP · 505 mon · 40 shadow crystals/); assert.match(el('wiPips').textContent, /Difficulty ●○○○○ · 0% complete/);
