@@ -45,7 +45,7 @@ module.exports = {
     el('shActs').children[0].click(); el('nBtns').children[0].click(); assert.strictEqual(game.SV.profile.mon, 350); assert.match(el('shMsg').textContent, /Bought: Lamellar Dō/);
     el('shActs').children.find(b => b.textContent === 'Equip it').click(); assert.strictEqual(game.SV.gear.equipped.armour, 'lamellar_do');
     const again = (await boot({ storage: st })).game.SV; assert.strictEqual(again.profile.mon, 350); assert.strictEqual(again.gear.equipped.armour, 'lamellar_do');
-    el('shClose').click(); assert.strictEqual(open(el, game), 'home');
+    game.SV.story.pending = []; el('shClose').click(); assert.strictEqual(open(el, game), 'home'); // (the rich profile's achievements were announced on entering)
   },
 
   async 'equipment changes the next fight: armour, a variant weapon, and its traits'() {

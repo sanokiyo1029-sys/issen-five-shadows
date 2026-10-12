@@ -20,10 +20,9 @@ module.exports = {
   async 'a daily counts from the day it began and pays once; achievements pay once'() {
     const { game } = await boot(), s = game.SV; game.setToday(() => '2026-10-12'); s.stats.wins = 7; game.rollDaily(s);
     const id = 'wins3'; s.daily.ids[0] = id; s.daily.base.wins = 7; const m0 = s.profile.mon, c0 = s.profile.crystals;
-    s.stats.wins = 9; assert.strictEqual(game.award(s).filter(x => /Win 3/.test(x.text)).length, 0, '2 of 3: not yet');
-    s.stats.wins = 10; const got = game.award(s); assert.ok(got.some(x => /Daily challenge — Win 3 duels/.test(x.text)));
-    assert.ok(got.some(x => /First Blood/.test(x.text)), 'and the first-win achievement'); assert.strictEqual(s.profile.mon, m0 + 60);
-    assert.strictEqual(s.profile.crystals, c0 + 5, 'First Blood: 5 crystals'); assert.deepStrictEqual(game.award(s), [], 'nothing twice');
+    s.stats.wins = 9; const g9 = game.award(s); assert.strictEqual(g9.filter(x => /Win 3/.test(x.text)).length, 0, '2 of 3: not yet'); assert.ok(g9.some(x => /First Blood/.test(x.text)), 'the first-win achievement');
+    s.stats.wins = 10; const got = game.award(s); assert.ok(got.some(x => /Daily challenge — Win 3 duels/.test(x.text))); assert.strictEqual(s.profile.mon, m0 + 60);
+    assert.strictEqual(s.profile.crystals, c0 + 5, 'First Blood: 5 crystals'); assert.strictEqual(game.award(s).length, 0, 'nothing twice');
     assert.strictEqual(s.stats.dailies, 1);
   },
 
@@ -40,7 +39,7 @@ module.exports = {
     const { game, el } = await boot(); game.setToday(() => '2026-10-12'); game.enterGame();
     el('hMenu').children.find(b => b.innerHTML.startsWith('Challenges')).click(); assert.strictEqual(open(el, game), 'chal'); assert.strictEqual(el('chBody').children.length, 3);
     game.openChal(null, 'ach'); assert.strictEqual(el('chBody').children.length, game.CHAL.achievements.length);
-    game.openChal(null, 'trials'); assert.ok(el('chBody').children[0].classList.contains('locked'), 'a trial waits for its shadow');
+    game.openChal(null, 'trials'); assert.ok(el('chBody').children[0].className.includes('locked'), 'a trial waits for its shadow');
     game.grantClear(game.SV, 0, 'w'); game.openChal(null, 'trials'); el('chBody').children[0].click(); assert.ok(game.G.trial, 'the trial starts from here');
     game.G.state = 'over'; game.toHome(); assert.strictEqual(open(el, game), 'notice'); assert.match(el('nText').textContent, /The First Shadow/);
   },
