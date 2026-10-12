@@ -130,6 +130,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
 .hb .bd{display:inline-block;min-width:1.25em;padding:0 .3em;border-radius:99px;background:var(--red);color:var(--paper);font-size:.6em;text-align:center;line-height:1.25em;margin-left:.6em;vertical-align:.25em;letter-spacing:0}
 #home .lnk{color:rgba(236,229,214,.82);border-color:rgba(236,229,214,.35)}#home .lnk:hover{color:#fff;border-color:var(--red)}#home .ver{color:var(--paper)}
 .purse{font-style:normal;font-weight:600;letter-spacing:.06em}
+.card .pr{font:600 max(.9cqw,10px) 'Cormorant Garamond',serif;letter-spacing:.08em;margin-top:.3cqw}.card .pr.short{color:var(--red)}#shop{gap:.55cqw}#shop h2{font-size:max(2.4cqw,16px)}#shop .big{padding:7px 26px}
 </style>
 </head>
 <body>
@@ -166,6 +167,10 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
     <div class="levels" id="cBody"></div><p class="rw" id="cMore"></p>
     <textarea id="cCode" class="code off" rows="2" spellcheck="false" aria-label="Save code"></textarea><div class="row"><span id="cCodeBtns" class="row"></span><span class="rw" id="cMsg" role="status"></span></div>
     <button class="big" id="cClose">Back to the map</button></div>
+  <div class="panel dim off" id="shop" role="dialog" aria-labelledby="shTitle"><h2 id="shTitle">The Shop</h2><p class="rw purse" id="shPurse"></p>
+    <div class="row tabs" id="shTabs"><button class="lnk" data-sh="weapons">Weapons</button><button class="lnk" data-sh="armour">Armour</button><button class="lnk" data-sh="charms">Charms</button><button class="lnk" data-sh="supplies">Supplies &amp; services</button><button class="lnk" data-sh="cosmetics">Crystal stall</button></div>
+    <div class="levels wrap" id="shBody"></div><p class="rw" id="shMore"></p><div class="row"><span class="row" id="shActs"></span><span class="rw" id="shMsg" role="status"></span></div>
+    <button class="big" id="shClose">Back</button></div>
   <div class="panel dim off" id="region" role="dialog" aria-labelledby="gTitle"><div class="mt"><span class="kj" id="gKanji"></span><span class="en" id="gTitle"></span></div><p class="tag" id="gText"></p>
     <div class="levels" id="gNodes"></div><div class="row"><button class="lnk" id="gChar">Character</button><button class="lnk" id="gBack">Back to the map</button></div></div>
   <div class="panel dim off" id="settings" role="dialog" aria-labelledby="sTitle"><h2 id="sTitle">Settings</h2><div class="row tabs" id="sTabs"><button class="lnk" data-st="game">Sound, screen &amp; play</button><button class="lnk" data-st="keys">Keyboard keys</button></div>
@@ -234,7 +239,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
  "blend":{"state":0.07,"move":0.05,"hit":0.05,"fall":0.1,"turn":0.07,"land":0.14,"step_px":45}}
 </script>
 <script type="application/json" id="data-gear">
-{"schema_version":1,
+{"schema_version":2,
  "rarities":{"common":{"name":"Common","slots":0},"rare":{"name":"Rare","slots":1},"epic":{"name":"Epic","slots":2},"legendary":{"name":"Legendary","slots":2},"mythic":{"name":"Mythic","slots":3}},
  "weapon_tiers":[{"desc":"+5% damage","mon":100,"materials":1,"dmg":1.05},{"desc":"+5% reach","mon":200,"materials":1,"reach":1.05},{"desc":"5% faster windups","mon":300,"materials":2,"startup":0.95},{"desc":"+5% ink","mon":400,"materials":2,"ink":1.05}],
  "weapons":{
@@ -261,7 +266,21 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   "nodachi":{"name":"Nodachi","tag":"pierce","rarity":"rare","source":"the Oni Lieutenant (Oni Castle elite)","rig":{"blen":150},"guard":"high","wk":{"sheath":0},"ink":1,
    "desc":"A great sword: reach x1.2, damage x1.25, windups x1.25; the third cut lunges.",
    "moves":{"slash":{"from":"a_cut","startup":1.25,"reach":1.2,"dmg":1.25},"slash2":{"from":"a_crush","startup":1.25,"reach":1.2,"dmg":1.25},"slash3":{"from":"a_cut","startup":1.25,"reach":1.2,"dmg":1.25,"set":{"lunge":950}},
-    "lunge":{"from":"a_cut","startup":1.25,"reach":1.22,"dmg":1.25},"low":{"from":"a_sweep","startup":1.25,"reach":1.2,"dmg":1.25,"set":{"kd":null}},"air":{"from":"air","startup":1.2,"reach":1.2,"dmg":1.2}}}},
+    "lunge":{"from":"a_cut","startup":1.25,"reach":1.22,"dmg":1.25},"low":{"from":"a_sweep","startup":1.25,"reach":1.2,"dmg":1.25,"set":{"kd":null}},"air":{"from":"air","startup":1.2,"reach":1.2,"dmg":1.2}}},
+  "storm_yari":{"class":"yari","name":"Storm Yari","rarity":"epic","traits":{"first":0.25},"stats":{"attack":-0.03},"bc":"#3e4a57","source":"the shop",
+   "desc":"A yari forged in a storm: your first hit each round deals 25% more; otherwise 3% less."},
+  "hundred_kodachi":{"class":"kodachi","name":"Hundred-cut Kodachi","rarity":"epic","traits":{"momentum":[0.03,0.12]},"stats":{"hp":-0.08},"bc":"#3a3a44","source":"the shop",
+   "desc":"Every hit you land in a row adds 3% damage (up to 12%) until you are hit; 8% less health."},
+  "moon_katana":{"class":"katana","name":"Moonlit Katana","rarity":"epic","traits":{"inkFirst":33.34},"bc":"#8f9aa8","source":"the crystal stall",
+   "desc":"A katana with a moon-pale edge: your first hit each round fills an ink bar."},
+  "ember_katana":{"class":"katana","name":"Ember Katana","rarity":"epic","traits":{"burn":[1,2]},"stats":{"defence":-0.1},"bc":"#7a1d12","source":"Hell Mode: the Ember Judge",
+   "desc":"Hits set the foe burning (1 damage a second for 2 s; a burn never kills); you take 10% more damage."},
+  "dawn_blade":{"class":"nodachi","name":"Dawn Blade","rarity":"epic","traits":{"parryHeal":6},"stats":{"ink":0.1},"bc":"#a08c4e","source":"White Mode: the White Lotus",
+   "desc":"A great sword of first light: a perfect parry heals 6; 10% more ink."},
+  "hellmaw_kanabo":{"class":"kanabo","name":"Hellmaw Kanabō","rarity":"legendary","traits":{"burn":[1,2],"momentum":[0.02,0.08]},"stats":{"defence":-0.08,"hp":-0.05},"bc":"#5a140d","source":"Hell Mode: the Ninth Gate",
+   "desc":"Burning hits, and 2% more damage for every hit in a row (up to 8%); you take 8% more damage and have 5% less health."},
+  "sunlit_naginata":{"class":"naginata","name":"Sunlit Naginata","rarity":"legendary","traits":{"parryHeal":8,"first":0.2},"stats":{"attack":-0.02},"bc":"#b09650","source":"White Mode: the Pale Sun",
+   "desc":"A perfect parry heals 8 and your first hit each round deals 20% more; otherwise 2% less damage."}},
  "charms":{
   "straw_charm":{"name":"Straw Charm","rarity":"common","source":"Burning Field, second duel","stats":{"hp":0.03}},
   "crane_charm":{"name":"Crane Charm","rarity":"common","source":"Bamboo Grove, second duel","stats":{"attack":0.03}},
@@ -272,7 +291,32 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   "mist_veil":{"name":"Mist Veil","rarity":"legendary","source":"Kasumi’s Ink Trial","stats":{"roll":0.1,"speed":0.03}},
   "iron_bead":{"name":"Iron Bead","rarity":"legendary","source":"Tetsugorō’s Ink Trial","stats":{"hp":0.06,"defence":0.03}},
   "pale_ribbon":{"name":"Pale Ribbon","rarity":"legendary","source":"Shirasagi’s Ink Trial","stats":{"ink":0.1,"cooldown":0.06}},
-  "oni_horn":{"name":"Oni Horn","rarity":"legendary","source":"Akuma’s Ink Trial","stats":{"attack":0.06}}}}
+  "oni_horn":{"name":"Oni Horn","rarity":"legendary","source":"Akuma’s Ink Trial","stats":{"attack":0.06}}},
+ "armour":{
+  "travel_haori":{"name":"Travel Haori","rarity":"common","stats":{"speed":0.06,"roll":0.08},"desc":"Light cloth for the road: a quicker walk and roll."},
+  "lamellar_do":{"name":"Lamellar Dō","rarity":"rare","stats":{"defence":0.06,"attack":-0.06,"speed":-0.04},"desc":"Laced iron scales: you take less, deal less, and walk slower."},
+  "shinobi_garb":{"name":"Shinobi Garb","rarity":"rare","stats":{"attack":0.05,"hp":-0.05,"roll":0.12},"desc":"Close-fitting and dark: harder cuts and a faster roll, at the cost of health."},
+  "monk_kesa":{"name":"Monk’s Kesa","rarity":"rare","stats":{"ink":0.12,"cooldown":0.08,"attack":-0.03},"desc":"A shrine robe for those who fight with powers: more ink, shorter cooldowns, lighter cuts."},
+  "onigane_plate":{"name":"Oni-gane Plate","rarity":"epic","stats":{"defence":0.1,"attack":-0.1,"footing":1},"source":"Hell Mode: the bone bridge gauntlet","desc":"Hell-forged plate: you take less and deal less, and the first knockdown each round only staggers you."},
+  "celestial_haori":{"name":"Celestial Haori","rarity":"epic","stats":{"ink":0.1,"parry":0.05,"speed":0.04},"source":"White Mode: the bell tower","desc":"Woven light: more ink, a lighter walk, and a longer perfect-parry window."}},
+ "items":{
+  "healing_tea":{"name":"Healing Tea","max":9,"effect":{"heal":20,"below":0.3},"desc":"Once a fight, the first time your health falls below 30%, restore 20. Not in Hell Mode."},
+  "whetstone":{"name":"Whetstone","max":9,"effect":{"dmg":0.06},"desc":"6% more damage for one fight."},
+  "focus_incense":{"name":"Focus Incense","max":9,"effect":{"ink":33.34},"desc":"Every round of one fight begins with an ink bar."}},
+ "cosmetics":{
+  "finish_silver":{"name":"Moon Silver","kind":"finish","color":"#7f8a99","desc":"A cool steel finish for any weapon."},
+  "finish_lacquer":{"name":"Crimson Lacquer","kind":"finish","color":"#7d1c12","desc":"A blade lacquered blood red."},
+  "finish_gold":{"name":"Gold Leaf","kind":"finish","color":"#9c7a2a","desc":"Gold leaf beaten into the steel."},
+  "trail_crimson":{"name":"Crimson Wake","kind":"trail","color":"#b5301c","desc":"Your swings leave red ink."},
+  "trail_pale":{"name":"Pale Wake","kind":"trail","color":"#8e99ab","desc":"Your swings leave a silver-grey wake."},
+  "trail_gold":{"name":"Gold Wake","kind":"trail","color":"#b58b2e","desc":"Your swings leave gold."},
+  "trail_hellfire":{"name":"Hellfire Wake","kind":"trail","color":"#d2401a","source":"Hell Mode: conquer the Ninth Gate","desc":"Embers follow the blade."},
+  "trail_dawn":{"name":"Dawn Wake","kind":"trail","color":"#c9b27a","source":"White Mode: face the Pale Sun","desc":"Morning light follows the blade."},
+  "aura_ember":{"name":"Ember Aura","kind":"aura","color":"181,48,28","desc":"A faint red glow around you."},
+  "aura_moon":{"name":"Moonlight Aura","kind":"aura","color":"120,140,190","desc":"A cold blue glow around you."},
+  "robe_indigo":{"name":"Indigo Robe","kind":"robe","color":["#161b2a","#3a4560"],"desc":"Robes dyed deep indigo."},
+  "robe_ash":{"name":"Ash Robe","kind":"robe","color":["#2e2c29","#77736c"],"desc":"Robes the grey of cold ash."},
+  "robe_crimson":{"name":"Crimson Robe","kind":"robe","color":["#2a0f0b","#6a2219"],"desc":"Robes dyed dark red."}}}
 </script>
 <script type="application/json" id="data-ladders">
 {"schema_version":1,"hp_per_region":0.12,
@@ -297,7 +341,18 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
 <script type="application/json" id="data-economy">
 {"schema_version":1,
  "currencies":{"mon":"ordinary coin: weapons, upgrades, charms, consumables and services","crystals":"shadow crystals, rare: finishes, trails, auras and special variants; never needed to progress"},
- "crystals":{"boss":{"gekko":20,"kasumi":20,"tetsugoro":25,"shirasagi":25,"akuma":40},"elite":5,"trial":15}}
+ "crystals":{"boss":{"gekko":20,"kasumi":20,"tetsugoro":25,"shirasagi":25,"akuma":40},"elite":5,"trial":15},
+ "stock":[
+  {"id":"yari","mon":600,"gate":"beaten:0"},{"id":"kodachi","mon":600,"gate":"beaten:1"},{"id":"kanabo","mon":600,"gate":"beaten:2"},{"id":"naginata","mon":600,"gate":"beaten:3"},{"id":"nodachi","mon":600,"gate":"beaten:4"},
+  {"id":"storm_yari","mon":1400,"gate":"beaten:2"},{"id":"hundred_kodachi","mon":1400,"gate":"beaten:3"},
+  {"id":"travel_haori","mon":150},{"id":"lamellar_do","mon":450,"gate":"region:1"},{"id":"shinobi_garb","mon":450,"gate":"region:1"},{"id":"monk_kesa","mon":450,"gate":"region:2"},
+  {"id":"straw_charm","mon":150},{"id":"crane_charm","mon":150,"gate":"region:1"},{"id":"fox_charm","mon":150,"gate":"region:2"},{"id":"bell_charm","mon":150,"gate":"region:3"},{"id":"carp_charm","mon":150,"gate":"region:4"},
+  {"id":"healing_tea","mon":40},{"id":"whetstone","mon":60},{"id":"focus_incense","mon":50},{"id":"material","mon":300,"gate":"beaten:0"},
+  {"id":"moon_katana","crystals":150},
+  {"id":"finish_silver","crystals":30},{"id":"finish_lacquer","crystals":40},{"id":"finish_gold","crystals":60},
+  {"id":"trail_crimson","crystals":30},{"id":"trail_pale","crystals":40},{"id":"trail_gold","crystals":60},
+  {"id":"aura_ember","crystals":80},{"id":"aura_moon","crystals":80},
+  {"id":"robe_indigo","crystals":25},{"id":"robe_ash","crystals":25},{"id":"robe_crimson","crystals":35}]}
 </script>
 <script type="application/json" id="data-powers">
 {"schema_version":3,
@@ -580,7 +635,7 @@ function fig(c,p,k,t,col){const L=k.L,J=joints(p,L),ty=k.type,ik_=col?col[0]:k.i
  c.fillStyle=ik_;if(robe)sleeve(c,sho,e1,h1,flow,t,ty==='child'?.75:1.1,7);
  c.strokeStyle=ty==='master'?'rgba(236,229,214,.7)':PAPER;c.lineWidth=3;limb3(c,j(sho,11),j(e1,12),j(h1,13),7.5,6,4.6,true);circ(c,h1[0],h1[1],5.2);
  if(ty==='lord'){c.fillStyle=ik_;const e=mixP(sho,e1,.7),n=perp(sho,e1);blob(c,[add(sho,n,-15),add(sho,n,15),add(e,n,17),add(e,n,-17)]);c.strokeStyle=PAPER;c.lineWidth=1.6;for(let i=1;i<3;i++){const m=mixP(sho,e,i/3);line(c,add(m,n,-14),add(m,n,14))}}
- if(p.blade>.5&&!sheathed){const wa=p.sw-p.rot;if(k.spear)spear(c,h1,wa,ik_);else if(k.club)club(c,h1,wa,ik_);else if(k.nagi)nagi(c,h1,wa,ik_);else if(k.twin){bladeDraw(c,h1,wa,k.blen,ik_);bladeDraw(c,h2,p.sw2-p.rot,k.blen,ik_)}else if(noto){const v=sub(mouth,h1);bladeDraw(c,h1,Math.atan2(v[0],v[1]),Math.min(Math.hypot(v[0],v[1]),k.blen),ik_)}else if(k.sword)bladeDraw(c,h1,p.sw-p.rot,k.blen,ik_)}
+ if(p.blade>.5&&!sheathed){const wa=p.sw-p.rot,bc=col?ik_:k.bc||ik_;if(k.spear)spear(c,h1,wa,bc);else if(k.club)club(c,h1,wa,bc);else if(k.nagi)nagi(c,h1,wa,bc);else if(k.twin){bladeDraw(c,h1,wa,k.blen,bc);bladeDraw(c,h2,p.sw2-p.rot,k.blen,bc)}else if(noto){const v=sub(mouth,h1);bladeDraw(c,h1,Math.atan2(v[0],v[1]),Math.min(Math.hypot(v[0],v[1]),k.blen),bc)}else if(k.sword)bladeDraw(c,h1,p.sw-p.rot,k.blen,bc)}
  c.restore()}
 // the ink bleed is the figure layer halved twice and stretched back up: a cheap blur (a canvas blur filter is very slow on phones)
 function figLayer(c,fn,bl=3,ha=.3){FX.setTransform(1,0,0,1,0,0);FX.globalAlpha=1;FX.clearRect(0,0,FIG.width,FIG.height);camT(FX,1);fn(FX);screen(c);
@@ -964,7 +1019,9 @@ const MV={
 const KDA=g=>[[0,g],[.12,KS1,'o5'],[.34,g]],KDB=g=>[[0,g],[.12,KS2,'o5'],[.34,g]]; // kodachi: alternating blades with a hip twist
 const WANIM={kd_a:{dur:.34,hit:[[.11,.18]],fr:KDA},kd_b:{dur:.34,hit:[[.11,.18]],fr:KDB}};
 const POSE={guard:PS.guard,SPG,KG,club:P(PS.guard,{sw:2.6,tl:.06,hd:-.05}),nagi:P(SPG,{sw:1.8,tl:.1}),high:P(PS.guard,{tl:.08,ua1:1.2,fa1:1.9,sw:2.7})};
-const GSTAT=['attack','defence','hp','crit','cooldown','ink','reach','speed','roll'];
+const GSTAT=['attack','defence','hp','crit','cooldown','ink','reach','speed','roll','parry','footing'];
+const COSK=['finish','trail','aura','robe'],COSN={finish:'Blade finish',trail:'Swing trail',aura:'Aura',robe:'Robe dye'};
+const WPN=id=>{const w=GEAR.weapons[id];return w&&w.class?Object.assign({},GEAR.weapons[w.class],w):w}; // a variant = its class + its own fields
 function forge(n,spec,mul){const b=MV[spec.base||n],a=MV[spec.from]||WANIM[spec.from]||b,ks=(spec.startup||1)*mul.startup,kr=spec.recovery||1;
  const h0=b.hit[0][0],h1=b.hit[b.hit.length-1][1],S=h0*ks,A=h1-h0,R=(b.dur-h1)*kr,a0=a.hit?a.hit[0][0]:h0,a1=a.hit?a.hit[a.hit.length-1][1]:h1;
  const warp=(t,t0,t1,d)=>t<=t0?t*S/t0:t<=t1?S+(t-t0)*A/(t1-t0||1):S+A+(t-t1)*R/((d-t1)||1);
@@ -972,7 +1029,7 @@ function forge(n,spec,mul){const b=MV[spec.base||n],a=MV[spec.from]||WANIM[spec.
   fr:g=>a.fr(g).map(([t,q,e])=>[warp(t,a0,a1,a.dur),q,e]),lunge:b.lunge&&[warp(b.lunge[0],h0,h1,b.dur),warp(b.lunge[1],h0,h1,b.dur),b.lunge[2]]});
  for(const[k,v]of Object.entries(spec.set||{}))if(v===null)delete m[k];else m[k]=v;
  if(m.armor===true)m.armor=[0,S];if(typeof m.lunge==='number')m.lunge=[S-.12,S+.04,m.lunge];return m}
-const wkind=id=>Object.assign({},K.hero,GEAR.weapons[id].rig); // the hero's rig with that weapon's drawing flags
+const wkind=id=>Object.assign({},K.hero,WPN(id).rig); // the hero's rig with that weapon's drawing flags
 // hero-only moves granted by absorbed powers. Never added to MV (shared with every boss): each hero fighter
 // resolves moves through F.moves, an object whose prototype is MV, so bosses stay byte-identical to the baseline.
 const HERO_MV={
@@ -1118,15 +1175,19 @@ function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')
   setSt(Dd,'bstun');Dd.stun=.2;Dd.vx=dir*(m.push||90)*.9*(m.blockPush||1)*(assist?.6:1);fxAdd({k:'clash',x:hx,y:hy,sz:.7});snd('clang',.55);inkUp(A,3);inkUp(Dd,5);G.freeze=.04;G.shake=Math.max(G.shake,5);return true}
  // damage: rage, then the attacker's modifiers (attack, chain hits 2-3, a crit drawn from the fight RNG only if crit > 0), then the defender's
  let dmg=m.dmg*(A.rage?1.2:1)*(A.sov?A.sov.dmg:1)*A.mod.dmg*(!proj&&(A.mvn==='slash2'||A.mvn==='slash3'||A.mvn==='slash4')?A.mod.combo:1);const crit=A.mod.crit>0&&G.rand()<A.mod.crit;if(crit)dmg*=A.mod.critDmg;
+ const tr=A.mod.tr;if(tr){if(tr.first&&!A.firstHit)dmg*=1+tr.first;if(tr.momentum)dmg*=1+Math.min(tr.momentum[1],(A.mom||0)*tr.momentum[0])} // weapon traits: first strike, momentum
  const punish=A.isP&&!proj&&Dd.st==='move'&&!!Dd.mv.hit&&Dd.mvT>Dd.mv.hit[Dd.mv.hit.length-1][1]; // whiff punish (§5.8a): a hit into the foe's recovery
  if(punish){dmg*=MOVE.punish.dmg;inkUp(A,MOVE.punish.ink);fxAdd({k:'punish',x:hx,y:hy});snd('clang',.4)}
  const skin=Dd.mod.skin&&G.t>=Dd.skinT;if(skin){dmg*=1-Dd.mod.skin.reduce;Dd.skinT=G.t+Dd.mod.skin.every;fxAdd({k:'clash',x:hx,y:hy,sz:.5})} /* Iron Skin echo */
  const iron=Dd.iron;if(iron){if(!m.kd){iron.absorbed+=dmg;iron.cnt=G.t+.5}dmg*=1-iron.mit;fxAdd({k:'clash',x:hx,y:hy,sz:.6})} // Iron Resolve: absorbed blows feed the counter
  if(A.sov&&A.sov.bleed)Dd.bleed={until:G.t+3,dps:A.sov.bleed};
+ if(tr){if(tr.burn)Dd.bleed={until:G.t+tr.burn[1],dps:tr.burn[0]};if(tr.inkFirst&&!A.firstHit)inkUp(A,tr.inkFirst);A.firstHit=1;A.mom=(A.mom||0)+1}Dd.mom=0; // burn (never kills), the first-hit ink, momentum resets when hit
  Dd.hp=Math.max(0,Dd.hp-dmg*(1-Dd.mod.mit));Dd.lagHold=.6;Dd.hitFlash=.14;
- const armored=(Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.pierceArmor||skin||iron)&&!m.kd&&Dd.hp>0;if(iron&&m.kd)Dd.iron=null;
+ if(Dd.isP&&G.tea&&Dd.hp>0&&Dd.hp<Dd.maxHp*GEAR.items.healing_tea.effect.below){G.tea=false;Dd.hp=Math.min(Dd.maxHp,Dd.hp+GEAR.items.healing_tea.effect.heal*Dd.mod.heal);fxAdd({k:'ring',x:Dd.x,y:0});snd('gong',.3)} // Healing Tea, once
+ const foot=m.kd&&Dd.mod.footing&&!Dd.footUsed&&Dd.hp>0,kd=m.kd&&!foot;if(foot)Dd.footUsed=1; // Oni-gane Plate: the first knockdown each round only staggers
+ const armored=(Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.pierceArmor||skin||iron)&&!kd&&Dd.hp>0;if(iron&&kd)Dd.iron=null;
  if(!armored){Dd.mv=null;Dd.manual=false;Dd.alpha=1;Dd.next=null;Dd.crouch=false;Dd.block=false;
-  if(m.kd||Dd.hp<=0){setSt(Dd,'down');Dd.vx=dir*(m.push||220)*1.2;Dd.vy=-520;Dd.air=true;fxAdd({k:'splash',x:Dd.x+dir*40,y:-2,sz:46,dir:0,persist:1})}
+  if(kd||Dd.hp<=0){setSt(Dd,'down');Dd.vx=dir*(m.push||220)*1.2;Dd.vy=-520;Dd.air=true;fxAdd({k:'splash',x:Dd.x+dir*40,y:-2,sz:46,dir:0,persist:1})}
   else{setSt(Dd,'hit');Dd.stun=m.stun||.3;Dd.vx=dir*(m.push||90);Dd.hz=m.zone||'mid';Dd.hk=m.dmg>=10;Dd.hn=(Dd.hn||0)+1}}
  fxAdd({k:'slash',x:hx,y:hy,a:m.zone==='high'?-.75:m.zone==='low'?.35:(Math.random()-.5)*.5});if(crit)fxAdd({k:'slash',x:hx,y:hy,a:.9}); /* a crit crosses the mark */fxAdd({k:'splash',x:hx,y:hy,sz:m.kd?70:46,dir:dir>0?0:Math.PI});
  G.freeze=m.kd?.09:.055;G.shake=Math.max(G.shake,m.kd?18:9);snd('drum',m.kd?.9:.55);if(m.kd)snd('boom',.3);if(Dd.isP&&SV.settings.haptics&&navigator.vibrate)navigator.vibrate(m.kd?45:18);G.punch=Math.max(G.punch||0,m.kd?.03:m.dmg>=10?.02:.008); // impact tiers
@@ -1187,10 +1248,10 @@ const STEP=1/60;
 function stepGame(dt){G.acc=Math.min(G.acc+dt,.1);while(G.acc>=STEP-1e-9){G.acc-=STEP;for(const F of[G.P,G.B]){F.px=F.x;F.py=F.y}for(const p of G.proj)p.px=p.x;updGame(STEP)}G.ia=clamp(G.acc/STEP)}
 const ip=(v,pv)=>pv==null||Math.abs(v-pv)>150?v:lerp(pv,v,G.ia);
 function readIn(){const k=G.keys;return{mx:(k.right?1:0)-(k.left?1:0),up:fresh(G.jb,.15),down:!!k.down,block:!!k.block,atk:G.buf&&fresh(G.buf.t,.28)?G.buf.a:null}}
-function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},once:{},sov:null,iron:null,burn:0,bleed:null,phase:false,trail:null,rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
- G.proj=[];G.fx=[];G.clone=null;G.timer=G.roundTime||60;
+function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},once:{},sov:null,iron:null,burn:0,bleed:null,phase:false,firstHit:0,mom:0,footUsed:0,trail:null,rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
+ G.proj=[];G.fx=[];G.clone=null;G.timer=G.roundTime||60;if(G.item==='focus_incense')G.P.ink=Math.max(G.P.ink,GEAR.items.focus_incense.effect.ink);
  if(G.trial){if(G.trial.hero_hp)G.P.hp=G.P.lag=G.P.maxHp*G.trial.hero_hp;if(G.trial.phase)G.B.phase=true;if(G.trial.rage)G.B.rage=true} /* Ink Trial modifiers */G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
- G.ban=G.round===1?{k:G.trial?'墨':G.def.jp,sub:G.trial?`Ink Trial · ${G.trial.name}: ${G.trial.desc}`:`${G.def.name}, ${G.def.title}`,t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
+ G.ban=G.round===1?{k:G.trial?'墨':G.def.jp,sub:(G.trial?`Ink Trial · ${G.trial.name}: ${G.trial.desc}`:`${G.def.name}, ${G.def.title}`)+(G.item?` · ${GEAR.items[G.item].name} at hand`:''),t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
 function endRound(){G.rw.wins++;if(G.rw.wins>=(G.need||2))matchEnd(G.rw===G.P);else{G.round++;newRound()}}
 function updGame(dt){if(G.paused||G.state==='over')return;G.shake*=Math.pow(.004,dt);if(G.hint>0&&G.state==='fight')G.hint-=dt;
  if(G.freeze>0){G.freeze-=dt;return}
@@ -1238,7 +1299,9 @@ function poseOf(F){const d=F.def,g=d.guard;let p;
  if(isFree(F)&&G.t-F.landT<B.land)p=mixv(p,P(p,CR),.5*Math.sin(Math.PI*(G.t-F.landT)/B.land)); // the knees give and recover
  F.lp=p;if(F.lf!==F.f){F.tT=F.lf==null?-9:G.t;F.lf=F.f}const tu=clamp((G.t-F.tT)/B.turn),ff=F.f*(2*E.io(tu)-1);
  p=Object.assign(P(),p,d.wk);p.x=ip(F.x,F.px);p.f=Math.abs(ff)<.08?.08*F.f:ff;p.s=d.s;p.lift=(p.lift||0)-ip(F.y,F.py);p.rage=F.rage||F.sov?1:0;p.stream=clamp(F.vx*F.f/900,-.5,.9)+(F.st==='move'&&F.mv.lunge&&F.mvT<F.mv.lunge[1]+.1?.45:0)+(F.st==='roll'?.5:0);return p}
+const AURA={};
 function drawF(g,F){const p=poseOf(F);if(F.hitFlash>0)p.x+=noise(G.t*90)*8;if(F.alpha<.03)return;
+ if(F.def.aura&&SV.settings.quality!=='low'){const a=AURA[F.def.aura]||(AURA[F.def.aura]=sprite(F.def.aura));g.globalAlpha=(.38+.1*Math.sin(G.t*2.4))*F.alpha;g.drawImage(a,p.x-170*p.s,-p.lift-330*p.s,340*p.s,380*p.s);g.globalAlpha=1} // cosmetic aura
  if(F.rage||F.sov){g.globalAlpha=.4+.15*Math.sin(G.t*9);g.drawImage(GLOW,p.x-170*p.s,-p.lift-330*p.s,340*p.s,380*p.s)}
  if(F.st==='roll'&&F.stT<MOVE.roll.travel){const d=F.roll.dir,a=1-F.stT/MOVE.roll.travel;g.fillStyle=INK;for(let k=0;k<3;k++){const y=-40-k*42,x=p.x-d*(70+k*24);g.globalAlpha=.35*a;brush(g,[[x,y],[x-d*(90+k*30)*a,y+3]],7-k*1.5,{taper:u=>1-u})}}
  g.globalAlpha=F.alpha*(rollInv(F)?.5:1);fig(g,p,F.def.kind,G.t);g.globalAlpha=1;
@@ -1247,7 +1310,7 @@ function drawF(g,F){const p=poseOf(F);if(F.hitFlash>0)p.x+=noise(G.t*90)*8;if(F.
  if(F.iron||m&&m.armor&&F.mvT<=m.armor[1]&&!F.isP){g.globalAlpha=(.25+.12*Math.sin(G.t*14))*F.alpha;fig(g,Object.assign({},p,{x:p.x-3*p.f}),F.def.kind,G.t,['#aaa498','#aaa498']);g.globalAlpha=1}
  // swing trail: the weapon tip during the active window, fading over 0.2 s (red for powers, rage and Sovereignty)
  if(SV.settings.quality!=='low'&&m&&m.hit&&!NOTRAIL.has(F.mvn)&&m.hit.some(w=>F.mvT>=w[0]-.03&&F.mvT<=w[1]+.02)){const q=bladePt(p,F.def.kind,tipLen(F.def.kind));(F.trail||(F.trail=[])).push([q[0],q[1],G.t]);if(F.trail.length>16)F.trail.shift()}
- if(F.trail){while(F.trail.length&&G.t-F.trail[0][2]>.2)F.trail.shift();if(F.trail.length>1){g.fillStyle=F.rage||F.sov||m&&HERO_MV[F.mvn]?RED:INK;g.globalAlpha=.6;brush(g,F.trail,(F.isP?15:20)*p.s,{taper:u=>u*u});g.globalAlpha=1}}
+ if(F.trail){while(F.trail.length&&G.t-F.trail[0][2]>.2)F.trail.shift();if(F.trail.length>1){g.fillStyle=F.rage||F.sov||m&&HERO_MV[F.mvn]?RED:F.def.trail||INK;g.globalAlpha=.6;brush(g,F.trail,(F.isP?15:20)*p.s,{taper:u=>u*u});g.globalAlpha=1}}
  if(m&&m.tell&&F.mvT>m.tell[0]&&F.mvT<m.tell[1]){const z=m.tellZone||m.zone||m.proj&&m.proj.zone||'mid',q=F.isP?bladePt(p,F.def.kind,130):[p.x+F.f*70*p.s,ip(F.y,F.py)+ZY[z]*p.s],u=(F.mvT-m.tell[0])/(m.tell[1]-m.tell[0]),r=26*(m.kd||m.proj&&m.proj.kd?1.3:1);
   g.globalAlpha=Math.sin(u*Math.PI);g.drawImage(MIST,q[0]-50,q[1]-50,100,100);g.fillStyle=RED;g.save();g.translate(q[0],q[1]);g.rotate(u*3);for(let k=0;k<4;k++){g.rotate(Math.PI/2);tri(g,[-3,0],[3,0],[0,-r])}g.restore();g.globalAlpha=1}}
 // reposition attacks: a closing ink ring where the boss will reappear, from the moment it vanishes (it tracks the player until the teleport)
@@ -1333,7 +1396,7 @@ function nightVeil(c,t){screen(c);c.globalCompositeOperation='multiply';c.fillSt
 /* --- progression: save v2, XP and levels, boss rewards, absorbed powers. Pure logic (no DOM); storage goes through `store`.
    Save format: docs/save-format.md · numbers: docs/balance.md --- */
 const DATA=id=>JSON.parse(document.getElementById(id).textContent);
-const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,MOVE=DATA('data-movement'),LAD=DATA('data-ladders'),GEAR=DATA('data-gear'),BOSS_IDS=BOSSES.map(b=>b.id);
+const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,MOVE=DATA('data-movement'),LAD=DATA('data-ladders'),GEAR=DATA('data-gear'),ECON=DATA('data-economy'),BOSS_IDS=BOSSES.map(b=>b.id);
 function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
  ok(PROG.schema_version===2,'progression.schema_version');ok(DATA('data-powers').schema_version===3,'powers.schema_version');
  {const A=PROG.attributes;ok(A.rank_cap>0&&A.k>0&&A.crit_damage>=1&&['assault','survival','shadowcraft'].every(p=>Object.values(A[p]).every(v=>v>=0&&v<1)),'attributes')}
@@ -1343,9 +1406,12 @@ function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
  ok(['state','move','hit','fall','turn','land'].every(k=>MOVE.blend[k]>0&&MOVE.blend[k]<=.2)&&MOVE.blend.step_px>0,'movement.blend');
  {const r=MOVE.roll;ok(MOVE.schema_version===1&&r.dur>0&&r.dist>0&&r.travel>0&&r.travel<=r.dur&&r.inv[0]>=0&&r.inv[0]<r.inv[1]&&r.inv[1]<=r.dur&&r.cd>=r.dur,'movement.roll')}
  ok(LAD.schema_version===1&&LAD.regions.length===BOSS_IDS.length&&LAD.regions.every((R,i)=>R.boss===BOSS_IDS[i]&&R.story.length&&R.steps.length>=2&&R.steps.every(st=>FOES[st.foe]&&st.xp>0)&&R.steps.some(st=>!st.elite)),'ladders');
- {const W=GEAR.weapons,C=GEAR.charms;ok(GEAR.schema_version===1&&W.katana&&GEAR.weapon_tiers.length===4&&Object.values(W).every(w=>GEAR.rarities[w.rarity]&&POSE[w.guard]&&Object.values(w.moves).every(x=>MV[x.base||'slash']&&(MV[x.from]||WANIM[x.from]))),'weapons');
+ {const W=GEAR.weapons,C=GEAR.charms;ok(GEAR.schema_version===2&&W.katana&&GEAR.weapon_tiers.length===4&&Object.keys(W).map(WPN).every(w=>GEAR.rarities[w.rarity]&&POSE[w.guard]&&Object.values(w.moves).every(x=>MV[x.base||'slash']&&(MV[x.from]||WANIM[x.from]))),'weapons');
   ok(Object.values(C).every(c=>GEAR.rarities[c.rarity]&&Object.keys(c.stats).every(k=>GSTAT.includes(k))),'charms');
-  ok(LAD.regions.every(R=>R.steps.every(st=>!st.item||W[st.item]||C[st.item]))&&BOSS_IDS.every(id=>C[LAD.trials[id].item]),'gear sources')}
+  ok(LAD.regions.every(R=>R.steps.every(st=>!st.item||W[st.item]||C[st.item]))&&BOSS_IDS.every(id=>C[LAD.trials[id].item]),'gear sources');
+  ok(Object.values(W).every(w=>!w.class||W[w.class]&&!W[w.class].class&&w.name&&w.desc&&GEAR.rarities[w.rarity])&&Object.values(GEAR.armour).every(a=>GEAR.rarities[a.rarity]&&Object.keys(a.stats).every(k=>GSTAT.includes(k))),'variants / armour');
+  ok(Object.values(GEAR.items).every(i=>i.max>0&&i.effect)&&Object.values(GEAR.cosmetics).every(c=>COSK.includes(c.kind)&&c.color),'supplies / cosmetics');
+  ok(ECON.schema_version===1&&ECON.stock.every(x=>(x.id==='material'||W[x.id]||C[x.id]||GEAR.armour[x.id]||GEAR.items[x.id]||GEAR.cosmetics[x.id])&&(x.mon>0)!==(x.crystals>0)),'shop stock')}
  ok(BOSS_IDS.every(id=>{const t=LAD.trials[id];return t&&t.name&&t.desc&&t.xp>0&&t.skill_points>=0&&t.item}),'trials');
  for(const id of BOSS_IDS){const r=PROG.rewards[id];ok(r&&r.xp>=0&&r.skill_points>=0&&r.mon>=0&&POWERS[r.power],'reward '+id)}
  for(const[id,p]of Object.entries(POWERS)){ok(/^[a-z_]+$/.test(id)&&BOSS_IDS.includes(p.boss)&&p.name&&p.jp&&p.short&&p.tiers&&p.tiers.length===5&&p.echo&&p.echo.name&&p.echo.desc,'power '+id);if(p.ready)ok(HERO_MV[p.move]&&HERO_MV[p.move].cost>=0&&HERO_MV[p.move].cd>0&&(p.extra||[]).every(x=>HERO_MV[x]),'power move '+id)}
@@ -1364,7 +1430,7 @@ function cleanSettings(o){const pick=(v,ok,d)=>ok.includes(v)?v:d,num=(v,lo,hi,d
   assist:o.assist===true,scale:num(o.scale,.8,1.4,1),lefty:o.lefty===true,keys:Object.fromEntries(Object.entries(obj(o.keys)).filter(([c,a])=>/^[A-Za-z0-9]{2,20}$/.test(c)&&ACTIONS.includes(a)))}}
 const newSave=()=>({v:2,rev:0,savedAt:0,profile:{level:1,xp:0,attrPts:0,skillPts:0,attrs:{assault:0,survival:0,shadowcraft:0},mon:0,materials:0,crystals:0},world:{at:-1},stats:{},
  progress:{beaten:0,defeated:[],ladder:{},regionsUnlocked:1,trialsDone:[],lastWin:null},powers:{},loadout:{powers:[null,null],echoes:[null,null]},
- gear:{owned:['katana'],equipped:{weapon:'katana',charm:null},tiers:{katana:1}},settings:Object.assign({},SET_D,{keys:{}}),rewardsClaimed:{},story:{pending:[],seen:[]},legacy:null});
+ gear:{owned:['katana'],equipped:{weapon:'katana',charm:null,armour:null,item:null},tiers:{katana:1},items:{},cos:{finish:null,trail:null,aura:null,robe:null}},settings:Object.assign({},SET_D,{keys:{}}),rewardsClaimed:{},story:{pending:[],seen:[]},legacy:null});
 // every field is re-validated and clamped on load, so bad data never reaches the game (in v1, {"beaten":"abc"} locked every boss)
 const int=(v,lo,hi,d=lo)=>(typeof v==='number'||typeof v==='string'&&v.trim()!=='')&&Number.isFinite(+v)?clamp(Math.floor(+v),lo,hi):d;
 const obj=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{},strs=(v,only)=>Array.isArray(v)?[...new Set(v.filter(x=>typeof x==='string'&&(!only||only.includes(x))))]:[];
@@ -1380,9 +1446,12 @@ function cleanSave(r){r=obj(r);const s=newSave(),p=obj(r.profile),a=obj(p.attrs)
  if(s.loadout.powers[1]===s.loadout.powers[0])s.loadout.powers[1]=null;
  s.loadout.echoes=[0,1].map(i=>{const id=Array.isArray(lo.echoes)?lo.echoes[i]:null;return s.powers[id]&&s.profile.level>=PROG.echo_slots.unlock_levels[i]&&!s.loadout.powers.includes(id)?id:null});
  if(s.loadout.echoes[1]===s.loadout.echoes[0])s.loadout.echoes[1]=null;
- {const gr=obj(r.gear),eq=obj(gr.equipped),ids=[...Object.keys(GEAR.weapons),...Object.keys(GEAR.charms)],own=strs(gr.owned,ids);if(!own.includes('katana'))own.unshift('katana');
-  s.gear={owned:own,equipped:{weapon:own.includes(eq.weapon)&&GEAR.weapons[eq.weapon]?eq.weapon:'katana',charm:own.includes(eq.charm)&&GEAR.charms[eq.charm]?eq.charm:null},
-   tiers:Object.fromEntries(Object.keys(GEAR.weapons).filter(id=>own.includes(id)).map(id=>[id,int(obj(gr.tiers)[id],1,5,1)]))}}s.settings=cleanSettings(obj(r.settings));
+ {const gr=obj(r.gear),eq=obj(gr.equipped),ids=[...Object.keys(GEAR.weapons),...Object.keys(GEAR.charms),...Object.keys(GEAR.armour),...Object.keys(GEAR.cosmetics)],own=strs(gr.owned,ids),cos=obj(gr.cos);if(!own.includes('katana'))own.unshift('katana');
+  s.gear={owned:own,equipped:{weapon:own.includes(eq.weapon)&&GEAR.weapons[eq.weapon]?eq.weapon:'katana',charm:own.includes(eq.charm)&&GEAR.charms[eq.charm]?eq.charm:null,
+    armour:own.includes(eq.armour)&&GEAR.armour[eq.armour]?eq.armour:null,item:GEAR.items[eq.item]?eq.item:null},
+   tiers:Object.fromEntries(Object.keys(GEAR.weapons).filter(id=>own.includes(id)).map(id=>[id,int(obj(gr.tiers)[id],1,5,1)])),
+   items:Object.fromEntries(Object.keys(GEAR.items).map(id=>[id,int(obj(gr.items)[id],0,GEAR.items[id].max,0)]).filter(e=>e[1]>0)),
+   cos:Object.fromEntries(COSK.map(k=>[k,own.includes(cos[k])&&GEAR.cosmetics[cos[k]]&&GEAR.cosmetics[cos[k]].kind===k?cos[k]:null]))}}s.settings=cleanSettings(obj(r.settings));
  for(const[k,v]of Object.entries(obj(r.rewardsClaimed)))if(v)s.rewardsClaimed[k]=typeof v==='number'?v:1;
  s.story=Object.assign({},sto,{seen:strs(sto.seen,LAD.regions.map(R=>R.id)),pending:(Array.isArray(sto.pending)?sto.pending:[]).filter(n=>obj(n).kind==='power'?!!POWERS[n.id]:['migrated','corrupt'].includes(obj(n).kind)&&typeof n.text==='string').slice(0,8)});
  s.legacy=typeof lg.raw==='string'?{raw:lg.raw.slice(0,200),migratedAt:int(lg.migratedAt,0,1e15)}:null;
@@ -1390,7 +1459,6 @@ function cleanSave(r){r=obj(r);const s=newSave(),p=obj(r.profile),a=obj(p.attrs)
  points(s);backfillCr(s);return s}
 // shadow crystals are paid per claim, once: the "cr:<claim>" flag makes every payout idempotent, and lets 1.7 pay what a
 // save from before crystals already earned (backfillCr runs on every load)
-const ECON=DATA('data-economy');
 const payCr=(s,claim,n)=>{if(!n||!s.rewardsClaimed[claim]||s.rewardsClaimed['cr:'+claim])return 0;s.rewardsClaimed['cr:'+claim]=1;s.profile.crystals=Math.min(1e9,s.profile.crystals+n);return n};
 function crOf(claim){const[k,a,b]=claim.split(':'),C=ECON.crystals;if(k==='boss')return C.boss[a]||0;if(k==='trial')return C.trial;
  if(k==='step'){const R=LAD.regions.find(R=>R.id===a),st=R&&R.steps[b];return st&&st.elite?C.elite:0}return 0}
@@ -1462,7 +1530,10 @@ function grantTrial(s,lv,winId){const g=s.progress,p=s.profile;if(winId&&g.lastW
  p.xp=Math.min(1e9,p.xp+r.xp);p.mon+=r.mon;p.materials+=r.materials;p.level=levelOf(p.xp).level;points(s);r.sp=p.skillPts-sp0;r.levelFrom=L0;r.levelTo=p.level;
  if(winId)g.lastWin={id:winId,result:r};return r}
 // gear actions (menus only): equip what is owned; upgrade a weapon one tier for mon and upgrade materials
+function wear(s,kind,id){const c=id&&GEAR.cosmetics[id];if(!COSK.includes(kind)||id&&(!c||c.kind!==kind||!s.gear.owned.includes(id)))return false;s.gear.cos[kind]=id||null;return true}
 function equip(s,slot,id){const own=s.gear.owned.includes(id);if(slot==='weapon'){if(!own||!GEAR.weapons[id])return false;s.gear.equipped.weapon=id;return true}
+ if(slot==='armour'){if(id&&(!own||!GEAR.armour[id]))return false;s.gear.equipped.armour=id||null;return true}
+ if(slot==='item'){if(id&&!GEAR.items[id])return false;s.gear.equipped.item=id||null;return true}
  if(id&&(!own||!GEAR.charms[id]))return false;s.gear.equipped.charm=id||null;return true}
 const weaponBlock=(s,id)=>{const t=s.gear.tiers[id]||1,c=GEAR.weapon_tiers[t-1];return!s.gear.owned.includes(id)?'not found yet':t>=5?'fully upgraded':s.profile.mon<c.mon?`needs ${c.mon} mon`:s.profile.materials<c.materials?`needs ${plural(c.materials,'upgrade material')}`:''};
 function upgradeWeapon(s,id){if(weaponBlock(s,id))return false;const t=s.gear.tiers[id]||1,c=GEAR.weapon_tiers[t-1];s.gear.tiers[id]=t+1;s.profile.mon-=c.mon;s.profile.materials-=c.materials;return true}
@@ -1482,12 +1553,14 @@ const attrBonus=(path,key,rank)=>PROG.attributes[path][key]*(1-Math.exp(-PROG.at
 function derive(s){const r=s.profile.attrs,b=(p,k)=>attrBonus(p,k,r[p]),pe=b('shadowcraft','power'),x=1+pe;let speed=b('shadowcraft','speed');
  const mod={dmg:1+b('assault','damage'),combo:1+b('assault','combo'),crit:b('assault','crit_chance'),critDmg:PROG.attributes.crit_damage,mit:b('survival','mitigation'),heal:1+b('survival','healing'),
   cd:1-b('shadowcraft','cooldown'),ink:1+b('shadowcraft','ink'),roll:1-b('shadowcraft','roll'),pe},ov={},mv=n=>ov[n]||(ov[n]=Object.assign({},MV[n]||HERO_MV[n]));
- const ge=s.gear.equipped,wid=GEAR.weapons[ge.weapon]?ge.weapon:'katana',W=GEAR.weapons[wid],wt=s.gear.tiers[wid]||1,ch=GEAR.charms[ge.charm],cs=ch?ch.stats:{};
+ const ge=s.gear.equipped,wid=GEAR.weapons[ge.weapon]?ge.weapon:'katana',W=WPN(wid),cls=GEAR.weapons[wid].class||wid,wt=s.gear.tiers[wid]||1,ch=GEAR.charms[ge.charm],ar=GEAR.armour[ge.armour],cs={};
+ for(const x of[ch&&ch.stats,ar&&ar.stats,W.stats])for(const k in x||{})cs[k]=(cs[k]||0)+x[k]; // charm, armour and the weapon's own stats add up
  const wm={dmg:1,reach:1,startup:1,ink:1};for(let t=1;t<wt;t++){const e=GEAR.weapon_tiers[t-1];for(const k in wm)if(e[k])wm[k]*=e[k]} // weapon tiers II-V: +5% to one stat each
  if(cs.reach)wm.reach*=1+cs.reach;
- const forged=Object.assign({},W.moves);if(wid==='katana'&&(wt>1||cs.reach))for(const n of['slash','slash2','slash3','lunge','low','air'])forged[n]={}; // a katana only changes once upgraded
+ const forged=Object.assign({},W.moves);if(cls==='katana'&&(wt>1||cs.reach))for(const n of['slash','slash2','slash3','lunge','low','air'])forged[n]={}; // a katana only changes once upgraded
  for(const[n,spec]of Object.entries(forged))ov[n]=forge(n,spec,wm);
  mod.ink*=W.ink*wm.ink*(1+(cs.ink||0));mod.dmg*=1+(cs.attack||0);mod.crit+=cs.crit||0;mod.mit=1-(1-mod.mit)*(1-(cs.defence||0));mod.cd*=1-(cs.cooldown||0);mod.roll*=1-(cs.roll||0);speed+=cs.speed||0;
+ if(W.traits)mod.tr=W.traits;if(cs.footing)mod.footing=1;if(cs.parry)mod.parry=cs.parry;
  for(const id of s.loadout.powers){if(!id||!POWERS[id].ready)continue;const pw=POWERS[id]; /* tiers II.. patch the equipped power's move; Shadowcraft scales its damage */
   for(let t=1;t<s.powers[id].tier;t++)patch(mv(pw.move),pw.tiers[t]);for(const n of[pw.move,...(pw.extra||[])])scalePe(mv(n),x)}
  for(const id of s.loadout.echoes){const e=id&&POWERS[id].echo;if(!e)continue;
@@ -1496,10 +1569,12 @@ function derive(s){const r=s.profile.attrs,b=(p,k)=>attrBonus(p,k,r[p]),pe=b('sh
   if(e.reduce)mod.skin={every:e.every,reduce:Math.min(.5,e.reduce*x)};
   if(e.wave_speed){mod.waveV=1+e.wave_speed*x;mod.pierce=!!e.pierce}
   if(e.ink)mod.ember={below:e.below,ink:e.ink*x}}
- return{hp:Math.round(HERO_D.hp*(1+b('survival','hp'))*(1+(cs.hp||0))),speed:HERO_D.speed*(1+speed),mod,ov,weapon:wid,kind:wkind(wid),guard:POSE[W.guard],wk:W.wk}}
+ return{hp:Math.round(HERO_D.hp*(1+b('survival','hp'))*(1+(cs.hp||0))),cls,speed:HERO_D.speed*(1+speed),mod,ov,weapon:wid,kind:wkind(wid),guard:POSE[W.guard],wk:W.wk}}
 // the hero for the next fight comes from the profile. A new profile gives HERO_D's numbers exactly (no points, no powers).
-const heroDef=()=>{const d=derive(SV);return Object.assign({},HERO_D,{hp:d.hp,speed:d.speed,mod:d.mod,ov:d.ov,echoes:SV.loadout.echoes.slice(),weapon:d.weapon,
-  kind:d.weapon==='katana'?HERO_D.kind:d.kind,guard:d.weapon==='katana'?HERO_D.guard:d.guard,wk:d.weapon==='katana'?HERO_D.wk:d.wk,
+const heroDef=(s=SV)=>{const d=derive(s),c=s.gear.cos||{},cz=k=>c[k]&&GEAR.cosmetics[c[k]],fin=cz('finish'),robe=cz('robe'),tr=cz('trail'),au=cz('aura'),bc=fin?fin.color:WPN(d.weapon).bc,plain=d.cls==='katana';
+ const kind=plain&&!bc&&!robe?HERO_D.kind:Object.assign({},d.kind,bc?{bc}:{},robe?{ink:robe.color[0],back:robe.color[1]}:{}); // cosmetics: finish, robe dye, trail, aura
+ return Object.assign({},HERO_D,{hp:d.hp,speed:d.speed,mod:d.mod,ov:d.ov,echoes:s.loadout.echoes.slice(),weapon:d.weapon,trail:tr?tr.color:null,aura:au?au.color:null,
+  kind,guard:plain?HERO_D.guard:d.guard,wk:plain?HERO_D.wk:d.wk,
  powers:SV.loadout.powers.map(id=>id&&SV.powers[id]&&POWERS[id].ready?id:null)})};
 let SV;{const L=loadSave();SV=L.save;if(L.write)writeSave(SV)}
 const SHK={full:1,reduced:.35,off:0},FLK={full:1,reduced:.3};let KEYCAP=null; // KEYCAP: the settings screen waiting for a key to bind
@@ -1508,7 +1583,7 @@ function applySettings(){const st=SV.settings;vols();document.body.classList.tog
  document.documentElement.style.setProperty('--k',st.scale);KMAP=Object.assign({},KMAP0);for(const[c,a]of Object.entries(st.keys))KMAP[c]=a}
 /* --- flow & menus --- */
 let MODE='film',helpBack='menu',VIEW='home'; // VIEW: the hub screen the menus return to ('home' = main menu, 'map' = world map)
-const PANELS=['home','menu','result','pause','help','char','notice','region','settings'];
+const PANELS=['home','shop','menu','result','pause','help','char','notice','region','settings'];
 const show=id=>{for(const p of PANELS)document.getElementById(p).classList.toggle('off',p!==id)};
 function buildMenu(){const box=document.getElementById('levels');box.innerHTML='';const todo=SV.profile.attrPts>0||Object.keys(SV.powers).some(id=>!tierBlock(SV,id));$('mChar').textContent=`Character · level ${SV.profile.level}${todo?' · points to spend':''}`;BOSSES.forEach((b,i)=>{const done=SV.progress.beaten>i,open=SV.progress.regionsUnlocked>i,ns=ladderNodes(SV,i).filter(n=>n.kind==='step'),c=ns.filter(n=>n.cleared).length,el=document.createElement('button');
  el.className='card'+(open?'':' locked');el.disabled=!open;el.setAttribute('aria-label',`${ARENAS[b.arena].name}: ${b.name}, ${b.title}. ${done?'Defeated':open?'Open':'Locked'}`);
@@ -1533,16 +1608,20 @@ function openRegion(lv){REG=lv;const R=LAD.regions[lv],b=BOSSES[lv],ar=ARENAS[b.
 // a fight in region lv: node = {kind:'boss'} (default), {kind:'step', i} (a ladder duel) or {kind:'trial'} (the boss's Ink Trial)
 function startFight(lv,seed,node={kind:'boss'}){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.lv=lv;G.node=node;G.seed=(seed??SEED_Q??Math.random()*4294967296)>>>0;G.rand=rng(G.seed);G.acc=0;G.ia=1;
  const st=node.kind==='step'&&LAD.regions[lv].steps[node.i];G.trial=node.kind==='trial'?LAD.trials[BOSS_IDS[lv]]:null;G.arena=BOSSES[lv].arena;G.need=st&&!st.elite?1:2;G.roundTime=G.trial&&G.trial.timer||60;
- G.def=st?Object.assign({},FOES[st.foe],{hp:Math.round(FOES[st.foe].hp*(1+LAD.hp_per_region*lv))}):BOSSES[lv];G.P=mkF(heroDef(),true);G.B=mkF(G.def,false);G.matchId=`${node.kind}:${lv}:${node.i??''}:`+Date.now();G.res=null;G.rv=0;
+ G.def=st?Object.assign({},FOES[st.foe],{hp:Math.round(FOES[st.foe].hp*(1+LAD.hp_per_region*lv))}):BOSSES[lv];G.P=mkF(heroDef(),true);G.B=mkF(G.def,false);takeSupply(true);G.matchId=`${node.kind}:${lv}:${node.i??''}:`+Date.now();G.res=null;G.rv=0;
  G.P.def.powers.forEach((id,i)=>{const el=tEls['p'+(i+1)];el.classList.toggle('off',!id);if(id)el.innerHTML=`<b>${POWERS[id].jp}</b><i>${POWERS[id].short}</i>`});G.round=1;G.t=0;G.mvId=0;G.hint=lv===0&&node.kind==='step'&&!node.i?14:7;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2};
  MODE='game';show(null);const ar=ARENAS[G.arena];amb(ar.wind,ar.rain,ar.rumb||0);newRound()}
 // victory: rewards are computed and SAVED first, then the (skippable) absorption ceremony, then the result panel
-function matchEnd(win){G.state='over';G.res={win,r:null};
+function matchEnd(win){G.state='over';G.res={win,r:null};useSupply();
  if(win&&G.node.kind!=='boss'){G.res.r=G.node.kind==='trial'?grantTrial(SV,G.lv,G.matchId):grantStep(SV,G.lv,G.node.i,G.matchId);writeSave(SV)}
  else if(win){const r=G.res.r=grantClear(SV,G.lv,G.matchId);if(r.power)SV.story.pending.push({kind:'power',id:r.power});writeSave(SV);
   if(r.power){G.state='absorb';G.st=0;G.rv=0;G.ban=null;return}}
  showResult()}
 const purse=()=>{$('rPurse').textContent=`Purse: ${fmtN(SV.profile.mon)} mon · ${fmtN(SV.profile.crystals)} shadow crystals · level ${SV.profile.level}`};
+// supplies (1.7): the chosen one comes into a rewarding fight if any is left, works through it, and one is used when it ends
+function takeSupply(rewarding){const id=SV.gear.equipped.item;G.item=rewarding&&id&&(SV.gear.items[id]||0)>0?id:null;G.tea=G.item==='healing_tea'&&!G.hell;
+ if(G.item==='whetstone')G.P.mod=Object.assign({},G.P.mod,{dmg:G.P.mod.dmg*(1+GEAR.items.whetstone.effect.dmg)})}
+function useSupply(){if(!G.item)return;SV.gear.items[G.item]=Math.max(0,(SV.gear.items[G.item]||0)-1);if(!SV.gear.items[G.item])delete SV.gear.items[G.item];G.item=null;writeSave(SV)}
 function absorbDone(){if(G.state!=='absorb')return;G.state='over';const id=G.res.r.power;SV.story.pending=SV.story.pending.filter(n=>!(n.kind==='power'&&n.id===id));writeSave(SV);showResult()}
 function showResult(){const{win,r}=G.res,lv=G.lv,last=lv===BOSSES.length-1,kind=G.node.kind;
  if(kind!=='boss')return showLadderResult(win,r);
@@ -1598,9 +1677,11 @@ function notice(k,title,text,btns){$('nKanji').textContent=k;$('nTitle').textCon
 const CH={tab:'attrs',back:'menu',slot:null,pw:null},ROM=['I','II','III','IV','V'],ATTR={assault:['斬','Assault'],survival:['守','Survival'],shadowcraft:['墨','Shadowcraft']};
 const pct=v=>`${+(v*100).toFixed(v<.1?1:0)}%`;
 // gear text: charm stats, and the change (▲ better, ▼ worse) from the worn charm or the equipped weapon
-const GLAB={attack:['attack',1],defence:['damage taken',-1],hp:['health',1],crit:['crit chance',1],cooldown:['power cooldowns',-1],ink:['ink',1],reach:['reach',1],speed:['walk',1],roll:['roll cooldown',-1]};
-const statText=st=>Object.entries(st).map(([k,v])=>`${GLAB[k][0]} ${GLAB[k][1]>0?'+':'−'}${pct(v)}`).join(' · ');
-const statDelta=(a,b)=>[...new Set([...Object.keys(a),...Object.keys(b)])].map(k=>{const d=(a[k]||0)-(b[k]||0);return d?`${GLAB[k][0]} ${d*GLAB[k][1]>0?'+':'−'}${pct(Math.abs(d))} ${d>0?'▲':'▼'}`:''}).filter(Boolean).join(' · ')||'no change';
+const GLAB={attack:['attack',1],defence:['damage taken',-1],hp:['health',1],crit:['crit chance',1],cooldown:['power cooldowns',-1],ink:['ink',1],reach:['reach',1],speed:['walk',1],roll:['roll cooldown',-1],parry:['perfect-parry window',1],footing:['iron footing',1]};
+const statOne=(k,v)=>k==='footing'?(v>0?'iron footing (the first knockdown each round only staggers)':'no iron footing'):k==='parry'?`${GLAB[k][0]} ${v>0?'+':'−'}${Math.abs(v).toFixed(2)} s`:`${GLAB[k][0]} ${v*GLAB[k][1]>0?'+':'−'}${pct(Math.abs(v))}`;
+const statText=st=>Object.entries(st).map(([k,v])=>statOne(k,v)).join(' · ');
+const statDelta=(a,b)=>[...new Set([...Object.keys(a),...Object.keys(b)])].map(k=>{const d=(a[k]||0)-(b[k]||0);return d?`${statOne(k,d)} ${d>0?'▲':'▼'}`:''}).filter(Boolean).join(' · ')||'no change';
+const traitText=t=>Object.entries(t||{}).map(([k,v])=>k==='first'?`first hit each round +${pct(v)}`:k==='momentum'?`+${pct(v[0])} a hit in a row (up to ${pct(v[1])})`:k==='burn'?`hits burn (${v[0]}/s for ${v[1]} s)`:k==='inkFirst'?'first hit each round fills an ink bar':k==='parryHeal'?`a perfect parry heals ${v}`:k).join(' · ');
 function weaponDelta(s,a,b){const m=w=>{const d=derive(Object.assign({},s,{gear:Object.assign({},s.gear,{equipped:Object.assign({},s.gear.equipped,{weapon:w})})})),x=d.ov.slash||MV.slash;return{reach:x.reach,dmg:x.dmg,speed:1/x.hit[0][0]}};
  const A=m(a),B=m(b);return[['reach',A.reach/B.reach],['damage',A.dmg/B.dmg],['windup speed',A.speed/B.speed]].map(([k,r])=>`${k} ${r>=1?'+':'−'}${Math.abs(Math.round((r-1)*100))}%${r>1.005?' ▲':r<.995?' ▼':''}`).join(' · ')}
 function attrLines(k,r){const b=key=>pct(attrBonus(k,key,r));
@@ -1636,12 +1717,24 @@ function openChar(mode,back){if(back)CH.back=back;if(mode)CH.tab='save';const p=
    more.textContent=kind==='powers'?'A power slot holds an awakened power: in a fight it costs ink, then cools down.':'An echo is a power’s passive. A power sits in a power slot or an echo slot, never both.'}
   else more.textContent=Object.keys(SV.powers).length?'Choose a slot to change it. Loadouts change here, between fights, never mid-fight.':'Defeat a shadow to absorb its power.'}
  else if(CH.tab==='gear'){const g=SV.gear,eqW=g.equipped.weapon,view=CH.gv||'weapons';
-  btn(acts,'Weapons',()=>{CH.gv='weapons';CH.sel=null;openChar()},view==='weapons');btn(acts,'Charms',()=>{CH.gv='charms';CH.sel=null;openChar()},view==='charms');
-  if(view==='weapons'){for(const[id,w]of Object.entries(GEAR.weapons)){const own=g.owned.includes(id),t=g.tiers[id]||1,why=own&&weaponBlock(SV,id),c=t<5&&GEAR.weapon_tiers[t-1];
-    const e=card('qcard'+(own?'':' locked')+((CH.sel||eqW)===id?' sel':''),`<span class="n">${GEAR.rarities[w.rarity].name} · ${w.tag}</span><span class="kj">${own?ROM[t-1]:'—'}</span><span class="nm">${w.name}</span><span class="ti">${!own?'From '+w.source:eqW===id?'Equipped':t>=5?'Fully upgraded':why||`Tier ${ROM[t]}: ${c.desc}`}</span>`,()=>{CH.sel=id;openChar()});
+  for(const[v,l]of[['weapons','Weapons'],['armour','Armour'],['charms','Charms'],['supplies','Supplies'],['cosmetics','Cosmetics']])btn(acts,l,()=>{CH.gv=v;CH.sel=null;openChar()},view===v);
+  if(view==='weapons'){box.classList.add('wrap');for(const id of Object.keys(GEAR.weapons)){const w=WPN(id);const own=g.owned.includes(id),t=g.tiers[id]||1,why=own&&weaponBlock(SV,id),c=t<5&&GEAR.weapon_tiers[t-1];
+    const e=card('qcard'+(own?'':' locked')+((CH.sel||eqW)===id?' sel':''),`<span class="n">${GEAR.rarities[w.rarity].name} · ${w.tag}</span><span class="kj">${own?ROM[t-1]:'—'}</span><span class="nm">${w.name}</span><span class="ti">${!own?'From '+w.source+(stockOf(id)&&!/shop|stall/.test(w.source)?', or the shop':''):eqW===id?'Equipped':t>=5?'Fully upgraded':why||`Tier ${ROM[t]}: ${c.desc}`}</span>`,()=>{CH.sel=id;openChar()});
     if(own&&eqW!==id)btn(e,'Equip',ev=>{ev.stopPropagation();edit(()=>equip(SV,'weapon',id))()});
     if(own&&t<5&&!why)btn(e,`Upgrade · ${c.mon} mon, ${c.materials} mat.`,ev=>{ev.stopPropagation();edit(()=>upgradeWeapon(SV,id))()})}
-   const id=CH.sel||eqW,w=GEAR.weapons[id];more.textContent=`${w.name}: ${w.desc}${id!==eqW?' Against your '+GEAR.weapons[eqW].name+': '+weaponDelta(SV,id,eqW)+'.':''} · ${SV.profile.mon} mon, ${plural(SV.profile.materials,'upgrade material')}`}
+   const id=CH.sel||eqW,w=WPN(id);more.textContent=`${w.name}: ${w.desc}${w.traits?' ('+traitText(w.traits)+')':''}${id!==eqW?' Against your '+WPN(eqW).name+': '+weaponDelta(SV,id,eqW)+'.':''} · ${SV.profile.mon} mon, ${plural(SV.profile.materials,'upgrade material')}`}
+  else if(view==='armour'){box.classList.add('wrap');const worn=g.equipped.armour&&GEAR.armour[g.equipped.armour];
+   card('qcard'+(!worn?' sel':''),`<span class="n">Armour</span><span class="nm">None</span><span class="ti">${worn?statDelta({},worn.stats):'unarmoured'}</span>`,edit(()=>equip(SV,'armour',null)));
+   for(const[id,a]of Object.entries(GEAR.armour)){const own=g.owned.includes(id),on=g.equipped.armour===id;
+    card('qcard'+(own?'':' locked')+(on?' sel':''),`<span class="n">${GEAR.rarities[a.rarity].name}${on?' · worn':''}</span><span class="nm">${a.name}</span><span class="ti">${!own?srcText(id):on?statText(a.stats):statDelta(a.stats,worn?worn.stats:{})}</span>`,own?edit(()=>equip(SV,'armour',id)):null)}
+   more.textContent='Armour changes how you fight, not how strong you are: every gain has its cost. The shop sells it.'}
+  else if(view==='supplies'){box.classList.add('wrap');const cur=g.equipped.item;
+   card('qcard'+(!cur?' sel':''),`<span class="n">Carried into fights</span><span class="nm">Nothing</span><span class="ti">fight without supplies</span>`,edit(()=>equip(SV,'item',null)));
+   for(const[id,it]of Object.entries(GEAR.items))card('qcard'+(cur===id?' sel':''),`<span class="n">${plural(g.items[id]||0,'carried')}${cur===id?' · chosen':''}</span><span class="nm">${it.name}</span><span class="ti">${it.desc}</span>`,edit(()=>equip(SV,'item',id)));
+   more.textContent=`The chosen supply goes into every campaign, Hell and White fight while you have it, one used per fight. Training and custom maps use none.${cur?` ${GEAR.items[cur].name}: ${g.items[cur]||0} left.`:''} The shop sells more.`}
+  else if(view==='cosmetics'){box.classList.add('wrap');const mine=Object.entries(GEAR.cosmetics).filter(([id])=>g.owned.includes(id));
+   for(const[id,c]of mine){const on=g.cos[c.kind]===id;card('qcard'+(on?' sel':''),`<span class="n">${COSN[c.kind]}${on?' · worn':''}</span><span class="nm">${c.name}</span><span class="ti">${c.desc}</span>`,edit(()=>wear(SV,c.kind,on?null:id)))}
+   more.textContent=mine.length?'Choose one to wear it, again to take it off. Cosmetics never change a fight.':'No cosmetics yet: the crystal stall in the shop sells blade finishes, swing trails, auras and robe dyes.'}
   else{box.classList.add('wrap');const worn=g.equipped.charm&&GEAR.charms[g.equipped.charm];
    card('qcard'+(!worn?' sel':''),`<span class="n">Charm slot</span><span class="nm">None</span><span class="ti">${worn?statDelta({},worn.stats):''}</span>`,edit(()=>equip(SV,'charm',null)));
    for(const id of g.owned.filter(id=>GEAR.charms[id])){const c=GEAR.charms[id];card('qcard'+(g.equipped.charm===id?' sel':''),`<span class="n">${GEAR.rarities[c.rarity].name}</span><span class="nm">${c.name}</span><span class="ti">${g.equipped.charm===id?statText(c.stats)+' · worn':statDelta(c.stats,worn?worn.stats:{})}</span>`,edit(()=>equip(SV,'charm',id)))}
@@ -1656,6 +1749,49 @@ function openChar(mode,back){if(back)CH.back=back;if(mode)CH.tab='save';const p=
    notice('墨','Load this save?',`Replace your progress (level ${p.level}, ${SV.progress.beaten} of 5 shadows) with the save code (level ${d.profile.level}, ${d.progress.beaten} of 5 shadows)?`,
     [['Load it',()=>{d.rev=Math.max(d.rev,SV.rev);SV=d;writeSave(SV);openChar()},1],['Cancel',()=>openChar('import')]])})}
  show('char');if(mode)code.focus()}
+/* --- the shop (1.7): mon buys weapons, armour, charms, supplies and upgrade material; shadow crystals buy finishes, trails,
+   auras, robe dyes and one weapon variant. A purchase checks everything first, then takes the price and gives the item
+   together, then saves; if the save cannot be written, both are undone. --- */
+const SH={tab:'weapons',sel:null,back:'home',msg:''},CUR={mon:'mon',crystals:'shadow crystals'};
+const stockOf=id=>ECON.stock.find(x=>x.id===id),priceOf=x=>x.crystals?['crystals',x.crystals]:['mon',x.mon];
+const kindOf=id=>id==='material'?'material':GEAR.weapons[id]?'weapon':GEAR.armour[id]?'armour':GEAR.charms[id]?'charm':GEAR.items[id]?'item':GEAR.cosmetics[id]?'cosmetic':null;
+const itemOf=id=>id==='material'?{name:'Upgrade material',desc:'Steel, lacquer and silk cord for one weapon tier (a tier also costs mon).'}:WPN(id)||GEAR.armour[id]||GEAR.charms[id]||GEAR.items[id]||GEAR.cosmetics[id];
+const SHTAB={weapons:['weapon'],armour:['armour'],charms:['charm'],supplies:['item','material'],cosmetics:['cosmetic']};
+const KLAB={weapon:'weapon',armour:'armour',charm:'charm',item:'supply',material:'service'};
+function gateOpen(s,g){if(!g)return true;const[k,n]=g.split(':');return k==='beaten'?s.progress.beaten>+n:k==='region'?s.progress.regionsUnlocked>+n:k==='mode'?!!(s.modes&&s.modes[n]):false}
+const gateText=g=>{const[k,n]=g.split(':');return k==='beaten'?`after ${BOSSES[+n].name} falls`:k==='region'?`once you reach ${ARENAS[BOSSES[+n].arena].name.replace(/^the /,'')}`:`with ${n==='hell'?'Hell':'White'} Mode`};
+const srcText=id=>{const x=stockOf(id),it=itemOf(id);return x?'In the shop'+(x.gate&&!gateOpen(SV,x.gate)?' '+gateText(x.gate):''):'From '+(it.source||'somewhere ahead')};
+function buyBlock(s,id,qty=1){const x=stockOf(id);if(!x)return'not for sale';if(!(Number.isInteger(qty)&&qty>=1&&qty<=9))return'a quantity of 1 to 9';if(!gateOpen(s,x.gate))return'sold '+gateText(x.gate);
+ const k=kindOf(id),[cur,p]=priceOf(x);if(k==='item'){if((s.gear.items[id]||0)+qty>GEAR.items[id].max)return`you can carry ${GEAR.items[id].max}`}else if(k!=='material'&&s.gear.owned.includes(id))return'owned';
+ const have=s.profile[cur],need=p*qty;return have<need?`needs ${fmtN(need-have)} more ${CUR[cur]}`:''}
+function buy(s,id,qty=1){const why=buyBlock(s,id,qty);if(why)return{ok:false,why};const[cur,p]=priceOf(stockOf(id)),k=kindOf(id),undo=JSON.stringify({p:s.profile,g:s.gear,st:s.stats});
+ s.profile[cur]-=p*qty;if(k==='item')s.gear.items[id]=(s.gear.items[id]||0)+qty;else if(k==='material')s.profile.materials+=qty;else{s.gear.owned.push(id);if(k==='weapon')s.gear.tiers[id]=1}
+ s.stats.purchases=(s.stats.purchases||0)+1;
+ if(s===SV&&!writeSave(s)){const u=JSON.parse(undo);s.profile=u.p;s.gear=u.g;s.stats=u.st;return{ok:false,why:'your save could not be written, so nothing was bought or paid'}}
+ return{ok:true}}
+const equipAny=(s,id)=>{const k=kindOf(id);return k==='cosmetic'?wear(s,GEAR.cosmetics[id].kind,id):equip(s,k==='item'?'item':k,id)};
+const isOn=(s,id)=>{const k=kindOf(id),e=s.gear.equipped;return k==='cosmetic'?s.gear.cos[GEAR.cosmetics[id].kind]===id:k==='material'?true:e[k==='item'?'item':k]===id};
+function shopLine(id){const it=itemOf(id),k=kindOf(id);return k==='weapon'?`${it.tag}${it.traits?' · '+traitText(it.traits):''}`:k==='armour'||k==='charm'?statText(it.stats):it.desc}
+function openShop(back,tab){if(back)SH.back=back;if(tab&&tab!==SH.tab){SH.tab=tab;SH.sel=null}const p=SV.profile,box=$('shBody'),acts=$('shActs');
+ $('shPurse').textContent=`Purse: ${fmtN(p.mon)} mon · ${fmtN(p.crystals)} shadow crystals · ${plural(p.materials,'upgrade material')}`;
+ for(const b of $('shTabs').children){b.classList.toggle('on',b.dataset.sh===SH.tab);b.setAttribute('aria-selected',b.dataset.sh===SH.tab)}
+ box.innerHTML='';acts.innerHTML='';$('shMsg').textContent=SH.msg;SH.msg='';
+ for(const x of ECON.stock.filter(x=>SH.tab==='cosmetics'?!!x.crystals:!x.crystals&&SHTAB[SH.tab].includes(kindOf(x.id)))){ /* the crystal stall: everything priced in crystals */const it=itemOf(x.id),k=kindOf(x.id),[cur,pr]=priceOf(x),why=buyBlock(SV,x.id),open=gateOpen(SV,x.gate),e=document.createElement('button');
+  e.className='card qcard'+(open?'':' locked')+(SH.sel===x.id?' sel':'');
+  e.innerHTML=`<span class="n">${it.rarity?GEAR.rarities[it.rarity].name+' · ':''}${k==='cosmetic'?COSN[it.kind]:KLAB[k]}</span><span class="nm">${it.name}</span><span class="ti">${shopLine(x.id)}</span><span class="pr${/^needs/.test(why)?' short':''}">${why==='owned'?(isOn(SV,x.id)?'Owned · in use':'Owned'):!open?'Sold '+gateText(x.gate):`${fmtN(pr)} ${CUR[cur]}${k==='item'?` · you carry ${SV.gear.items[x.id]||0}`:''}`}</span>`;
+  e.onclick=()=>{SH.sel=x.id;openShop()};box.appendChild(e)}
+ const sel=SH.sel&&stockOf(SH.sel);
+ if(sel){const id=sel.id,it=itemOf(id),k=kindOf(id),[cur,pr]=priceOf(sel),why=buyBlock(SV,id),e=SV.gear.equipped;let cmp='';
+  if(k==='weapon')cmp=` Against your ${WPN(e.weapon).name}: ${weaponDelta(SV,id,e.weapon)}.`;
+  else if(k==='armour'||k==='charm'){const w=e[k]&&(k==='armour'?GEAR.armour:GEAR.charms)[e[k]];cmp=` Against ${w?'your '+w.name:k==='armour'?'no armour':'no charm'}: ${statDelta(it.stats,w?w.stats:{})}.`}
+  $('shMore').textContent=`${it.name}: ${it.desc||statText(it.stats)}${it.traits?' ('+traitText(it.traits)+')':''}${cmp}`;
+  const b=document.createElement('button');b.className='lnk';b.disabled=!!why;b.textContent=why==='owned'?'Owned':why?`Cannot buy: ${why}`:`Buy for ${fmtN(pr)} ${CUR[cur]}`;
+  b.onclick=()=>notice('五','Confirm the purchase',`Buy ${it.name} for ${fmtN(pr)} ${CUR[cur]}? Your purse goes from ${fmtN(SV.profile[cur])} to ${fmtN(SV.profile[cur]-pr)} ${CUR[cur]}.`,
+   [['Buy it',()=>{const r=buy(SV,id);SH.msg=r.ok?`Bought: ${it.name}.`:`Not bought — ${r.why}.`;openShop()},1],['Cancel',()=>openShop()]]);acts.appendChild(b);
+  if(k!=='material'&&(k==='item'?(SV.gear.items[id]||0)>0:SV.gear.owned.includes(id))&&!isOn(SV,id)){const q=document.createElement('button');q.className='lnk';q.textContent=k==='item'?'Carry it into fights':'Equip it';
+   q.onclick=()=>{equipAny(SV,id);writeSave(SV);SH.msg=`${it.name}: ${k==='item'?'carried':'equipped'}.`;openShop()};acts.appendChild(q)}}
+ else $('shMore').textContent=SH.tab==='cosmetics'?'Shadow crystals come from first victories over shadows, elites and trials, from achievements and the hardest challenges. Nothing here changes a fight, except the Moonlit Katana (a sidegrade).':'Choose an item to see it compared with what you carry. Prices are taken only when a purchase goes through.';
+ show('shop');(acts.firstChild||box.firstChild||$('shClose')).focus()}
 // the settings screen: from the map or the pause menu; every change is saved at once and applied live
 let setBack='menu',setTab='game';
 const SETROWS=[['volume','Master volume','range'],['music','Music','range'],['sfx','Sound effects','range'],['shake','Screen shake',['full','reduced','off']],['flash','Flashes',['full','reduced']],['haptics','Vibration',[true,false]],
@@ -1734,6 +1870,8 @@ $('hFilm').onclick=watchFilm;$('mHome').onclick=toHome;$('hChar').onclick=()=>op
 $('mChar').onclick=()=>openChar(null,'menu');$('mSet').onclick=()=>openSettings('menu');$('pSet').onclick=()=>openSettings('pause');
 $('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(setBack==='home')toHome();else{buildMenu();show('menu')}};for(const b of $('sTabs').children)b.onclick=()=>{setTab=b.dataset.st;openSettings()};$('gBack').onclick=toMenu;$('gChar').onclick=()=>openChar(null,'region');$('cClose').onclick=()=>{if(CH.back==='result')show('result');else if(CH.back==='region')openRegion(REG);else if(CH.back==='home')toHome();else{buildMenu();show('menu')}};
 for(const b of $('cTabs').children)b.onclick=()=>{CH.tab=b.dataset.tab;CH.slot=null;openChar()};
+for(const b of $('shTabs').children)b.onclick=()=>openShop(null,b.dataset.sh);$('shClose').onclick=()=>{if(SH.back==='result')show('result');else if(SH.back==='menu')toMenu();else toHome()};
+HOME_X.push(()=>['Shop',()=>openShop('home'),{note:`${fmtN(SV.profile.mon)} mon · ${fmtN(SV.profile.crystals)} crystals`}],()=>['Inventory',()=>{CH.tab='gear';openChar(null,'home')}]);
 $('mHelp').onclick=()=>{helpBack='menu';show('help')};$('pHelp').onclick=()=>{helpBack='pause';show('help')};$('hClose').onclick=()=>show(helpBack);
 $('pResume').onclick=togglePause;$('pRestart').onclick=()=>startFight(G.lv,undefined,G.node);$('pQuit').onclick=toMenu;
 /* --- touch controls: floating joystick + multi-touch buttons feed the same G.keys / G.buf as the keyboard --- */
@@ -1761,7 +1899,7 @@ function bgResume(){try{AU.ctx&&AU.ctx.resume()}catch(e){}}
 document.addEventListener('visibilitychange',()=>document.hidden?bgPause():bgResume());
 // Android Back (and Esc outside a fight): closes the open screen, pauses or leaves a fight; returns 0 only on the map or the film (the app may exit)
 window.issenApp={pause:bgPause,resume:bgResume,back(){const open=PANELS.find(p=>!$(p).classList.contains('off'));if(open==='menu'){toHome();return 1}
- if(open==='settings'){$('sClose').click();return 1}if(open==='char'){$('cClose').click();return 1}if(open==='help'){show(helpBack);return 1}
+ if(open==='settings'){$('sClose').click();return 1}if(open==='shop'){$('shClose').click();return 1}if(open==='char'){$('cClose').click();return 1}if(open==='help'){show(helpBack);return 1}
  if(open==='region'){toMenu();return 1}if(open==='notice'){const b=$('nBtns').firstChild;if(b)b.click();return 1}
  if(MODE==='game'){if(G.state==='over')toMenu();else togglePause();return 1}return 0}};$('pp').onclick=()=>st.playing?pause():play();$('rp').onclick=replay;
 $('snd').onclick=()=>{AU.on=!AU.on;vols();$('sndi').style.opacity=AU.on?1:.35};
@@ -1774,7 +1912,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
  // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
- window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,toMenu,toHome,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,useSupply,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
  if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 applySettings();
 // keep the save: ask the browser not to evict this site's storage (an installed PWA usually gets it; spec §14.4)

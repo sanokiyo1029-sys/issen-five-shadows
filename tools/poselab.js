@@ -14,7 +14,7 @@ const PARAMS = ['tl', 'hd', 'ua1', 'fa1', 'ua2', 'fa2', 'sw', 'th1', 'sh1', 'th2
 const HERO_MOVES = ['slash', 'slash2', 'slash3', 'lunge', 'low', 'kick', 'round', 'sweepK', 'air', 'airKick', 'wave', 'issen', ...Object.keys(HMV)];
 const FIGHTERS = [{ name: 'Issen', def: game.HERO_D, moves: HERO_MOVES }, ...game.BOSSES.map(b => ({ name: b.name, def: b, moves: [...b.moves, ...(b.phase ? [b.phase.move] : [])] })),
   ...Object.values(game.FOES).filter(f => !f.id.startsWith('elite')).map(f => ({ name: f.name, def: f, moves: f.moves })), // retainers (elites borrow boss moves)
-  ...Object.entries(game.GEAR.weapons).filter(([id]) => id !== 'katana').map(([id, w]) => { const d = game.derive(Object.assign({}, game.SV, { gear: { owned: [id], equipped: { weapon: id, charm: null }, tiers: { [id]: 1 } } }));
+  ...Object.entries(game.GEAR.weapons).filter(([id, w]) => id !== 'katana' && !w.class).map(([id, w]) => { const d = game.derive(Object.assign({}, game.SV, { gear: { owned: [id], equipped: { weapon: id, charm: null }, tiers: { [id]: 1 } } }));
     return { name: 'Issen · ' + w.name, def: Object.assign({}, game.HERO_D, { kind: d.kind, guard: d.guard, wk: d.wk }), moves: Object.keys(w.moves).map(n => id + '.' + n) }; })];
 const KICKS = new Set(['kick', 'round', 'sweepK', 'airKick', 'b_kick', 'k_low']);
 const DELIBERATE = m => !!(m.lunge || m.start || m.mark || m.issen || m.proj); // big jumps are the point of these moves

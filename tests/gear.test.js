@@ -49,7 +49,7 @@ module.exports = {
 
   async 'gear comes from fixed rewards: elites give weapons, second duels and trials give charms; upgrades cost mon and materials'() {
     const { game } = await boot(), s = game.migrate(JSON.stringify({ beaten: 0 })).save;
-    assert.deepStrictEqual(JSON.parse(JSON.stringify(s.gear)), { owned: ['katana'], equipped: { weapon: 'katana', charm: null }, tiers: { katana: 1 } });
+    assert.deepStrictEqual(JSON.parse(JSON.stringify(s.gear)), { owned: ['katana'], equipped: { weapon: 'katana', charm: null, armour: null, item: null }, tiers: { katana: 1 }, items: {}, cos: { finish: null, trail: null, aura: null, robe: null } });
     game.grantStep(s, 0, 0); game.grantStep(s, 0, 1); assert.ok(s.gear.owned.includes('straw_charm'), 'the second duel gives a charm');
     game.grantStep(s, 0, 2); assert.ok(s.gear.owned.includes('yari') && s.gear.tiers.yari === 1, 'the elite gives its weapon');
     assert.strictEqual(s.profile.materials, 1);
@@ -78,7 +78,7 @@ module.exports = {
     const { game, el } = await boot(); game.SV = prof(game); game.SV.profile.materials = 3; game.enterGame();
     game.CH.tab = 'gear'; game.CH.gv = 'weapons'; game.openChar(null, 'menu');
     const cards = () => el('cBody').children, find = (list, t) => [...list].find(x => x.textContent.includes(t));
-    assert.strictEqual(cards().length, 6, 'six weapons');
+    assert.strictEqual(cards().length, Object.keys(game.GEAR.weapons).length, 'every weapon, variants included (1.7)');
     find(cards()[1].children, 'Equip').click(); assert.strictEqual(game.SV.gear.equipped.weapon, 'yari');
     find(cards()[1].children, 'Upgrade').click(); assert.strictEqual(game.SV.gear.tiers.yari, 2);
     assert.match(game.weaponDelta(game.SV, 'kanabo', 'yari'), /damage \+\d+% ▲/);
