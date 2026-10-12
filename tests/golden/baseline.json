@@ -1889,6 +1889,23 @@
    ],
    "bg": "fn function dojoBG(c,t){WIND={x:-1,y:.04,s:.06};screen(c);c.fillStyle=ink(.2);c.fillRect(0,0,W,H);if(!DOJO)DOJO=dojoLayer();\r\n camT(c,.72);c.drawImage(DOJO,-1800,-1010);\r\n screen(c);for(let i=0;i<3;i++){const x=260+i*640+Math.sin(t*.2+i)*30,gr=c.createLinearGradient(x,0,x+300,0);gr.addColorStop(0,'rgba(246,240,226,0)');gr.addColorStop(.5,'rgba(246,240,226,.16)');gr.addColorStop(1,'rgba(246,240,226,0)');\r\n  c.fillStyle=gr;c.beginPath();c.moveTo(x,0);c.lineTo(x+170,0);c.lineTo(x+480,H);c.lineTo(x+260,H);c.fill()}\r\n camT(c,1);const gr=c.createLinearGradient(0,-6,0,520);gr.addColorStop(0,ink(.5));gr.addColorStop(1,ink(.26));c.fillStyle=gr;c.fillRect(CAM.x-2400,-6,4800,900);\r\n c.strokeStyle=ink(.62);c.lineWidth=2;for(const y of[16,40,72,116,176,256,360])line(c,[CAM.x-2400,y],[CAM.x+2400,y]);tiles(c,FLOOR,1,-10)}",
    "fg": "fn function dojoFG(c,t){camT(c,1);c.fillStyle='#f3ecdc';for(let i=0;i<26;i++){const x=CAM.x-1100+((hash(i)*2200+t*(8+hash(i*3)*14))%2200),y=-700+hash(i*7)*680+Math.sin(t*.9+i)*24;c.globalAlpha=.25+.2*Math.sin(t*2+i);circ(c,x,y,1.6+hash(i*5)*1.8)}c.globalAlpha=1}"
+  },
+  {
+   "name": "Ashen Village",
+   "jp": "焼",
+   "wind": 0.25,
+   "rain": 0,
+   "rumb": 0.12,
+   "bpm": 104,
+   "notes": [
+    293.66,
+    311.13,
+    392,
+    466.16,
+    587.33
+   ],
+   "bg": "fn function ashenBG(c,t){WIND={x:-1,y:.08,s:.4};screen(c);const sk=c.createLinearGradient(0,0,0,H);sk.addColorStop(0,ink(.46));sk.addColorStop(.55,ink(.2));sk.addColorStop(1,PAPER);c.fillStyle=sk;c.fillRect(0,0,W,H);\r\n camT(c,.05);c.globalAlpha=.55;c.drawImage(STORM,-1800+t*6,-1100);c.globalAlpha=1;camT(c,.18);c.drawImage(HILLS,-1800,-600);mistBand(c,.25,-120,t,.4);\r\n camT(c,.42);c.drawImage(VIL_D.img,-1300,-330);for(const[sx,sy]of VIL_D.smokes)smoke(c,-1300+sx,-330+sy,t,sx,.85,2.2,.55);\r\n camT(c,1);const gr=c.createLinearGradient(0,-6,0,500);gr.addColorStop(0,ink(.46));gr.addColorStop(1,ink(.16));c.fillStyle=gr;c.fillRect(CAM.x-2400,-6,4800,900);tiles(c,FLOOR,1,-14);\r\n c.fillStyle=ink(.86);for(const x of[-780,700]){brush(c,[[x,4],[x+3,-120],[x-4,-236]],26,{taper:u=>1-u*.3});brush(c,[[x-80,-226],[x,-232],[x+70,-222]],16,{taper:()=>1})}}",
+   "fg": "fn function ashenFG(c,t){camT(c,1);c.fillStyle=ink(.5);for(let i=0;i<44;i++){const age=(t*.22+hash(i))%1,x=CAM.x-1100+hash(i*3)*2200-age*220+Math.sin(t+i)*20,y=-900+age*1000;c.globalAlpha=.55*(1-age);c.fillRect(x,y,4,4)}\r\n screen(c);c.fillStyle=RED;for(let i=0;i<20;i++){const y=H-((t*(40+hash(i)*60)+hash(i*3)*H)%H),x=((hash(i*5)*W+Math.sin(t+i)*50)%W+W)%W;c.globalAlpha=.6*(y/H);circ(c,x,y,1.5+hash(i*9)*2)}c.globalAlpha=1}"
   }
  ],
  "HERO_D": {

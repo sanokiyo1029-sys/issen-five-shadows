@@ -62,7 +62,20 @@ canvas{display:block;width:100%;height:100%}
 .card .ar{font:500 .85cqw 'Cormorant Garamond',serif;letter-spacing:.14em;text-transform:uppercase;opacity:.55;margin-top:.3cqw}
 .card .stt{font:600 .85cqw 'Cormorant Garamond',serif;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-top:.4cqw}
 .card.locked{cursor:not-allowed}.card.locked>*{opacity:.38}.card.locked:hover{transform:none;box-shadow:none}
-#menu{background:radial-gradient(ellipse 62% 58% at 50% 50%,rgba(236,229,214,.9) 0%,rgba(236,229,214,.72) 55%,rgba(236,229,214,0) 100%)}
+#menu{background:none}
+#wmap{position:absolute;inset:0;overflow:hidden;touch-action:none;cursor:grab}#wmap.drag{cursor:grabbing}#wpins{position:absolute;left:0;top:0;height:100%;width:156.25%;will-change:transform}
+.pin{all:unset;position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:.2cqw;cursor:pointer;color:var(--ink);text-align:center}
+.pin .kj{display:grid;place-items:center;min-width:max(4cqw,40px);height:max(4cqw,40px);padding:0 .5cqw;box-sizing:border-box;border-radius:99px;background:rgba(236,229,214,.94);border:2px solid var(--ink);font:max(1.9cqw,18px)/1 'Yuji Boku',serif;box-shadow:0 .3cqw 1cqw rgba(21,19,15,.3);transition:transform .2s,border-color .2s}
+.pin:hover .kj,.pin:focus-visible .kj,.pin.sel .kj{transform:scale(1.14);border-color:var(--red)}.pin:focus-visible{outline:none}.pin:focus-visible .nm{outline:2px solid var(--red)}
+.pin .nm{font:600 max(1cqw,11px)/1.15 'Cormorant Garamond',serif;background:rgba(236,229,214,.9);padding:.15em .6em;border-radius:99px;white-space:nowrap}
+.pin .pp{font:600 max(.78cqw,9px)/1 'Cormorant Garamond',serif;letter-spacing:.08em;color:var(--red);background:rgba(236,229,214,.82);padding:.12em .45em;border-radius:99px;white-space:nowrap}
+.pin.locked .kj{background:rgba(150,143,130,.92);border-style:dashed;color:rgba(21,19,15,.5)}.pin.locked .nm{opacity:.75}.pin.done .kj{background:var(--ink);color:var(--paper)}
+.pin.next .kj{animation:inkpulse .9s infinite alternate}.pin.hell .kj{background:#1b0e0b;color:#f0b6a8;border-color:#8a2416}.pin.white .kj{background:#f6f3ec;color:#3a4866;border-color:#b09650}
+.wtop{position:absolute;left:2cqw;top:1.4cqw;display:flex;align-items:baseline;gap:1cqw;color:var(--ink);background:rgba(236,229,214,.88);padding:.4cqw 1.3cqw;border-radius:99px;font:600 max(1.3cqw,12px)/1.2 'Cormorant Garamond',serif;pointer-events:none}.wtop .kj{font:max(2cqw,18px)/1 'Yuji Boku',serif}.wtop small{font-weight:500;font-style:italic;opacity:.85}
+.wpan{all:unset;position:absolute;top:50%;transform:translateY(-50%);width:max(3.4cqw,44px);height:max(3.4cqw,44px);border-radius:50%;display:grid;place-items:center;background:rgba(236,229,214,.88);border:1.5px solid rgba(21,19,15,.6);font:600 max(2cqw,20px)/1 'Cormorant Garamond',serif;cursor:pointer;color:var(--ink)}.wpan.l{left:1.2cqw}.wpan.r{right:1.2cqw}.wpan:focus-visible{outline:2px solid var(--red)}
+.winfo{position:absolute;right:5.5cqw;bottom:5.5cqw;width:31cqw;background:rgba(236,229,214,.96);border:1.5px solid rgba(21,19,15,.6);padding:1.1cqw 1.4cqw;color:var(--ink);text-align:left;box-shadow:0 .6cqw 2cqw rgba(21,19,15,.25);display:flex;flex-direction:column;gap:.4cqw}
+.winfo[hidden]{display:none}.winfo h3{margin:0;font:600 max(1.8cqw,15px)/1.1 'Cormorant Garamond',serif}.winfo p{margin:0;font:italic max(1.02cqw,11px)/1.4 'Cormorant Garamond',serif;max-width:none}.winfo .pp{color:var(--red);font-style:normal;font-weight:600;letter-spacing:.08em}.winfo .row{justify-content:flex-start;gap:1.2cqw}
+#menu .wlinks{position:absolute;left:0;right:0;bottom:1.1cqw;gap:1.2cqw}#menu .wlinks .lnk{background:rgba(236,229,214,.85);padding:4px 12px;border-radius:99px;border:none}
 .card .seal{position:absolute;top:.7cqw;right:.7cqw;width:2.3cqw;height:2.3cqw;background:var(--red);color:var(--paper);font:1.5cqw/2.3cqw 'Yuji Boku',serif;transform:rotate(-7deg)}
 .row{display:flex;gap:1.8cqw;align-items:center;flex-wrap:wrap;justify-content:center}.col{flex-direction:column;gap:.9cqw}
 .panel h2{font:600 3cqw/1.1 'Cormorant Garamond',serif;margin:0}.rk{font:10cqw/1 'Yuji Boku',serif}
@@ -154,11 +167,12 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
     <div class="row"><button class="lnk" id="hChar">Character</button><button class="lnk" id="hHelp">Controls</button><button class="lnk" id="hFilm">Watch the intro film</button></div>
     <p class="ver" id="hVer"></p></div>
   <div class="panel off" id="menu">
-    <div class="mt"><span class="kj">一閃</span><span class="en">Five Shadows</span></div>
-    <p class="tag">The warlord has fallen, yet five shadows still haunt the land. Walk the path of the single stroke — defeat each to reach the next.</p>
-    <div class="levels" id="levels"></div>
+    <div id="wmap" aria-label="World map: drag, scroll or use the arrows to look around"><div id="wpins"></div></div>
+    <div class="wtop"><span class="kj">一閃</span><span>World Map</span><small id="wSum"></small></div>
+    <button class="wpan l" id="wL" aria-label="Look west">‹</button><button class="wpan r" id="wR" aria-label="Look east">›</button>
+    <div class="winfo" id="wInfo" hidden role="dialog" aria-labelledby="wiTitle"><h3 id="wiTitle"></h3><p class="pp" id="wiPips"></p><p id="wiText"></p><p id="wiRew"></p><div class="row" id="wiBtns"></div></div>
     <p class="ver" id="ver"></p>
-    <div class="row"><button class="lnk" id="mHome">‹ Main menu</button><button class="lnk" id="mChar">Character</button><button class="lnk" id="mHelp">Controls</button><button class="lnk" id="mSet">Settings</button></div>
+    <div class="row wlinks"><button class="lnk" id="mHome">‹ Main menu</button><button class="lnk" id="mChar">Character</button><button class="lnk" id="mShop">Shop</button><button class="lnk" id="mHelp">Controls</button><button class="lnk" id="mSet">Settings</button></div>
   </div>
   <div class="panel dim off" id="result" role="dialog" aria-labelledby="rTitle"><div class="rk" id="rKanji">勝</div><h2 id="rTitle">Victory</h2><p id="rText"></p><p class="rw" id="rRewards"></p><p class="rw purse" id="rPurse"></p><div class="row" id="rBtns"></div></div>
   <div class="panel dim off" id="char" role="dialog" aria-labelledby="cTitle"><h2 id="cTitle">Issen · level <span id="cLvl">1</span></h2>
@@ -298,7 +312,8 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   "mist_veil":{"name":"Mist Veil","rarity":"legendary","source":"Kasumi’s Ink Trial","stats":{"roll":0.1,"speed":0.03}},
   "iron_bead":{"name":"Iron Bead","rarity":"legendary","source":"Tetsugorō’s Ink Trial","stats":{"hp":0.06,"defence":0.03}},
   "pale_ribbon":{"name":"Pale Ribbon","rarity":"legendary","source":"Shirasagi’s Ink Trial","stats":{"ink":0.1,"cooldown":0.06}},
-  "oni_horn":{"name":"Oni Horn","rarity":"legendary","source":"Akuma’s Ink Trial","stats":{"attack":0.06}}},
+  "oni_horn":{"name":"Oni Horn","rarity":"legendary","source":"Akuma’s Ink Trial","stats":{"attack":0.06}},
+  "ash_charm":{"name":"Ash Charm","rarity":"rare","source":"Ashen Village: the Ash Ronin","stats":{"ink":0.05,"roll":0.08}}},
  "armour":{
   "travel_haori":{"name":"Travel Haori","rarity":"common","stats":{"speed":0.06,"roll":0.08},"desc":"Light cloth for the road: a quicker walk and roll."},
   "lamellar_do":{"name":"Lamellar Dō","rarity":"rare","stats":{"defence":0.06,"attack":-0.06,"speed":-0.04},"desc":"Laced iron scales: you take less, deal less, and walk slower."},
@@ -415,6 +430,31 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   {"id":"hell_done","name":"Lord of Ash","text":"Conquer the Ninth Gate","check":"claim:hell:7","crystals":50},
   {"id":"white_first","name":"Into the Light","text":"Win a duel in White Mode","stat":"whiteWins","n":1,"crystals":10},
   {"id":"white_done","name":"Dawnbringer","text":"Face the Pale Sun and win","check":"claim:white:7","crystals":50}]}
+</script>
+<script type="application/json" id="data-world">
+{"schema_version":1,"width":3000,
+ "places":[
+  {"id":"dojo","kind":"dojo","name":"Forgotten Dojo","jp":"師","at":[250,780],"desc":"An empty hall where an old master once taught. Practise here: nothing you do changes your journey."},
+  {"id":"burning_field","kind":"region","lv":0,"at":[640,640]},
+  {"id":"bamboo_grove","kind":"region","lv":1,"at":[1060,470]},
+  {"id":"mountain_shrine","kind":"region","lv":2,"at":[1480,300]},
+  {"id":"moonlit_lake","kind":"region","lv":3,"at":[1900,560]},
+  {"id":"oni_castle","kind":"region","lv":4,"at":[2350,370]},
+  {"id":"ashen","kind":"loc","at":[800,930],"secret":true},
+  {"id":"white","kind":"loc","at":[1050,165]},
+  {"id":"hell","kind":"loc","at":[1500,930]}],
+ "roads":[["dojo","burning_field"],["burning_field","bamboo_grove"],["bamboo_grove","mountain_shrine"],["mountain_shrine","moonlit_lake"],["moonlit_lake","oni_castle"],["burning_field","ashen"],["burning_field","white"],["burning_field","hell"]],
+ "secret":{"beaten":2,"region":"burning_field","text":"A hidden road: smoke still rises south of the Burning Field. Ashen Village is on your map."}}
+</script>
+<script type="application/json" id="data-modes">
+{"schema_version":1,
+ "locs":{
+  "ashen":{"name":"Ashen Village","jp":"焼","arena":6,"diff":2,"desc":"A village burned in the war, twenty years cold. Its last swordsman still guards the ash.",
+   "story":["South of the Burning Field, a road the maps forgot leads to a village of ash.","Someone still walks its burnt streets, and the smoke has never settled."],
+   "missions":[
+    {"name":"The Empty Well","kind":"duel","foe":"ash_bandit","rounds":1,"hp":1.1,"xp":600,"mon":60,"desc":"A looter among the ruins."},
+    {"name":"Smoke on the Road","kind":"gauntlet","waves":["ash_bandit","cutthroat","thrower"],"hp":1.15,"xp":900,"mon":90,"crystals":5,"desc":"Three in a row; your health carries from one to the next."},
+    {"name":"The Ash Ronin","kind":"duel","foe":"ash_ronin","rounds":2,"xp":1600,"mon":200,"crystals":15,"item":"ash_charm","boss":true,"desc":"The one who lit the fire, and stayed.","after":"The Ash Ronin kneels in the ash. The smoke over the village finally thins."}]}}}
 </script>
 <script type="application/json" id="data-powers">
 {"schema_version":3,
@@ -1159,6 +1199,12 @@ const FOES={
   tip:'He fades and reappears beside you: watch for the pale ring.'},
  elite_oni:{id:'elite_oni',name:'Oni Lieutenant',title:'of the castle guard',jp:'将',kind:K.e_oni,s:1.15,hp:120,speed:260,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_cut','a_sweep','b_kick','a_wave'],ai:{think:.5,aggr:.65,block:.4,range:220},win:P(PS.high,{tl:-.2,hd:-.4}),
   tip:'The warlord’s officer: block his ink wave or roll through it.'}};
+// Ashen Village (1.7): a looter in grey ink, and the swordsman who burned the village
+K.ash_bandit=Object.assign({},K.bandit,{ink:'#3d3a36',back:'#7a756d'});K.ash_ronin={L:LH,ink:'#262320',back:'#57524b',jit:.5,type:'master',sword:1,blen:120};
+FOES.ash_bandit={id:'ash_bandit',name:'Ash Looter',title:'picking through the ruins',jp:'焼',kind:K.ash_bandit,s:1,hp:60,speed:300,guard:PS.guard,wk:{},moves:['r_slash','r_low','r_jab','b_kick'],ai:{think:.7,aggr:.58,block:.25,range:180},win:PS.stand,
+ tip:'A desperate blade: block the cuts, crouch-block the low one, then punish its recovery.'};
+FOES.ash_ronin={id:'ash_ronin',name:'Ash Ronin',title:'who lit the fire, and stayed',jp:'焼',kind:K.ash_ronin,s:1.06,hp:135,speed:300,guard:PS.guard,wk:{sheath:0},moves:['a_cut','r_high','a_sweep','a_wave','b_kick'],ai:{think:.55,aggr:.62,block:.38,range:220},
+ phase:{at:.5,move:'a_rend',k:'焼',sub:'The embers flare',think:.9,aggr:.05},win:P(PS.high,{tl:-.15}),tip:'He cuts high, sweeps low and throws ink: duck the high cut, jump or crouch-block the sweep, block the wave. Hurt, he adds a cut-and-crush.'};
 // the training partner (1.7): an oak-and-straw dummy with a wooden sword and a retainer's readable cuts
 K.dummy={L:LH,ink:'#4a3b2a',back:'#8a7452',jit:.3,type:'bandit',sword:1,blen:96};
 FOES.dummy={id:'dummy',name:'Training Dummy',title:'oak and straw',jp:'守',kind:K.dummy,s:1.02,hp:100,speed:150,guard:PS.guard,wk:{},moves:['r_slash','r_high','r_low','b_kick'],ai:{think:.9,aggr:.5,block:.3,range:190},win:PS.stand,
@@ -1202,13 +1248,22 @@ function dojoBG(c,t){WIND={x:-1,y:.04,s:.06};screen(c);c.fillStyle=ink(.2);c.fil
  camT(c,1);const gr=c.createLinearGradient(0,-6,0,520);gr.addColorStop(0,ink(.5));gr.addColorStop(1,ink(.26));c.fillStyle=gr;c.fillRect(CAM.x-2400,-6,4800,900);
  c.strokeStyle=ink(.62);c.lineWidth=2;for(const y of[16,40,72,116,176,256,360])line(c,[CAM.x-2400,y],[CAM.x+2400,y]);tiles(c,FLOOR,1,-10)}
 function dojoFG(c,t){camT(c,1);c.fillStyle='#f3ecdc';for(let i=0;i<26;i++){const x=CAM.x-1100+((hash(i)*2200+t*(8+hash(i*3)*14))%2200),y=-700+hash(i*7)*680+Math.sin(t*.9+i)*24;c.globalAlpha=.25+.2*Math.sin(t*2+i);circ(c,x,y,1.6+hash(i*5)*1.8)}c.globalAlpha=1}
+// Ashen Village (1.7, secret): a burnt village under a smoke-dark sky; charred posts; ash falls and embers drift up
+function ashenBG(c,t){WIND={x:-1,y:.08,s:.4};screen(c);const sk=c.createLinearGradient(0,0,0,H);sk.addColorStop(0,ink(.46));sk.addColorStop(.55,ink(.2));sk.addColorStop(1,PAPER);c.fillStyle=sk;c.fillRect(0,0,W,H);
+ camT(c,.05);c.globalAlpha=.55;c.drawImage(STORM,-1800+t*6,-1100);c.globalAlpha=1;camT(c,.18);c.drawImage(HILLS,-1800,-600);mistBand(c,.25,-120,t,.4);
+ camT(c,.42);c.drawImage(VIL_D.img,-1300,-330);for(const[sx,sy]of VIL_D.smokes)smoke(c,-1300+sx,-330+sy,t,sx,.85,2.2,.55);
+ camT(c,1);const gr=c.createLinearGradient(0,-6,0,500);gr.addColorStop(0,ink(.46));gr.addColorStop(1,ink(.16));c.fillStyle=gr;c.fillRect(CAM.x-2400,-6,4800,900);tiles(c,FLOOR,1,-14);
+ c.fillStyle=ink(.86);for(const x of[-780,700]){brush(c,[[x,4],[x+3,-120],[x-4,-236]],26,{taper:u=>1-u*.3});brush(c,[[x-80,-226],[x,-232],[x+70,-222]],16,{taper:()=>1})}}
+function ashenFG(c,t){camT(c,1);c.fillStyle=ink(.5);for(let i=0;i<44;i++){const age=(t*.22+hash(i))%1,x=CAM.x-1100+hash(i*3)*2200-age*220+Math.sin(t+i)*20,y=-900+age*1000;c.globalAlpha=.55*(1-age);c.fillRect(x,y,4,4)}
+ screen(c);c.fillStyle=RED;for(let i=0;i<20;i++){const y=H-((t*(40+hash(i)*60)+hash(i*3)*H)%H),x=((hash(i*5)*W+Math.sin(t+i)*50)%W+W)%W;c.globalAlpha=.6*(y/H);circ(c,x,y,1.5+hash(i*9)*2)}c.globalAlpha=1}
 const ARENAS=[
  {name:'the Burning Field',jp:'焼野',wind:.32,rain:.4,rumb:.25,bpm:116,notes:[N.D4,N.Eb4,N.G4,N.A4,N.Bb4],bg:(c,t)=>{WIND={x:-1,y:.08,s:1};fieldBG(c,t,t,{storm:1,sun:0,fire:1})},fg:(c,t)=>{fgGrass(c,t);rain(c,t,.55)}},
  {name:'the Bamboo Grove',jp:'竹林',wind:.18,rain:0,bpm:128,notes:[N.D4,N.G4,N.A4,N.D5,N.Eb5],bg:(c,t)=>{WIND={x:-1,y:.1,s:.45};bambooBG(c,t)},fg:leaves},
  {name:'the Mountain Shrine',jp:'山寺',wind:.22,rain:0,bpm:100,notes:[N.A3,N.D4,N.Eb4,N.G4,N.A4],bg:shrineBG,fg:(c,t)=>{camT(c,1);petalField(c,t,22,CAM.x-1200,CAM.x+1200,-950,10,4,8)}},
  {name:'the Moonlit Lake',jp:'月湖',wind:.08,rain:0,bpm:92,notes:[N.D4,N.Eb4,N.A4,N.Bb4,N.D5],bg:lakeBG,fg:lakeFG},
  {name:'the Oni Castle',jp:'鬼城',wind:.35,rain:0,rumb:.35,bpm:136,notes:[N.D4,N.Eb4,N.A3,N.Bb3,N.D5],bg:castleBG,fg:castleFG},
- {name:'the Forgotten Dojo',jp:'師',wind:.02,rain:0,bpm:84,notes:[N.A3,N.D4,N.Eb4,N.G4,N.A4],bg:dojoBG,fg:dojoFG}];
+ {name:'the Forgotten Dojo',jp:'師',wind:.02,rain:0,bpm:84,notes:[N.A3,N.D4,N.Eb4,N.G4,N.A4],bg:dojoBG,fg:dojoFG},
+ {name:'Ashen Village',jp:'焼',wind:.25,rain:0,rumb:.12,bpm:104,notes:[N.D4,N.Eb4,N.G4,N.Bb4,N.D5],bg:ashenBG,fg:ashenFG}];
 /* --- state & combat --- */
 const DOJO_A=5; // ARENAS index of the Forgotten Dojo (pushed after the five)
 const G={P:null,B:null,def:null,lv:0,proj:[],fx:[],t:0,rt:0,mt:0,rdt:0,st:0,state:'',round:1,timer:60,freeze:0,slow:1,slowT:0,shake:0,cam:{x:0,y:-240,z:1.2},keys:{},buf:null,jb:-9,paused:false,ban:null,nb:0,step:0,hint:0,mvId:0,seed:0,rand:Math.random,acc:0,ia:1};
@@ -1352,7 +1407,11 @@ function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign
  G.proj=[];G.fx=[];G.clone=null;G.timer=G.roundTime||60;if(G.item==='focus_incense')G.P.ink=Math.max(G.P.ink,GEAR.items.focus_incense.effect.ink);
  if(G.trial){if(G.trial.hero_hp)G.P.hp=G.P.lag=G.P.maxHp*G.trial.hero_hp;if(G.trial.phase)G.B.phase=true;if(G.trial.rage)G.B.rage=true} /* Ink Trial modifiers */G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
  G.ban=G.round===1?{k:G.train?'師':G.trial?'墨':G.def.jp,sub:G.train?`Training · ${G.def.name}`:(G.trial?`Ink Trial · ${G.trial.name}: ${G.trial.desc}`:`${G.def.name}, ${G.def.title}`)+(G.item?` · ${GEAR.items[G.item].name} at hand`:''),t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
-function endRound(){G.rw.wins++;if(G.rw.wins>=(G.need||2))matchEnd(G.rw===G.P);else{G.round++;newRound()}}
+function endRound(){G.rw.wins++;if(G.waves&&G.rw===G.P&&G.wave<G.waves.length-1)return nextWave();if(G.rw.wins>=(G.need||2))matchEnd(G.rw===G.P);else{G.round++;newRound()}}
+// a gauntlet (1.7): the next foe steps in; the hero keeps health and ink
+const WAVEK=['壱','弐','参','墨','墨'];
+function nextWave(){const P=G.P,hp=P.hp,ink_=P.ink;G.wave++;G.def=G.waves[G.wave];G.B=mkF(G.def,false);P.wins=0;G.round=1;newRound();Object.assign(P,{hp,lag:hp,ink:ink_});
+ G.ban={k:WAVEK[G.wave],sub:`Wave ${G.wave+1} of ${G.waves.length}: ${G.def.name}, ${G.def.title}`,t0:G.rt,dur:1.9,size:220}}
 function updGame(dt){if(G.paused||G.state==='over')return;G.shake*=Math.pow(.004,dt);if(G.hint>0&&G.state==='fight')G.hint-=dt;
  if(G.freeze>0){G.freeze-=dt;return}
  if(G.slowT>0){G.slowT-=dt;if(G.slowT<=0)G.slow=1}
@@ -1363,7 +1422,7 @@ function updGame(dt){if(G.paused||G.state==='over')return;G.shake*=Math.pow(.004
  if(G.state==='intro'&&G.st>(G.round===1?2.5:1.7)){G.state='fight';G.st=0;G.ban={k:'始',sub:'Begin',t0:G.rt,dur:.9,size:260};snd('drum',1);snd('slash',.6)}
  else if(live&&G.train)trainTick(sdt);
  else if(live){G.timer-=sdt;const pk=pl.hp<=0,bk=bo.hp<=0,to=G.timer<=0;
-  if(pk||bk||to){const pw=bk||!pk&&to&&pl.hp/pl.maxHp>=bo.hp/bo.maxHp,L=pw?bo:pl;G.rw=pw?pl:bo;G.state='ko';G.st=0;if(L.hp<=0){fxAdd({k:'smoke',x:L.x,y:0,pale:L.def.kind.type==='ghost'?1:0});fxAdd({k:'splash',x:L.x,y:-120*L.def.s,sz:90,dir:-1.57,persist:1});L.mv=null;L.manual=false;L.alpha=1;if(L.st!=='down')setSt(L,'dead');else L.st='dead'}
+  if(pk||bk||to){const pw=bk||!pk&&to&&(G.survive||pl.hp/pl.maxHp>=bo.hp/bo.maxHp),L=pw?bo:pl;G.rw=pw?pl:bo;G.state='ko';G.st=0;if(L.hp<=0){fxAdd({k:'smoke',x:L.x,y:0,pale:L.def.kind.type==='ghost'?1:0});fxAdd({k:'splash',x:L.x,y:-120*L.def.s,sz:90,dir:-1.57,persist:1});L.mv=null;L.manual=false;L.alpha=1;if(L.st!=='down')setSt(L,'dead');else L.st='dead'}
    G.slow=.3;G.slowT=.9;const timeUp=to&&!pk&&!bk;G.ban={k:timeUp?'時':pw?'勝':'敗',sub:timeUp?(pw?'Time — you lead':'Time — you trail'):pw?'Victory':'Defeat',t0:G.rt,dur:2.2,seal:pw};snd('boom',.8);snd(pw?'gong':'drum',.6)}}
  else if(G.state==='ko'){if(G.st>1.1&&isFree(G.rw))setSt(G.rw,'win');if(G.st>2.9)endRound()}
  else if(G.state==='absorb'){bo.alpha=1-ss(.6,2.8,G.st);if(!G.rv&&G.st>2.9){const p=POWERS[G.res.r.power];G.rv=1;G.ban={k:p.jp,sub:p.name,t0:G.rt,dur:2.4,size:300,seal:true};fxAdd({k:'ring',x:pl.x,y:0});snd('gong',.8);snd('drum',.9)}if(G.st>=ABSORB)absorbDone()}
@@ -1458,10 +1517,14 @@ function hud(c){screen(c);const pl=G.P,bo=G.B;c.globalAlpha=.85;c.drawImage(MIST
   if(!TOUCH.on){c.font='600 16px "Cormorant Garamond", serif';c.fillStyle=ink(.6);c.fillText(['U','O'][i],x,y+40)}c.globalAlpha=1;c.textBaseline='alphabetic'});
  const cx=W/2,cy=102,pts=[];for(let i=0;i<=40;i++){const a=-1.4+i/40*5.9;pts.push([cx+Math.cos(a)*52,cy+Math.sin(a)*52])}c.strokeStyle=INK;dry(c,pts,11,7,{dry:.6});
  c.fillStyle=INK;c.textAlign='center';c.textBaseline='middle';c.font='600 50px "Cormorant Garamond", serif';c.fillText(G.train?'∞':Math.max(0,Math.ceil(G.timer)),cx,cy+2);
- c.font='500 20px "Cormorant Garamond", serif';c.fillStyle=ink(.6);c.fillText(G.train?'THE FORGOTTEN DOJO · '+(G.train.drill?'DRILL · '+drillOf(G.train.drill).name.toUpperCase():'FREE PRACTICE'):G.trial?'INK TRIAL · '+G.trial.name.toUpperCase():G.node.kind==='step'?ARENAS[G.arena].name.toUpperCase()+' · '+(LAD.regions[G.lv].steps[G.node.i].elite?'ELITE':'RETAINER'):['FIRST','SECOND','THIRD','FOURTH','FIFTH'][G.lv]+' SHADOW · '+ARENAS[G.arena].name.toUpperCase(),cx,184);
+ c.font='500 20px "Cormorant Garamond", serif';c.fillStyle=ink(.6);c.fillText(hudSub(),cx,184);
  if(G.hint>0&&G.state!=='ko'&&G.state!=='absorb'){const a=clamp(G.hint);c.globalAlpha=a*.86;c.fillStyle=PAPER;c.beginPath();c.roundRect(W/2-850,H-112,1700,96,48);c.fill();c.globalAlpha=a;c.fillStyle=INK;c.font='500 25px "Cormorant Garamond", "Yuji Boku", serif';
   c.fillText(PAD.on?'Stick  move  ·  LB  block  ·  A  jump  ·  B  roll  ·  down  crouch  ·  X  slash  ·  Y  kick  ·  RB  ink wave  ·  RT  issen  ·  Start  pause':TOUCH.on?'Joystick  move  ·  pull back or 守  block  ·  up  jump  ·  down  crouch  ·  roll button  dodge  ·  斬  slash  ·  蹴  kick  ·  墨  ink wave  ·  閃  issen':'← →  move  ·  H or hold back  block  ·  ↑  jump  ·  ↓  crouch  ·  Space  roll  ·  J  slash  ·  K  kick  ·  L  ink wave  ·  I  issen  ·  Esc  pause',W/2,H-72);c.font='italic 23px "Cormorant Garamond", serif';c.fillStyle=ink(.7,a);c.fillText(G.def.tip,W/2,H-38);c.globalAlpha=1}
  c.textBaseline='alphabetic'}
+function hudSub(){if(G.train)return'THE FORGOTTEN DOJO · '+(G.train.drill?'DRILL · '+drillOf(G.train.drill).name.toUpperCase():'FREE PRACTICE');if(G.trial)return'INK TRIAL · '+G.trial.name.toUpperCase();
+ if(G.node.kind==='mission'){const L=MODES[G.node.loc],M=L.missions[G.node.i];return`${L.name} · ${M.name}${G.waves?` · wave ${G.wave+1} of ${G.waves.length}`:''}${G.survive?' · survive':''}`.toUpperCase()}
+ if(G.node.kind==='custom')return('Ink Workshop · '+G.map.name+(G.waves?` · wave ${G.wave+1} of ${G.waves.length}`:'')).toUpperCase();
+ return G.node.kind==='step'?ARENAS[G.arena].name.toUpperCase()+' · '+(LAD.regions[G.lv].steps[G.node.i].elite?'ELITE':'RETAINER'):['FIRST','SECOND','THIRD','FOURTH','FIFTH'][G.lv]+' SHADOW · '+ARENAS[G.arena].name.toUpperCase()}
 const BANB={}; // banner glyph + its blurred shadow, built once (a blur filter every frame is slow on phones)
 function banner(c){const b=G.ban;if(!b)return;const u=G.rt-b.t0;if(u>b.dur){G.ban=null;return}
  const a=Math.min(1,u/.15)*(1-ss(b.dur-.35,b.dur,u)),y=H*.44,sz=b.size||300;screen(c);c.globalAlpha=a*.85;c.drawImage(MIST,W/2-sz*1.6,y-sz*1.1,sz*3.2,sz*2.4);c.globalAlpha=a;
@@ -1491,7 +1554,7 @@ function absorbText(c){const p=POWERS[G.res.r.power],a=ss(3.2,3.7,G.st);screen(c
  if(a>0){c.globalAlpha=a*.9;c.drawImage(MIST,W/2-1000,H*.44+170,2000,160);c.globalAlpha=a;c.fillStyle=ink(.85);c.font='italic 30px "Cormorant Garamond", serif';c.fillText(p.desc+(p.ready?'':' It awakens in a later update.'),W/2,H*.44+250)}
  if(G.st>.8){c.globalAlpha=.55+.2*Math.sin(G.rt*3);c.fillStyle=ink(.7);c.font='500 22px "Cormorant Garamond", serif';c.fillText(TOUCH.on?'tap to continue':'press any key to continue',W/2,H-60)}
  c.globalAlpha=1;c.textBaseline='alphabetic'}
-function renderMenu(t){setCam({x:(VIEW==='home'?-330:-60)+Math.sin(t*.05)*60,y:-270,z:1.05},0,t);cliffWorld(X,t,{bloom:.55,sun:.85,wind:.5,petals:26,figs:g=>fig(g,P(PS.stand,{x:-210,f:-1}),K.hero,t)});if(VIEW==='home')nightVeil(X,t);grain(X)}
+function renderMenu(t){if(VIEW==='map')return renderWorld(t);setCam({x:(VIEW==='home'?-330:-60)+Math.sin(t*.05)*60,y:-270,z:1.05},0,t);cliffWorld(X,t,{bloom:.55,sun:.85,wind:.5,petals:26,figs:g=>fig(g,P(PS.stand,{x:-210,f:-1}),K.hero,t)});if(VIEW==='home')nightVeil(X,t);grain(X)}
 // the main menu's night: an indigo wash over the cliff (the red sun turns to a blood moon), a pale moon, rising embers
 function nightVeil(c,t){screen(c);c.globalCompositeOperation='multiply';c.fillStyle='#565a70';c.fillRect(0,0,W,H);c.globalCompositeOperation='source-over';
  c.globalAlpha=.45;c.drawImage(MIST,1200,60,480,480);c.globalAlpha=.92;c.fillStyle='#efe9dc';circ(c,1440,300,70);
@@ -1499,13 +1562,15 @@ function nightVeil(c,t){screen(c);c.globalCompositeOperation='multiply';c.fillSt
 /* --- progression: save v2, XP and levels, boss rewards, absorbed powers. Pure logic (no DOM); storage goes through `store`.
    Save format: docs/save-format.md · numbers: docs/balance.md --- */
 const DATA=id=>JSON.parse(document.getElementById(id).textContent);
-const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,MOVE=DATA('data-movement'),LAD=DATA('data-ladders'),GEAR=DATA('data-gear'),ECON=DATA('data-economy'),TRAIN=DATA('data-training'),CHAL=DATA('data-challenges'),BOSS_IDS=BOSSES.map(b=>b.id);
+const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,MOVE=DATA('data-movement'),LAD=DATA('data-ladders'),GEAR=DATA('data-gear'),ECON=DATA('data-economy'),TRAIN=DATA('data-training'),CHAL=DATA('data-challenges'),WORLD=DATA('data-world'),MODES=DATA('data-modes').locs,BOSS_IDS=BOSSES.map(b=>b.id);
 function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
  ok(PROG.schema_version===2,'progression.schema_version');ok(DATA('data-powers').schema_version===3,'powers.schema_version');
  {const A=PROG.attributes;ok(A.rank_cap>0&&A.k>0&&A.crit_damage>=1&&['assault','survival','shadowcraft'].every(p=>Object.values(A[p]).every(v=>v>=0&&v<1)),'attributes')}
  ok(PROG.echo_slots.unlock_levels.length===2&&PROG.power_tiers.length===4&&PROG.power_tiers.every(t=>t.sp>0&&t.mon>=0),'echo slots / power tiers');
  ok(PROG.xp.base>0&&PROG.xp.exponent>0&&PROG.xp.level_cap>=2&&PROG.xp.repeat_share>=0&&PROG.xp.repeat_share<=1,'xp curve');
  ok(PROG.power_slots.unlock_levels.length===2&&PROG.level_up.attr_points>=0,'slots / level-up');
+ ok(WORLD.schema_version===1&&WORLD.places.every(p=>p.id&&p.at&&(p.kind!=='region'||BOSSES[p.lv])&&(p.kind!=='loc'||!MODES[p.id]||MODES[p.id].name))&&WORLD.roads.every(r=>r.every(id=>WORLD.places.some(p=>p.id===id))),'world');
+ for(const[loc,L]of Object.entries(MODES))ok(L.name&&L.jp&&ARENAS[L.arena]&&L.diff>=0&&L.story&&L.missions.length&&L.missions.every(M=>M.name&&M.desc&&M.xp>0&&['duel','gauntlet','survive'].includes(M.kind)&&(M.kind==='gauntlet'?M.waves.length>=2&&M.waves.length<=5&&M.waves.every(id=>FOES[id]||BOSS_IDS.includes(id)):FOES[M.foe]||BOSS_IDS.includes(M.foe))&&(!M.item||GEAR.weapons[M.item]||GEAR.charms[M.item]||GEAR.armour[M.item]||GEAR.cosmetics[M.item])),'missions '+loc);
  ok(CHAL.schema_version===1&&CHAL.daily.count>0&&CHAL.daily.pool.length>=CHAL.daily.count+3&&CHAL.daily.pool.every(d=>d.id&&d.text&&d.stat&&d.n>0&&(d.mon>0||d.crystals>0))&&CHAL.achievements.every(a=>a.id&&a.name&&a.text&&(a.stat&&a.n>0||a.check)&&a.crystals>0)&&new Set(CHAL.achievements.map(a=>a.id)).size===CHAL.achievements.length,'challenges');
  ok(MOVE.parry.win>0&&MOVE.parry.win<=.25&&MOVE.parry.stun>0&&MOVE.parry.ink>=0,'movement.parry');ok(TRAIN.schema_version===1&&TRAIN.reward_mon>=0&&TRAIN.drills.every(d=>d.id&&d.name&&d.hint&&d.goal&&d.goal.n>0&&['idle','block','attack','fight'].includes(d.behav)),'training drills');
  ok(['state','move','hit','fall','turn','land'].every(k=>MOVE.blend[k]>0&&MOVE.blend[k]<=.2)&&MOVE.blend.step_px>0,'movement.blend');
@@ -1533,7 +1598,7 @@ const ACTIONS=['left','right','up','down','slash','kick','block','roll','ink','i
 function cleanSettings(o){const pick=(v,ok,d)=>ok.includes(v)?v:d,num=(v,lo,hi,d)=>typeof v==='number'&&Number.isFinite(v)?clamp(v,lo,hi):d;
  return{volume:num(o.volume,0,1,1),music:num(o.music,0,1,.8),sfx:num(o.sfx,0,1,1),sens:num(o.sens,.6,1.6,1),lang:pick(o.lang,['en'],'en'),shake:pick(o.shake,['full','reduced','off'],'full'),flash:pick(o.flash,['full','reduced'],'full'),haptics:o.haptics!==false,quality:pick(o.quality,['high','low'],'high'),
   assist:o.assist===true,scale:num(o.scale,.8,1.4,1),lefty:o.lefty===true,keys:Object.fromEntries(Object.entries(obj(o.keys)).filter(([c,a])=>/^[A-Za-z0-9]{2,20}$/.test(c)&&ACTIONS.includes(a)))}}
-const newSave=()=>({v:2,rev:0,savedAt:0,profile:{level:1,xp:0,attrPts:0,skillPts:0,attrs:{assault:0,survival:0,shadowcraft:0},mon:0,materials:0,crystals:0},world:{at:-1},stats:{},daily:{day:'',ids:[],base:{}},
+const newSave=()=>({v:2,rev:0,savedAt:0,profile:{level:1,xp:0,attrPts:0,skillPts:0,attrs:{assault:0,survival:0,shadowcraft:0},mon:0,materials:0,crystals:0},world:{at:-1,loc:'',secret:0},stats:{},daily:{day:'',ids:[],base:{}},
  progress:{beaten:0,defeated:[],ladder:{},regionsUnlocked:1,trialsDone:[],lastWin:null},powers:{},loadout:{powers:[null,null],echoes:[null,null]},
  gear:{owned:['katana'],equipped:{weapon:'katana',charm:null,armour:null,item:null},tiers:{katana:1},items:{},cos:{finish:null,trail:null,aura:null,robe:null}},settings:Object.assign({},SET_D,{keys:{}}),rewardsClaimed:{},story:{pending:[],seen:[]},legacy:null});
 // every field is re-validated and clamped on load, so bad data never reaches the game (in v1, {"beaten":"abc"} locked every boss)
@@ -1558,15 +1623,15 @@ function cleanSave(r){r=obj(r);const s=newSave(),p=obj(r.profile),a=obj(p.attrs)
    items:Object.fromEntries(Object.keys(GEAR.items).map(id=>[id,int(obj(gr.items)[id],0,GEAR.items[id].max,0)]).filter(e=>e[1]>0)),
    cos:Object.fromEntries(COSK.map(k=>[k,own.includes(cos[k])&&GEAR.cosmetics[cos[k]]&&GEAR.cosmetics[cos[k]].kind===k?cos[k]:null]))}}s.settings=cleanSettings(obj(r.settings));
  for(const[k,v]of Object.entries(obj(r.rewardsClaimed)))if(v)s.rewardsClaimed[k]=typeof v==='number'?v:1;
- s.story=Object.assign({},sto,{seen:strs(sto.seen,LAD.regions.map(R=>R.id)),pending:(Array.isArray(sto.pending)?sto.pending:[]).filter(n=>obj(n).kind==='power'?!!POWERS[n.id]:['migrated','corrupt','ach'].includes(obj(n).kind)&&typeof n.text==='string').slice(0,8)});
+ s.story=Object.assign({},sto,{seen:strs(sto.seen,[...LAD.regions.map(R=>R.id),...Object.keys(MODES)]),pending:(Array.isArray(sto.pending)?sto.pending:[]).filter(n=>obj(n).kind==='power'?!!POWERS[n.id]:['migrated','corrupt','ach'].includes(obj(n).kind)&&typeof n.text==='string').slice(0,8)});
  s.legacy=typeof lg.raw==='string'?{raw:lg.raw.slice(0,200),migratedAt:int(lg.migratedAt,0,1e15)}:null;
- s.world={at:int(obj(r.world).at,-1,BOSSES.length-1,-1)};{const d=obj(r.daily),pool=CHAL.daily.pool.map(x=>x.id);s.daily={day:typeof d.day==='string'&&/^\d{4}-\d\d-\d\d$/.test(d.day)?d.day:'',ids:strs(d.ids,pool).slice(0,CHAL.daily.count),base:Object.fromEntries(Object.entries(obj(d.base)).filter(([k])=>/^[a-zA-Z]{1,24}$/.test(k)).map(([k,v])=>[k,int(v,0,1e9)]))}}s.stats=Object.fromEntries(Object.entries(obj(r.stats)).filter(([k])=>/^[a-zA-Z]{1,24}$/.test(k)).map(([k,v])=>[k,int(v,0,1e9)]));
+ {const w=obj(r.world);s.world={at:int(w.at,-1,BOSSES.length-1,-1),loc:typeof w.loc==='string'&&MODES[w.loc]?w.loc:'',secret:w.secret?1:0}}{const d=obj(r.daily),pool=CHAL.daily.pool.map(x=>x.id);s.daily={day:typeof d.day==='string'&&/^\d{4}-\d\d-\d\d$/.test(d.day)?d.day:'',ids:strs(d.ids,pool).slice(0,CHAL.daily.count),base:Object.fromEntries(Object.entries(obj(d.base)).filter(([k])=>/^[a-zA-Z]{1,24}$/.test(k)).map(([k,v])=>[k,int(v,0,1e9)]))}}s.stats=Object.fromEntries(Object.entries(obj(r.stats)).filter(([k])=>/^[a-zA-Z]{1,24}$/.test(k)).map(([k,v])=>[k,int(v,0,1e9)]));
  points(s);backfillCr(s);return s}
 // shadow crystals are paid per claim, once: the "cr:<claim>" flag makes every payout idempotent, and lets 1.7 pay what a
 // save from before crystals already earned (backfillCr runs on every load)
 const payCr=(s,claim,n)=>{if(!n||!s.rewardsClaimed[claim]||s.rewardsClaimed['cr:'+claim])return 0;s.rewardsClaimed['cr:'+claim]=1;s.profile.crystals=Math.min(1e9,s.profile.crystals+n);return n};
 function crOf(claim){const[k,a,b]=claim.split(':'),C=ECON.crystals;if(k==='boss')return C.boss[a]||0;if(k==='trial')return C.trial;
- if(k==='step'){const R=LAD.regions.find(R=>R.id===a),st=R&&R.steps[b];return st&&st.elite?C.elite:0}return 0}
+ if(k==='step'){const R=LAD.regions.find(R=>R.id===a),st=R&&R.steps[b];return st&&st.elite?C.elite:0}if(MODES[k]){const M=MODES[k].missions[+a];return M&&M.crystals||0}return 0}
 function backfillCr(s){for(const k of Object.keys(s.rewardsClaimed))if(!k.startsWith('cr:'))payCr(s,k,crOf(k))}
 // attribute and skill points are derived, never trusted: earned (levels, first-clear claims, milestone levels) minus spent (ranks, tiers)
 const tierCost=t=>PROG.power_tiers[t-2]; /* the price of reaching tier t (2-5) */
@@ -1574,6 +1639,7 @@ const maxTier=(s,id)=>!POWERS[id].ready?1:s.progress.trialsDone.includes(POWERS[
 function points(s){const p=s.profile,A=p.attrs,earned=(p.level-1)*PROG.level_up.attr_points;if(A.assault+A.survival+A.shadowcraft>earned)A.assault=A.survival=A.shadowcraft=0;
  p.attrPts=earned-A.assault-A.survival-A.shadowcraft;
  let sp=PROG.level_up.skill_point_levels.filter(L=>p.level>=L).length,used=0;for(const id of BOSS_IDS){if(s.rewardsClaimed['boss:'+id])sp+=PROG.rewards[id].skill_points;if(s.rewardsClaimed['trial:'+id])sp+=LAD.trials[id].skill_points}
+ for(const[loc,L]of Object.entries(MODES))L.missions.forEach((M,i)=>{if(M.skill_points&&s.rewardsClaimed[`${loc}:${i}`])sp+=M.skill_points})
  for(const id in s.powers)for(let t=2;t<=s.powers[id].tier;t++)used+=tierCost(t).sp;
  if(used>sp){for(const id in s.powers)s.powers[id].tier=1;used=0}p.skillPts=sp-used}
 // character-screen actions. A fight's hero is built from the save when the fight starts, so nothing here reaches a fight in progress.
@@ -1701,7 +1767,7 @@ function ladderNodes(s,lv){const R=LAD.regions[lv],open=s.progress.regionsUnlock
  ns.push({kind:'boss',foe:BOSSES[lv],cleared:beaten,open:open&&(beaten||ns.every(n=>n.elite||n.cleared))});
  ns.push({kind:'trial',foe:BOSSES[lv],trial:LAD.trials[BOSS_IDS[lv]],cleared:s.progress.trialsDone.includes(BOSS_IDS[lv]),open:beaten});return ns}
 let REG=0;
-function openRegion(lv){REG=lv;const R=LAD.regions[lv],b=BOSSES[lv],ar=ARENAS[b.arena];MODE='menu';if(SV.world.at!==lv){SV.world.at=lv;writeSave(SV)} /* Continue returns here */
+function openRegion(lv){REG=lv;REGL=null;const R=LAD.regions[lv],b=BOSSES[lv],ar=ARENAS[b.arena];MODE='menu';if(SV.world.at!==lv||SV.world.loc){SV.world.at=lv;SV.world.loc='';writeSave(SV)} /* Continue returns here */
  if(!SV.story.seen.includes(R.id)){SV.story.seen.push(R.id);writeSave(SV);return notice(ar.jp,ar.name.replace(/^the /,''),R.story.join(' '),[['Continue',()=>openRegion(lv),1]])} // the region's story card, once
  $('gKanji').textContent=ar.jp;$('gTitle').textContent=ar.name.replace(/^the /,'');$('gText').textContent=`${b.name}, ${b.title}, waits at the end of this road. Retainers fight one round; the elite is optional.`;
  const box=$('gNodes');box.innerHTML='';
@@ -1711,10 +1777,11 @@ function openRegion(lv){REG=lv;const R=LAD.regions[lv],b=BOSSES[lv],ar=ARENAS[b.
   el.onclick=()=>startFight(lv,undefined,n.kind==='step'?{kind:'step',i:n.i}:{kind:n.kind});box.appendChild(el)}
  show('region');amb(.1,0,0);box.firstChild&&box.firstChild.focus()}
 // a fight in region lv: node = {kind:'boss'} (default), {kind:'step', i} (a ladder duel) or {kind:'trial'} (the boss's Ink Trial)
-function startFight(lv,seed,node={kind:'boss'}){prep(seed);G.lv=lv;G.node=node;G.train=null;G.parry=false;
+function startFight(lv,seed,node={kind:'boss'}){prep(seed);G.lv=lv;G.node=node;G.train=null;G.parry=false;noMission();
  const st=node.kind==='step'&&LAD.regions[lv].steps[node.i];G.trial=node.kind==='trial'?LAD.trials[BOSS_IDS[lv]]:null;G.arena=BOSSES[lv].arena;G.need=st&&!st.elite?1:2;G.roundTime=G.trial&&G.trial.timer||60;
  fighters(st?Object.assign({},FOES[st.foe],{hp:Math.round(FOES[st.foe].hp*(1+LAD.hp_per_region*lv))}):BOSSES[lv]);takeSupply(true);G.matchId=`${node.kind}:${lv}:${node.i??''}:`+Date.now();
  G.hint=lv===0&&node.kind==='step'&&!node.i?14:7;go()}
+const noMission=()=>{G.hell=G.white=G.survive=false;G.waves=null;G.wave=0;G.map=null};
 function prep(seed){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.seed=(seed??SEED_Q??Math.random()*4294967296)>>>0;G.rand=rng(G.seed);G.acc=0;G.ia=1}
 function fighters(def,hero){G.def=def;G.P=mkF(hero||heroDef(),true);G.B=mkF(def,false);G.res=null;G.rv=0;G.tally={};G.combo={n:0,dmg:0,t:-9};G.item=null;G.tea=false;
  G.P.def.powers.forEach((id,i)=>{const el=tEls['p'+(i+1)];el.classList.toggle('off',!id);if(id)el.innerHTML=`<b>${POWERS[id].jp}</b><i>${POWERS[id].short}</i>`});G.round=1;G.t=0;G.mvId=0;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2}}
@@ -1730,7 +1797,7 @@ const moveName=n=>{const m=MV[n];return`${n.replace(/^[a-z]_/,'').replace(/[0-9_
 function startTraining(o){G.train=Object.assign({partner:'dummy',behav:'idle',move:null,gap:1.4,inf:true,ink:false,boxes:false,weapon:null,drill:null},G.train||{},o||{},{drill:null});prep();G.hint=7;trainSetup();go()}
 function trainSetup(){const T=G.train;if(!partners().includes(T.partner))T.partner='dummy';if(T.weapon&&!SV.gear.owned.includes(T.weapon))T.weapon=null;
  const s=T.weapon?Object.assign({},SV,{gear:Object.assign({},SV.gear,{equipped:Object.assign({},SV.gear.equipped,{weapon:T.weapon})})}):SV;
- G.lv=0;G.node={kind:'train'};G.trial=null;G.arena=DOJO_A;G.need=99;G.roundTime=99;G.parry=true;fighters(partnerDef(T.partner),heroDef(s));G.matchId='train:'+Date.now()}
+ noMission();G.lv=0;G.node={kind:'train'};G.trial=null;G.arena=DOJO_A;G.need=99;G.roundTime=99;G.parry=true;fighters(partnerDef(T.partner),heroDef(s));G.matchId='train:'+Date.now()}
 function trainAI(B,Pl,dt){const T=G.train,inp={mx:0,up:false,down:false,atk:null},d=Math.abs(Pl.x-B.x),toward=Pl.x>B.x?1:-1;
  if(T.behav==='block'){inp.block=true;inp.down=Pl.st==='move'&&Pl.mv.zone==='low'||Pl.crouch;return inp}
  if(T.behav!=='attack')return inp;
@@ -1773,7 +1840,9 @@ function openTrain(){const T=G.train,box=$('tBody'),done=TRAIN.drills.filter(d=>
  show('train');$('tResume').focus()}
 // victory: rewards are computed and SAVED first, then the (skippable) absorption ceremony, then the result panel
 function matchEnd(win){G.state='over';G.res={win,r:null,ch:[]};useSupply();tallyEnd(win);
- if(win&&G.node.kind!=='boss')G.res.r=G.node.kind==='trial'?grantTrial(SV,G.lv,G.matchId):grantStep(SV,G.lv,G.node.i,G.matchId);
+ if(win&&G.node.kind==='mission')G.res.r=grantMission(SV,G.node.loc,G.node.i,G.matchId);
+ else if(win&&G.node.kind==='custom')G.res.r=null;
+ else if(win&&G.node.kind!=='boss')G.res.r=G.node.kind==='trial'?grantTrial(SV,G.lv,G.matchId):grantStep(SV,G.lv,G.node.i,G.matchId);
  else if(win){const r=G.res.r=grantClear(SV,G.lv,G.matchId);if(r.power)SV.story.pending.push({kind:'power',id:r.power})}
  G.res.ch=award(SV);writeSave(SV);
  if(win&&G.node.kind==='boss'&&G.res.r.power){G.state='absorb';G.st=0;G.rv=0;G.ban=null;return}
@@ -1795,12 +1864,12 @@ function achProg(s,a){if(a.stat)return[Math.min(a.n,s.stats[a.stat]||0),a.n];con
  return k==='beaten'?[Math.min(n,s.progress.beaten),n]:k==='trials'?[Math.min(n,s.progress.trialsDone.length),n]:k==='level'?[Math.min(n,s.profile.level),n]:k==='weapons'?[Math.min(n,s.gear.owned.filter(id=>GEAR.weapons[id]).length),n]
   :k==='tier5'?[+Object.values(s.gear.tiers).some(t=>t>=5),1]:k==='drills'?[TRAIN.drills.filter(d=>s.rewardsClaimed['drill:'+d.id]).length,TRAIN.drills.length]:k==='sun'?[+!!(s.modes&&s.modes.sun),1]
   :k==='secret'?[+!!(s.world&&s.world.secret),1]:k==='claim'?[+!!s.rewardsClaimed[v+':'+w],1]:[0,1]}
-function award(s){rollDaily(s);const got=[];
+function award(s){rollDaily(s);const got=[];if(discover(s))got.push({text:WORLD.secret.text,mon:0,crystals:0});
  for(const id of s.daily.ids){const d=dailyOf(id),claim=`daily:${s.daily.day}:${id}`;if(s.rewardsClaimed[claim]||dailyProg(s,d)<d.n)continue;
   s.rewardsClaimed[claim]=Date.now();s.profile.mon+=d.mon||0;s.stats.dailies=(s.stats.dailies||0)+1;got.push({text:`Daily challenge — ${d.text}`,mon:d.mon||0,crystals:payCr(s,claim,d.crystals||0)})}
  for(const a of CHAL.achievements){const claim='ach:'+a.id,[n,of]=achProg(s,a);if(s.rewardsClaimed[claim]||n<of)continue;s.rewardsClaimed[claim]=Date.now();got.push({text:`Achievement — ${a.name}`,mon:0,crystals:payCr(s,claim,a.crystals)})}
  return got}
-const gotText=g=>g.map(x=>`${x.text} (${[x.mon&&`+${x.mon} mon`,x.crystals&&`+${x.crystals} shadow crystals`].filter(Boolean).join(', ')})`).join(' · ');
+const gotText=g=>g.map(x=>{const p=[x.mon&&`+${x.mon} mon`,x.crystals&&`+${x.crystals} shadow crystals`].filter(Boolean).join(', ');return p?`${x.text} (${p})`:x.text}).join(' · ');
 // anything met outside a fight (a purchase, an upgrade, a drill, a level) is announced on the next visit to the menus
 function awardQuiet(){const g=award(SV);if(g.length){SV.story.pending.push({kind:'ach',text:gotText(g)});writeSave(SV)}}
 const CHS={tab:'daily',back:'home'};
@@ -1825,7 +1894,7 @@ function takeSupply(rewarding){const id=SV.gear.equipped.item;G.item=rewarding&&
 function useSupply(){if(!G.item)return;SV.gear.items[G.item]=Math.max(0,(SV.gear.items[G.item]||0)-1);if(!SV.gear.items[G.item])delete SV.gear.items[G.item];G.item=null;writeSave(SV)}
 function absorbDone(){if(G.state!=='absorb')return;G.state='over';const id=G.res.r.power;SV.story.pending=SV.story.pending.filter(n=>!(n.kind==='power'&&n.id===id));writeSave(SV);showResult()}
 function showResult(){const{win,r}=G.res,lv=G.lv,last=lv===BOSSES.length-1,kind=G.node.kind;
- if(kind!=='boss')return showLadderResult(win,r);
+ if(kind==='mission')return showMissionResult(win,r);if(kind==='custom')return showCustomResult(win);if(kind!=='boss')return showLadderResult(win,r);
  $('rRewards').textContent=r?rewardText([r])+(r.slot>=0?` — ready in power slot ${r.slot+1} (${TOUCH.on?'the '+POWERS[r.power].jp+' button':['U','O'][r.slot]+' key'})`:''):'No rewards for a defeat — and nothing is lost.';purse();
  document.getElementById('rKanji').textContent=win?(last?'終':'勝'):'敗';document.getElementById('rTitle').textContent=win?(last?'The Five Shadows are no more':'Victory'):'Defeat';
  document.getElementById('rText').textContent=win?(last?'The ink remembers. Beneath the blossoms, the village sleeps in peace.':`${G.def.name} falls. ${BOSSES[lv+1].name}, ${BOSSES[lv+1].title}, waits at ${ARENAS[BOSSES[lv+1].arena].name}.`):`${G.def.name} still stands. Breathe — then strike once more.`;
@@ -1839,6 +1908,106 @@ function showLadderResult(win,r){const lv=G.lv,T=G.trial,next=ladderNodes(SV,lv)
  if(!win)mkb('Retry',()=>startFight(lv,undefined,G.node),1);else if(next)mkb(`Next · ${next.kind==='trial'?next.trial.name:next.foe.name}`,()=>startFight(lv,undefined,next.kind==='step'?{kind:'step',i:next.i}:{kind:next.kind}),1);
  mkb('Character & loadout',()=>openChar(null,'result'));mkb('Back to '+ARENAS[G.arena].name.replace(/^the /,''),()=>openRegion(lv));
  show('result');amb(.08,0,0);bt.firstChild.focus()}
+/* --- missions (1.7): Ashen Village, Hell Mode and White Mode share one system. A location's missions open in order; each is a
+   duel (rounds), a gauntlet (waves, health carried over) or a survival (outlast the clock). First clears pay once (claim
+   <loc>:<i>), repeats pay a quarter of the XP, a loss changes nothing. --- */
+const locOpen=(s,loc)=>loc==='ashen'?!!s.world.secret:!!(s.modes&&s.modes[loc]);
+function locNodes(s,loc){let prev=true;return MODES[loc].missions.map((m,i)=>{const cleared=!!s.rewardsClaimed[`${loc}:${i}`],open=locOpen(s,loc)&&(prev||cleared);prev=cleared;return{m,i,cleared,open}})}
+function grantMission(s,loc,i,winId){const g=s.progress,p=s.profile;if(winId&&g.lastWin&&g.lastWin.id===winId)return g.lastWin.result;
+ const M=MODES[loc].missions[i],claim=`${loc}:${i}`,first=!s.rewardsClaimed[claim],L0=p.level,sp0=p.skillPts;
+ const r={kind:'mission',loc,i,first,xp:first?M.xp:Math.round(M.xp*PROG.xp.repeat_share),mon:first?M.mon||0:0,materials:first?M.materials||0:0,sp:0,power:null,slot:-1};
+ if(first){s.rewardsClaimed[claim]=Date.now();if(M.item&&!s.gear.owned.includes(M.item)){s.gear.owned.push(M.item);if(GEAR.weapons[M.item])s.gear.tiers[M.item]=1;r.item=M.item;r.itemName=itemOf(M.item).name}}
+ r.crystals=payCr(s,claim,crOf(claim));p.xp=Math.min(1e9,p.xp+r.xp);p.mon+=r.mon;p.materials+=r.materials;p.level=levelOf(p.xp).level;points(s);r.sp=p.skillPts-sp0;r.levelFrom=L0;r.levelTo=p.level;
+ if(winId)g.lastWin={id:winId,result:r};return r}
+let REGL=null,SUN=null; // the location a region-style panel shows (null: a ladder region)
+function openLoc(loc){const L=MODES[loc];MODE='menu';REGL=loc;if(!locOpen(SV,loc))return toMenu();if(SV.world.loc!==loc){SV.world.loc=loc;writeSave(SV)}
+ if(!SV.story.seen.includes(loc)){SV.story.seen.push(loc);writeSave(SV);return notice(L.jp,L.name,L.story.join(' '),[['Continue',()=>openLoc(loc),1]])}
+ $('gKanji').textContent=L.jp;$('gTitle').textContent=L.name;$('gText').textContent=L.desc;const box=$('gNodes');box.innerHTML='';
+ for(const n of locNodes(SV,loc)){const M=n.m,el=document.createElement('button'),lab=M.kind==='gauntlet'?`Gauntlet · ${M.waves.length} foes`:M.kind==='survive'?`Survive ${M.time} s`:M.boss?'Champion':M.rounds>1?'Duel · best of three':'Duel · one round';
+  el.className='card ncard'+(n.open?'':' locked');el.disabled=!n.open;el.setAttribute('aria-label',`${lab}: ${M.name}. ${n.cleared?'Cleared':n.open?'Fight':'Locked'}`);
+  el.innerHTML=`<span class="n">${lab}</span><span class="kj">${M.jp||L.jp}</span><span class="nm">${M.name}</span><span class="ti">${M.desc}</span><span class="stt">${n.cleared?'Cleared · again':n.open?'Fight':'Locked'}</span>${n.cleared?'<span class="seal">討</span>':''}`;
+  el.onclick=()=>startMission(loc,n.i);box.appendChild(el)}
+ show('region');amb(.1,0,0);box.firstChild&&box.firstChild.focus()}
+function startMission(loc,i,seed){const L=MODES[loc],M=L.missions[i];prep(seed);noMission();G.lv=0;G.node={kind:'mission',loc,i};G.train=null;G.trial=null;G.parry=!!L.parry;G.hell=loc==='hell';G.white=loc==='white';
+ G.arena=M.arena??L.arena;G.need=M.rounds||1;G.roundTime=M.time||60;G.survive=M.kind==='survive';
+ const mk=id=>{const d=FOES[id]||BOSSES.find(b=>b.id===id);return Object.assign({},d,{hp:Math.round(d.hp*(M.hp||1))})};
+ G.waves=M.waves?M.waves.map(mk):null;G.wave=0;fighters(G.waves?G.waves[0]:mk(M.foe));takeSupply(true);G.matchId=`${loc}:${i}:`+Date.now();G.hint=0;go();
+ if(G.waves)G.ban={k:WAVEK[0],sub:`${M.name} · wave 1 of ${G.waves.length}: ${G.def.name}`,t0:G.rt,dur:2.3,size:230}}
+function showMissionResult(win,r){const{loc,i}=G.node,L=MODES[loc],M=L.missions[i],next=locNodes(SV,loc).find(n=>n.open&&!n.cleared);
+ $('rRewards').textContent=r?rewardText([r]):'No rewards for a defeat — and nothing is lost.';purse();$('rKanji').textContent=win?'勝':'敗';$('rTitle').textContent=win?(M.final&&L.final||'Victory'):'Defeat';
+ $('rText').textContent=win?(M.after||`${M.name}: done.`):M.kind==='survive'?'The light caught you. Keep moving, and try again.':`${G.def.name} still stands. Your place is kept — try again.`;
+ const bt=$('rBtns');bt.innerHTML='';const mkb=(txt,fn,big)=>{const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=txt;e.onclick=fn;bt.appendChild(e)};
+ if(!win)mkb('Retry',()=>startMission(loc,i),1);else if(next)mkb(`Next · ${next.m.name}`,()=>startMission(loc,next.i),1);
+ mkb('Character & loadout',()=>openChar(null,'result'));mkb('Back to '+L.name,()=>openLoc(loc));mkb('World map',toMenu);show('result');amb(.08,0,0);bt.firstChild.focus()}
+// the hidden road: found once two shadows are down and every duel of the Burning Field is won
+function discover(s){const S=WORLD.secret,R=LAD.regions.find(R=>R.id===S.region);if(s.world.secret||s.progress.beaten<S.beaten||!R.steps.every((st,i)=>s.rewardsClaimed[`step:${R.id}:${i}`]))return false;s.world.secret=1;return true}
+/* --- the world map (1.7): an ink map one and a half screens wide that pans (drag, wheel, the arrows, or moving the focus);
+   a marker for every place, locked or open, with difficulty, completion, boss and mission counts; roads open with the
+   journey; a hidden road; the hero stands where you last went. Choosing a marker previews its rewards. --- */
+const WM={x:0,tx:null,drag:null,sel:null,sig:'',img:null,px:-1,first:true};
+const placeOf=id=>WORLD.places.find(p=>p.id===id);
+const placesFor=s=>WORLD.places.filter(p=>p.kind!=='loc'||MODES[p.id]&&(!p.secret||s.world.secret)&&(!['hell','white'].includes(p.id)||s.modes&&s.modes.sun));
+function remaining(list){const a={xp:0,mon:0,cr:0,items:[]};for(const x of list){a.xp+=x.xp||0;a.mon+=x.mon||0;a.cr+=x.crystals||0;if(x.item)a.items.push(x.item)}
+ return a.xp||a.mon||a.cr||a.items.length?`Still to earn here: ${fmtN(a.xp)} XP${a.mon?` · ${fmtN(a.mon)} mon`:''}${a.cr?` · ${a.cr} shadow crystals`:''}${a.items.length?' · '+a.items.join(', '):''}.`:'Everything here is earned: fights again pay a quarter of their XP.'}
+function placeInfo(s,p){if(p.kind==='dojo'){const d=TRAIN.drills.filter(x=>s.rewardsClaimed['drill:'+x.id]).length;return{name:p.name,jp:p.jp,open:true,pct:null,diff:0,desc:p.desc,rew:`Drills done: ${d} of ${TRAIN.drills.length} (each pays ${TRAIN.reward_mon} mon the first time).`,act:()=>startTraining(),go:'Train'}}
+ if(p.kind==='workshop')return{name:p.name,jp:p.jp,open:true,pct:null,diff:0,desc:p.desc,rew:'Custom maps pay no XP or currency: they are for play and practice.',act:()=>openWorkshop('menu'),go:'Open the workshop'};
+ if(p.kind==='region'){const lv=p.lv,b=BOSSES[lv],ar=ARENAS[b.arena],R=LAD.regions[lv],ns=ladderNodes(s,lv),d=ns.filter(n=>n.cleared).length,rw=PROG.rewards[b.id],T=LAD.trials[b.id];
+  const left=[...R.steps.filter((st,i)=>!s.rewardsClaimed[`step:${R.id}:${i}`]).map(st=>({xp:st.xp,mon:st.mon,crystals:st.elite?ECON.crystals.elite:0,item:st.item&&itemOf(st.item).name})),
+   ...(s.progress.beaten>lv?[]:[{xp:rw.xp,mon:rw.mon,crystals:ECON.crystals.boss[b.id],item:POWERS[rw.power].name}]),...(s.progress.trialsDone.includes(b.id)?[]:[{xp:T.xp,mon:T.mon,crystals:ECON.crystals.trial,item:T.item_name}])];
+  return{name:ar.name.replace(/^the /,''),jp:ar.jp,sub:b.name,open:s.progress.regionsUnlocked>lv,done:d===ns.length,pct:Math.round(d/ns.length*100),diff:lv+1,desc:`${R.story[0]} ${b.name}, ${b.title}, waits at the end of the road.`,
+   rew:remaining(left),act:()=>openRegion(lv),go:'Enter',lock:lv?`Defeat ${BOSSES[lv-1].name} to open this road.`:''}}
+ const L=MODES[p.id],ns=locNodes(s,p.id),d=ns.filter(n=>n.cleared).length;
+ return{name:L.name,jp:L.jp,sub:`${L.missions.length} missions`,open:locOpen(s,p.id),done:d===ns.length,pct:Math.round(d/ns.length*100),diff:L.diff,desc:L.desc,cls:p.id==='hell'||p.id==='white'?p.id:'',
+  rew:remaining(ns.filter(n=>!n.cleared).map(n=>({xp:n.m.xp,mon:n.m.mon,crystals:n.m.crystals,item:n.m.item&&itemOf(n.m.item).name}))),act:()=>openLoc(p.id),go:'Enter',lock:L.lock||''}}
+function mapDone(s){let n=0,d=0;LAD.regions.forEach((R,i)=>{for(const x of ladderNodes(s,i)){n++;if(x.cleared)d++}});for(const loc in MODES)if(placesFor(s).some(p=>p.id===loc))for(const x of locNodes(s,loc)){n++;if(x.cleared)d++}return Math.round(d/n*100)}
+const herePlace=s=>s.world.loc&&locOpen(s,s.world.loc)?s.world.loc:s.world.at>=0?LAD.regions[s.world.at].id:'dojo';
+const panTo=()=>{$('wpins').style.transform=`translateX(${-WM.x/WORLD.width*100}%)`};
+function buildMenu(){const s=SV,box=$('wpins');box.innerHTML='';$('wSum').textContent=`campaign ${campaign(s).pct}% · whole map ${mapDone(s)}% · drag or use ‹ › to look around`;
+ const list=placesFor(s),next=(list.find(p=>p.kind==='region'&&(I=>I.open&&!I.done)(placeInfo(s,p)))||{}).id;
+ if(WM.first){WM.first=false;WM.x=clamp(placeOf(herePlace(s)).at[0]-W/2,0,WORLD.width-W)}
+ for(const p of list){const I=placeInfo(s,p),e=document.createElement('button');e.className='pin'+(I.open?'':' locked')+(I.done?' done':'')+(p.id===next?' next':'')+(I.cls?' '+I.cls:'')+(WM.sel===p.id?' sel':'');
+  e.style.left=p.at[0]/WORLD.width*100+'%';e.style.top=p.at[1]/H*100+'%';e.dataset.place=p.id;
+  e.innerHTML=`<span class="kj">${I.jp}</span><span class="nm">${I.name}${I.sub?' · '+I.sub:''}</span>${I.pct!=null?`<span class="pp">${'●'.repeat(I.diff)}${'○'.repeat(5-I.diff)} · ${I.open?I.pct+'%':'locked'}</span>`:''}`;
+  e.setAttribute('aria-label',`${I.name}${I.sub?', '+I.sub:''}: ${I.open?(I.pct!=null?I.pct+'% complete':'open'):'locked'}${I.diff?`, difficulty ${I.diff} of 5`:''}`);
+  e.onclick=()=>{if(!WM.moved)selPlace(p.id)};e.onfocus=()=>{WM.tx=clamp(p.at[0]-W/2,0,WORLD.width-W)};box.appendChild(e)}
+ if(WM.sel&&list.some(p=>p.id===WM.sel))selPlace(WM.sel);else $('wInfo').hidden=true;panTo()}
+function selPlace(id){const p=placeOf(id),I=placeInfo(SV,p),b=$('wiBtns');WM.sel=id;for(const e of $('wpins').children)e.classList.toggle('sel',e.dataset.place===id);
+ $('wiTitle').textContent=I.name+(I.sub?' · '+I.sub:'');$('wiPips').textContent=I.pct!=null?`Difficulty ${'●'.repeat(I.diff)}${'○'.repeat(5-I.diff)} · ${I.open?I.pct+'% complete':'locked'}`:'Always open';
+ $('wiText').textContent=I.desc+(I.open?'':' '+I.lock);$('wiRew').textContent=I.rew;b.innerHTML='';
+ const go=document.createElement('button');go.className='big';go.textContent=I.open?I.go:'Locked';go.disabled=!I.open;go.onclick=I.act;b.appendChild(go);
+ const x=document.createElement('button');x.className='lnk';x.textContent='Close';x.onclick=()=>{WM.sel=null;$('wInfo').hidden=true;for(const e of $('wpins').children)e.classList.remove('sel')};b.appendChild(x);
+ $('wInfo').hidden=false;WM.tx=clamp(p.at[0]-W/2+W*.12,0,WORLD.width-W);if(MODE==='menu')(I.open?go:x).focus()}
+const worldSig=s=>[s.progress.regionsUnlocked,s.progress.beaten,s.world.secret,s.modes&&s.modes.sun,s.modes&&s.modes.hell,s.modes&&s.modes.white].join();
+function roadOpen(s,a,b){const q=placeOf(b);return q.kind==='region'?s.progress.regionsUnlocked>q.lv:q.kind==='loc'?placesFor(s).includes(q):true}
+// the map's ink: mountains, a river to the sea, the roads (dotted where not yet open), a small picture for every place
+function worldLayer(s){return pre(WORLD.width,H,g=>{const r=rng(77),at=id=>placeOf(id).at;g.fillStyle=PAPER;g.fillRect(0,0,WORLD.width,H);
+ g.globalAlpha=.42;g.drawImage(M_FAR,-300,-360,3600,900);g.globalAlpha=.3;g.drawImage(M_MID,-200,-170,3600,800);g.globalAlpha=1;
+ const sea=g.createLinearGradient(2600,0,3000,0);sea.addColorStop(0,'rgba(21,19,15,0)');sea.addColorStop(1,ink(.28));g.fillStyle=sea;g.fillRect(2580,0,420,H);
+ g.strokeStyle=ink(.4);g.lineWidth=2.4;for(let i=0;i<30;i++){const x=2660+r()*320,y=60+r()*980;g.beginPath();g.arc(x,y,16,3.5,5.9);g.stroke()}
+ g.strokeStyle=ink(.3);dry(g,qpts([1240,0],[1560,700],[1900,600],34),24,3,{dry:.55,alpha:.4,even:1});dry(g,qpts([1960,610],[2300,840],[3000,720],34),22,4,{dry:.55,alpha:.35,even:1});
+ for(const[a,b]of WORLD.roads){const q=placeOf(b);if(!placesFor(s).includes(q)&&q.kind==='loc')continue;const A=at(a),B=at(b),m=[(A[0]+B[0])/2+50,(A[1]+B[1])/2-50],pts=qpts(A,m,B,30);
+  if(q.kind==='loc'&&b!=='ashen'){g.strokeStyle=b==='hell'?'rgba(140,30,18,.7)':'rgba(176,150,80,.8)';g.lineWidth=4;g.setLineDash([14,12]);g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.stroke();g.setLineDash([]);continue} // spirit roads from the sun
+  if(roadOpen(s,a,b)){g.strokeStyle=ink(.78);dry(g,pts,11,a.length+b.length,{dry:.4,even:1})}else{g.fillStyle=ink(.42);for(let i=0;i<pts.length;i+=2)circ(g,pts[i][0],pts[i][1],3.2)}}
+ const v=(id,fn)=>{const p=placeOf(id);if(p&&placesFor(s).includes(p)){g.save();g.translate(p.at[0],p.at[1]);fn(g);g.restore()}};
+ v('dojo',g=>{g.fillStyle=ink(.45);g.fillRect(-70,-64,140,46);roof(g,0,-60,170,58,ink(.75));});
+ v('burning_field',g=>{g.strokeStyle=ink(.6);for(let i=0;i<26;i++){const x=-170+r()*340,y=-20+r()*60;g.lineWidth=2;line(g,[x,y],[x+(r()-.5)*10,y-18-r()*22])}if(s.progress.beaten<1){g.fillStyle='rgba(181,48,28,.75)';for(let i=0;i<5;i++){const x=-120+i*60;brush(g,[[x,0],[x+6,-40],[x-4,-80]],22,{taper:u=>1-u})}}});
+ v('bamboo_grove',g=>{for(let i=0;i<11;i++){const x=-170+i*32+(r()-.5)*16,h=110+r()*90,l=(r()-.5)*14,tn=.35+r()*.4;g.fillStyle=ink(tn);brush(g,[[x,8],[x+l*.5,-h*.5],[x+l,-h]],4+r()*3,{taper:u=>1-u*.3});
+  for(let k=0;k<3;k++){const y=-h*(.45+r()*.5),sd=r()<.5?-1:1;brush(g,qpts([x+l*.6,y],[x+l*.6+sd*14,y-8],[x+l*.6+sd*30,y+4],6),5,{taper:u=>Math.sin(Math.PI*u)})}}});
+ v('mountain_shrine',g=>{for(const[x,h,tn]of[[-120,150,.28],[90,190,.36],[-10,120,.48]]){g.fillStyle=ink(tn);g.beginPath();g.moveTo(x-150,-20);g.quadraticCurveTo(x-40,-h*.7,x,-h);g.quadraticCurveTo(x+50,-h*.6,x+160,-20);g.fill()}g.drawImage(TORII,-50,-128,100,78)});
+ v('moonlit_lake',g=>{g.fillStyle=ink(.42);g.beginPath();g.ellipse(0,-20,190,52,0,0,6.2832);g.fill();g.fillStyle='#f4efe5';g.fillRect(-14,-34,28,6);g.fillRect(-9,-24,18,4)});
+ v('oni_castle',g=>{g.drawImage(CASTLE,-130,-200,260,172)});
+ v('ashen',g=>{g.globalAlpha=.85;g.drawImage(VIL_D.img,-200,-110,400,132);g.globalAlpha=1});
+ v('white',g=>{g.fillStyle='rgba(201,163,74,.18)';circ(g,0,-30,170);g.fillStyle=ink(.5);g.beginPath();g.moveTo(-170,0);g.quadraticCurveTo(0,-22,170,0);g.lineTo(40,110);g.lineTo(-30,96);g.closePath();g.fill();g.drawImage(TEMPLE,-90,-74,180,77)});
+ v('hell',g=>{const gr=g.createRadialGradient(0,0,10,0,0,200);gr.addColorStop(0,'rgba(181,48,28,.75)');gr.addColorStop(1,'rgba(21,19,15,0)');g.fillStyle=gr;g.fillRect(-220,-220,440,440);g.fillStyle=ink(.92);for(let i=0;i<7;i++){const x=-180+i*60;tri(g,[x-26,40],[x+26,40],[x+(r()-.5)*20,-50-r()*70])}})})}
+function renderWorld(t){const s=SV,sig=worldSig(s);if(WM.sig!==sig||!WM.img){WM.sig=sig;WM.img=worldLayer(s)}
+ if(WM.tx!=null&&!WM.drag){WM.x+=(WM.tx-WM.x)*Math.min(1,(G.rdt||1/60)*6);if(Math.abs(WM.tx-WM.x)<1){WM.x=WM.tx;WM.tx=null}}
+ WM.x=clamp(WM.x,0,WORLD.width-W);if(WM.px!==WM.x){WM.px=WM.x;panTo()}
+ screen(X);X.drawImage(WM.img,-WM.x,0);X.translate(-WM.x,0);const list=placesFor(s);
+ const fire=placeOf('burning_field').at;if(s.progress.beaten<1)smoke(X,fire[0],fire[1]-60,t,3,.5,.7,.35);
+ const ash=placeOf('ashen').at;smoke(X,ash[0],ash[1]-40,t,9,s.world.secret?.6:.3,.75,.45); // the hint before the road is found
+ for(const p of list){const I=placeInfo(s,p);if(!I.open){X.globalAlpha=.55;for(let k=0;k<4;k++)X.drawImage(MIST,p.at[0]-170+k*60+Math.sin(t*.3+k)*20,p.at[1]-140+(k%2)*40,180,150);X.globalAlpha=1}}
+ const h=placeOf(herePlace(s)).at;X.globalAlpha=.25;X.fillStyle=INK;X.beginPath();X.ellipse(h[0]-74,h[1]+58,22,5,0,0,6.2832);X.fill();X.globalAlpha=1;fig(X,P(PS.stand,{x:h[0]-74,y:h[1]+58,s:.36,f:1}),K.hero,t);
+ if(SUN&&SUN.draw)SUN.draw(X,t);grain(X)}
 function toMenu(){$('ver').textContent='v'+VERSION;MODE='menu';VIEW='map';G.paused=false;awardQuiet();buildMenu();show('menu');amb(.1,0,0);nextNotice()}
 /* --- main menu (1.7): every entry opens a real screen; a locked one says what opens it --- */
 function toHome(){$('hVer').textContent='v'+VERSION;MODE='menu';VIEW='home';G.paused=false;awardQuiet();buildHome();show('home');amb(.08,0,0);nextNotice()}
@@ -1851,14 +2020,14 @@ function buildHome(){const p=SV.profile,l=levelOf(p.xp),c=campaign(SV),wid=SV.ge
  $('hXp').style.width=(l.need?l.into/l.need*100:100)+'%';box.innerHTML='';
  const item=(lab,fn,o={})=>{const b=document.createElement('button');b.className='hb'+(o.lock?' lock':'');b.innerHTML=lab+(o.badge?`<span class="bd">${o.badge}</span>`:'')+(o.note?`<small>${o.note}</small>`:'');b.onclick=fn;box.appendChild(b);return b};
  const at=SV.world.at,started=Object.keys(SV.rewardsClaimed).length>0;
- item(started?'Continue':'Begin',continueGame,{note:started&&at>=0?ARENAS[BOSSES[at].arena].name.replace(/^the /,''):started?'the world map':'the Burning Field'});
+ item(started?'Continue':'Begin',continueGame,{note:SV.world.loc&&locOpen(SV,SV.world.loc)?MODES[SV.world.loc].name:started&&at>=0?ARENAS[BOSSES[at].arena].name.replace(/^the /,''):started?'the world map':'the Burning Field'});
  item('New Game',newGameAsk);
  item('World Map',toMenu);
  for(const e of HOME_X)item(...e());
  item('Settings',()=>openSettings('home'));
  item('Quit',quitGame);if(MODE==='menu'&&box.firstChild)box.firstChild.focus()}
 const HOME_X=[]; // entries the later sections add: [label, action, options]
-function continueGame(){const at=SV.world.at;if(at>=0&&SV.progress.regionsUnlocked>at)openRegion(at);else if(!Object.keys(SV.rewardsClaimed).length)openRegion(0);else toMenu()}
+function continueGame(){if(SV.world.loc&&locOpen(SV,SV.world.loc))return openLoc(SV.world.loc);const at=SV.world.at;if(at>=0&&SV.progress.regionsUnlocked>at)openRegion(at);else if(!Object.keys(SV.rewardsClaimed).length)openRegion(0);else toMenu()}
 const BKEY=SKEY+'.before-new-game';
 function newGameAsk(){const p=SV.profile;notice('止','Start a new game?',`Your journey so far (level ${p.level}, ${SV.progress.beaten} of 5 shadows, ${fmtN(p.mon)} mon, ${fmtN(p.crystals)} shadow crystals) will be replaced. A copy is kept: Character › Save code › Restore can bring it back. Settings and custom maps stay.`,
  [['Start a new game',newGame,1],['Cancel',toHome]])}
@@ -2070,7 +2239,11 @@ function frame(now){const raw=(now-st.last)/1000||0,dt=Math.min(.1,raw);st.last=
 $('playBig').onclick=play;$('replayBig').onclick=replay;$('enterGame').onclick=enterGame;$('toGame').onclick=enterGame;$('skip').onclick=enterGame;
 $('hFilm').onclick=watchFilm;$('mHome').onclick=toHome;$('hChar').onclick=()=>openChar(null,'home');$('hHelp').onclick=()=>{helpBack='home';show('help')};
 $('mChar').onclick=()=>openChar(null,'menu');$('mSet').onclick=()=>openSettings('menu');$('pSet').onclick=()=>openSettings('pause');
-$('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(setBack==='home')toHome();else{buildMenu();show('menu')}};for(const b of $('sTabs').children)b.onclick=()=>{setTab=b.dataset.st;openSettings()};$('gBack').onclick=toMenu;$('gChar').onclick=()=>openChar(null,'region');$('cClose').onclick=()=>{if(CH.back==='result')show('result');else if(CH.back==='region')openRegion(REG);else if(CH.back==='home')toHome();else{buildMenu();show('menu')}};
+$('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(setBack==='home')toHome();else{buildMenu();show('menu')}};for(const b of $('sTabs').children)b.onclick=()=>{setTab=b.dataset.st;openSettings()};$('gBack').onclick=toMenu;$('mShop').onclick=()=>openShop('menu');$('wL').onclick=()=>{WM.tx=clamp(WM.x-760,0,WORLD.width-W)};$('wR').onclick=()=>{WM.tx=clamp(WM.x+760,0,WORLD.width-W)};
+{const m=$('wmap'),k=()=>W/(stage.clientWidth||W);m.addEventListener('pointerdown',e=>{WM.drag={x0:e.clientX,wx:WM.x};WM.moved=false;m.classList.add('drag')});
+ addEventListener('pointermove',e=>{if(!WM.drag)return;const dx=(e.clientX-WM.drag.x0)*k();if(Math.abs(dx)>8)WM.moved=true;WM.x=clamp(WM.drag.wx-dx,0,WORLD.width-W);WM.tx=null});
+ addEventListener('pointerup',()=>{if(WM.drag){WM.drag=null;m.classList.remove('drag');setTimeout(()=>{WM.moved=false},0)}});
+ m.addEventListener('wheel',e=>{e.preventDefault();WM.tx=null;WM.x=clamp(WM.x+(Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY)*1.4,0,WORLD.width-W)},{passive:false})}$('gChar').onclick=()=>openChar(null,'region');$('cClose').onclick=()=>{if(CH.back==='result')show('result');else if(CH.back==='region')REGL?openLoc(REGL):openRegion(REG);else if(CH.back==='home')toHome();else{buildMenu();show('menu')}};
 for(const b of $('cTabs').children)b.onclick=()=>{CH.tab=b.dataset.tab;CH.slot=null;openChar()};
 for(const b of $('shTabs').children)b.onclick=()=>openShop(null,b.dataset.sh);for(const b of $('chTabs').children)b.onclick=()=>openChal(null,b.dataset.ch);$('chClose').onclick=()=>CHS.back==='menu'?toMenu():toHome();$('shClose').onclick=()=>{if(SH.back==='result')show('result');else if(SH.back==='menu')toMenu();else toHome()};
 HOME_X.push(()=>['Training Room',()=>startTraining(),{note:`${TRAIN.drills.filter(d=>SV.rewardsClaimed['drill:'+d.id]).length} of ${TRAIN.drills.length} drills`}],()=>['Shop',()=>openShop('home'),{note:`${fmtN(SV.profile.mon)} mon · ${fmtN(SV.profile.crystals)} crystals`}],()=>['Inventory',()=>{CH.tab='gear';openChar(null,'home')}],()=>{rollDaily(SV);const n=SV.daily.ids.filter(id=>!SV.rewardsClaimed[`daily:${SV.daily.day}:${id}`]).length;return['Challenges',()=>openChal('home'),{note:n?`${n} of ${SV.daily.ids.length} today`:'today’s are done'}]});
@@ -2114,7 +2287,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
  // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
- window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,award,rollDaily,dailyOf,dailyProg,achProg,CHAL,openChal,tallyEnd,setToday:f=>{TODAY=f},startTraining,trainSetup,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,useSupply,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,startMission,openLoc,locNodes,locOpen,grantMission,MODES,WORLD,WM,buildMenu,selPlace,placeInfo,placesFor,mapDone,renderWorld,discover,nextWave,award,rollDaily,dailyOf,dailyProg,achProg,CHAL,openChal,tallyEnd,setToday:f=>{TODAY=f},startTraining,trainSetup,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,useSupply,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
  if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 applySettings();
 // keep the save: ask the browser not to evict this site's storage (an installed PWA usually gets it; spec §14.4)

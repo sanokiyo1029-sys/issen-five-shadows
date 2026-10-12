@@ -52,7 +52,7 @@ module.exports = {
       const { game, el } = await boot({ storage: legacy(raw) });
       assert.strictEqual(game.SV.progress.beaten, n, raw); assert.strictEqual(game.SV.legacy.raw, raw);
       game.toMenu();
-      assert.strictEqual(el('levels').children[0].disabled, false, `first boss must always be open (${raw})`);
+      assert.ok(!el('wpins').children.find(p => p.dataset.place === 'burning_field').className.includes('locked'), `first boss must always be open (${raw})`); // 1.7: the world map
     }
   },
 
