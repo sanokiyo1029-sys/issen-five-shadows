@@ -1873,6 +1873,22 @@
    ],
    "bg": "fn function castleBG(c,t){WIND={x:-1,y:.1,s:.8};screen(c);c.fillStyle=PAPER;c.fillRect(0,0,W,H);camT(c,.03);sunDisc(c,140,-420,250,1);\r\n camT(c,.07);c.globalAlpha=.85;c.drawImage(STORM,-1800+t*10,-1150);c.globalAlpha=1;camT(c,.2);c.drawImage(HILLS,-1800,-560);\r\n camT(c,.38);c.drawImage(CASTLE,-380,-505,760,500);for(const[x,y]of[[-250,-20],[60,-70],[230,-30]]){c.globalAlpha=.45*(.75+.25*noise(t*7+x));c.drawImage(GLOW,x-150,y-90,300,180);c.globalAlpha=1;smoke(c,x,y-20,t,x,.9,1.4,.45)}\r\n const hy=scr(0,-15,.38)[1];screen(c);const gr=c.createLinearGradient(0,hy,0,H);gr.addColorStop(0,ink(.25));gr.addColorStop(1,ink(.62));c.fillStyle=gr;c.fillRect(0,hy,W,H-hy);camT(c,1);tiles(c,FLOOR,1,-14);\r\n screen(c);c.globalCompositeOperation='multiply';c.fillStyle='rgb(255,226,210)';c.fillRect(0,0,W,H);c.globalCompositeOperation='source-over'}",
    "fg": "fn function castleFG(c,t){screen(c);c.fillStyle=RED;for(let i=0;i<40;i++){const y=H-((t*(60+hash(i)*90)+hash(i*3)*H)%H),x=((hash(i*5)*W+Math.sin(t+i)*60-t*25)%W+W)%W;c.globalAlpha=.75*(y/H);circ(c,x,y,1.5+hash(i*9)*2.5)}c.globalAlpha=1}"
+  },
+  {
+   "name": "the Forgotten Dojo",
+   "jp": "師",
+   "wind": 0.02,
+   "rain": 0,
+   "bpm": 84,
+   "notes": [
+    220,
+    293.66,
+    311.13,
+    392,
+    440
+   ],
+   "bg": "fn function dojoBG(c,t){WIND={x:-1,y:.04,s:.06};screen(c);c.fillStyle=ink(.2);c.fillRect(0,0,W,H);if(!DOJO)DOJO=dojoLayer();\r\n camT(c,.72);c.drawImage(DOJO,-1800,-1010);\r\n screen(c);for(let i=0;i<3;i++){const x=260+i*640+Math.sin(t*.2+i)*30,gr=c.createLinearGradient(x,0,x+300,0);gr.addColorStop(0,'rgba(246,240,226,0)');gr.addColorStop(.5,'rgba(246,240,226,.16)');gr.addColorStop(1,'rgba(246,240,226,0)');\r\n  c.fillStyle=gr;c.beginPath();c.moveTo(x,0);c.lineTo(x+170,0);c.lineTo(x+480,H);c.lineTo(x+260,H);c.fill()}\r\n camT(c,1);const gr=c.createLinearGradient(0,-6,0,520);gr.addColorStop(0,ink(.5));gr.addColorStop(1,ink(.26));c.fillStyle=gr;c.fillRect(CAM.x-2400,-6,4800,900);\r\n c.strokeStyle=ink(.62);c.lineWidth=2;for(const y of[16,40,72,116,176,256,360])line(c,[CAM.x-2400,y],[CAM.x+2400,y]);tiles(c,FLOOR,1,-10)}",
+   "fg": "fn function dojoFG(c,t){camT(c,1);c.fillStyle='#f3ecdc';for(let i=0;i<26;i++){const x=CAM.x-1100+((hash(i)*2200+t*(8+hash(i*3)*14))%2200),y=-700+hash(i*7)*680+Math.sin(t*.9+i)*24;c.globalAlpha=.25+.2*Math.sin(t*2+i);circ(c,x,y,1.6+hash(i*5)*1.8)}c.globalAlpha=1}"
   }
  ],
  "HERO_D": {

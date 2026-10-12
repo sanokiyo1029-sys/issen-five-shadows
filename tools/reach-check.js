@@ -28,7 +28,7 @@ async function check() {
   };
   for (const n of ['slash', 'slash2', 'slash3', 'lunge', 'low', 'air']) meas('katana.' + n, game.MV[n], game.HERO_D);
   for (const [id, w] of Object.entries(game.GEAR.weapons)) {
-    if (id === 'katana') continue;
+    if (id === 'katana' || w.class) continue; // variants share their class's moves (1.7)
     const d = game.derive(Object.assign({}, game.SV, { gear: { owned: [id], equipped: { weapon: id, charm: null }, tiers: { [id]: 1 } } }));
     const def = Object.assign({}, game.HERO_D, { kind: d.kind, guard: d.guard, wk: d.wk });
     for (const n of Object.keys(w.moves)) meas(id + '.' + n, d.ov[n], def);

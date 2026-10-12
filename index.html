@@ -129,7 +129,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
 .hb.lock{opacity:.5}.hb small{font-size:.6em;letter-spacing:.06em;opacity:.78;margin-left:.7em;text-transform:none;font-style:italic}
 .hb .bd{display:inline-block;min-width:1.25em;padding:0 .3em;border-radius:99px;background:var(--red);color:var(--paper);font-size:.6em;text-align:center;line-height:1.25em;margin-left:.6em;vertical-align:.25em;letter-spacing:0}
 #home .lnk{color:rgba(236,229,214,.82);border-color:rgba(236,229,214,.35)}#home .lnk:hover{color:#fff;border-color:var(--red)}#home .ver{color:var(--paper)}
-.purse{font-style:normal;font-weight:600;letter-spacing:.06em}
+.purse{font-style:normal;font-weight:600;letter-spacing:.06em}#train{gap:.5cqw}#train .sgrid{gap:.25cqw 1.6cqw;max-width:92cqw}#train .sgrid .lnk{font-size:max(.95cqw,10px)}#train .sgrid b{font-size:max(1cqw,10px)}
 .card .pr{font:600 max(.9cqw,10px) 'Cormorant Garamond',serif;letter-spacing:.08em;margin-top:.3cqw}.card .pr.short{color:var(--red)}#shop{gap:.55cqw}#shop h2{font-size:max(2.4cqw,16px)}#shop .big{padding:7px 26px}
 </style>
 </head>
@@ -171,6 +171,9 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
     <div class="row tabs" id="shTabs"><button class="lnk" data-sh="weapons">Weapons</button><button class="lnk" data-sh="armour">Armour</button><button class="lnk" data-sh="charms">Charms</button><button class="lnk" data-sh="supplies">Supplies &amp; services</button><button class="lnk" data-sh="cosmetics">Crystal stall</button></div>
     <div class="levels wrap" id="shBody"></div><p class="rw" id="shMore"></p><div class="row"><span class="row" id="shActs"></span><span class="rw" id="shMsg" role="status"></span></div>
     <button class="big" id="shClose">Back</button></div>
+  <div class="panel dim off" id="train" role="dialog" aria-labelledby="tTitle"><h2 id="tTitle">The Forgotten Dojo</h2><p class="rw" id="tSub"></p>
+    <div class="keys sgrid" id="tBody"></div><p class="rw" id="tMsg" role="status"></p>
+    <div class="row"><button class="big" id="tResume">Resume</button><button class="lnk" id="tReset">Reset positions and health</button><button class="lnk" id="tHelp">Controls</button><button class="lnk" id="tLeave">Leave the dojo</button></div></div>
   <div class="panel dim off" id="region" role="dialog" aria-labelledby="gTitle"><div class="mt"><span class="kj" id="gKanji"></span><span class="en" id="gTitle"></span></div><p class="tag" id="gText"></p>
     <div class="levels" id="gNodes"></div><div class="row"><button class="lnk" id="gChar">Character</button><button class="lnk" id="gBack">Back to the map</button></div></div>
   <div class="panel dim off" id="settings" role="dialog" aria-labelledby="sTitle"><h2 id="sTitle">Settings</h2><div class="row tabs" id="sTabs"><button class="lnk" data-st="game">Sound, screen &amp; play</button><button class="lnk" data-st="keys">Keyboard keys</button></div>
@@ -236,6 +239,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
 {"schema_version":1,
  "roll":{"dur":0.34,"dist":240,"travel":0.26,"inv":[0.05,0.22],"cd":0.7},
  "punish":{"dmg":1.2,"ink":4},
+ "parry":{"win":0.15,"stun":0.6,"ink":12},
  "blend":{"state":0.07,"move":0.05,"hit":0.05,"fall":0.1,"turn":0.07,"land":0.14,"step_px":45}}
 </script>
 <script type="application/json" id="data-gear">
@@ -353,6 +357,19 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   {"id":"trail_crimson","crystals":30},{"id":"trail_pale","crystals":40},{"id":"trail_gold","crystals":60},
   {"id":"aura_ember","crystals":80},{"id":"aura_moon","crystals":80},
   {"id":"robe_indigo","crystals":25},{"id":"robe_ash","crystals":25},{"id":"robe_crimson","crystals":35}]}
+</script>
+<script type="application/json" id="data-training">
+{"schema_version":1,"reward_mon":20,
+ "drills":[
+  {"id":"chain","name":"The Three Cuts","hint":"Step in and slash three times quickly: the third cut of the chain lunges. Land the full chain twice.","goal":{"stat":"chains","n":2},"behav":"idle"},
+  {"id":"guard","name":"The Guard","hint":"Hold back (or the block key) as the dummy cuts; crouch while holding back for its low cut. Block 5 strikes.","goal":{"stat":"blocks","n":5},"behav":"attack","gap":1.6},
+  {"id":"heights","name":"High and Low","hint":"Without blocking: duck the high cut (down), jump the low one (up). Let 4 strikes miss.","goal":{"stat":"evades","n":4},"behav":"attack","gap":1.8},
+  {"id":"roll","name":"Through the Blade","hint":"Roll (Space, B or the swirl button) into a cut just as it lands, so it passes through you. 3 times.","goal":{"stat":"rollsThrough","n":3},"behav":"attack","gap":1.8},
+  {"id":"punish","name":"Punish the Miss","hint":"Make a blow miss — step back or duck — then strike while it recovers: 3 punishes (a red ring marks each).","goal":{"stat":"punishes","n":3},"behav":"attack","gap":1.8},
+  {"id":"parry","name":"The Perfect Parry","hint":"Start blocking just as a blow arrives (within 0.15 s; a guard held from before does not count): 3 perfect parries.","goal":{"stat":"parries","n":3},"behav":"attack","gap":1.8},
+  {"id":"combo","name":"A Long Stroke","hint":"Land 5 hits in a row with no pause longer than a breath: chain, kick, lunge.","goal":{"stat":"maxCombo","n":5},"behav":"idle"},
+  {"id":"issen","name":"Ink and Issen","hint":"Every hit fills ink. Fill all three bars, then strike with Issen (I, RT or 閃).","goal":{"stat":"issen","n":1},"behav":"idle"},
+  {"id":"spar","name":"Sparring","hint":"The dummy fights back now. Bring its health to zero once.","goal":{"stat":"downs","n":1},"behav":"fight"}]}
 </script>
 <script type="application/json" id="data-powers">
 {"schema_version":3,
@@ -1097,6 +1114,10 @@ const FOES={
   tip:'He fades and reappears beside you: watch for the pale ring.'},
  elite_oni:{id:'elite_oni',name:'Oni Lieutenant',title:'of the castle guard',jp:'将',kind:K.e_oni,s:1.15,hp:120,speed:260,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_cut','a_sweep','b_kick','a_wave'],ai:{think:.5,aggr:.65,block:.4,range:220},win:P(PS.high,{tl:-.2,hd:-.4}),
   tip:'The warlord’s officer: block his ink wave or roll through it.'}};
+// the training partner (1.7): an oak-and-straw dummy with a wooden sword and a retainer's readable cuts
+K.dummy={L:LH,ink:'#4a3b2a',back:'#8a7452',jit:.3,type:'bandit',sword:1,blen:96};
+FOES.dummy={id:'dummy',name:'Training Dummy',title:'oak and straw',jp:'守',kind:K.dummy,s:1.02,hp:100,speed:150,guard:PS.guard,wk:{},moves:['r_slash','r_high','r_low','b_kick'],ai:{think:.9,aggr:.5,block:.3,range:190},win:PS.stand,
+ tip:'Training: Esc (or the pause button) opens the options — partner, behaviour, drills, weapon, hitboxes.'};
 /* --- arenas --- */
 function shrineBG(c,t){WIND={x:-1,y:.06,s:.35};screen(c);c.fillStyle=PAPER;c.fillRect(0,0,W,H);camT(c,.06);c.globalAlpha=.6;c.drawImage(CLOUDL,-1800+t*5,-1450);c.globalAlpha=1;
  camT(c,.12);c.drawImage(M_FAR,-1800,-760);mistBand(c,.18,-200,t,.5);camT(c,.25);c.drawImage(M_MID,-1800,-560);mistBand(c,.32,-40,t,.6);
@@ -1116,13 +1137,35 @@ function castleBG(c,t){WIND={x:-1,y:.1,s:.8};screen(c);c.fillStyle=PAPER;c.fillR
  const hy=scr(0,-15,.38)[1];screen(c);const gr=c.createLinearGradient(0,hy,0,H);gr.addColorStop(0,ink(.25));gr.addColorStop(1,ink(.62));c.fillStyle=gr;c.fillRect(0,hy,W,H-hy);camT(c,1);tiles(c,FLOOR,1,-14);
  screen(c);c.globalCompositeOperation='multiply';c.fillStyle='rgb(255,226,210)';c.fillRect(0,0,W,H);c.globalCompositeOperation='source-over'}
 function castleFG(c,t){screen(c);c.fillStyle=RED;for(let i=0;i<40;i++){const y=H-((t*(60+hash(i)*90)+hash(i*3)*H)%H),x=((hash(i*5)*W+Math.sin(t+i)*60-t*25)%W+W)%W;c.globalAlpha=.75*(y/H);circ(c,x,y,1.5+hash(i*9)*2.5)}c.globalAlpha=1}
+// the Forgotten Dojo (training, 1.7): a dim hall of paper screens and dark pillars, a master's scroll, a rack of wooden swords,
+// light falling through the high windows. The wall is one layer built on first use.
+let DOJO=null;
+function dojoLayer(){return pre(3600,1200,g=>{const r=rng(61);g.fillStyle=ink(.16);g.fillRect(0,0,3600,1200);
+ for(let x=0;x<3600;x+=600)for(let k=0;k<3;k++){const px=x+60+k*170,py=200,pw=150,ph=820,open=x===1800&&k===1;g.fillStyle=open?ink(.55):'#e6dfcd';g.fillRect(px,py,pw,ph);
+  g.strokeStyle=ink(.55);g.lineWidth=6;g.strokeRect(px,py,pw,ph);g.lineWidth=2.2;for(let i=1;i<3;i++)line(g,[px+pw*i/3,py],[px+pw*i/3,py+ph]);for(let j=1;j<9;j++)line(g,[px,py+ph*j/9],[px+pw,py+ph*j/9])}
+ g.fillStyle=ink(.78);for(let x=0;x<=3600;x+=600)g.fillRect(x-26,60,52,1140);g.fillRect(0,60,3600,80);g.fillRect(0,165,3600,24);g.fillRect(0,1030,3600,46);
+ g.strokeStyle=ink(.9);for(let i=0;i<5;i++)dry(g,[[0,100+i*9],[1800,98+i*9],[3600,101+i*9]],5,i,{dry:.8,alpha:.4,even:1});
+ const sx=1500;g.fillStyle=ink(.85);g.fillRect(sx-100,520,200,450);g.fillStyle='#efe8d8';g.fillRect(sx-84,536,168,414);g.font='150px "Yuji Boku", serif';g.textAlign='center';g.textBaseline='middle';g.fillStyle=INK;g.fillText('師',sx,700);
+ g.fillStyle=RED;g.fillRect(sx+28,880,34,34);g.fillStyle=ink(.85);g.fillRect(sx-120,506,240,16);g.fillRect(sx-110,966,220,14);
+ const rx=2350;g.fillStyle=ink(.8);g.fillRect(rx-200,520,400,18);g.fillRect(rx-200,700,400,18);g.fillRect(rx-180,500,16,560);g.fillRect(rx+164,500,16,560);
+ g.strokeStyle=ink(.85);g.lineCap='round';for(let i=0;i<4;i++){g.lineWidth=11;const y=470+i*14;g.beginPath();g.moveTo(rx-230,y+60);g.quadraticCurveTo(rx,y-6,rx+230,y+56);g.stroke()}
+ g.fillStyle='rgba(236,229,214,.5)';for(let i=0;i<60;i++){g.globalAlpha=.25+r()*.3;circ(g,r()*3600,240+r()*780,1+r()*2)}g.globalAlpha=1})}
+function dojoBG(c,t){WIND={x:-1,y:.04,s:.06};screen(c);c.fillStyle=ink(.2);c.fillRect(0,0,W,H);if(!DOJO)DOJO=dojoLayer();
+ camT(c,.72);c.drawImage(DOJO,-1800,-1010);
+ screen(c);for(let i=0;i<3;i++){const x=260+i*640+Math.sin(t*.2+i)*30,gr=c.createLinearGradient(x,0,x+300,0);gr.addColorStop(0,'rgba(246,240,226,0)');gr.addColorStop(.5,'rgba(246,240,226,.16)');gr.addColorStop(1,'rgba(246,240,226,0)');
+  c.fillStyle=gr;c.beginPath();c.moveTo(x,0);c.lineTo(x+170,0);c.lineTo(x+480,H);c.lineTo(x+260,H);c.fill()}
+ camT(c,1);const gr=c.createLinearGradient(0,-6,0,520);gr.addColorStop(0,ink(.5));gr.addColorStop(1,ink(.26));c.fillStyle=gr;c.fillRect(CAM.x-2400,-6,4800,900);
+ c.strokeStyle=ink(.62);c.lineWidth=2;for(const y of[16,40,72,116,176,256,360])line(c,[CAM.x-2400,y],[CAM.x+2400,y]);tiles(c,FLOOR,1,-10)}
+function dojoFG(c,t){camT(c,1);c.fillStyle='#f3ecdc';for(let i=0;i<26;i++){const x=CAM.x-1100+((hash(i)*2200+t*(8+hash(i*3)*14))%2200),y=-700+hash(i*7)*680+Math.sin(t*.9+i)*24;c.globalAlpha=.25+.2*Math.sin(t*2+i);circ(c,x,y,1.6+hash(i*5)*1.8)}c.globalAlpha=1}
 const ARENAS=[
  {name:'the Burning Field',jp:'焼野',wind:.32,rain:.4,rumb:.25,bpm:116,notes:[N.D4,N.Eb4,N.G4,N.A4,N.Bb4],bg:(c,t)=>{WIND={x:-1,y:.08,s:1};fieldBG(c,t,t,{storm:1,sun:0,fire:1})},fg:(c,t)=>{fgGrass(c,t);rain(c,t,.55)}},
  {name:'the Bamboo Grove',jp:'竹林',wind:.18,rain:0,bpm:128,notes:[N.D4,N.G4,N.A4,N.D5,N.Eb5],bg:(c,t)=>{WIND={x:-1,y:.1,s:.45};bambooBG(c,t)},fg:leaves},
  {name:'the Mountain Shrine',jp:'山寺',wind:.22,rain:0,bpm:100,notes:[N.A3,N.D4,N.Eb4,N.G4,N.A4],bg:shrineBG,fg:(c,t)=>{camT(c,1);petalField(c,t,22,CAM.x-1200,CAM.x+1200,-950,10,4,8)}},
  {name:'the Moonlit Lake',jp:'月湖',wind:.08,rain:0,bpm:92,notes:[N.D4,N.Eb4,N.A4,N.Bb4,N.D5],bg:lakeBG,fg:lakeFG},
- {name:'the Oni Castle',jp:'鬼城',wind:.35,rain:0,rumb:.35,bpm:136,notes:[N.D4,N.Eb4,N.A3,N.Bb3,N.D5],bg:castleBG,fg:castleFG}];
+ {name:'the Oni Castle',jp:'鬼城',wind:.35,rain:0,rumb:.35,bpm:136,notes:[N.D4,N.Eb4,N.A3,N.Bb3,N.D5],bg:castleBG,fg:castleFG},
+ {name:'the Forgotten Dojo',jp:'師',wind:.02,rain:0,bpm:84,notes:[N.A3,N.D4,N.Eb4,N.G4,N.A4],bg:dojoBG,fg:dojoFG}];
 /* --- state & combat --- */
+const DOJO_A=5; // ARENAS index of the Forgotten Dojo (pushed after the five)
 const G={P:null,B:null,def:null,lv:0,proj:[],fx:[],t:0,rt:0,mt:0,rdt:0,st:0,state:'',round:1,timer:60,freeze:0,slow:1,slowT:0,shake:0,cam:{x:0,y:-240,z:1.2},keys:{},buf:null,jb:-9,paused:false,ban:null,nb:0,step:0,hint:0,mvId:0,seed:0,rand:Math.random,acc:0,ia:1};
 const NOIN={mx:0,up:false,down:false,atk:null};
 const snd=(n,v)=>{if(AU.ctx&&AU.ctx.state==='running')try{S[n](AU.ctx.currentTime+.01,v)}catch(e){}};
@@ -1162,17 +1205,18 @@ function stepMove(F,O,dt){const m=F.mv,a=F.mvT,b=a+dt;F.mvT=b;
  if(m.tick)m.tick(F,O,a,b);
  if(F.mv!==m)return;
  if(m.air&&!F.air&&b>.08){F.mv=null;setSt(F,'idle');return}
- if(b>=m.dur+(m.whiffLag&&m.hit&&!F.mask?m.whiffLag:0)){F.mv=null;F.manual=false;F.alpha=1;const n=F.next;F.next=null;if(n&&startMove(F,n))return;setSt(F,F.air?'jump':'idle')}}
+ if(b>=m.dur+(m.whiffLag&&m.hit&&!F.mask?m.whiffLag:0)){if(!F.isP&&m.hit&&!F.mask){const P=G.P;if(P&&Math.abs(P.x-F.x)<m.reach*F.def.s+60&&!P.block&&P.st!=='roll'&&P.st!=='hit'&&P.st!=='down')note('evades')}F.mv=null;F.manual=false;F.alpha=1;const n=F.next;F.next=null;if(n&&startMove(F,n))return;setSt(F,F.air?'jump':'idle')}}
 function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')return false;
  if(!proj){const dx=(Dd.x-A.x)*A.f;if(dx<-40||dx>m.reach*A.def.s+20*Dd.def.s)return false}
  const dAir=Dd.y<-50,dir=proj?Math.sign(m.vx)||A.f:A.f;
  if(!proj&&(m.zone==='high'&&Dd.crouch&&!dAir||m.zone==='low'&&dAir))return false;
- if(invul(Dd)){if(Dd.st==='move'&&Dd.mv.dodgeInk&&!Dd.d.dodged){Dd.d.dodged=1;inkUp(Dd,Dd.mv.dodgeInk)}return false} // Miststep III: ink for slipping a live attack
+ if(invul(Dd)){if(Dd.isP&&Dd.st==='roll'&&!proj&&G.rtSeen!==A.mvId){G.rtSeen=A.mvId;note('rollsThrough')} /* rolled through a blow that would have landed */if(Dd.st==='move'&&Dd.mv.dodgeInk&&!Dd.d.dodged){Dd.d.dodged=1;inkUp(Dd,Dd.mv.dodgeInk)}return false} // Miststep III: ink for slipping a live attack
  const hx=Dd.x-dir*14*Dd.def.s,hy=Dd.y+ZY[m.zone||'mid']*Dd.def.s*(Dd.crouch&&m.zone!=='low'?.7:1);
  const facing=Dd.f===-dir,canBlock=!m.unblock&&Dd.block&&facing&&!dAir&&(isFree(Dd)||Dd.st==='bstun')&&(m.zone==='low'?Dd.crouch:m.zone==='high'?!Dd.crouch:true);
  const assist=!canBlock&&Dd.isP&&SV.settings.assist&&!proj&&!m.unblock&&facing&&!dAir&&Dd.st==='idle'&&!Dd.crouch&&m.zone!=='low'&&!(G.trial&&G.trial.no_block); // Guard Assist (§5.8b): an idle hero raises the guard on mid / high
+ if(canBlock&&Dd.isP&&G.parry&&G.t-(Dd.blockT??-9)<=MOVE.parry.win+(Dd.mod.parry||0))return parry(A,Dd,m,proj,hx,hy);
  if(canBlock||assist){if(m.chip)Dd.hp=Math.max(1,Dd.hp-m.dmg*m.chip*A.mod.dmg); // Moon Pierce: a share through the guard
-  setSt(Dd,'bstun');Dd.stun=.2;Dd.vx=dir*(m.push||90)*.9*(m.blockPush||1)*(assist?.6:1);fxAdd({k:'clash',x:hx,y:hy,sz:.7});snd('clang',.55);inkUp(A,3);inkUp(Dd,5);G.freeze=.04;G.shake=Math.max(G.shake,5);return true}
+  setSt(Dd,'bstun');Dd.stun=.2;Dd.vx=dir*(m.push||90)*.9*(m.blockPush||1)*(assist?.6:1);fxAdd({k:'clash',x:hx,y:hy,sz:.7});snd('clang',.55);inkUp(A,3);inkUp(Dd,5);if(Dd.isP)note('blocks');G.freeze=.04;G.shake=Math.max(G.shake,5);return true}
  // damage: rage, then the attacker's modifiers (attack, chain hits 2-3, a crit drawn from the fight RNG only if crit > 0), then the defender's
  let dmg=m.dmg*(A.rage?1.2:1)*(A.sov?A.sov.dmg:1)*A.mod.dmg*(!proj&&(A.mvn==='slash2'||A.mvn==='slash3'||A.mvn==='slash4')?A.mod.combo:1);const crit=A.mod.crit>0&&G.rand()<A.mod.crit;if(crit)dmg*=A.mod.critDmg;
  const tr=A.mod.tr;if(tr){if(tr.first&&!A.firstHit)dmg*=1+tr.first;if(tr.momentum)dmg*=1+Math.min(tr.momentum[1],(A.mom||0)*tr.momentum[0])} // weapon traits: first strike, momentum
@@ -1182,7 +1226,7 @@ function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')
  const iron=Dd.iron;if(iron){if(!m.kd){iron.absorbed+=dmg;iron.cnt=G.t+.5}dmg*=1-iron.mit;fxAdd({k:'clash',x:hx,y:hy,sz:.6})} // Iron Resolve: absorbed blows feed the counter
  if(A.sov&&A.sov.bleed)Dd.bleed={until:G.t+3,dps:A.sov.bleed};
  if(tr){if(tr.burn)Dd.bleed={until:G.t+tr.burn[1],dps:tr.burn[0]};if(tr.inkFirst&&!A.firstHit)inkUp(A,tr.inkFirst);A.firstHit=1;A.mom=(A.mom||0)+1}Dd.mom=0; // burn (never kills), the first-hit ink, momentum resets when hit
- Dd.hp=Math.max(0,Dd.hp-dmg*(1-Dd.mod.mit));Dd.lagHold=.6;Dd.hitFlash=.14;
+ const hp0=Dd.hp;Dd.hp=Math.max(0,Dd.hp-dmg*(1-Dd.mod.mit));Dd.lagHold=.6;Dd.hitFlash=.14;Dd.hurtT=G.t;
  if(Dd.isP&&G.tea&&Dd.hp>0&&Dd.hp<Dd.maxHp*GEAR.items.healing_tea.effect.below){G.tea=false;Dd.hp=Math.min(Dd.maxHp,Dd.hp+GEAR.items.healing_tea.effect.heal*Dd.mod.heal);fxAdd({k:'ring',x:Dd.x,y:0});snd('gong',.3)} // Healing Tea, once
  const foot=m.kd&&Dd.mod.footing&&!Dd.footUsed&&Dd.hp>0,kd=m.kd&&!foot;if(foot)Dd.footUsed=1; // Oni-gane Plate: the first knockdown each round only staggers
  const armored=(Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.pierceArmor||skin||iron)&&!kd&&Dd.hp>0;if(iron&&kd)Dd.iron=null;
@@ -1191,10 +1235,21 @@ function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')
   else{setSt(Dd,'hit');Dd.stun=m.stun||.3;Dd.vx=dir*(m.push||90);Dd.hz=m.zone||'mid';Dd.hk=m.dmg>=10;Dd.hn=(Dd.hn||0)+1}}
  fxAdd({k:'slash',x:hx,y:hy,a:m.zone==='high'?-.75:m.zone==='low'?.35:(Math.random()-.5)*.5});if(crit)fxAdd({k:'slash',x:hx,y:hy,a:.9}); /* a crit crosses the mark */fxAdd({k:'splash',x:hx,y:hy,sz:m.kd?70:46,dir:dir>0?0:Math.PI});
  G.freeze=m.kd?.09:.055;G.shake=Math.max(G.shake,m.kd?18:9);snd('drum',m.kd?.9:.55);if(m.kd)snd('boom',.3);if(Dd.isP&&SV.settings.haptics&&navigator.vibrate)navigator.vibrate(m.kd?45:18);G.punch=Math.max(G.punch||0,m.kd?.03:m.dmg>=10?.02:.008); // impact tiers
- inkUp(A,9);inkUp(Dd,5);
+ inkUp(A,9);inkUp(Dd,5);scoreHit(A,Dd,hp0-Dd.hp,punish,crit,kd,proj);
  if(Dd.def.ai&&Dd.def.ai.rage&&!Dd.rage&&Dd.hp<Dd.maxHp*.5&&Dd.hp>0){Dd.rage=true;G.ban={k:'怒',sub:'The warlord’s fury awakens',t0:G.rt,dur:1.6};snd('growl',1)}
  const ph=Dd.def.phase;if(ph&&!Dd.phase&&Dd.hp<Dd.maxHp*ph.at&&Dd.hp>0){Dd.phase=true;if(ph.k){G.ban={k:ph.k,sub:ph.sub,t0:G.rt,dur:1.5,size:240};snd('gong',.5)}} // the boss's second phase
  return true}
+// the perfect parry: the attacker reels (melee), a projectile breaks, the hero gains ink (and heals with the parry-heal trait)
+function parry(A,Dd,m,proj,hx,hy){if(!proj&&A.st==='move'){A.mv=null;A.manual=false;A.alpha=1;A.next=null;A.crouch=false;setSt(A,'hit');A.stun=MOVE.parry.stun;A.vx=-A.f*160;A.hz='mid';A.hk=true;A.hn=(A.hn||0)+1}
+ if(A.ward)A.wardOff=G.t+3; // a celestial ward shatters (White Mode)
+ const tr=Dd.mod.tr;if(tr&&tr.parryHeal)Dd.hp=Math.min(Dd.maxHp,Dd.hp+tr.parryHeal*Dd.mod.heal);
+ inkUp(Dd,MOVE.parry.ink);note('parries');fxAdd({k:'parry',x:hx,y:hy});snd('clang',.9);snd('tell',.5);G.freeze=.09;G.shake=Math.max(G.shake,6);return true}
+// fight tallies (1.7): drills, daily challenges and achievements read them; nothing in a fight depends on them
+const note=(k,n=1)=>{if(G.tally)G.tally[k]=(G.tally[k]||0)+n};
+function scoreHit(A,Dd,d,punish,crit,kd,proj){if(!G.tally)return;
+ if(A===G.P||A===G.clone){note('hits');note('dmg',d);if(punish)note('punishes');if(kd)note('knockdowns');if(!proj&&A.mvn==='slash3')note('chains');if(A.mv&&A.mv.issen)note('issen');if(A===G.P&&HERO_MV[A.mvn])note('powerHits');
+  const C=G.combo;if(G.t-C.t<.9)C.n++;else{C.n=1;C.dmg=0}C.dmg+=d;C.t=G.t;G.tally.maxCombo=Math.max(G.tally.maxCombo||0,C.n);if(G.train)fxAdd({k:'num',x:Dd.x,y:-270*Dd.def.s,v:Math.round(d*10)/10,crit})}
+ else if(Dd===G.P)note('hurt',d)}
 // ink gain: the fighter's ink modifier, faster below half health with the Ember of Rage echo
 const inkUp=(F,v)=>{F.ink=Math.min(100,F.ink+v*F.mod.ink*(F.sov?1.5:1)*(F.mod.ember&&F.hp<F.maxHp*F.mod.ember.below?1+F.mod.ember.ink:1))};
 function spawnProj(F,pd){const wave=pd.type==='wave';G.proj.push({o:F,x:F.x+F.f*80*F.def.s,y:pd.y*F.def.s,vx:pd.v*F.f*(wave&&F.mod.waveV||1),pierce:wave&&!!F.mod.pierce,ground:pd.ground,wide:pd.wide,ret:pd.ret,type:pd.type,dmg:pd.dmg,zone:pd.zone,kd:pd.kd,push:140,t:0,big:F.def.s>1.2});snd(pd.type==='star'||pd.type==='wisp'?'whoosh':'slash',.5)}
@@ -1228,7 +1283,7 @@ function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;
  F.x=clamp(F.x,-ARENA,ARENA)}
 function separate(a,b){if(a.air||b.air||a.manual||b.manual||a.mv&&a.mv.issen||b.mv&&b.mv.issen||a.st==='dead'||b.st==='dead')return;const min=58*(a.def.s+b.def.s)/2,d=b.x-a.x;
  if(Math.abs(d)<min){const p=(min-Math.abs(d))/2*(d>=0?1:-1);a.x=clamp(a.x-p,-ARENA,ARENA);b.x=clamp(b.x+p,-ARENA,ARENA)}}
-function ai(B,Pl,dt){const A=B.def.ai,d=Math.abs(Pl.x-B.x),inp={mx:0,up:false,down:false,atk:null},toward=Pl.x>B.x?1:-1,R=B.rage?.7:1,s=B.def.s;
+function ai(B,Pl,dt){if(G.train&&G.train.behav!=='fight')return trainAI(B,Pl,dt);const A=B.def.ai,d=Math.abs(Pl.x-B.x),inp={mx:0,up:false,down:false,atk:null},toward=Pl.x>B.x?1:-1,R=B.rage?.7:1,s=B.def.s;
  if(Pl.st==='move'&&!Pl.mv.issen&&B.ai.seen!==Pl.mvId){B.ai.seen=Pl.mvId;if(d<(Pl.mv.reach||300)+130&&G.rand()<A.block*(B.rage?1.2:1)+(Pl.sov?.2:0)){B.ai.blk=.42;B.ai.low=Pl.mv.zone==='low'}}
  for(const p of G.proj)if(p.o===Pl&&!p.seen&&Math.abs(p.x-B.x)<420&&Math.sign(B.x-p.x)===Math.sign(p.vx)){p.seen=1;if(G.rand()<A.block+.25){B.ai.blk=.5;B.ai.low=p.zone==='low'}}
  if(B.ai.blk>0){B.ai.blk-=dt;inp.mx=-toward;inp.down=B.ai.low;return inp}
@@ -1251,16 +1306,17 @@ function readIn(){const k=G.keys;return{mx:(k.right?1:0)-(k.left?1:0),up:fresh(G
 function newRound(){for(const[F,x,f]of[[G.P,-300,1],[G.B,300,-1]]){Object.assign(F,{x,y:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},once:{},sov:null,iron:null,burn:0,bleed:null,phase:false,firstHit:0,mom:0,footUsed:0,trail:null,rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
  G.proj=[];G.fx=[];G.clone=null;G.timer=G.roundTime||60;if(G.item==='focus_incense')G.P.ink=Math.max(G.P.ink,GEAR.items.focus_incense.effect.ink);
  if(G.trial){if(G.trial.hero_hp)G.P.hp=G.P.lag=G.P.maxHp*G.trial.hero_hp;if(G.trial.phase)G.B.phase=true;if(G.trial.rage)G.B.rage=true} /* Ink Trial modifiers */G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
- G.ban=G.round===1?{k:G.trial?'墨':G.def.jp,sub:(G.trial?`Ink Trial · ${G.trial.name}: ${G.trial.desc}`:`${G.def.name}, ${G.def.title}`)+(G.item?` · ${GEAR.items[G.item].name} at hand`:''),t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
+ G.ban=G.round===1?{k:G.train?'師':G.trial?'墨':G.def.jp,sub:G.train?`Training · ${G.def.name}`:(G.trial?`Ink Trial · ${G.trial.name}: ${G.trial.desc}`:`${G.def.name}, ${G.def.title}`)+(G.item?` · ${GEAR.items[G.item].name} at hand`:''),t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
 function endRound(){G.rw.wins++;if(G.rw.wins>=(G.need||2))matchEnd(G.rw===G.P);else{G.round++;newRound()}}
 function updGame(dt){if(G.paused||G.state==='over')return;G.shake*=Math.pow(.004,dt);if(G.hint>0&&G.state==='fight')G.hint-=dt;
  if(G.freeze>0){G.freeze-=dt;return}
  if(G.slowT>0){G.slowT-=dt;if(G.slowT<=0)G.slow=1}
  const sdt=dt*G.slow,pl=G.P,bo=G.B,live=G.state==='fight';G.t+=sdt;G.st+=sdt;
- pl.in=live?readIn():NOIN;bo.in=live?ai(bo,pl,sdt):NOIN;
+ pl.in=live?readIn():NOIN;bo.in=live?ai(bo,pl,sdt):NOIN;{const bw=!!pl.in.block||!!pl.in.mx&&pl.in.mx===-pl.f;if(bw&&!G.bw)pl.blockT=G.t;G.bw=bw}
  upd(pl,bo,sdt);upd(bo,pl,sdt);separate(pl,bo);updProj(sdt);updClone(sdt);
  {let k=0;for(const f of G.fx)if(f.persist||G.t-f.t0<2)G.fx[k++]=f;G.fx.length=k}
  if(G.state==='intro'&&G.st>(G.round===1?2.5:1.7)){G.state='fight';G.st=0;G.ban={k:'始',sub:'Begin',t0:G.rt,dur:.9,size:260};snd('drum',1);snd('slash',.6)}
+ else if(live&&G.train)trainTick(sdt);
  else if(live){G.timer-=sdt;const pk=pl.hp<=0,bk=bo.hp<=0,to=G.timer<=0;
   if(pk||bk||to){const pw=bk||!pk&&to&&pl.hp/pl.maxHp>=bo.hp/bo.maxHp,L=pw?bo:pl;G.rw=pw?pl:bo;G.state='ko';G.st=0;if(L.hp<=0){fxAdd({k:'smoke',x:L.x,y:0,pale:L.def.kind.type==='ghost'?1:0});fxAdd({k:'splash',x:L.x,y:-120*L.def.s,sz:90,dir:-1.57,persist:1});L.mv=null;L.manual=false;L.alpha=1;if(L.st!=='down')setSt(L,'dead');else L.st='dead'}
    G.slow=.3;G.slowT=.9;const timeUp=to&&!pk&&!bk;G.ban={k:timeUp?'時':pw?'勝':'敗',sub:timeUp?(pw?'Time — you lead':'Time — you trail'):pw?'Victory':'Defeat',t0:G.rt,dur:2.2,seal:pw};snd('boom',.8);snd(pw?'gong':'drum',.6)}}
@@ -1326,6 +1382,8 @@ function drawFx(c){camT(c,1);for(const f of G.fx){const age=G.t-f.t0;
  else if(f.k==='dust'&&age<.5){c.globalAlpha=.22*(1-age/.5);c.drawImage(PUFF,f.x-60-age*80,f.y-30,120+age*160,40);c.globalAlpha=1}
  else if(f.k==='smoke'&&age<.9){for(let i=0;i<7;i++){const r=(40+age*140)*(.6+hash(f.seed+i)*.6);c.globalAlpha=.6*(1-age/.9);c.drawImage(f.pale?MIST:PUFF,f.x+(hash(f.seed+i*3)-.5)*120-r,f.y-hash(f.seed+i*7)*220-r,r*2,r*2)}c.globalAlpha=1}
  else if(f.k==='ring'&&age<.6){c.strokeStyle=ink(.8,1-age/.6);c.lineWidth=6*(1-age/.6)+1;c.beginPath();c.ellipse(f.x,f.y,40+age*600,(40+age*600)*.16,0,0,6.3);c.stroke()}
+ else if(f.k==='num'&&age<.9){c.globalAlpha=1-age/.9;c.fillStyle=f.crit?RED:INK;c.font='600 44px "Cormorant Garamond", serif';c.textAlign='center';c.fillText(f.v,f.x,f.y-age*110);c.globalAlpha=1} // training: damage dealt
+ else if(f.k==='parry'&&age<.45){const u=age/.45;c.strokeStyle='#c49a3c';c.globalAlpha=1-u;c.lineWidth=8*(1-u)+1;c.beginPath();c.arc(f.x,f.y,24+u*240,0,6.2832);c.stroke();c.lineWidth=4*(1-u)+1;for(let k=0;k<8;k++){const a=k*.785+.3,r0=40+u*120,r1=70+u*230;line(c,[f.x+Math.cos(a)*r0,f.y+Math.sin(a)*r0],[f.x+Math.cos(a)*r1,f.y+Math.sin(a)*r1])}c.globalAlpha=1} // the perfect parry: a gold burst
  else if(f.k==='punish'&&age<.3){c.strokeStyle=RED;c.globalAlpha=1-age/.3;c.lineWidth=7*(1-age/.3)+1;c.beginPath();c.arc(f.x,f.y,24+age*220,0,6.2832);c.stroke();c.globalAlpha=1}
  else if(f.k==='lance'&&age<.3){c.strokeStyle=RED;c.globalAlpha=1-age/.3;c.lineWidth=5*(1-age/.3)+1;line(c,[f.x,f.y],[f.x+f.f*f.len,f.y+4]);c.globalAlpha=1}
  else if(f.k==='moon'&&age<.4){const u=age/.4;c.save();c.translate(f.x,f.y);c.scale(f.f,1);c.fillStyle=RED; // Red Moon: a crescent at full reach + the thrust streak
@@ -1354,8 +1412,8 @@ function hud(c){screen(c);const pl=G.P,bo=G.B;c.globalAlpha=.85;c.drawImage(MIST
   c.fillStyle=ok?RED:INK;c.textAlign='center';c.textBaseline='middle';c.font='30px "Yuji Boku", serif';c.fillText(pw.jp,x,y+1);
   if(!TOUCH.on){c.font='600 16px "Cormorant Garamond", serif';c.fillStyle=ink(.6);c.fillText(['U','O'][i],x,y+40)}c.globalAlpha=1;c.textBaseline='alphabetic'});
  const cx=W/2,cy=102,pts=[];for(let i=0;i<=40;i++){const a=-1.4+i/40*5.9;pts.push([cx+Math.cos(a)*52,cy+Math.sin(a)*52])}c.strokeStyle=INK;dry(c,pts,11,7,{dry:.6});
- c.fillStyle=INK;c.textAlign='center';c.textBaseline='middle';c.font='600 50px "Cormorant Garamond", serif';c.fillText(Math.max(0,Math.ceil(G.timer)),cx,cy+2);
- c.font='500 20px "Cormorant Garamond", serif';c.fillStyle=ink(.6);c.fillText(G.trial?'INK TRIAL · '+G.trial.name.toUpperCase():G.node.kind==='step'?ARENAS[G.arena].name.toUpperCase()+' · '+(LAD.regions[G.lv].steps[G.node.i].elite?'ELITE':'RETAINER'):['FIRST','SECOND','THIRD','FOURTH','FIFTH'][G.lv]+' SHADOW · '+ARENAS[G.arena].name.toUpperCase(),cx,184);
+ c.fillStyle=INK;c.textAlign='center';c.textBaseline='middle';c.font='600 50px "Cormorant Garamond", serif';c.fillText(G.train?'∞':Math.max(0,Math.ceil(G.timer)),cx,cy+2);
+ c.font='500 20px "Cormorant Garamond", serif';c.fillStyle=ink(.6);c.fillText(G.train?'THE FORGOTTEN DOJO · '+(G.train.drill?'DRILL · '+drillOf(G.train.drill).name.toUpperCase():'FREE PRACTICE'):G.trial?'INK TRIAL · '+G.trial.name.toUpperCase():G.node.kind==='step'?ARENAS[G.arena].name.toUpperCase()+' · '+(LAD.regions[G.lv].steps[G.node.i].elite?'ELITE':'RETAINER'):['FIRST','SECOND','THIRD','FOURTH','FIFTH'][G.lv]+' SHADOW · '+ARENAS[G.arena].name.toUpperCase(),cx,184);
  if(G.hint>0&&G.state!=='ko'&&G.state!=='absorb'){const a=clamp(G.hint);c.globalAlpha=a*.86;c.fillStyle=PAPER;c.beginPath();c.roundRect(W/2-850,H-112,1700,96,48);c.fill();c.globalAlpha=a;c.fillStyle=INK;c.font='500 25px "Cormorant Garamond", "Yuji Boku", serif';
   c.fillText(PAD.on?'Stick  move  ·  LB  block  ·  A  jump  ·  B  roll  ·  down  crouch  ·  X  slash  ·  Y  kick  ·  RB  ink wave  ·  RT  issen  ·  Start  pause':TOUCH.on?'Joystick  move  ·  pull back or 守  block  ·  up  jump  ·  down  crouch  ·  roll button  dodge  ·  斬  slash  ·  蹴  kick  ·  墨  ink wave  ·  閃  issen':'← →  move  ·  H or hold back  block  ·  ↑  jump  ·  ↓  crouch  ·  Space  roll  ·  J  slash  ·  K  kick  ·  L  ink wave  ·  I  issen  ·  Esc  pause',W/2,H-72);c.font='italic 23px "Cormorant Garamond", serif';c.fillStyle=ink(.7,a);c.fillText(G.def.tip,W/2,H-38);c.globalAlpha=1}
  c.textBaseline='alphabetic'}
@@ -1373,10 +1431,10 @@ function renderGame(){const ar=ARENAS[G.arena],pl=G.P,bo=G.B,t=G.t,dt=Math.min(.
  const sk=SHK[SV.settings.shake];G.punch=(G.punch||0)*Math.pow(.002,dt);setCam(Object.assign({},G.cam,{z:G.cam.z*(1+G.punch*sk)}),G.shake*sk,G.rt);ar.bg(X,t); // shake and camera punch honor Reduce Shake
  const iss=pl.st==='move'&&pl.mv.issen?pl.mvT:-1;if(iss>=0){screen(X);X.globalAlpha=ss(0,.18,iss)*(1-ss(.85,1.2,iss))*.88*FLK[SV.settings.flash];X.fillStyle='#f6f1e6';X.fillRect(0,0,W,H);X.globalAlpha=1}
  drawMarks(X);camT(X,1);for(const F of[bo,pl]){const y=ip(F.y,F.py),w=72*F.def.s*(1-Math.min(.6,-y/400));X.fillStyle=ink(.9,.16*(1-Math.min(.7,-y/350)));X.beginPath();X.ellipse(ip(F.x,F.px),2,w,w*.16,0,0,6.2832);X.fill()} // contact shadows
- figLayer(X,g=>{drawF(g,bo);if(G.clone)drawClone(g);drawF(g,pl)},SV.settings.quality==='low'?0:3);drawFx(X);drawProj(X);ar.fg(X,t);if(G.state==='absorb')drawAbsorb(X);
+ figLayer(X,g=>{drawF(g,bo);if(G.clone)drawClone(g);drawF(g,pl)},SV.settings.quality==='low'?0:3);drawFx(X);drawProj(X);ar.fg(X,t);if(G.train&&G.train.boxes)drawBoxes(X);if(G.state==='absorb')drawAbsorb(X);
  if(iss>=.4&&iss<1.25){const pr=clamp((iss-.4)/.22),al=1-ss(.85,1.25,iss),y=scr(0,-150*bo.def.s)[1];screen(X);const pts=[];for(let i=0;i<=50;i++){const u=i/50;pts.push([lerp(120,lerp(120,W-120,E.out(pr)),u),y+Math.sin(u*3)*10+40-u*90])}
   X.fillStyle=INK;X.globalAlpha=al;brush(X,pts,34,{taper:u=>Math.pow(Math.sin(Math.PI*clamp(u*.96+.02)),.45)});X.strokeStyle=INK;dry(X,pts,60,7,{dry:.9,alpha:al*.8});X.globalAlpha=1}
- grain(X);hud(X);banner(X);if(G.state==='absorb')absorbText(X);if(G.overlay)G.overlay(X)} // G.overlay: debug frame-data overlay
+ grain(X);hud(X);if(G.train)trainHUD(X);banner(X);if(G.state==='absorb')absorbText(X);if(G.overlay)G.overlay(X)} // G.overlay: debug frame-data overlay
 // victory ceremony: the defeated boss's ink streams into the hero, then the power is named (ABSORB s; a key or tap skips after 0.8 s)
 const ABSORB=5.4;
 function drawAbsorb(c){const pl=G.P,bo=G.B,a=[bo.x,-150*bo.def.s],b=[pl.x,-150],m=[(a[0]+b[0])/2,-420],q=e=>[(1-e)*(1-e)*a[0]+2*(1-e)*e*m[0]+e*e*b[0],(1-e)*(1-e)*a[1]+2*(1-e)*e*m[1]+e*e*b[1]];camT(c,1);
@@ -1396,13 +1454,14 @@ function nightVeil(c,t){screen(c);c.globalCompositeOperation='multiply';c.fillSt
 /* --- progression: save v2, XP and levels, boss rewards, absorbed powers. Pure logic (no DOM); storage goes through `store`.
    Save format: docs/save-format.md · numbers: docs/balance.md --- */
 const DATA=id=>JSON.parse(document.getElementById(id).textContent);
-const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,MOVE=DATA('data-movement'),LAD=DATA('data-ladders'),GEAR=DATA('data-gear'),ECON=DATA('data-economy'),BOSS_IDS=BOSSES.map(b=>b.id);
+const PROG=DATA('data-progression'),POWERS=DATA('data-powers').powers,MOVE=DATA('data-movement'),LAD=DATA('data-ladders'),GEAR=DATA('data-gear'),ECON=DATA('data-economy'),TRAIN=DATA('data-training'),BOSS_IDS=BOSSES.map(b=>b.id);
 function validateData(){const e=[],ok=(c,m)=>{if(!c)e.push(m)};
  ok(PROG.schema_version===2,'progression.schema_version');ok(DATA('data-powers').schema_version===3,'powers.schema_version');
  {const A=PROG.attributes;ok(A.rank_cap>0&&A.k>0&&A.crit_damage>=1&&['assault','survival','shadowcraft'].every(p=>Object.values(A[p]).every(v=>v>=0&&v<1)),'attributes')}
  ok(PROG.echo_slots.unlock_levels.length===2&&PROG.power_tiers.length===4&&PROG.power_tiers.every(t=>t.sp>0&&t.mon>=0),'echo slots / power tiers');
  ok(PROG.xp.base>0&&PROG.xp.exponent>0&&PROG.xp.level_cap>=2&&PROG.xp.repeat_share>=0&&PROG.xp.repeat_share<=1,'xp curve');
  ok(PROG.power_slots.unlock_levels.length===2&&PROG.level_up.attr_points>=0,'slots / level-up');
+ ok(MOVE.parry.win>0&&MOVE.parry.win<=.25&&MOVE.parry.stun>0&&MOVE.parry.ink>=0,'movement.parry');ok(TRAIN.schema_version===1&&TRAIN.reward_mon>=0&&TRAIN.drills.every(d=>d.id&&d.name&&d.hint&&d.goal&&d.goal.n>0&&['idle','block','attack','fight'].includes(d.behav)),'training drills');
  ok(['state','move','hit','fall','turn','land'].every(k=>MOVE.blend[k]>0&&MOVE.blend[k]<=.2)&&MOVE.blend.step_px>0,'movement.blend');
  {const r=MOVE.roll;ok(MOVE.schema_version===1&&r.dur>0&&r.dist>0&&r.travel>0&&r.travel<=r.dur&&r.inv[0]>=0&&r.inv[0]<r.inv[1]&&r.inv[1]<=r.dur&&r.cd>=r.dur,'movement.roll')}
  ok(LAD.schema_version===1&&LAD.regions.length===BOSS_IDS.length&&LAD.regions.every((R,i)=>R.boss===BOSS_IDS[i]&&R.story.length&&R.steps.length>=2&&R.steps.every(st=>FOES[st.foe]&&st.xp>0)&&R.steps.some(st=>!st.elite)),'ladders');
@@ -1583,7 +1642,7 @@ function applySettings(){const st=SV.settings;vols();document.body.classList.tog
  document.documentElement.style.setProperty('--k',st.scale);KMAP=Object.assign({},KMAP0);for(const[c,a]of Object.entries(st.keys))KMAP[c]=a}
 /* --- flow & menus --- */
 let MODE='film',helpBack='menu',VIEW='home'; // VIEW: the hub screen the menus return to ('home' = main menu, 'map' = world map)
-const PANELS=['home','shop','menu','result','pause','help','char','notice','region','settings'];
+const PANELS=['home','shop','train','menu','result','pause','help','char','notice','region','settings'];
 const show=id=>{for(const p of PANELS)document.getElementById(p).classList.toggle('off',p!==id)};
 function buildMenu(){const box=document.getElementById('levels');box.innerHTML='';const todo=SV.profile.attrPts>0||Object.keys(SV.powers).some(id=>!tierBlock(SV,id));$('mChar').textContent=`Character · level ${SV.profile.level}${todo?' · points to spend':''}`;BOSSES.forEach((b,i)=>{const done=SV.progress.beaten>i,open=SV.progress.regionsUnlocked>i,ns=ladderNodes(SV,i).filter(n=>n.kind==='step'),c=ns.filter(n=>n.cleared).length,el=document.createElement('button');
  el.className='card'+(open?'':' locked');el.disabled=!open;el.setAttribute('aria-label',`${ARENAS[b.arena].name}: ${b.name}, ${b.title}. ${done?'Defeated':open?'Open':'Locked'}`);
@@ -1606,11 +1665,66 @@ function openRegion(lv){REG=lv;const R=LAD.regions[lv],b=BOSSES[lv],ar=ARENAS[b.
   el.onclick=()=>startFight(lv,undefined,n.kind==='step'?{kind:'step',i:n.i}:{kind:n.kind});box.appendChild(el)}
  show('region');amb(.1,0,0);box.firstChild&&box.firstChild.focus()}
 // a fight in region lv: node = {kind:'boss'} (default), {kind:'step', i} (a ladder duel) or {kind:'trial'} (the boss's Ink Trial)
-function startFight(lv,seed,node={kind:'boss'}){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.lv=lv;G.node=node;G.seed=(seed??SEED_Q??Math.random()*4294967296)>>>0;G.rand=rng(G.seed);G.acc=0;G.ia=1;
+function startFight(lv,seed,node={kind:'boss'}){prep(seed);G.lv=lv;G.node=node;G.train=null;G.parry=false;
  const st=node.kind==='step'&&LAD.regions[lv].steps[node.i];G.trial=node.kind==='trial'?LAD.trials[BOSS_IDS[lv]]:null;G.arena=BOSSES[lv].arena;G.need=st&&!st.elite?1:2;G.roundTime=G.trial&&G.trial.timer||60;
- G.def=st?Object.assign({},FOES[st.foe],{hp:Math.round(FOES[st.foe].hp*(1+LAD.hp_per_region*lv))}):BOSSES[lv];G.P=mkF(heroDef(),true);G.B=mkF(G.def,false);takeSupply(true);G.matchId=`${node.kind}:${lv}:${node.i??''}:`+Date.now();G.res=null;G.rv=0;
- G.P.def.powers.forEach((id,i)=>{const el=tEls['p'+(i+1)];el.classList.toggle('off',!id);if(id)el.innerHTML=`<b>${POWERS[id].jp}</b><i>${POWERS[id].short}</i>`});G.round=1;G.t=0;G.mvId=0;G.hint=lv===0&&node.kind==='step'&&!node.i?14:7;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2};
- MODE='game';show(null);const ar=ARENAS[G.arena];amb(ar.wind,ar.rain,ar.rumb||0);newRound()}
+ fighters(st?Object.assign({},FOES[st.foe],{hp:Math.round(FOES[st.foe].hp*(1+LAD.hp_per_region*lv))}):BOSSES[lv]);takeSupply(true);G.matchId=`${node.kind}:${lv}:${node.i??''}:`+Date.now();
+ G.hint=lv===0&&node.kind==='step'&&!node.i?14:7;go()}
+function prep(seed){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.seed=(seed??SEED_Q??Math.random()*4294967296)>>>0;G.rand=rng(G.seed);G.acc=0;G.ia=1}
+function fighters(def,hero){G.def=def;G.P=mkF(hero||heroDef(),true);G.B=mkF(def,false);G.res=null;G.rv=0;G.tally={};G.combo={n:0,dmg:0,t:-9};G.item=null;G.tea=false;
+ G.P.def.powers.forEach((id,i)=>{const el=tEls['p'+(i+1)];el.classList.toggle('off',!id);if(id)el.innerHTML=`<b>${POWERS[id].jp}</b><i>${POWERS[id].short}</i>`});G.round=1;G.t=0;G.mvId=0;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2}}
+function go(){MODE='game';show(null);const ar=ARENAS[G.arena];amb(ar.wind,ar.rain,ar.rumb||0);newRound()}
+/* --- the Training Room (1.7): the Forgotten Dojo. A dummy or any foe already met, idle, blocking, attacking (every move or one
+   pattern, at a chosen tempo) or fighting back; any owned weapon; infinite health and ink; hitboxes; drills that teach each
+   skill. No clock, no KO, no rewards (a drill pays a little mon the first time only) and nothing in the save changes. --- */
+const drillOf=id=>TRAIN.drills.find(d=>d.id===id);
+const partners=()=>{const s=SV,ids=['dummy'];LAD.regions.forEach((R,lv)=>R.steps.forEach((st,i)=>{if(s.rewardsClaimed[`step:${R.id}:${i}`]&&!ids.includes(st.foe))ids.push(st.foe)}));for(const id of s.progress.defeated)ids.push(id);return ids};
+const partnerDef=id=>FOES[id]||BOSSES.find(b=>b.id===id)||FOES.dummy;
+const movesOf=d=>d.moves.concat(d.phase?[d.phase.move]:[]).filter(n=>MV[n]&&MV[n].ai);
+const moveName=n=>{const m=MV[n];return`${n.replace(/^[a-z]_/,'').replace(/[0-9_]+/g,' ').trim()} · ${m.proj?'thrown, '+m.proj.zone:m.zone||'mid'}${m.kd||m.proj&&m.proj.kd?', knockdown':''}`};
+function startTraining(o){G.train=Object.assign({partner:'dummy',behav:'idle',move:null,gap:1.4,inf:true,ink:false,boxes:false,weapon:null,drill:null},G.train||{},o||{},{drill:null});prep();G.hint=7;trainSetup();go()}
+function trainSetup(){const T=G.train;if(!partners().includes(T.partner))T.partner='dummy';if(T.weapon&&!SV.gear.owned.includes(T.weapon))T.weapon=null;
+ const s=T.weapon?Object.assign({},SV,{gear:Object.assign({},SV.gear,{equipped:Object.assign({},SV.gear.equipped,{weapon:T.weapon})})}):SV;
+ G.lv=0;G.node={kind:'train'};G.trial=null;G.arena=DOJO_A;G.need=99;G.roundTime=99;G.parry=true;fighters(partnerDef(T.partner),heroDef(s));G.matchId='train:'+Date.now()}
+function trainAI(B,Pl,dt){const T=G.train,inp={mx:0,up:false,down:false,atk:null},d=Math.abs(Pl.x-B.x),toward=Pl.x>B.x?1:-1;
+ if(T.behav==='block'){inp.block=true;inp.down=Pl.st==='move'&&Pl.mv.zone==='low'||Pl.crouch;return inp}
+ if(T.behav!=='attack')return inp;
+ B.ai.t-=dt;const ms=T.move&&B.moves[T.move]?[T.move]:movesOf(B.def);if(!isFree(B)||!ms.length)return inp;
+ const opts=ms.filter(n=>{const m=B.moves[n];return(!m.cd||(B.cd[n]||0)<=G.t)&&d>=m.ai[0]*B.def.s&&d<=m.ai[1]*B.def.s});
+ if(opts.length&&B.ai.t<=0){B.ai.t=T.gap;inp.atk=opts[G.rand()*opts.length|0];return inp}
+ if(!opts.length){const m=B.moves[ms[0]];inp.mx=d>m.ai[1]*B.def.s?toward:d<m.ai[0]*B.def.s?-toward:0}return inp}
+function trainTick(dt){const T=G.train,pl=G.P,bo=G.B;G.timer=99;
+ if(T.inf&&pl.hp<pl.maxHp&&G.t-(pl.hurtT??-9)>1.2)pl.hp=pl.lag=pl.maxHp;
+ if(pl.hp<=0){pl.hp=pl.lag=pl.maxHp;G.ban={k:'止',sub:'You fell — health restored',t0:G.rt,dur:1.4,size:170}}
+ if(bo.hp<=0){bo.hp=bo.lag=bo.maxHp;note('downs')}
+ if(T.ink)pl.ink=100;const D=T.drill&&drillOf(T.drill);if(D&&(G.tally[D.goal.stat]||0)>=D.goal.n)drillDone(D)}
+function drillDone(D){const claim='drill:'+D.id,first=!SV.rewardsClaimed[claim];G.train.drill=null;
+ if(first){SV.rewardsClaimed[claim]=Date.now();SV.profile.mon+=TRAIN.reward_mon;SV.stats.drills=(SV.stats.drills||0)+1;writeSave(SV)}
+ G.ban={k:'勝',sub:`Drill complete: ${D.name}${first?` · +${TRAIN.reward_mon} mon, the first time only`:''}`,t0:G.rt,dur:2.4,size:200,seal:true};snd('gong',.6)}
+function startDrill(id){const D=drillOf(id),T=G.train;if(!D)return;Object.assign(T,{drill:id,behav:D.behav,move:null,gap:D.gap||1.4,partner:'dummy',inf:true,ink:false});trainSetup();newRound();G.ban=null}
+function trainReset(){G.round=1;newRound();G.ban=null}
+function trainHUD(c){const T=G.train,C=G.combo;screen(c);c.textBaseline='alphabetic';
+ if(C.n>1&&G.t-C.t<1.6){c.globalAlpha=1-ss(1.1,1.6,G.t-C.t);c.textAlign='right';c.fillStyle=RED;c.font='600 60px "Cormorant Garamond", serif';c.fillText(`${C.n} HITS`,W-100,282);c.fillStyle=INK;c.font='500 30px "Cormorant Garamond", serif';c.fillText(`${Math.round(C.dmg*10)/10} damage`,W-100,320);c.globalAlpha=1}
+ c.textAlign='left';c.fillStyle=ink(.8);c.font='italic 24px "Cormorant Garamond", serif';c.fillText(`best combo ${G.tally.maxCombo||0} · ${Math.round(G.tally.dmg||0)} damage dealt · ${TOUCH.on?'pause button':PAD.on?'Start':'Esc'}: training options`,100,232);
+ const D=T.drill&&drillOf(T.drill);if(D&&!(G.hint>0)){c.globalAlpha=.88;c.fillStyle=PAPER;c.beginPath();c.roundRect(W/2-880,H-118,1760,102,50);c.fill();c.globalAlpha=1;c.textAlign='center';c.fillStyle=INK;
+  c.font='600 27px "Cormorant Garamond", serif';c.fillText(`${D.name} · ${Math.min(D.goal.n,G.tally[D.goal.stat]||0)} / ${D.goal.n}`,W/2,H-78);c.font='italic 23px "Cormorant Garamond", serif';c.fillStyle=ink(.75);c.fillText(D.hint,W/2,H-42)}}
+// hitboxes and hurtboxes (training): blue body boxes (green while invulnerable), red reach boxes while a blow is live (dashed in its windup)
+function drawBoxes(c){camT(c,1);c.lineWidth=3;for(const F of[G.P,G.B]){const x=ip(F.x,F.px),y=ip(F.y,F.py),s=F.def.s,h=246*s*(F.crouch?.62:1);
+ c.globalAlpha=.85;c.strokeStyle=invul(F)?'#3d7a4f':'#2c4a7a';c.strokeRect(x-46*s,y-h,92*s,h);
+ const m=F.st==='move'&&F.mv;if(m&&m.hit){const on=m.hit.some(w=>F.mvT>=w[0]&&F.mvT<=w[1]),z=y+ZY[m.zone||'mid']*s,x0=x-F.f*40,x1=x+F.f*m.reach*s;
+  c.fillStyle=RED;c.globalAlpha=on?.35:.12;c.fillRect(Math.min(x0,x1),z-34,Math.abs(x1-x0),68);if(!on){c.globalAlpha=.6;c.setLineDash([12,8]);c.strokeStyle=RED;c.strokeRect(Math.min(x0,x1),z-34,Math.abs(x1-x0),68);c.setLineDash([])}}}
+ c.globalAlpha=1}
+function openTrain(){const T=G.train,box=$('tBody'),done=TRAIN.drills.filter(d=>SV.rewardsClaimed['drill:'+d.id]).length;box.innerHTML='';
+ $('tSub').textContent=`Free practice changes nothing in your journey. Drills done: ${done} of ${TRAIN.drills.length} (each pays ${TRAIN.reward_mon} mon the first time).`;$('tMsg').textContent=T.drill?`Drill: ${drillOf(T.drill).hint}`:'';
+ const row=(lab,opts,cur,fn)=>{const w=document.createElement('span');for(const[v,l]of opts){const b=document.createElement('button');b.className='lnk'+(v===cur?' on':'');b.textContent=l;b.onclick=()=>{fn(v);openTrain()};w.appendChild(b);w.appendChild(document.createTextNode(' '))}
+  const bb=document.createElement('b');bb.textContent=lab;box.appendChild(bb);box.appendChild(w)};
+ row('Drills',TRAIN.drills.map(d=>[d.id,(SV.rewardsClaimed['drill:'+d.id]?'✓ ':'')+d.name]),T.drill,v=>{startDrill(v);G.paused=true});
+ row('Partner',partners().map(id=>[id,partnerDef(id).name]),T.partner,v=>{T.partner=v;T.move=null;T.drill=null;trainSetup();newRound();G.ban=null;G.paused=true});
+ row('Behaviour',[['idle','still'],['block','always block'],['attack','attack (no guard)'],['fight','fight back']],T.behav,v=>{T.behav=v});
+ if(T.behav==='attack')row('Pattern',[[null,'every move'],...movesOf(G.B.def).map(n=>[n,moveName(n)])],T.move,v=>{T.move=v});
+ row('Tempo',[[2,'slow'],[1.4,'steady'],[.9,'fast']],T.gap,v=>{T.gap=v});
+ row('Weapon',SV.gear.owned.filter(id=>GEAR.weapons[id]).map(id=>[id,WPN(id).name]),T.weapon||SV.gear.equipped.weapon,v=>{T.weapon=v;trainSetup();newRound();G.ban=null;G.paused=true});
+ row('Your health',[[true,'infinite'],[false,'normal']],T.inf,v=>{T.inf=v});row('Ink',[[false,'normal'],[true,'infinite (practise powers)']],T.ink,v=>{T.ink=v});row('Hitboxes',[[false,'hidden'],[true,'shown']],T.boxes,v=>{T.boxes=v});
+ show('train');$('tResume').focus()}
 // victory: rewards are computed and SAVED first, then the (skippable) absorption ceremony, then the result panel
 function matchEnd(win){G.state='over';G.res={win,r:null};useSupply();
  if(win&&G.node.kind!=='boss'){G.res.r=G.node.kind==='trial'?grantTrial(SV,G.lv,G.matchId):grantStep(SV,G.lv,G.node.i,G.matchId);writeSave(SV)}
@@ -1812,7 +1926,7 @@ function openSettings(back,tab){if(back)setBack=back;if(tab)setTab=tab;const st=
    const w=document.createElement('span');w.textContent=codes+' ';w.appendChild(b);add(a,w)}
  if(setTab==='keys'){const r=document.createElement('button');r.className='lnk';r.textContent='Reset keys';r.onclick=()=>{st.keys={};save();openSettings()};add('',r)}
  show('settings')}
-function togglePause(){if(MODE!=='game'||G.state==='over')return;if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;show(G.paused?'pause':null);G.keys={}}
+function togglePause(){if(MODE!=='game'||G.state==='over')return;if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;G.keys={};if(G.paused&&G.train)openTrain();else show(G.paused?'pause':null)}
 const KMAP0={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',KeyH:'block',ShiftLeft:'block',ShiftRight:'block',Space:'roll',Escape:'pause',KeyP:'pause'};
 let KMAP=KMAP0; // the default keys plus the player's own bindings (settings.keys)
 function gameKey(e,down){if(down&&KEYCAP){KEYCAP(e);return}if(down&&e.code==='Escape'&&MODE!=='game'){window.issenApp.back();return}if(down)usePad(false);if(e.code==='KeyF'&&down){document.getElementById('fs').click();return}if(e.code==='KeyM'&&down){document.getElementById('snd').click();return}
@@ -1871,9 +1985,9 @@ $('mChar').onclick=()=>openChar(null,'menu');$('mSet').onclick=()=>openSettings(
 $('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(setBack==='home')toHome();else{buildMenu();show('menu')}};for(const b of $('sTabs').children)b.onclick=()=>{setTab=b.dataset.st;openSettings()};$('gBack').onclick=toMenu;$('gChar').onclick=()=>openChar(null,'region');$('cClose').onclick=()=>{if(CH.back==='result')show('result');else if(CH.back==='region')openRegion(REG);else if(CH.back==='home')toHome();else{buildMenu();show('menu')}};
 for(const b of $('cTabs').children)b.onclick=()=>{CH.tab=b.dataset.tab;CH.slot=null;openChar()};
 for(const b of $('shTabs').children)b.onclick=()=>openShop(null,b.dataset.sh);$('shClose').onclick=()=>{if(SH.back==='result')show('result');else if(SH.back==='menu')toMenu();else toHome()};
-HOME_X.push(()=>['Shop',()=>openShop('home'),{note:`${fmtN(SV.profile.mon)} mon · ${fmtN(SV.profile.crystals)} crystals`}],()=>['Inventory',()=>{CH.tab='gear';openChar(null,'home')}]);
+HOME_X.push(()=>['Training Room',()=>startTraining(),{note:`${TRAIN.drills.filter(d=>SV.rewardsClaimed['drill:'+d.id]).length} of ${TRAIN.drills.length} drills`}],()=>['Shop',()=>openShop('home'),{note:`${fmtN(SV.profile.mon)} mon · ${fmtN(SV.profile.crystals)} crystals`}],()=>['Inventory',()=>{CH.tab='gear';openChar(null,'home')}]);
 $('mHelp').onclick=()=>{helpBack='menu';show('help')};$('pHelp').onclick=()=>{helpBack='pause';show('help')};$('hClose').onclick=()=>show(helpBack);
-$('pResume').onclick=togglePause;$('pRestart').onclick=()=>startFight(G.lv,undefined,G.node);$('pQuit').onclick=toMenu;
+$('pResume').onclick=togglePause;$('tResume').onclick=togglePause;$('tReset').onclick=()=>{trainReset();togglePause()};$('tHelp').onclick=()=>{helpBack='train';show('help')};$('tLeave').onclick=()=>{G.train=null;G.paused=false;toHome()};$('pRestart').onclick=()=>startFight(G.lv,undefined,G.node);$('pQuit').onclick=toMenu;
 /* --- touch controls: floating joystick + multi-touch buttons feed the same G.keys / G.buf as the keyboard --- */
 const tEls={touch:$('touch'),pause:$('tPause'),ink:$('tbInk'),issen:$('tbIssen'),p1:$('tbP1'),p2:$('tbP2'),roll:$('tbRoll')},capture=(el,id)=>{try{el.setPointerCapture(id)}catch(e){}};
 const setTouch=v=>{TOUCH.on=v;document.body.classList.toggle('touch',v)};setTouch(TOUCH.on);
@@ -1912,7 +2026,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
  // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
- window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,useSupply,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,startTraining,trainSetup,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,useSupply,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
  if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 applySettings();
 // keep the save: ask the browser not to evict this site's storage (an installed PWA usually gets it; spec §14.4)
