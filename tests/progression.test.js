@@ -44,7 +44,7 @@ module.exports = {
     assert.strictEqual((await boot({ storage: copy(storage) })).game.SV.story.pending.length, 1);
 
     step(game, 60 * 6); // ceremony plays out (5.4 s) and hands over to the result panel
-    assert.strictEqual(G.state, 'over'); assert.match(el('rRewards').textContent, /\+600 XP · level 3 .*\+1 skill point · \+100 mon · absorbed 月 Spear of the Red Moon — ready in power slot 1/);
+    assert.strictEqual(G.state, 'over'); assert.match(el('rRewards').textContent, /\+600 XP · level 3 .*\+1 skill point · \+100 mon · \+20 shadow crystals · absorbed 月 Spear of the Red Moon — ready in power slot 1/);
     eq(game.SV.story.pending, []);
 
     const { game: g2 } = await boot({ storage }); // quit and relaunch

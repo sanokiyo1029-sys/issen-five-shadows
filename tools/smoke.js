@@ -22,7 +22,7 @@ const FLOW = `(async () => {
   if (G.state === 'absorb') { game.absorbDone(); } steps.push('after ceremony: ' + !document.getElementById('result').classList.contains('off'));
   window.issenApp.back(); steps.push('Back from the result: ' + game.mode);
   if (window.poseLab) { poseLab.openLab('g_dragon'); for (let i = 0; i < 30; i++) G.lab(1 / 60); poseLab.closeLab(); steps.push('pose lab'); }
-  game.toMenu(); document.getElementById('mFilm').click(); film.seek(30); film.render(30); steps.push('film');
+  game.toHome(); document.getElementById('hFilm').click(); film.seek(30); film.render(30); steps.push('film');
   return steps; })()`;
 
 (async () => {

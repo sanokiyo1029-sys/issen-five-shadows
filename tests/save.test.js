@@ -37,7 +37,8 @@ module.exports = {
       assert.strictEqual(S.profile.level, game.levelOf(xp).level);
       eq(Object.keys(S.powers), ids.slice(0, n).map(id => R[id].power));
       assert.strictEqual(S.loadout.powers[0], n ? 'red_moon' : null);
-      assert.ok(Object.keys(S.rewardsClaimed).length === n, 'one claim per defeated boss');
+      assert.ok(Object.keys(S.rewardsClaimed).filter(k => !k.startsWith('cr:')).length === n, 'one claim per defeated boss');
+      assert.strictEqual(S.profile.crystals, ids.slice(0, n).reduce((a, id) => a + game.ECON.crystals.boss[id], 0), '1.7: and their shadow crystals, once');
       assert.strictEqual(S.legacy.raw, JSON.stringify({ beaten: n }));
       assert.strictEqual(st.getItem(SKEY), JSON.stringify({ beaten: n }), 'legacy key kept and current');
       assert.strictEqual(S.story.pending.some(p => p.kind === 'migrated'), n > 0);

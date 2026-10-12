@@ -16,9 +16,9 @@ async function duel(lv = 0, xs = [-100, 100], settings = {}) {
 module.exports = {
   async 'settings have defaults, are validated, persist and apply live'() {
     const st = memoryStorage(), { game, win } = await boot({ storage: st });
-    assert.deepStrictEqual(JSON.parse(JSON.stringify(game.SV.settings)), { volume: 1, shake: 'full', flash: 'full', haptics: true, quality: 'high', assist: false, scale: 1, lefty: false, keys: {} });
+    assert.deepStrictEqual(JSON.parse(JSON.stringify(game.SV.settings)), { volume: 1, music: .8, sfx: 1, shake: 'full', flash: 'full', haptics: true, quality: 'high', assist: false, scale: 1, sens: 1, lefty: false, lang: 'en', keys: {} });
     assert.deepStrictEqual(JSON.parse(JSON.stringify(game.cleanSettings({ volume: 7, shake: 'wild', haptics: 0, scale: 'big', lefty: 'yes', keys: { KeyY: 'slash', '<b>': 'kick', KeyQ: 'fly' } }))),
-      { volume: 1, shake: 'full', flash: 'full', haptics: true, quality: 'high', assist: false, scale: 1, lefty: false, keys: { KeyY: 'slash' } });
+      { volume: 1, music: .8, sfx: 1, shake: 'full', flash: 'full', haptics: true, quality: 'high', assist: false, scale: 1, sens: 1, lefty: false, lang: 'en', keys: { KeyY: 'slash' } });
     Object.assign(game.SV.settings, { volume: .4, lefty: true, scale: 1.2, shake: 'off' }); game.writeSave(game.SV); game.applySettings();
     assert.ok(win.document.body.classList.contains('lefty')); assert.strictEqual(win.document.documentElement.style['--k'], 1.2);
     const again = (await boot({ storage: st })).game.SV.settings; assert.strictEqual(again.volume, .4); assert.strictEqual(again.shake, 'off');
