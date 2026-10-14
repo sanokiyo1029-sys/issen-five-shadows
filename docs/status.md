@@ -77,10 +77,10 @@
 | Feature status table | Done | this file |
 | Asset and license manifest | Done, one open item | `docs/assets.md` (the OFL text should ship with the fonts) |
 | Changelog | Done | `docs/changelog.md` |
-| APK with hash and install instructions | Done | `Issen-FiveShadows-1.8.apk`; `docs/test-report.md`, `docs/release.md` |
+| APK with hash and install instructions | Done | `Issen-FiveShadows-1.8.apk`, also the site's download `Issen-FiveShadows.apk`; `docs/test-report.md`, `docs/release.md` |
 
 ## Open, and why
 
 - **Every Device item:** there is no Android device, emulator or gamepad on this PC. `docs/test-report.md` lists what to run on a phone.
 - **Fonts' OFL text:** it should ship alongside the fonts (`docs/assets.md`).
-- **Publishing:** pushing updates the live site and the APK it offers. That is the owner's call. Store publication is a separate step and not part of this release.
+- **Store publication:** a separate step, not part of this release. (The site and its APK download were published on the owner's go.)

@@ -60,7 +60,7 @@ Built on 1.7 from the APK-informed v2 brief. It keeps the ink identity, the five
 - **WebView hardening:** navigation is restricted to the bundled page (an https link opens in the browser; anything else is refused), and file and content access are off. WebViewAssetLoader was evaluated and not adopted: a new origin means an empty localStorage, so it waits for a save migration (`docs/release.md`).
 - **Settings:** touch-button opacity, sound captions, a 30 fps option, and adaptive quality that now recovers once frames are calm.
 - **Docs:** `docs/test-report.md` (scenario, revision, APK SHA-256, environment, result), `docs/status.md` (feature status), `docs/assets.md` (asset and license manifest).
-- **APK:** `Issen-FiveShadows-1.8.apk`, built next to the 1.7 file rather than over it.
+- **APK:** `Issen-FiveShadows-1.8.apk`, built and checked beside the 1.7 file, then published as the site's download, `Issen-FiveShadows.apk`.
 
 ## 1.7 — Ultimate Edition (versionCode 8)
 

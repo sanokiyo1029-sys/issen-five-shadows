@@ -9,7 +9,7 @@
 | APK | `Issen-FiveShadows-1.8.apk`, 312,454 bytes, `com.issen.fiveshadows` versionCode 9, versionName 1.8, minSdk 24, targetSdk 34 |
 | **APK SHA-256** | **`7169f9b5a778ff3c31f8efc0191fb9dbc6ef47bfa5622d84ef369630448b9ac8`** |
 | Signing certificate SHA-256 | `b9a812770075c1a69a4034f08c42d6ef59e8549f35f93b6eb753390ff94c277d`. This is the same certificate as 1.7, so 1.8 installs over it and keeps the save. |
-| The 1.7 APK, kept unchanged | `Issen-FiveShadows.apk`, versionCode 8, SHA-256 `a7fc7c7d7dd52a77aabdf826f3a4866784fe10a7b425d27ed629ccd679142eb9` |
+| The site's download | `Issen-FiveShadows.apk`: a byte-for-byte copy of the APK above (the same SHA-256), published on the owner's go. The 1.7 build it replaced (versionCode 8, SHA-256 `a7fc7c7d7dd52a77aabdf826f3a4866784fe10a7b425d27ed629ccd679142eb9`) stays in git history, tag `backup-1.7-before-v2`. |
 
 ## Environment
 

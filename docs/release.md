@@ -6,7 +6,7 @@ What 1.8 adds is listed in `docs/changelog.md`; the evidence is in `docs/test-re
 
 | Platform | How | Save lives in |
 |---|---|---|
-| **Android** | Install `Issen-FiveShadows-1.8.apk` (sideload; versionCode 9) **over** the installed app. It installs over 1.0–1.7 and keeps the save, because every build is signed with the same key. | The WebView's DOM storage in the app's data directory (`app_webview/`). |
+| **Android** | Install the site's download, `Issen-FiveShadows.apk` (the same file as `Issen-FiveShadows-1.8.apk`; sideload; versionCode 9), **over** the installed app. It installs over 1.0–1.7 and keeps the save, because every build is signed with the same key. | The WebView's DOM storage in the app's data directory (`app_webview/`). |
 | **PC: browser / installed app** | Open https://sanokiyo1029-sys.github.io/issen-five-shadows/ in Chrome or Edge, then "Install the app" (the install hint on the cover, or the browser's install icon). It runs in its own window and works offline. | That origin's storage. The game asks `navigator.storage.persist()`, which installed apps are normally granted. |
 | **PC: fully local** | Run `node tools/serve.js`, then open http://localhost:8779/ (it can be installed from there too). | `localhost:8779` storage |
 | **iPhone / iPad** | Open the site in Safari, then Share › Add to Home Screen. | Safari's storage for the site |
@@ -16,11 +16,11 @@ What 1.8 adds is listed in `docs/changelog.md`; the evidence is in `docs/test-re
 ## Installing 1.8 on Android (keep your save)
 
 1. **Back up first:** in the game, Character › Save code › Export, and keep the code somewhere safe (a note, an email to yourself).
-2. Copy `Issen-FiveShadows-1.8.apk` to the phone (or download it), then open it. Allow "install unknown apps" for the app that opens it if Android asks.
+2. Download `Issen-FiveShadows.apk` from the site on the phone (or copy `Issen-FiveShadows-1.8.apk` to it), then open it. Allow "install unknown apps" for the app that opens it if Android asks.
 3. Choose **Update**. **Do not uninstall the old version first:** uninstalling deletes the app's data, and the save with it.
 4. Open Issen: the main menu shows v1.8 and your progress. If anything looks wrong, Character › Save code › Import the code from step 1.
 
-Check the file before installing: its SHA-256 is in `docs/test-report.md`. The 1.7 file (`Issen-FiveShadows.apk`, versionCode 8) is kept unchanged next to it.
+Check the file before installing: its SHA-256 is in `docs/test-report.md` (both names, one file). The 1.7 build it replaced at the download address is in git history (tag `backup-1.7-before-v2`).
 
 ## Decision record: WebViewAssetLoader (v2 brief, stage 6)
 
@@ -59,7 +59,7 @@ cd issen-android
 python build.py 9 1.8 Issen-FiveShadows-1.8.apk
 ```
 
-This writes `samurai-film/Issen-FiveShadows-1.8.apk` and leaves the 1.7 `Issen-FiveShadows.apk` as it was (without the third argument the build replaces `Issen-FiveShadows.apk`, the file the site links to). The APK carries only `index.html`, `fonts/` and `icons/`; `tools/` (the Pose Lab, tests) never ships.
+This writes `samurai-film/Issen-FiveShadows-1.8.apk` (without the third argument the build writes `Issen-FiveShadows.apk`, the file the site links to). For 1.8 the versioned file was built first, checked, and then copied to `Issen-FiveShadows.apk` when the owner chose to publish it. The APK carries only `index.html`, `fonts/` and `icons/`; `tools/` (the Pose Lab, tests) never ships.
 
 Shell behavior (`MainActivity`):
 - `onPause` / `onResume` pause the fight and silence audio.
