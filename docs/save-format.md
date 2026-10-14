@@ -1,4 +1,4 @@
-# Save format v2 (with the 1.7 additions)
+# Save format v2 (with the 1.7 and 1.8 additions)
 
 ## Storage keys (localStorage)
 
@@ -73,6 +73,25 @@ Every field below is optional on load and gets its default when missing, so a 1.
 
 **Mission skill points:** derived like the others, as earned (claims) minus spent (tiers).
 
+## Additions in 1.8 (still `v: 2`)
+
+1.8 reads every 1.7 save. Going back is not supported: 1.7 opens a 1.8 save and keeps every claim, and it finds the mode fields mirrored, but it shows ladder steps and missions as unplayed (their claims moved to `m:<id>`).
+
+| Field | Contents |
+|---|---|
+| `att` | The attempt ledger: `{seq, open: {id, kind, ref, epoch, at, supply} or null, done: [last 64 ids], floor, receipts: {id: result}, at most 24}`. A rewarding fight opens an attempt (saved) before the bell; settling pays it once; a replay returns the receipt; a stale or foreign attempt pays nothing. An attempt still open at load was cut off: it is retired, unpaid. |
+| `profile.epoch` | The profile's identity, new on New Game, Restore and Import. An attempt from another epoch never settles. |
+| `modes` | `{ack: 0/1, visited: {hell, white}, last: 'hell', 'white' or null}`, plus `sun`, `hell`, `white` written as a mirror for 1.7. Eligibility is never stored: both paths open with the `boss:gekko` claim. A 1.7 save maps `sun` to `ack` and a chosen path to `visited`. |
+| `tour` | `{best: {event id: stages}}`: each tournament event's best run |
+| `settings` | Adds `opacity` (0.3 to 1), `captions` (true/false), `fps` (60 or 30) |
+| `daily.day` | Now a high-water mark: a clock set back never repays a claimed day |
+
+**Claims:** ladder steps and missions are claimed by stable id, `m:<id>`, in place of `step:<region>:<i>` and `<loc>:<i>`. `LEG` maps every 1.7 key onto its id on load (crystal flags and story cards too). A `boss:` or `trial:` claim that disagrees with `progress` is dropped. Lieutenants (new steps) have ids only.
+
+**Writes:** every reward goes through `commit()`: the change is made on the save, written, and rolled back if the write fails, with a "could not be saved" notice offering a retry. A save from a newer version (`v > 2`) is never overwritten (`STORE.lock`).
+
+**Custom maps** gain `verified`: the signature (`mapSig`) of the last layout won. Publishing needs it to match; an imported map arrives unverified and unpublished.
+
 ### Other keys (localStorage)
 
 | Key | Contents |
@@ -99,6 +118,6 @@ On import, the checksum is verified and the document is run through `cleanSave`.
 ## Guarantees (tested in `tests/save.test.js` and `tests/progression.test.js`)
 
 - Rewards are written **before** the victory ceremony, so killing the app mid-ceremony loses nothing. The interrupted reveal is shown on the next visit to the map.
-- Each first-clear reward is granted exactly once, through the `boss:<id>` claims plus the `lastWin` match id.
+- Each first-clear reward is granted exactly once, through its claim, and each fight settles exactly once, through the attempt ledger (1.8; the old `lastWin` field is kept for older builds but no longer used). Tests: `tests/durable.test.js`, `tests/stage4.test.js`.
 - A damaged newest slot falls back to the previous slot.
 - Values like `"abc"`, `-2`, `99`, `true` or bad JSON never lock a boss.

@@ -1,17 +1,39 @@
-# Release 1.7 (Ultimate Edition): Android APK and PC
+# Release 1.8: Android APK and PC
 
-What 1.7 adds is listed in `docs/changelog.md`. The packaging is unchanged from 1.6 (M9), except that the Android shell now exposes `IssenNative.exit()` for the main menu's Quit.
+What 1.8 adds is listed in `docs/changelog.md`; the evidence is in `docs/test-report.md` and the state of every feature in `docs/status.md`. The packaging is as in 1.7, plus the WebView hardening below. Signing secrets (`issen-release.keystore`, `keystore-password.txt`) are never deliverables, and publishing to a store is a separate step not taken here.
 
 ## How to play
 
 | Platform | How | Save lives in |
 |---|---|---|
-| **Android** | Install `Issen-FiveShadows.apk` (sideload; versionCode 8). It installs over 1.0–1.6 and keeps the save, because every build is signed with the same key. | The WebView's DOM storage in the app's data directory (`app_webview/`). |
+| **Android** | Install `Issen-FiveShadows-1.8.apk` (sideload; versionCode 9) **over** the installed app. It installs over 1.0–1.7 and keeps the save, because every build is signed with the same key. | The WebView's DOM storage in the app's data directory (`app_webview/`). |
 | **PC: browser / installed app** | Open https://sanokiyo1029-sys.github.io/issen-five-shadows/ in Chrome or Edge, then "Install the app" (the install hint on the cover, or the browser's install icon). It runs in its own window and works offline. | That origin's storage. The game asks `navigator.storage.persist()`, which installed apps are normally granted. |
 | **PC: fully local** | Run `node tools/serve.js`, then open http://localhost:8779/ (it can be installed from there too). | `localhost:8779` storage |
 | **iPhone / iPad** | Open the site in Safari, then Share › Add to Home Screen. | Safari's storage for the site |
 
 **Moving between devices:** Character › Save code › Export on one device, then Import on the other. The code carries everything.
+
+## Installing 1.8 on Android (keep your save)
+
+1. **Back up first:** in the game, Character › Save code › Export, and keep the code somewhere safe (a note, an email to yourself).
+2. Copy `Issen-FiveShadows-1.8.apk` to the phone (or download it), then open it. Allow "install unknown apps" for the app that opens it if Android asks.
+3. Choose **Update**. **Do not uninstall the old version first:** uninstalling deletes the app's data, and the save with it.
+4. Open Issen: the main menu shows v1.8 and your progress. If anything looks wrong, Character › Save code › Import the code from step 1.
+
+Check the file before installing: its SHA-256 is in `docs/test-report.md`. The 1.7 file (`Issen-FiveShadows.apk`, versionCode 8) is kept unchanged next to it.
+
+## Decision record: WebViewAssetLoader (v2 brief, stage 6)
+
+| Option | Origin | Saves | Verdict |
+|---|---|---|---|
+| `file:///android_asset/index.html` + navigation guard | `file://` | every existing save stays where it is | **chosen for 1.8** |
+| WebViewAssetLoader (`https://appassets.androidplatform.net/`) | a real https origin (no file-access settings needed) | localStorage is per origin: the new origin starts **empty**, so every installed player would seem to lose their journey | **deferred** |
+
+WebViewAssetLoader becomes worth it once a migration exists: the old page exports its save, and the new origin imports it on first start (the save-code path already carries everything). Until then, the shell keeps the `file://` origin and closes what that origin would otherwise allow:
+
+- `shouldOverrideUrlLoading` keeps only `file:///android_asset/index.html` inside the WebView; an https link opens in the browser; anything else is refused. No other page can ever reach the `IssenNative` bridge.
+- `setAllowFileAccess(false)` (assets still load), `setAllowContentAccess(false)`, no file-URL cross-access, no geolocation, no extra windows.
+- The manifest has no INTERNET permission: the WebView cannot fetch anything off the device.
 
 ## Decision record: how to ship on PC (§15, §14.4)
 
@@ -34,15 +56,16 @@ Revisit if a store release (Steam and similar) is wanted. The native port (M10) 
 
 ```
 cd issen-android
-python build.py 8 1.7
+python build.py 9 1.8 Issen-FiveShadows-1.8.apk
 ```
 
-This writes `samurai-film/Issen-FiveShadows.apk`. The APK carries only `index.html`, `fonts/` and `icons/`; `tools/` (the Pose Lab, tests) never ships.
+This writes `samurai-film/Issen-FiveShadows-1.8.apk` and leaves the 1.7 `Issen-FiveShadows.apk` as it was (without the third argument the build replaces `Issen-FiveShadows.apk`, the file the site links to). The APK carries only `index.html`, `fonts/` and `icons/`; `tools/` (the Pose Lab, tests) never ships.
 
 Shell behavior (`MainActivity`):
 - `onPause` / `onResume` pause the fight and silence audio.
 - **Back** goes to `issenApp.back()`. Since 1.6 it closes the open screen (settings, character, region, notice, help), pauses or leaves a fight, and exits only from the map or the film.
 - The view is excluded from edge-swipe Back.
+- Navigation is guarded and file access is off (1.8; see the WebViewAssetLoader decision above).
 
 ## Storage notes (§14.4)
 
@@ -53,13 +76,13 @@ Shell behavior (`MainActivity`):
 
 ## What could not be tested here (spec §17.3)
 
-The same limits apply to 1.7, plus its new screens on a real phone: the map's drag, the editor's taps, and the touch size of the shop and challenge cards.
+The same limits apply to 1.8, plus what is new on a real phone: the navigation guard (a link out should open the browser), the 30 fps option's battery effect, the captions' legibility, the touch-button opacity, and the touch size of the codex rows and the tournament cards. `docs/test-report.md` lists each scenario with its result.
 
 This PC has no Android device, emulator or system image attached, and no physical gamepad. The following are **untested**:
 
 1. **Install and update:**
    - A fresh install.
-   - An update over 1.6 that keeps the save (and pays the crystals already earned).
+   - An update over 1.7 that keeps the save (and maps its claims to stable ids).
    - Quit from the main menu closing the app (the new `IssenNative` bridge).
    - Reinstall after uninstall (the save is lost, unless Auto Backup restores it).
 2. **Process death:**

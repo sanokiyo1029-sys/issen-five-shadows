@@ -64,7 +64,8 @@ module.exports = {
     const { game } = await boot(); game.enterGame(); win(game); const s = game.SV; s.profile.mon = 0; s.profile.materials = 0;
     let wins = 0; while (s.profile.mon < 100 && wins < 10) { win(game); wins++; } assert.ok(wins <= 4, `${wins} ordinary wins for 100 mon`);
     for (let i = 0; i < 2; i++) win(game, 0, { kind: 'step', i: 1 }); s.rewardsClaimed['m:bf_thrower'] = 1;
-    win(game, 0, { kind: 'step', i: 4 }); const m = s.profile.materials; win(game, 0, { kind: 'step', i: 4 }); assert.strictEqual(s.profile.materials, m + 1, 'an elite repeat pays a material');
+    win(game, 0, { kind: 'step', i: 4 }); let m = s.profile.materials; win(game, 0, { kind: 'step', i: 4 }); assert.strictEqual(s.profile.materials, m, 'an elite repeat pays mon only');
+    for (let i = 0; i < 4; i++) s.rewardsClaimed['m:' + game.LAD.regions[0].steps[i].id] = 1; win(game, 0, { kind: 'boss' }); m = s.profile.materials; win(game, 0, { kind: 'boss' }); assert.strictEqual(s.profile.materials, m + 1, 'a Shadow repeat pays a material');
     const lost = s.profile.mon; game.startFight(0, 1, { kind: 'step', i: 0 }); const G = game.G; G.state = 'fight'; G.P.hp = 0; run(game, 4, passive); assert.strictEqual(s.profile.mon, lost, 'a loss pays nothing');
   },
 

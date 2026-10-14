@@ -60,7 +60,8 @@ module.exports = {
     game.ED.tool = 'fire'; game.edPlace(320, 0); assert.match(game.validateMap(game.ED.m).join(), /foe's start is on a hazard/); game.ED.tool = 'erase'; game.edPlace(320, 0); assert.strictEqual(game.ED.m.hazards.length, 0);
     game.ED.tool = 'foe'; game.edPlace(600, 0); assert.strictEqual(game.ED.m.spawns.foe, 600); for (let i = 0; i < 9; i++) { game.ED.tool = 'obstacle'; game.edPlace(-700 + i * 40, 0); } assert.strictEqual(game.ED.m.obstacles.length, 6, 'six at most');
     game.ED.m.obstacles = []; game.ED.m.name = 'Mine'; assert.strictEqual(game.storeMap(game.ED.m), ''); game.WK.sel = game.ED.m.id; game.openWorkshop();
-    const btn = t => el('wkBtns').children.find(b => b.textContent === t); btn('Publish to the map').click(); assert.ok(game.maps()[0].published);
+    const btn = t => el('wkBtns').children.find(b => b.textContent === t); btn('Publish to the map').click(); assert.ok(!game.maps()[0].published, '1.8: not before a win');
+    game.startCustom(game.maps()[0]); game.G.state = 'fight'; game.G.P.wins = 1; game.G.B.hp = 0; run(game, 5, idle); game.openWorkshop(); btn('Publish to the map').click(); assert.ok(game.maps()[0].published, 'won, then published');
     btn('Duplicate').click(); assert.strictEqual(game.maps().length, 2); assert.ok(!game.maps()[1].published, 'a copy starts as a draft');
     btn('Share as code').click(); const code = el('wkCode').value; assert.match(code, /^ISSENMAP1-/); btn('Load a code').click(); el('wkCode').value = code; btn('Load it').click(); assert.strictEqual(game.maps().length, 3);
     btn('Delete').click(); assert.strictEqual(open(el, game), 'notice'); el('nBtns').children[0].click(); assert.strictEqual(game.maps().length, 2);
