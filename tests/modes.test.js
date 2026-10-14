@@ -10,28 +10,30 @@ const passive = G => { G.B.ai.t = 1e9; G.B.ai.pt = 0; G.B.ai.blk = 0; G.B.ai.see
 const near = (a, b, m, e = 1e-6) => assert.ok(Math.abs(a - b) < e, `${m}: ${a} vs ${b}`);
 // win against Gekkō and play on until the fight's end (the sun, or the result)
 function beatGekko(game) { game.startFight(0, 1); const G = game.G; G.state = 'fight'; G.P.wins = 1; G.B.hp = 0; for (let i = 0; i < 900 && G.state !== 'sun' && G.state !== 'over'; i++) { G.rdt = 1 / 60; G.rt += 1 / 60; game.updGame(1 / 60); if (G.state === 'absorb' && G.st > 1) game.absorbDone(); } return G; }
-function modes(game, o) { const s = game.SV; game.grantClear(s, 0, 'g'); Object.assign(s.modes, { sun: 1 }, o); for (const k of ['hell', 'white']) s.story.seen.push(k, ...game.MODES[k].missions.map(M => 'm:' + M.id)); s.story.pending = []; return s; }
+function modes(game, o) { const s = game.SV; game.grantClear(s, 0, 'g'); Object.assign(s.modes, { ack: 1 }); for (const k of ['hell', 'white']) s.story.seen.push(k, ...game.MODES[k].missions.map(M => 'm:' + M.id)); s.story.pending = []; return s; }
 
 module.exports = {
-  async 'the first fall of Gekkō raises the sun; touching it offers both paths and opens neither by itself'() {
+  async 'Gekkō’s first fall opens both paths and raises the sun; touching it saves that it was seen; choosing enters a path and closes none'() {
     const st = memoryStorage(), { game, el } = await boot({ storage: st }); game.enterGame(); const G = beatGekko(game);
     assert.strictEqual(G.state, 'sun', 'after the ceremony the sun rises'); assert.ok(el('sunBtn').classList.contains('off'), 'it cannot be touched at once');
-    run(game, 3); assert.ok(!el('sunBtn').classList.contains('off'), 'then it can'); assert.strictEqual(game.SV.modes.hell || game.SV.modes.white, false, 'nothing opens by itself');
-    el('sunBtn').click(); assert.strictEqual(open(el, game), 'sunp'); assert.strictEqual(el('suCards').children.length, 2);
-    el('suCards').children[0].click(); assert.strictEqual(game.SV.modes.hell, true); assert.strictEqual(game.SV.modes.white, false);
+    assert.ok(game.locOpen(game.SV, 'hell') && game.locOpen(game.SV, 'white'), 'both paths are already open'); assert.ok(!el('sunSkip').classList.contains('off'), 'the scene can be skipped');
+    run(game, 3); assert.ok(!el('sunBtn').classList.contains('off'), 'then it can be touched'); assert.strictEqual(game.SV.modes.ack, 0);
+    el('sunBtn').click(); assert.strictEqual(open(el, game), 'sunp'); assert.strictEqual(el('suCards').children.length, 2); assert.strictEqual(game.SV.modes.ack, 1, 'seen: saved');
     assert.ok(game.SV.rewardsClaimed['event:sun']); assert.ok(game.SV.rewardsClaimed['ach:sun'], 'The Light Awakens');
-    el('nBtns').children[1].click(); assert.strictEqual(open(el, game), 'result', 'Later: the victory screen');
-    const again = (await boot({ storage: st })).game.SV; assert.strictEqual(again.modes.hell, true, 'saved'); assert.strictEqual(again.modes.white, false);
+    el('suCards').children[0].click(); assert.strictEqual(el('nTitle').textContent, 'Hell Mode', 'choosing goes there: its story card first'); el('nBtns').children[0].click(); assert.strictEqual(el('gTitle').textContent, 'Hell Mode'); assert.strictEqual(game.SV.modes.last, 'hell');
+    assert.deepStrictEqual({ ...game.SV.modes.visited }, { hell: true, white: false }); assert.ok(game.locOpen(game.SV, 'white'), 'the other stays open');
+    const again = (await boot({ storage: st })).game.SV; assert.strictEqual(again.modes.ack, 1, 'saved'); assert.strictEqual(again.modes.last, 'hell'); assert.strictEqual(again.modes.hell && again.modes.white, true, 'the 1.7 mirror: both open');
   },
 
-  async 'it rises only once; the map keeps the sun for the other path, then it is gone'() {
-    const { game, el } = await boot(); game.enterGame(); let G = beatGekko(game); run(game, 3); game.openSunChoice(); el('suBtns').children[0].click();
-    assert.strictEqual(game.SV.modes.sun, 0, 'Not yet: no choice made'); G = beatGekko(game); assert.strictEqual(G.state, 'sun', 'a later win offers it again until it is answered');
-    run(game, 3); game.openSunChoice(); el('suCards').children[1].click(); assert.strictEqual(game.SV.modes.white, true); el('nBtns').children[1].click();
-    G = beatGekko(game); assert.strictEqual(G.state, 'over', 'answered: the next win goes straight to its result');
-    game.toMenu(); assert.ok(el('wpins').children.some(p => p.dataset.place === 'sun'), 'the sun waits for the dark path'); assert.ok(el('wpins').children.some(p => p.dataset.place === 'white'));
-    game.selPlace('sun'); el('wiBtns').children[0].click(); assert.strictEqual(open(el, game), 'sunp'); assert.match(el('suText').textContent, /other path/);
-    el('suCards').children[0].click(); el('nBtns').children[1].click(); game.toMenu(); assert.ok(!el('wpins').children.some(p => p.dataset.place === 'sun'), 'both open: the sun is gone');
+  async 'until it is seen the sun rises after every Gekkō win and waits on the map; Back leaves it waiting; once seen it is gone'() {
+    const { game, el, win } = await boot(); game.enterGame(); let G = beatGekko(game); run(game, 3); win.issenApp.back();
+    assert.strictEqual(open(el, game), 'result', 'Back: to the victory screen'); assert.strictEqual(game.SV.modes.ack, 0, 'nothing chosen, nothing seen');
+    G = beatGekko(game); assert.strictEqual(G.state, 'sun', 'a later win raises it again');
+    game.G.state = 'over'; game.toMenu(); assert.ok(el('wpins').children.some(p => p.dataset.place === 'sun'), 'the sun waits on the map'); assert.ok(el('wpins').children.some(p => p.dataset.place === 'white'));
+    game.selPlace('sun'); el('wiBtns').children[0].click(); assert.strictEqual(game.G.state, 'sun'); run(game, .5); el('sunSkip').click(); assert.strictEqual(open(el, game), 'sunp', 'Skip: straight to the choice');
+    assert.strictEqual(game.SV.modes.ack, 1); el('suBtns').children[0].click(); assert.match(el('nText').textContent, /The Light Awakens/, 'Later: the map, which announces the achievement');
+    el('nBtns').children[0].click(); assert.strictEqual(open(el, game), 'menu');
+    assert.ok(!el('wpins').children.some(p => p.dataset.place === 'sun'), 'seen: the sun is gone'); G = beatGekko(game); assert.strictEqual(G.state, 'over', 'and a win goes straight to its result');
   },
 
   async 'a save from before 1.7 with Gekkō beaten finds the sun on the map, with its scene'() {
@@ -40,7 +42,7 @@ module.exports = {
     run(game, 3); el('sunBtn').click(); assert.strictEqual(open(el, game), 'sunp');
   },
 
-  async 'the main menu: both modes locked and explained until chosen, then they open their own missions and arenas'() {
+  async 'the main menu: both modes locked and explained until Gekkō falls, then they open their own missions and arenas'() {
     const { game, el } = await boot(); game.enterGame(); const hell = () => el('hMenu').children.find(b => b.innerHTML.startsWith('Hell Mode'));
     assert.ok(hell().className.includes('lock')); hell().click(); assert.match(el('nText').textContent, /Defeat Gekkō/);
     modes(game, { hell: true, white: true }); game.toHome(); hell().click(); assert.strictEqual(el('gTitle').textContent, 'Hell Mode'); assert.strictEqual(el('gNodes').children.length, 7);

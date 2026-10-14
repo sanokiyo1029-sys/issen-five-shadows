@@ -41,7 +41,7 @@ module.exports = {
     const { game } = await boot(), S = game.SV, C = game.ECON.crystals;
     assert.strictEqual(game.grantClear(S, 0, 'a').crystals, C.boss.gekko); assert.strictEqual(game.grantClear(S, 0, 'b').crystals, 0);
     assert.strictEqual(game.grantClear(S, 0, 'b').crystals, 0, 'a double report replays the stored result'); assert.strictEqual(S.profile.crystals, C.boss.gekko);
-    assert.strictEqual(game.grantStep(S, 0, 2, 'c').crystals, C.elite, 'the elite'); assert.strictEqual(game.grantStep(S, 0, 0, 'd').crystals, 0, 'a retainer pays none');
+    assert.strictEqual(game.grantStep(S, 0, 4, 'c').crystals, C.elite, 'the elite'); assert.strictEqual(game.grantStep(S, 0, 0, 'd').crystals, 0, 'a retainer pays none');
     assert.strictEqual(game.grantTrial(S, 0, 'e').crystals, C.trial); assert.strictEqual(S.profile.crystals, C.boss.gekko + C.elite + C.trial);
   },
 

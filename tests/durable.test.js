@@ -64,7 +64,7 @@ module.exports = {
     const { game } = await boot(); game.enterGame(); win(game); const s = game.SV; s.profile.mon = 0; s.profile.materials = 0;
     let wins = 0; while (s.profile.mon < 100 && wins < 10) { win(game); wins++; } assert.ok(wins <= 4, `${wins} ordinary wins for 100 mon`);
     for (let i = 0; i < 2; i++) win(game, 0, { kind: 'step', i: 1 }); s.rewardsClaimed['m:bf_thrower'] = 1;
-    win(game, 0, { kind: 'step', i: 2 }); const m = s.profile.materials; win(game, 0, { kind: 'step', i: 2 }); assert.strictEqual(s.profile.materials, m + 1, 'an elite repeat pays a material');
+    win(game, 0, { kind: 'step', i: 4 }); const m = s.profile.materials; win(game, 0, { kind: 'step', i: 4 }); assert.strictEqual(s.profile.materials, m + 1, 'an elite repeat pays a material');
     const lost = s.profile.mon; game.startFight(0, 1, { kind: 'step', i: 0 }); const G = game.G; G.state = 'fight'; G.P.hp = 0; run(game, 4, passive); assert.strictEqual(s.profile.mon, lost, 'a loss pays nothing');
   },
 
@@ -88,7 +88,7 @@ module.exports = {
 
   async 'typed events: a champion is an elite, a shadow, a trial or a mode champion; damage is counted before healing'() {
     const { game } = await boot(); game.enterGame(); win(game); assert.ok(!(game.SV.stats.bigWins > 0), 'a retainer is no champion');
-    win(game, 0, { kind: 'step', i: 2 }); assert.strictEqual(game.SV.stats.bigWins, 1);
+    win(game, 0, { kind: 'step', i: 4 }); assert.strictEqual(game.SV.stats.bigWins, 1);
     const s = game.SV; s.gear.items = { healing_tea: 1 }; game.equip(s, 'item', 'healing_tea'); game.startFight(0, 1); const G = game.G; G.state = 'fight'; G.P.hp = 35; G.P.x = -100; G.B.x = 100; passive(G);
     game.startMove(G.B, 'g_thrust'); run(game, .6, passive); assert.ok(G.tally.hurt >= 9 - 1e-9, `the hit counted (${G.tally.hurt}) although the tea healed more`);
   },

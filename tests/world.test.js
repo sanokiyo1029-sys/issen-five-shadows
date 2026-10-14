@@ -9,7 +9,7 @@ const pin = (el, id) => el('wpins').children.find(p => p.dataset.place === id);
 const passive = G => { G.B.ai.t = 1e9; G.B.ai.pt = 0; G.B.ai.blk = 0; G.B.ai.seen = G.P.mvId; };
 const win = (game, G) => { G.state = 'fight'; G.B.hp = 0; run(game, 4, passive); };
 function opened(game) { const s = game.SV; game.setToday(() => '2000-01-01'); s.daily = { day: '2000-01-01', ids: ['parry3'], base: { parries: 0 } }; // no daily pays during these tests
-  for (let i = 0; i < 3; i++) game.grantStep(s, 0, i, 's' + i); game.grantClear(s, 0, 'b0'); game.grantClear(s, 1, 'b1'); return s; }
+  for (let i = 0; i < game.LAD.regions[0].steps.length; i++) game.grantStep(s, 0, i, 's' + i); game.grantClear(s, 0, 'b0'); game.grantClear(s, 1, 'b1'); return s; }
 
 module.exports = {
   async 'the map: a marker per place, locked ones dashed and explained, a preview with the rewards still to earn'() {
@@ -17,7 +17,7 @@ module.exports = {
     assert.deepStrictEqual(el('wpins').children.map(p => p.dataset.place), ['dojo', 'workshop', 'burning_field', 'bamboo_grove', 'mountain_shrine', 'moonlit_lake', 'oni_castle'], 'the secret and the modes stay hidden');
     assert.ok(pin(el, 'bamboo_grove').className.includes('locked')); assert.ok(pin(el, 'burning_field').className.includes('next'), 'the next road pulses');
     pin(el, 'bamboo_grove').click(); assert.match(el('wiText').textContent, /Defeat Gekkō to open this road/); assert.strictEqual(el('wiBtns').children[0].disabled, true);
-    pin(el, 'burning_field').click(); assert.match(el('wiRew').textContent, /Still to earn here: 7,650 XP · 505 mon · 40 shadow crystals/); assert.match(el('wiPips').textContent, /Difficulty ●○○○○ · 0% complete/);
+    pin(el, 'burning_field').click(); assert.match(el('wiRew').textContent, /Still to earn here: 8,400 XP · 570 mon · 40 shadow crystals/); assert.match(el('wiPips').textContent, /Difficulty ●○○○○ · 0% complete/);
     el('wiBtns').children[0].click(); assert.strictEqual(open(el, game), 'notice', 'the region opens (its story card first)');
     game.toMenu(); pin(el, 'dojo').click(); el('wiBtns').children[0].click(); assert.strictEqual(game.G.arena, game.DOJO_A, 'the dojo marker trains');
   },
@@ -30,7 +30,7 @@ module.exports = {
 
   async 'the hidden road: found once, after two shadows and every Burning Field duel; it pays the Wanderer once'() {
     const { game, el } = await boot(); const s = game.SV; game.grantClear(s, 0, 'b0'); game.grantClear(s, 1, 'b1'); game.award(s); assert.ok(!s.world.secret, 'the field\'s duels are still open');
-    for (let i = 0; i < 3; i++) game.grantStep(s, 0, i, 's' + i); const got = game.award(s);
+    for (let i = 0; i < game.LAD.regions[0].steps.length; i++) game.grantStep(s, 0, i, 's' + i); const got = game.award(s);
     assert.ok(s.world.secret); assert.ok(got.some(x => /hidden road/.test(x.text))); assert.ok(got.some(x => /Wanderer/.test(x.text)));
     assert.strictEqual(game.award(s).length, 0, 'once'); s.story.pending = []; game.enterGame(); game.toMenu(); assert.ok(pin(el, 'ashen'), 'Ashen Village is on the map');
   },

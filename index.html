@@ -174,7 +174,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
     <button class="lnk" id="replayBig" aria-label="Replay film">Replay the film</button>
   </div>
   <button id="skip" class="skip off">Skip intro ›</button>
-  <button id="sunBtn" class="sunbtn off" aria-label="Touch the mysterious sun"></button>
+  <button id="sunBtn" class="sunbtn off" aria-label="Touch the mysterious sun"></button><button id="sunSkip" class="skip off">Skip ›</button>
   <div class="panel off" id="home" role="navigation" aria-label="Main menu">
     <div class="mt"><span class="kj">一閃</span><span class="en">Five Shadows</span></div>
     <p class="hst" id="hStat"></p><div class="xpbar" aria-hidden="true"><i id="hXp"></i></div>
@@ -366,15 +366,15 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
 {"schema_version":1,"hp_per_region":0.12,
  "regions":[
   {"id":"burning_field","boss":"gekko","story":["The field still burns where the warlord fell.","Gekkō’s spearmen hold the road through the smoke; the Red Spear waits beyond them."],
-   "steps":[{"id":"bf_footman","was":"step:burning_field:0","foe":"footman","xp":250,"mon":20},{"id":"bf_thrower","was":"step:burning_field:1","foe":"thrower","xp":300,"mon":25,"item":"straw_charm"},{"id":"bf_spear","was":"step:burning_field:2","foe":"elite_spear","elite":true,"xp":500,"mon":60,"materials":1,"item":"yari"}]},
+   "steps":[{"id":"bf_footman","was":"step:burning_field:0","foe":"footman","xp":250,"mon":20},{"id":"bf_thrower","was":"step:burning_field:1","foe":"thrower","xp":300,"mon":25,"item":"straw_charm"},{"id":"bf_glint","foe":"lt_glint","lieutenant":true,"xp":350,"mon":30},{"id":"bf_dragon","foe":"lt_dragon","lieutenant":true,"xp":400,"mon":35},{"id":"bf_spear","was":"step:burning_field:2","foe":"elite_spear","elite":true,"xp":500,"mon":60,"materials":1,"item":"yari"}]},
   {"id":"bamboo_grove","boss":"kasumi","story":["Wind in the bamboo, and blades in the wind.","Kasumi’s cutthroats watch every path through the grove."],
-   "steps":[{"id":"bg_cutthroat","was":"step:bamboo_grove:0","foe":"cutthroat","xp":300,"mon":25},{"id":"bg_thrower","was":"step:bamboo_grove:1","foe":"thrower","xp":350,"mon":30,"item":"crane_charm"},{"id":"bg_footman","was":"step:bamboo_grove:2","foe":"footman","xp":350,"mon":30},{"id":"bg_shinobi","was":"step:bamboo_grove:3","foe":"elite_shinobi","elite":true,"xp":650,"mon":70,"materials":1,"item":"kodachi"}]},
+   "steps":[{"id":"bg_cutthroat","was":"step:bamboo_grove:0","foe":"cutthroat","xp":300,"mon":25},{"id":"bg_thrower","was":"step:bamboo_grove:1","foe":"thrower","xp":350,"mon":30,"item":"crane_charm"},{"id":"bg_footman","was":"step:bamboo_grove:2","foe":"footman","xp":350,"mon":30},{"id":"bg_star","foe":"lt_star","lieutenant":true,"xp":400,"mon":35},{"id":"bg_vanish","foe":"lt_vanish","lieutenant":true,"xp":450,"mon":40},{"id":"bg_shinobi","was":"step:bamboo_grove:3","foe":"elite_shinobi","elite":true,"xp":650,"mon":70,"materials":1,"item":"kodachi"}]},
   {"id":"mountain_shrine","boss":"tetsugoro","story":["The shrine bell has not rung since the monks took up iron.","Climb past the guards: the Iron Monk sits beneath the torii."],
-   "steps":[{"id":"ms_guard","was":"step:mountain_shrine:0","foe":"guard","xp":400,"mon":30},{"id":"ms_footman","was":"step:mountain_shrine:1","foe":"footman","xp":400,"mon":30,"item":"fox_charm"},{"id":"ms_cutthroat","was":"step:mountain_shrine:2","foe":"cutthroat","xp":450,"mon":35},{"id":"ms_acolyte","was":"step:mountain_shrine:3","foe":"elite_acolyte","elite":true,"xp":750,"mon":80,"materials":1,"item":"kanabo"}]},
+   "steps":[{"id":"ms_guard","was":"step:mountain_shrine:0","foe":"guard","xp":400,"mon":30},{"id":"ms_footman","was":"step:mountain_shrine:1","foe":"footman","xp":400,"mon":30,"item":"fox_charm"},{"id":"ms_cutthroat","was":"step:mountain_shrine:2","foe":"cutthroat","xp":450,"mon":35},{"id":"ms_quake","foe":"lt_quake","lieutenant":true,"xp":500,"mon":40},{"id":"ms_iron","foe":"lt_iron","lieutenant":true,"xp":550,"mon":45},{"id":"ms_acolyte","was":"step:mountain_shrine:3","foe":"elite_acolyte","elite":true,"xp":750,"mon":80,"materials":1,"item":"kanabo"}]},
   {"id":"moonlit_lake","boss":"shirasagi","story":["The lake gives back what it drowned.","Pale shapes walk the shore; one of them was once a duelist."],
-   "steps":[{"id":"ml_thrower","was":"step:moonlit_lake:0","foe":"thrower","xp":450,"mon":35},{"id":"ml_guard","was":"step:moonlit_lake:1","foe":"guard","xp":500,"mon":35,"item":"bell_charm"},{"id":"ml_cutthroat","was":"step:moonlit_lake:2","foe":"cutthroat","xp":500,"mon":40},{"id":"ml_ronin","was":"step:moonlit_lake:3","foe":"elite_ronin","elite":true,"xp":850,"mon":90,"materials":1,"item":"naginata"}]},
+   "steps":[{"id":"ml_thrower","was":"step:moonlit_lake:0","foe":"thrower","xp":450,"mon":35},{"id":"ml_guard","was":"step:moonlit_lake:1","foe":"guard","xp":500,"mon":35,"item":"bell_charm"},{"id":"ml_cutthroat","was":"step:moonlit_lake:2","foe":"cutthroat","xp":500,"mon":40},{"id":"ml_wisp","foe":"lt_wisp","lieutenant":true,"xp":550,"mon":45},{"id":"ml_phase","foe":"lt_phase","lieutenant":true,"xp":600,"mon":50},{"id":"ml_ronin","was":"step:moonlit_lake:3","foe":"elite_ronin","elite":true,"xp":850,"mon":90,"materials":1,"item":"naginata"}]},
   {"id":"oni_castle","boss":"akuma","story":["The castle of the oni, where the war began.","His guard is mixed: the armored, the quick and the distant. Bring the powers you have taken."],
-   "steps":[{"id":"oc_guard","was":"step:oni_castle:0","foe":"guard","xp":550,"mon":40},{"id":"oc_thrower","was":"step:oni_castle:1","foe":"thrower","xp":550,"mon":40,"item":"carp_charm"},{"id":"oc_cutthroat","was":"step:oni_castle:2","foe":"cutthroat","xp":600,"mon":45},{"id":"oc_oni","was":"step:oni_castle:3","foe":"elite_oni","elite":true,"xp":900,"mon":100,"materials":1,"item":"nodachi"}]}],
+   "steps":[{"id":"oc_guard","was":"step:oni_castle:0","foe":"guard","xp":550,"mon":40},{"id":"oc_thrower","was":"step:oni_castle:1","foe":"thrower","xp":550,"mon":40,"item":"carp_charm"},{"id":"oc_cutthroat","was":"step:oni_castle:2","foe":"cutthroat","xp":600,"mon":45},{"id":"oc_wave","foe":"lt_wave","lieutenant":true,"xp":650,"mon":50},{"id":"oc_fury","foe":"lt_fury","lieutenant":true,"xp":700,"mon":55},{"id":"oc_oni","was":"step:oni_castle:3","foe":"elite_oni","elite":true,"xp":900,"mon":100,"materials":1,"item":"nodachi"}]}],
  "trials":{
   "gekko":{"name":"Swift Spear","desc":"Rounds last 30 seconds.","timer":30,"xp":6000,"mon":300,"materials":1,"skill_points":1,"item":"moon_tassel","item_name":"the Moon Tassel"},
   "kasumi":{"name":"Open Hands","desc":"You cannot block.","no_block":true,"xp":7500,"mon":300,"materials":1,"skill_points":1,"item":"mist_veil","item_name":"the Mist Veil"},
@@ -409,7 +409,9 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   {"id":"parry","name":"The Perfect Parry","hint":"Start blocking just as a blow arrives (within 0.15 s; a guard held from before does not count): 3 perfect parries.","goal":{"stat":"parries","n":3},"behav":"attack","gap":1.8},
   {"id":"combo","name":"A Long Stroke","hint":"Land 5 hits in a row with no pause longer than a breath: chain, kick, lunge.","goal":{"stat":"maxCombo","n":5},"behav":"idle"},
   {"id":"issen","name":"Ink and Issen","hint":"Every hit fills ink. Fill all three bars, then strike with Issen (I, RT or 閃).","goal":{"stat":"issen","n":1},"behav":"idle"},
-  {"id":"spar","name":"Sparring","hint":"The dummy fights back now. Bring its health to zero once.","goal":{"stat":"downs","n":1},"behav":"fight"}]}
+  {"id":"throw","name":"Break the Guard","hint":"The dummy blocks everything. Step close, hold Block and press Kick: a throw cannot be blocked. 3 throws.","goal":{"stat":"throws","n":3},"behav":"block"},
+  {"id":"spar","name":"Sparring","hint":"The dummy fights back now. Bring its health to zero once.","goal":{"stat":"downs","n":1},"behav":"fight"}],
+ "codex":{"hero":[["slash","Slash"],["slash2","Slash, Slash"],["slash3","Slash ×3"],["lunge","Forward + Slash"],["low","Down + Slash"],["air","Slash, jumping"],["kick","Kick"],["round","Forward + Kick"],["sweepK","Down + Kick"],["airKick","Kick, jumping"],["throw","Block + Kick, close"],["wave","Ink (one bar)"],["issen","Issen (three bars)"]]}}
 </script>
 <script type="application/json" id="data-challenges">
 {"schema_version":1,
@@ -445,7 +447,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   {"id":"student","name":"Student of the Dojo","text":"Complete every training drill","check":"drills","crystals":15},
   {"id":"daily7","name":"Daily Discipline","text":"Complete 7 daily challenges","stat":"dailies","n":7,"crystals":15},
   {"id":"patron","name":"Patron","text":"Buy 10 things in the shop","stat":"purchases","n":10,"crystals":5},
-  {"id":"sun","name":"The Light Awakens","text":"Answer the mysterious sun","check":"sun","crystals":10},
+  {"id":"sun","name":"The Light Awakens","text":"See the mysterious sun rise","check":"sun","crystals":10},
   {"id":"wanderer","name":"Wanderer","text":"Find the hidden village","check":"secret","crystals":15},
   {"id":"architect","name":"Architect","text":"Save a custom map that passes validation","stat":"mapsMade","n":1,"crystals":10},
   {"id":"hell_first","name":"Through the Gate","text":"Win a duel in Hell Mode","stat":"hellWins","n":1,"crystals":10},
@@ -479,7 +481,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
     {"id":"ash_well","was":"ashen:0","name":"The Empty Well","kind":"duel","foe":"ash_bandit","rounds":1,"hp":1.1,"xp":600,"mon":60,"desc":"A looter among the ruins."},
     {"id":"ash_road","was":"ashen:1","name":"Smoke on the Road","kind":"gauntlet","waves":["ash_bandit","cutthroat","thrower"],"hp":1.15,"xp":900,"mon":90,"crystals":5,"desc":"Three in a row; your health carries from one to the next."},
     {"id":"ash_ronin","was":"ashen:2","name":"The Ash Ronin","kind":"duel","foe":"ash_ronin","rounds":2,"xp":1600,"mon":200,"crystals":15,"item":"ash_charm","boss":true,"desc":"The one who lit the fire, and stayed.","after":"The Ash Ronin kneels in the ash. The smoke over the village finally thins."}]},
-  "hell":{"name":"Hell Mode","jp":"鬼","arena":7,"diff":5,"final":"Hell is conquered","lock":"Touch the mysterious sun and choose the dark path.",
+  "hell":{"name":"Hell Mode","jp":"鬼","arena":7,"diff":5,"final":"Hell is conquered","lock":"Defeat Gekkō, the first shadow: the dark path opens when he falls.",
    "desc":"The Infernal Realm: a brutal path of ash and fire. Demons strike back at what they block and chain what lands; healing is halved, wounds carry between rounds, and the vents flare. The rewards are worth it.",
    "story":["Beneath the dark sun the ground opens, and the road goes down.","Below, the fires the war lit never went out, and those who fed them are waiting."],
    "missions":[
@@ -490,7 +492,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
     {"id":"hell_enra","was":"hell:4","name":"Enra, the Ember Judge","kind":"duel","foe":"h_enra","rounds":2,"boss":true,"arena":8,"xp":2400,"mon":300,"crystals":20,"skill_points":1,"item":"ember_katana","desc":"The judge of the burning: fire rises where you stand.","story":"A judge in a robe of coals weighs every soul that comes down the stair. He has weighed yours.","after":"Enra’s fire gutters out. His blade, still warm, is yours."},
     {"id":"hell_stair","was":"hell:5","name":"The Burning Stair","kind":"survive","foe":"h_brute","time":45,"xp":1500,"mon":200,"crystals":10,"desc":"Endure 45 seconds on the stair: an Oni Brute, and the vents.","layout":{"hazards":[{"x":-520,"w":160,"kind":"fire","period":3.5,"dmg":9},{"x":0,"w":160,"kind":"spikes","period":4,"dmg":9},{"x":520,"w":160,"kind":"fire","period":3,"dmg":9}]}},
     {"id":"hell_ninth","was":"hell:6","name":"The Ninth Gate","kind":"duel","foe":"h_akuma","rounds":2,"boss":true,"final":true,"arena":8,"xp":3500,"mon":600,"crystals":50,"skill_points":1,"item":["hellmaw_kanabo","trail_hellfire"],"desc":"The warlord, unbound by death, at the last gate.","story":"At the bottom of everything stands a gate, and before it the warlord you killed, whole again and burning.","after":"The Ninth Gate closes behind you. The warlord’s fury is ash at last.","layout":{"hazards":[{"x":-580,"w":160,"kind":"fire","period":5,"dmg":10},{"x":580,"w":160,"kind":"fire","period":5.5,"dmg":10}]}}]},
-  "white":{"name":"White Mode","jp":"白","arena":9,"diff":4,"parry":true,"final":"The light is answered","lock":"Touch the mysterious sun and choose the path of light.",
+  "white":{"name":"White Mode","jp":"白","arena":9,"diff":4,"parry":true,"final":"The light is answered","lock":"Defeat Gekkō, the first shadow: the path of light opens when he falls.",
    "desc":"The Celestial Sanctuary: a luminous path of precision. Its guardians wear a ward that turns plain blows aside; only a perfect parry, a punish or an Issen breaks it. Falling light, a reflection, a pale sun.",
    "story":["Above the bright sun the sky opens, and the road climbs into light.","The sanctuary’s guardians do not hate you. They simply will not let a careless blade pass."],
    "missions":[
@@ -1105,6 +1107,9 @@ const MV={
  lunge:{dur:.5,hit:[[.17,.3]],reach:175,dmg:10,zone:'mid',push:160,lunge:[.08,.27,1150],snd:'slash',fr:g=>[[0,g],[.1,PS.wind],[.24,PS.cutSide,'o5'],[.5,g]]},
  low:{dur:.46,hit:[[.15,.25]],reach:180,dmg:7,zone:'low',push:90,crouch:1,snd:'slash',fr:g=>[[0,P(g,CR)],[.1,P(PS.wind,CR)],[.2,P(PS.guard,LOWC),'o5'],[.46,P(g,CR)]]},
  kick:{dur:.36,hit:[[.11,.2]],reach:125,dmg:5,zone:'mid',push:320,fr:g=>[[0,g],[.12,P(g,KICK),'o5'],[.36,g]]},
+ // the throw (v2): Block + Kick, close. It cannot be blocked or parried, but it only catches a fighter on the ground who is not
+ // attacking, rolling or reeling (so a strike, a jump or a roll beats it; two throws catch nothing); a miss is slow to recover
+ throw:{dur:.62,hit:[[.1,.15]],reach:95,dmg:8,zone:'mid',grab:1,unblock:1,kd:1,push:200,answers:['strike','jump','roll'],fr:g=>[[0,g],[.1,P(PS.wind,{tl:.35})],[.24,P(PS.cutSide,{tl:-.25}),'o5'],[.62,g]]},
  round:{dur:.6,hit:[[.22,.32]],reach:140,dmg:9,zone:'high',kd:1,push:260,fr:g=>[[0,g],[.12,P(g,{th1:1.2,sh1:.2,tl:.1})],[.26,P(g,RHK),'o5'],[.6,g]]},
  sweepK:{dur:.5,hit:[[.16,.27]],reach:150,dmg:6,zone:'low',kd:1,push:120,crouch:1,fr:g=>[[0,P(g,CR)],[.18,P(g,SWK),'o5'],[.5,P(g,CR)]]},
  air:{dur:.42,hit:[[.06,.24]],reach:165,dmg:8,zone:'high',air:1,push:120,snd:'slash',fr:g=>[[0,P(PS.high,JMP)],[.14,P(PS.cutLow,JMP),'o5'],[.42,P(g,JMP)]]},
@@ -1258,6 +1263,31 @@ const FOES={
   tip:'He fades and reappears beside you: watch for the pale ring.'},
  elite_oni:{id:'elite_oni',name:'Oni Lieutenant',title:'of the castle guard',jp:'将',kind:K.e_oni,s:1.15,hp:120,speed:260,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_cut','a_sweep','b_kick','a_wave'],ai:{think:.5,aggr:.65,block:.4,range:220},win:P(PS.high,{tl:-.2,hd:-.4}),
   tip:'The warlord’s officer: block his ink wave or roll through it.'}};
+/* --- lieutenants (v2, stage 3): two required duels in every region before its Shadow. Each teaches one of that Shadow's ways with
+   the Shadow's own moves (the shared MV entries, never copied), and fights two rounds like an elite. --- */
+K.lt_spear=Object.assign({},K.gekko,{ink:'#45362c',back:'#76675a'});K.lt_shinobi=Object.assign({},K.kasumi,{ink:'#2b2d33',back:'#5e6068'});K.lt_monk=Object.assign({},K.monk,{ink:'#433a30',back:'#776d60'});
+K.lt_ghost=Object.assign({},K.ghost,{ink:'#cbd2d6',back:'#9aa1a6'});K.lt_oni=Object.assign({},K.lord,{ink:'#3a2a26',back:'#6b5650'});
+Object.assign(FOES,{
+ lt_glint:{id:'lt_glint',name:'Glint Spearman',title:'Gekkō’s lieutenant · the red glint',jp:'将',kind:K.lt_spear,s:1.04,hp:75,speed:245,guard:SPG,wk:{gl:45,sheath:0},moves:['g_spin','g_low','g_thrust'],ai:{think:.8,aggr:.55,block:.2,range:225},win:P(SPG,{tl:-.1,hd:-.3}),
+  tip:'The glint tells the height: a rising spear spins high, so crouch under it; the low thrust is crouch-blocked. Then strike the long recovery.'},
+ lt_dragon:{id:'lt_dragon',name:'Dragon Lancer',title:'Gekkō’s lieutenant · the long charge',jp:'将',kind:K.lt_spear,s:1.06,hp:85,speed:250,guard:SPG,wk:{gl:45,sheath:0},moves:['g_dragon','g_twin','b_kick'],ai:{think:.8,aggr:.55,block:.22,range:240},win:P(SPG,{tl:-.1,hd:-.3}),
+  tip:'From across the field he charges with the dragon thrust: block it, or roll through it. Up close his thrust-and-sweep comes twice: hold the guard, crouch for the sweep.'},
+ lt_star:{id:'lt_star',name:'Star Thrower',title:'Kasumi’s lieutenant · stars high and low',jp:'将',kind:K.lt_shinobi,s:.97,hp:70,speed:380,guard:KG,wk:{sheath:0},moves:['k_star','k_volley','k_stab'],ai:{think:.55,aggr:.6,block:.25,range:300,jump:.1},win:P(KG,{tl:0,hd:-.2}),
+  tip:'Her stars fly high: crouch under them, or block. The volley throws high and low at once, so block that one standing.'},
+ lt_vanish:{id:'lt_vanish',name:'Vanishing Blade',title:'Kasumi’s lieutenant · the ink ring',jp:'将',kind:K.lt_shinobi,s:.99,hp:75,speed:390,guard:KG,wk:{sheath:0},moves:['k_vanish','k_flurry','k_low'],ai:{think:.5,aggr:.62,block:.3,range:150,jump:.15},win:P(KG,{tl:0,hd:-.2}),
+  tip:'When he vanishes, an ink ring marks where he will strike: hold block there. His low cut knocks down: crouch-block it.'},
+ lt_quake:{id:'lt_quake',name:'Quake Monk',title:'Tetsugorō’s lieutenant · the earthquake',jp:'将',kind:K.lt_monk,s:1.18,hp:95,speed:185,guard:P(PS.guard,{sw:2.6,tl:.06,hd:-.05}),wk:{gl:20,sheath:0},moves:['m_slam','m_low','b_kick'],ai:{think:.9,aggr:.55,block:.15,range:210},win:P(PS.high,{tl:-.1}),
+  tip:'His slam sends an earthquake along the ground: jump it. The low swing knocks down: jump it or crouch-block it.'},
+ lt_iron:{id:'lt_iron',name:'Iron-skin Monk',title:'Tetsugorō’s lieutenant · the iron body',jp:'将',kind:K.lt_monk,s:1.22,hp:105,speed:190,guard:P(PS.guard,{sw:2.6,tl:.06,hd:-.05}),wk:{gl:20,sheath:0},moves:['m_smash','m_swing','b_kick'],ai:{think:.85,aggr:.55,block:.15,range:210},win:P(PS.high,{tl:-.1}),
+  tip:'While his body shines like iron, light blows will not stop his swing: block or duck it first, then punish the long recovery.'},
+ lt_wisp:{id:'lt_wisp',name:'Wisp Keeper',title:'Shirasagi’s lieutenant · the ghost-fire',jp:'将',kind:K.lt_ghost,s:1.04,hp:85,speed:280,guard:P(SPG,{sw:1.8,tl:.1}),wk:{gl:45,sheath:0},moves:['y_wisp','y_wisp2','y_rise'],ai:{think:.6,aggr:.6,block:.3,range:300},win:P(SPG,{tl:-.05,hd:-.25}),
+  tip:'Ghost-fire drifts slowly: block it, or crouch under the spread. Close in, the rising cut is high: crouch.'},
+ lt_phase:{id:'lt_phase',name:'Fading Duelist',title:'Shirasagi’s lieutenant · the pale ring',jp:'将',kind:K.lt_ghost,s:1.05,hp:90,speed:285,guard:P(SPG,{sw:1.8,tl:.1}),wk:{gl:45,sheath:0},moves:['y_phase','y_sweep','y_thrust'],ai:{think:.55,aggr:.62,block:.35,range:235},win:P(SPG,{tl:-.05,hd:-.25}),
+  tip:'She fades; a pale ring marks where she will reappear: block there. The sweep is low: jump it or crouch-block it.'},
+ lt_wave:{id:'lt_wave',name:'Ink-wave Captain',title:'Akuma’s lieutenant · the ink wave',jp:'将',kind:K.lt_oni,s:1.14,hp:100,speed:260,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_wave','a_cut','a_crush'],ai:{think:.55,aggr:.62,block:.35,range:230},win:P(PS.high,{tl:-.2,hd:-.4}),
+  tip:'Block the ink wave or roll through it. The overhead crush is high: crouch under it, then strike.'},
+ lt_fury:{id:'lt_fury',name:'Fury Oni',title:'Akuma’s lieutenant · the fury',jp:'将',kind:K.lt_oni,s:1.16,hp:110,speed:265,guard:P(PS.guard,{sw:2.2}),wk:{sheath:0},moves:['a_leap','a_sweep','a_rend'],ai:{think:.5,aggr:.65,block:.4,range:225,rage:1},win:P(PS.high,{tl:-.2,hd:-.4}),
+  tip:'At half health his fury wakes: faster and harder. From afar he leaps: crouch or block the landing. The cut-and-crush needs the guard held twice.'}});
 // Ashen Village (1.7): a looter in grey ink, and the swordsman who burned the village
 K.ash_bandit=Object.assign({},K.bandit,{ink:'#3d3a36',back:'#7a756d'});K.ash_ronin={L:LH,ink:'#262320',back:'#57524b',jit:.5,type:'master',sword:1,blen:120};
 FOES.ash_bandit={id:'ash_bandit',name:'Ash Looter',title:'picking through the ruins',jp:'焼',kind:K.ash_bandit,s:1,hp:60,speed:300,guard:PS.guard,wk:{},moves:['r_slash','r_low','r_jab','b_kick'],ai:{think:.7,aggr:.58,block:.25,range:180},win:PS.stand,
@@ -1444,7 +1474,7 @@ function startRoll(F,O,inp){if((F.rollCd||0)>G.t)return false;const dir=inp.mx||
  F.roll={x0:F.x,dir};F.rollCd=G.t+MOVE.roll.cd*F.mod.roll;F.block=F.crouch=false;F.vx=0;setSt(F,'roll');fxAdd({k:'dust',x:F.x,y:0});snd('whoosh',.35);return true}
 const isFree=F=>F.st==='idle'||F.st==='walk'||F.st==='crouch';
 function fxAdd(o){o.t0=G.t;o.seed=Math.random()*1000;G.fx.push(o);if(o.persist){const ps=G.fx.filter(f=>f.persist);if(ps.length>16)G.fx.splice(G.fx.indexOf(ps[0]),1)}}
-function heroMove(F,a,inp){const fwd=inp.mx===F.f;if(a==='power1'||a==='power2'){const id=(F.def.powers||[])[a==='power1'?0:1];return id?POWERS[id].move:null}if(a==='slash')return F.iron&&G.t<F.iron.cnt&&F.moves.p_iron_counter?'p_iron_counter':F.air?'air':inp.down?'low':fwd?'lunge':'slash';if(a==='kick')return F.air?'airKick':inp.down?'sweepK':fwd?'round':'kick';if(a==='ink')return F.ink>=33.3?'wave':null;return a==='issen'&&F.sov&&F.moves.p_sov_cut?'p_sov_cut':a==='issen'&&F.ink>=99.5?'issen':null}
+function heroMove(F,a,inp){const fwd=inp.mx===F.f;if(a==='power1'||a==='power2'){const id=(F.def.powers||[])[a==='power1'?0:1];return id?POWERS[id].move:null}if(a==='slash')return F.iron&&G.t<F.iron.cnt&&F.moves.p_iron_counter?'p_iron_counter':F.air?'air':inp.down?'low':fwd?'lunge':'slash';if(a==='kick')return F.air?'airKick':inp.block&&!inp.down?'throw':inp.down?'sweepK':fwd?'round':'kick';if(a==='ink')return F.ink>=33.3?'wave':null;return a==='issen'&&F.sov&&F.moves.p_sov_cut?'p_sov_cut':a==='issen'&&F.ink>=99.5?'issen':null}
 function startMove(F,n){const m=F.moves[n];if(!m||m.cd&&(F.cd[n]||0)>G.t||m.once&&F.once[n]||HERO_MV[n]&&F.burn>G.t)return false;const O=F===G.P?G.B:G.P;
  if(m.cost){if(F.ink<m.cost*33.3-.5)return false;F.ink=Math.max(0,F.ink-m.cost*33.34)}
  if(m.once)F.once[n]=1;if(F.iron&&n!=='p_iron_counter')F.iron=null; // attacking ends Iron Resolve's stance
@@ -1467,24 +1497,27 @@ function stepMove(F,O,dt){const m=F.mv,a=F.mvT,b=a+dt;F.mvT=b;
  if(F.mv!==m)return;
  if(m.air&&!F.air&&b>.08){F.mv=null;setSt(F,'idle');return}
  if(b>=m.dur+(m.whiffLag&&m.hit&&!F.mask?m.whiffLag:0)){if(!F.isP&&m.hit&&!F.mask){const P=G.P;if(P&&Math.abs(P.x-F.x)<m.reach*F.def.s+60&&!P.block&&P.st!=='roll'&&P.st!=='hit'&&P.st!=='down')note('evades')}F.mv=null;F.manual=false;F.alpha=1;const n=F.next;F.next=null;if(n&&startMove(F,n))return;setSt(F,F.air?'jump':'idle')}}
+// a blow reaches the defender's centre when it is within [-40, reachOf] in front of the attacker (the training boxes draw this)
+const reachOf=(A,Dd,m)=>m.reach*A.def.s+20*Dd.def.s;
 function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')return false;
- if(!proj){const dx=(Dd.x-A.x)*A.f;if(dx<-40||dx>m.reach*A.def.s+20*Dd.def.s)return false}
+ if(!proj){const dx=(Dd.x-A.x)*A.f;if(dx<-40||dx>reachOf(A,Dd,m))return false}
  if(!proj&&G.L&&Math.abs(A.y-Dd.y)>190*Dd.def.s)return false; // custom maps: no cut reaches from the floor to a high ledge
  const dAir=Dd.y<(Dd.gy||0)-50,dir=proj?Math.sign(m.vx)||A.f:A.f;
  if(!proj&&(m.zone==='high'&&Dd.crouch&&!dAir||m.zone==='low'&&dAir))return false;
+ if(m.grab&&(dAir||!(isFree(Dd)||Dd.st==='bstun')))return false; // a throw only catches a fighter standing (or guarding) on the ground
  if(invul(Dd)){if(Dd.isP&&Dd.st==='roll'&&!proj&&G.rtSeen!==A.mvId){G.rtSeen=A.mvId;note('rollsThrough')} /* rolled through a blow that would have landed */if(Dd.st==='move'&&Dd.mv.dodgeInk&&!Dd.d.dodged){Dd.d.dodged=1;inkUp(Dd,Dd.mv.dodgeInk)}return false} // Miststep III: ink for slipping a live attack
  const hx=Dd.x-dir*14*Dd.def.s,hy=Dd.y+ZY[m.zone||'mid']*Dd.def.s*(Dd.crouch&&m.zone!=='low'?.7:1);
  const facing=Dd.f===-dir,canBlock=!m.unblock&&Dd.block&&facing&&!dAir&&(isFree(Dd)||Dd.st==='bstun')&&(m.zone==='low'?Dd.crouch:m.zone==='high'?!Dd.crouch:true);
  const assist=!canBlock&&Dd.isP&&SV.settings.assist&&!proj&&!m.unblock&&facing&&!dAir&&Dd.st==='idle'&&!Dd.crouch&&m.zone!=='low'&&!(G.trial&&G.trial.no_block); // Guard Assist (§5.8b): an idle hero raises the guard on mid / high
- if(canBlock&&Dd.isP&&G.parry&&G.t-(Dd.blockT??-9)<=MOVE.parry.win+(Dd.mod.parry||0))return parry(A,Dd,m,proj,hx,hy);
+ if(canBlock&&Dd.isP&&G.parry&&G.t-(Dd.blockT??-9)<=MOVE.parry.win+(Dd.mod.parry||0)){fdRes(A,'parried');return parry(A,Dd,m,proj,hx,hy)}
  if(canBlock||assist){if(m.chip)Dd.hp=Math.max(1,Dd.hp-m.dmg*m.chip*A.mod.dmg); // Moon Pierce: a share through the guard
-  setSt(Dd,'bstun');Dd.stun=.2;Dd.vx=dir*(m.push||90)*.9*(m.blockPush||1)*(assist?.6:1);fxAdd({k:'clash',x:hx,y:hy,sz:.7});snd('clang',.55);inkUp(A,3);inkUp(Dd,5);if(Dd.isP)note('blocks');else if(Dd.def.ai&&Dd.def.ai.counter)Dd.ai.cnt=G.t+.5; /* Hell: ready to strike back */G.freeze=.04;G.shake=Math.max(G.shake,5);return true}
+  setSt(Dd,'bstun');Dd.stun=.2;Dd.vx=dir*(m.push||90)*.9*(m.blockPush||1)*(assist?.6:1);fxAdd({k:'clash',x:hx,y:hy,sz:.7});snd('clang',.55);inkUp(A,3);inkUp(Dd,5);fdRes(A,'blocked');if(Dd.isP)note('blocks');else if(Dd.def.ai&&Dd.def.ai.counter)Dd.ai.cnt=G.t+.5; /* Hell: ready to strike back */G.freeze=.04;G.shake=Math.max(G.shake,5);return true}
  // damage: rage, then the attacker's modifiers (attack, chain hits 2-3, a crit drawn from the fight RNG only if crit > 0), then the defender's
  let dmg=m.dmg*(A.rage?1.2:1)*(A.sov?A.sov.dmg:1)*A.mod.dmg*(!proj&&(A.mvn==='slash2'||A.mvn==='slash3'||A.mvn==='slash4')?A.mod.combo:1);const crit=A.mod.crit>0&&G.rand()<A.mod.crit;if(crit)dmg*=A.mod.critDmg;
  const tr=A.mod.tr;if(tr){if(tr.first&&!A.firstHit)dmg*=1+tr.first;if(tr.momentum)dmg*=1+Math.min(tr.momentum[1],(A.mom||0)*tr.momentum[0])} // weapon traits: first strike, momentum
  const punish=A.isP&&!proj&&Dd.st==='move'&&!!Dd.mv.hit&&Dd.mvT>Dd.mv.hit[Dd.mv.hit.length-1][1]; // whiff punish (§5.8a): a hit into the foe's recovery
  if(punish){dmg*=MOVE.punish.dmg;inkUp(A,MOVE.punish.ink);fxAdd({k:'punish',x:hx,y:hy});snd('clang',.4)}
- const ward=!!Dd.def.ward&&G.t>=(Dd.wardOff||0)&&!m.unblock; // White Mode: a punish breaks the ward; anything else but a parry or an Issen glances off
+ const ward=!!Dd.def.ward&&G.t>=(Dd.wardOff||0)&&!(m.unblock&&!m.grab); /* a throw glances off too */ // White Mode: a punish breaks the ward; anything else but a parry or an Issen glances off
  if(ward){if(punish){Dd.wardOff=G.t+2.5;fxAdd({k:'parry',x:hx,y:hy})}else{dmg*=.15;fxAdd({k:'ward',x:hx,y:hy});snd('clang',.5)}}
  const skin=Dd.mod.skin&&G.t>=Dd.skinT;if(skin){dmg*=1-Dd.mod.skin.reduce;Dd.skinT=G.t+Dd.mod.skin.every;fxAdd({k:'clash',x:hx,y:hy,sz:.5})} /* Iron Skin echo */
  const iron=Dd.iron;if(iron){if(!m.kd){iron.absorbed+=dmg;iron.cnt=G.t+.5}dmg*=1-iron.mit;fxAdd({k:'clash',x:hx,y:hy,sz:.6})} // Iron Resolve: absorbed blows feed the counter
@@ -1493,7 +1526,7 @@ function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')
  const hp0=Dd.hp;Dd.hp=Math.max(0,Dd.hp-dmg*(1-Dd.mod.mit));Dd.lagHold=.6;Dd.hitFlash=.14;Dd.hurtT=G.t;
  const dealt=hp0-Dd.hp; // damage is counted before any healing
  if(Dd.isP&&G.tea&&Dd.hp>0&&Dd.hp<Dd.maxHp*GEAR.items.healing_tea.effect.below)teaHeal(Dd); // Healing Tea, once, charged as it heals
- const foot=m.kd&&Dd.mod.footing&&!Dd.footUsed&&Dd.hp>0,kd=m.kd&&!foot;if(foot)Dd.footUsed=1; // Oni-gane Plate: the first knockdown each round only staggers
+ const foot=m.kd&&Dd.mod.footing&&!Dd.footUsed&&Dd.hp>0,kd=m.kd&&!foot;if(foot)Dd.footUsed=1;fdRes(A,kd?'knockdown':'hit'); // Oni-gane Plate: the first knockdown each round only staggers
  const armored=(Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.pierceArmor||skin||iron||ward&&!punish)&&!kd&&Dd.hp>0;if(iron&&kd)Dd.iron=null;
  if(!armored){Dd.mv=null;Dd.manual=false;Dd.alpha=1;Dd.next=null;Dd.crouch=false;Dd.block=false;
   if(kd||Dd.hp<=0){setSt(Dd,'down');Dd.vx=dir*(m.push||220)*1.2;Dd.vy=-520;Dd.air=true;fxAdd({k:'splash',x:Dd.x+dir*40,y:-2,sz:46,dir:0,persist:1})}
@@ -1513,7 +1546,7 @@ function parry(A,Dd,m,proj,hx,hy){if(!proj&&A.st==='move'){A.mv=null;A.manual=fa
 // fight tallies (1.7): drills, daily challenges and achievements read them; nothing in a fight depends on them
 const note=(k,n=1)=>{if(G.tally)G.tally[k]=(G.tally[k]||0)+n};
 function scoreHit(A,Dd,d,punish,crit,kd,proj){if(!G.tally)return;
- if(A===G.P||A===G.clone){note('hits');note('dmg',d);if(punish)note('punishes');if(kd)note('knockdowns');if(!proj&&A.mvn==='slash3')note('chains');if(A.mv&&A.mv.issen)note('issen');if(A===G.P&&HERO_MV[A.mvn])note('powerHits');
+ if(A===G.P||A===G.clone){note('hits');if(A.mv&&A.mv.grab)note('throws');note('dmg',d);if(punish)note('punishes');if(kd)note('knockdowns');if(!proj&&A.mvn==='slash3')note('chains');if(A.mv&&A.mv.issen)note('issen');if(A===G.P&&HERO_MV[A.mvn])note('powerHits');
   const C=G.combo;if(G.t-C.t<.9)C.n++;else{C.n=1;C.dmg=0}C.dmg+=d;C.t=G.t;G.tally.maxCombo=Math.max(G.tally.maxCombo||0,C.n);if(G.train)fxAdd({k:'num',x:Dd.x,y:-270*Dd.def.s,v:Math.round(d*10)/10,crit})}
  else if(Dd===G.P)note('hurt',d)}
 // ink gain: the fighter's ink modifier, faster below half health with the Ember of Rage echo
@@ -1563,6 +1596,7 @@ function ai(B,Pl,dt){if(G.train&&G.train.behav!=='fight')return trainAI(B,Pl,dt)
  const read=n=>{if(!A.read)return 1;const m=B.moves[n],z=m.zone||m.proj&&m.proj.zone;return Pl.block&&!Pl.crouch&&z==='low'||Pl.crouch&&z==='mid'?2.2:1}; // Hell: low against a standing guard, mid against a crouch
  const PH=B.phase&&B.def.phase,wt=n=>B.moves[n].w*(Pl.iron&&B.moves[n].kd?3:1)*read(n); // knockdowns break Iron Resolve
  if(B.ai.t<=0&&isFree(B)){B.ai.t=A.think*R*(PH?PH.think:1)*(.6+G.rand()*.8);
+  if(Pl.block&&isFree(Pl)&&!Pl.air&&d<=B.moves.throw.reach*s+20*Pl.def.s&&G.rand()<(A.throw??.3)){inp.atk='throw';return inp} // a guard held close invites a throw
   const opts=(PH?B.def.moves.concat(PH.move):B.def.moves).filter(n=>{const m=B.moves[n];return(!m.cd||(B.cd[n]||0)<=G.t)&&d>=m.ai[0]*s&&d<=m.ai[1]*s});
   if(Pl.air&&d<280){const aa=opts.find(n=>B.moves[n].zone==='high');if(aa){inp.atk=aa;return inp}}
   if(opts.length&&G.rand()<A.aggr+(B.rage?.15:0)+(PH?PH.aggr:0)){let tw=0;for(const n of opts)tw+=wt(n);let r=G.rand()*tw;for(const n of opts){r-=wt(n);if(r<=0){inp.atk=n;break}}return inp}
@@ -1784,7 +1818,7 @@ function cleanSettings(o){const pick=(v,ok,d)=>ok.includes(v)?v:d,num=(v,lo,hi,d
  return{volume:num(o.volume,0,1,1),music:num(o.music,0,1,.8),sfx:num(o.sfx,0,1,1),sens:num(o.sens,.6,1.6,1),lang:pick(o.lang,['en'],'en'),shake:pick(o.shake,['full','reduced','off'],'full'),flash:pick(o.flash,['full','reduced'],'full'),haptics:o.haptics!==false,quality:pick(o.quality,['high','low'],'high'),
   assist:o.assist===true,scale:num(o.scale,.8,1.4,1),lefty:o.lefty===true,keys:Object.fromEntries(Object.entries(obj(o.keys)).filter(([c,a])=>/^[A-Za-z0-9]{2,20}$/.test(c)&&ACTIONS.includes(a)))}}
 const newEpoch=()=>(Date.now().toString(36)+Math.floor(Math.random()*1e8).toString(36)).slice(0,20); // a profile's identity: New Game, import and restore make a new one
-const newSave=()=>({v:2,rev:0,savedAt:0,att:{seq:0,open:null,done:[],floor:0,receipts:{}},profile:{level:1,xp:0,attrPts:0,skillPts:0,attrs:{assault:0,survival:0,shadowcraft:0},mon:0,materials:0,crystals:0,epoch:newEpoch()},world:{at:-1,loc:'',secret:0},modes:{sun:0,hell:false,white:false},stats:{},daily:{day:'',ids:[],base:{}},
+const newSave=()=>({v:2,rev:0,savedAt:0,att:{seq:0,open:null,done:[],floor:0,receipts:{}},profile:{level:1,xp:0,attrPts:0,skillPts:0,attrs:{assault:0,survival:0,shadowcraft:0},mon:0,materials:0,crystals:0,epoch:newEpoch()},world:{at:-1,loc:'',secret:0},modes:{sun:0,hell:false,white:false,ack:0,visited:{hell:false,white:false},last:null},stats:{},daily:{day:'',ids:[],base:{}},
  progress:{beaten:0,defeated:[],ladder:{},regionsUnlocked:1,trialsDone:[],lastWin:null},powers:{},loadout:{powers:[null,null],echoes:[null,null]},
  gear:{owned:['katana'],equipped:{weapon:'katana',charm:null,armour:null,item:null},tiers:{katana:1},items:{},cos:{finish:null,trail:null,aura:null,robe:null}},settings:Object.assign({},SET_D,{keys:{}}),rewardsClaimed:{},story:{pending:[],seen:[]},legacy:null});
 // every field is re-validated and clamped on load, so bad data never reaches the game (in v1, {"beaten":"abc"} locked every boss)
@@ -1815,9 +1849,10 @@ function cleanSave(r){r=obj(r);const s=newSave(),p=obj(r.profile),a=obj(p.attrs)
   if(Number.isInteger(open.id))retire(s.att,open.id);s.att.seq=Math.max(s.att.seq,...s.att.done,s.att.floor)} // an attempt still open at load was abandoned
  s.story=Object.assign({},sto,{seen:strs((Array.isArray(sto.seen)?sto.seen:[]).map(k=>LEG[k]||k),[...LAD.regions.map(R=>R.id),...Object.keys(MODES),...Object.values(MODES).flatMap(L=>L.missions.map(M=>'m:'+M.id))]),pending:(Array.isArray(sto.pending)?sto.pending:[]).filter(n=>obj(n).kind==='power'?!!POWERS[n.id]:['migrated','corrupt','ach'].includes(obj(n).kind)&&typeof n.text==='string').slice(0,8)});
  s.legacy=typeof lg.raw==='string'?{raw:lg.raw.slice(0,200),migratedAt:int(lg.migratedAt,0,1e15)}:null;
- {const md=obj(r.modes);s.modes={sun:md.sun?1:0,hell:md.hell===true,white:md.white===true};if(!s.modes.sun)s.modes.hell=s.modes.white=false}
+ {const md=obj(r.modes),v17=!md.visited,vi=v17?{hell:md.hell,white:md.white}:obj(md.visited); // a 1.7 save (no visited): its chosen path counts as visited; later, hell/white are only the mirror
+  Object.assign(s.modes,{ack:(v17?md.sun:md.ack)?1:0,visited:{hell:vi.hell===true,white:vi.white===true},last:['hell','white'].includes(md.last)?md.last:null})}
  {const w=obj(r.world);s.world={at:int(w.at,-1,BOSSES.length-1,-1),loc:typeof w.loc==='string'&&MODES[w.loc]?w.loc:'',secret:w.secret?1:0}}{const d=obj(r.daily),pool=CHAL.daily.pool.map(x=>x.id);s.daily={day:typeof d.day==='string'&&/^\d{4}-\d\d-\d\d$/.test(d.day)?d.day:'',ids:strs(d.ids,pool).slice(0,CHAL.daily.count),base:Object.fromEntries(Object.entries(obj(d.base)).filter(([k])=>/^[a-zA-Z]{1,24}$/.test(k)).map(([k,v])=>[k,int(v,0,1e9)]))}}s.stats=Object.fromEntries(Object.entries(obj(r.stats)).filter(([k])=>/^[a-zA-Z]{1,24}$/.test(k)).map(([k,v])=>[k,int(v,0,1e9)]));
- points(s);backfillCr(s);return s}
+ points(s);backfillCr(s);mirrorModes(s);return s}
 /* --- durable progress (v2 brief §6). Every change that matters goes through commit(): it is made, the whole save is written,
    and only a successful write keeps it; a failed write puts back the last saved state and the player is told (with a
    retry). A rewarding fight is an attempt: begun and saved before it starts, bound to this profile's epoch, settled once. --- */
@@ -1840,7 +1875,7 @@ function settle(d,id,epoch,fn){const A=d.att;if(A.receipts[id])return{replay:A.r
 // shadow crystals are paid per claim, once: the "cr:<claim>" flag makes every payout idempotent, and lets 1.7 pay what a
 // save from before crystals already earned (backfillCr runs on every load)
 // stable mission ids (v2 brief §6): a ladder step or mission is claimed as "m:<id>"; LEG maps the 1.7 index claims onto them
-const LEG={};for(const R of LAD.regions)for(const st of R.steps)LEG[st.was]='m:'+st.id;for(const L of Object.values(MODES))for(const M of L.missions)LEG[M.was]='m:'+M.id;
+const LEG={};for(const R of LAD.regions)for(const st of R.steps)if(st.was)LEG[st.was]='m:'+st.id;for(const L of Object.values(MODES))for(const M of L.missions)if(M.was)LEG[M.was]='m:'+M.id;
 const NODE={};for(const R of LAD.regions)for(const st of R.steps)NODE[st.id]={st,R};for(const[loc,L]of Object.entries(MODES))for(const M of L.missions)NODE[M.id]={M,loc};
 const payCr=(s,claim,n)=>{if(!n||!s.rewardsClaimed[claim]||s.rewardsClaimed['cr:'+claim])return 0;s.rewardsClaimed['cr:'+claim]=1;s.profile.crystals=Math.min(1e9,s.profile.crystals+n);return n};
 function crOf(claim){const[k,a,b]=claim.split(':'),C=ECON.crystals;if(k==='boss')return C.boss[a]||0;if(k==='trial')return C.trial;
@@ -1858,6 +1893,8 @@ function points(s){const p=s.profile,A=p.attrs,earned=(p.level-1)*PROG.level_up.
 // character-screen actions. A fight's hero is built from the save when the fight starts, so nothing here reaches a fight in progress.
 function spendAttr(s,k){if(s.profile.attrPts<1||s.profile.attrs[k]>=PROG.attributes.rank_cap)return false;s.profile.attrs[k]++;points(s);return true}
 function resetAttrs(s){const a=s.profile.attrs;a.assault=a.survival=a.shadowcraft=0;points(s)}
+// the respec route for powers: every tier back to I, every skill point back to spend; the mon paid for upgrades is not returned
+function resetPowers(s){if(!Object.values(s.powers).some(x=>x.tier>1))return false;for(const id in s.powers)s.powers[id].tier=1;points(s);return true}
 function tierBlock(s,id){const pw=POWERS[id],own=s.powers[id],t=own&&own.tier,c=t&&tierCost(t+1);
  return!own?'not absorbed yet':!pw.ready?'awakens in a later update':t>=5?'fully upgraded':c.trial&&t>=maxTier(s,id)?`needs ${BOSSES[BOSS_IDS.indexOf(pw.boss)].name}’s Ink Trial (coming with the ladders)`
   :s.profile.skillPts<c.sp?`needs ${plural(c.sp,'skill point')}`:s.profile.mon<c.mon?`needs ${c.mon} mon`:''}
@@ -1871,7 +1908,7 @@ const fnv=t=>{let h=0x811c9dc5;for(let i=0;i<t.length;i++)h=Math.imul(h^t.charCo
 const seal=d=>JSON.stringify({sum:fnv(JSON.stringify(d)),doc:d});
 function unseal(t){try{const w=JSON.parse(t);if(w&&w.doc&&w.doc.v===2&&w.sum===fnv(JSON.stringify(w.doc)))return w.doc}catch(e){}return null}
 // full-document writes alternate between two slots, so a write cut short always leaves the previous save intact
-function writeSave(s){if(STORE.lock)return false;s.rev++;s.savedAt=Date.now();const ok=store.set(SLOTS[s.rev%2],seal(s));
+function writeSave(s){if(STORE.lock)return false;mirrorModes(s);s.rev++;s.savedAt=Date.now();const ok=store.set(SLOTS[s.rev%2],seal(s));
  store.set(SKEY,JSON.stringify({beaten:s.progress.beaten})); // keep the v1 key current: rolling back to v1.x still finds its progress
  return ok}
 function loadSave(){const texts=SLOTS.map(k=>store.get(k)),docs=texts.map(t=>{if(!t)return null;try{const w=JSON.parse(t);if(w&&w.doc&&w.sum===fnv(JSON.stringify(w.doc)))return w.doc}catch(e){}return'bad'});
@@ -1983,22 +2020,22 @@ function buildMenu(){const box=document.getElementById('levels');box.innerHTML='
 // a region's ladder: retainers in order (each a one-round duel), an optional elite, the boss (open once the retainers are
 // cleared, or already beaten), then its Ink Trial (once the boss is beaten). A win saves the checkpoint; a loss retries.
 function ladderNodes(s,lv){const R=LAD.regions[lv],open=s.progress.regionsUnlocked>lv,beaten=s.progress.beaten>lv;
- let req=true;const ns=R.steps.map((st,i)=>{const cleared=!!s.rewardsClaimed['m:'+st.id],n={kind:'step',i,id:st.id,foe:FOES[st.foe],elite:!!st.elite,cleared,open:open&&req};if(!st.elite&&!cleared)req=false;return n}); /* a step opens once every required step before it is won */
+ let req=true;const ns=R.steps.map((st,i)=>{const cleared=!!s.rewardsClaimed['m:'+st.id],n={kind:'step',i,id:st.id,foe:FOES[st.foe],elite:!!st.elite,lt:!!st.lieutenant,cleared,open:open&&req};if(!st.elite&&!cleared)req=false;return n}); /* a step opens once every required step before it is won */
  ns.push({kind:'boss',foe:BOSSES[lv],cleared:beaten,open:open&&(beaten||ns.every(n=>n.elite||n.cleared))});
  ns.push({kind:'trial',foe:BOSSES[lv],trial:LAD.trials[BOSS_IDS[lv]],cleared:s.progress.trialsDone.includes(BOSS_IDS[lv]),open:beaten});return ns}
 let REG=0;
 function openRegion(lv){REG=lv;REGL=null;const R=LAD.regions[lv],b=BOSSES[lv],ar=ARENAS[b.arena];MODE='menu';if(SV.world.at!==lv||SV.world.loc){SV.world.at=lv;SV.world.loc='';writeSave(SV)} /* Continue returns here */
  if(!SV.story.seen.includes(R.id)){SV.story.seen.push(R.id);writeSave(SV);return notice(ar.jp,ar.name.replace(/^the /,''),R.story.join(' '),[['Continue',()=>openRegion(lv),1]])} // the region's story card, once
- $('gKanji').textContent=ar.jp;$('gTitle').textContent=ar.name.replace(/^the /,'');$('gText').textContent=`${b.name}, ${b.title}, waits at the end of this road. Retainers fight one round; the elite is optional.`;
+ $('gKanji').textContent=ar.jp;$('gTitle').textContent=ar.name.replace(/^the /,'');$('gText').textContent=`${b.name}, ${b.title}, waits at the end of this road. Retainers fight one round; lieutenants fight two and teach the Shadow’s ways; the elite is optional.`;
  const box=$('gNodes');box.innerHTML='';
- for(const n of ladderNodes(SV,lv)){const el=document.createElement('button'),lab=n.kind==='boss'?'Shadow':n.kind==='trial'?'Ink Trial':n.elite?'Elite · optional':'Retainer';
+ for(const n of ladderNodes(SV,lv)){const el=document.createElement('button'),lab=n.kind==='boss'?'Shadow':n.kind==='trial'?'Ink Trial':n.elite?'Elite · optional':n.lt?'Lieutenant':'Retainer';
   el.className='card ncard'+(n.open?'':' locked');el.disabled=!n.open;el.setAttribute('aria-label',`${lab}: ${n.kind==='trial'?n.trial.name:n.foe.name}. ${n.cleared?'Cleared':n.open?'Fight':'Locked'}`);
   el.innerHTML=`<span class="n">${lab}</span><span class="kj">${n.kind==='trial'?'墨':n.foe.jp}</span><span class="nm">${n.kind==='trial'?n.trial.name:n.foe.name}</span><span class="ti">${n.kind==='trial'?n.trial.desc:n.foe.title}</span><span class="stt">${n.cleared?'Cleared · again':n.open?'Fight':'Locked'}</span>${n.cleared?'<span class="seal">討</span>':''}`;
   el.onclick=()=>startFight(lv,undefined,n.kind==='step'?{kind:'step',i:n.i}:{kind:n.kind});box.appendChild(el)}
  show('region');amb(.1,0,0);box.firstChild&&box.firstChild.focus()}
 // a fight in region lv: node = {kind:'boss'} (default), {kind:'step', i} (a ladder duel) or {kind:'trial'} (the boss's Ink Trial)
 function startFight(lv,seed,node={kind:'boss'}){prep(seed);G.lv=lv;G.node=node;G.train=null;G.parry=false;noMission();
- const st=node.kind==='step'&&LAD.regions[lv].steps[node.i];G.trial=node.kind==='trial'?LAD.trials[BOSS_IDS[lv]]:null;G.arena=BOSSES[lv].arena;G.need=st&&!st.elite?1:2;G.roundTime=G.trial&&G.trial.timer||60;
+ const st=node.kind==='step'&&LAD.regions[lv].steps[node.i];G.trial=node.kind==='trial'?LAD.trials[BOSS_IDS[lv]]:null;G.arena=BOSSES[lv].arena;G.need=st&&!st.elite&&!st.lieutenant?1:2;G.roundTime=G.trial&&G.trial.timer||60;
  if(GATES&&!ladderNodes(SV,lv).find(n=>n.kind===node.kind&&(n.kind!=='step'||n.i===node.i)).open)return openRegion(lv); /* prerequisites are checked again on entry */
  fighters(st?Object.assign({},FOES[st.foe],{hp:Math.round(FOES[st.foe].hp*(1+LAD.hp_per_region*lv))}):BOSSES[lv]);if(!beginFight(node.kind,node.kind==='step'?st.id:BOSS_IDS[lv]))return storageError(()=>startFight(lv,seed,node),toMenu);
  G.hint=lv===0&&node.kind==='step'&&!node.i?14:7;go()}
@@ -2020,7 +2057,7 @@ const moveName=n=>{const m=MV[n];return`${n.replace(/^[a-z]_/,'').replace(/[0-9_
 function startTraining(o){G.train=Object.assign({partner:'dummy',behav:'idle',move:null,gap:1.4,inf:true,ink:false,boxes:false,weapon:null,drill:null},G.train||{},o||{},{drill:null});prep();G.hint=7;trainSetup();go()}
 function trainSetup(){const T=G.train;if(!partners().includes(T.partner))T.partner='dummy';if(T.weapon&&!SV.gear.owned.includes(T.weapon))T.weapon=null;
  const s=T.weapon?Object.assign({},SV,{gear:Object.assign({},SV.gear,{equipped:Object.assign({},SV.gear.equipped,{weapon:T.weapon})})}):SV;
- noMission();G.lv=0;G.node={kind:'train'};G.trial=null;G.arena=DOJO_A;G.need=99;G.roundTime=99;G.parry=true;fighters(partnerDef(T.partner),heroDef(s))}
+ noMission();G.lv=0;G.node={kind:'train'};G.trial=null;G.arena=DOJO_A;G.need=99;G.roundTime=99;G.parry=true;fighters(partnerDef(T.partner),heroDef(s));G.fd=null}
 function trainAI(B,Pl,dt){const T=G.train,inp={mx:0,up:false,down:false,atk:null},d=Math.abs(Pl.x-B.x),toward=Pl.x>B.x?1:-1;
  if(T.behav==='block'){inp.block=true;inp.down=Pl.st==='move'&&Pl.mv.zone==='low'||Pl.crouch;return inp}
  if(T.behav!=='attack')return inp;
@@ -2032,22 +2069,46 @@ function trainTick(dt){const T=G.train,pl=G.P,bo=G.B;G.timer=99;
  if(T.inf&&pl.hp<pl.maxHp&&G.t-(pl.hurtT??-9)>1.2)pl.hp=pl.lag=pl.maxHp;
  if(pl.hp<=0){pl.hp=pl.lag=pl.maxHp;G.ban={k:'止',sub:'You fell — health restored',t0:G.rt,dur:1.4,size:170}}
  if(bo.hp<=0){bo.hp=bo.lag=bo.maxHp;note('downs')}
- if(T.ink)pl.ink=100;const D=T.drill&&drillOf(T.drill);if(D&&(G.tally[D.goal.stat]||0)>=D.goal.n)drillDone(D)}
+ if(T.ink)pl.ink=100;
+ // live frame data: the newest move either fighter started, what it met, and the advantage once both are free (+: the attacker first)
+ const f=G.fd||(G.fd={id:-1});for(const[A,Dd]of[[pl,bo],[bo,pl]])if(A.st==='move'&&A.mvId>f.id)Object.assign(f,{id:A.mvId,n:A.mvn,m:A.mv,a:A,d:Dd,who:A.isP?'You':A.def.name,res:'whiff',aEnd:null,dEnd:null});
+ if(f.a){if(f.aEnd==null&&!(f.a.st==='move'&&f.a.mvId===f.id))f.aEnd=G.t;if(f.res!=='whiff'&&f.dEnd==null&&isFree(f.d))f.dEnd=G.t}const D=T.drill&&drillOf(T.drill);if(D&&(G.tally[D.goal.stat]||0)>=D.goal.n)drillDone(D)}
+const fdRes=(A,r)=>{const f=G.fd;if(f&&f.a===A&&f.id===A.mvId)f.res=r};
+// frame data at 60 fps: startup = frames before the first active frame (a thrown move: before the release), active = first to last
+// active frame, recovery = frames after the last active one. A move timed in its own code (Issen) has none.
+const fr60=t=>Math.round(t*60);
+function frameData(m){const h=m.hit,on=h?h[0][0]:m.proj?m.proj.t:null,off=h?h[h.length-1][1]:on;return on==null?{start:null,active:null,rec:null,total:fr60(m.dur)}:{start:fr60(on),active:h?fr60(off-on):1,rec:fr60(m.dur-off),total:fr60(m.dur)}}
+function moveLine(m,s){const f=frameData(m),dm=m.dmg??(m.proj&&m.proj.dmg),z=m.proj?'thrown, '+m.proj.zone:m.zone||'mid';if(f.start==null)return'timed by its own animation (see its drill)';
+ return`${f.start}f startup · ${f.active}f active · ${f.rec}f recovery · ${m.reach?`reach ${Math.round(m.reach*s)} · `:''}${dm!=null?`${Math.round(dm*10)/10} damage · `:''}${z}${m.kd||m.proj&&m.proj.kd?' · knockdown':''}${m.grab?' · throw':m.unblock?' · unblockable':''}${m.armor?' · armoured':''}`}
+const codexIds=()=>Object.keys(FOES).filter(id=>id!=='dummy').concat(BOSS_IDS);
+function codexInto(box,id,met){const add=(lab,txt)=>{const b=document.createElement('b'),sp=document.createElement('span');b.textContent=lab;sp.textContent=txt;box.appendChild(b);box.appendChild(sp)};
+ if(id==='hero'){const F=G.P;for(const[n,inp]of TRAIN.codex.hero)if(F.moves[n])add(inp,moveLine(F.moves[n],F.def.s));for(const p of F.def.powers||[])if(p)add(POWERS[p].name,moveLine(F.moves[POWERS[p].move],F.def.s));return}
+ if(!met.includes(id))return add('? ? ?','Not yet met. Defeat it anywhere and it joins the registry.');
+ const d=partnerDef(id),mv=n=>d.ov&&d.ov[n]||MV[n];add(d.name,`${d.title} · ${d.hp} health · walks ${d.speed}${d.ai&&d.ai.rage?' · fury below half health':''}. ${d.tip||''}`);
+ for(const n of movesOf(d))add(moveName(n).split(' · ')[0],moveLine(mv(n),d.s))}
 function drillDone(D){const claim='drill:'+D.id;G.train.drill=null;
  const first=!SV.rewardsClaimed[claim]&&commit(d=>{d.rewardsClaimed[claim]=Date.now();d.profile.mon+=TRAIN.reward_mon;d.stats.drills=(d.stats.drills||0)+1}).ok;
  G.ban={k:'勝',sub:`Drill complete: ${D.name}${first?` · +${TRAIN.reward_mon} mon, the first time only`:''}`,t0:G.rt,dur:2.4,size:200,seal:true};snd('gong',.6)}
 function startDrill(id){const D=drillOf(id),T=G.train;if(!D)return;Object.assign(T,{drill:id,behav:D.behav,move:null,gap:D.gap||1.4,partner:'dummy',inf:true,ink:false});trainSetup();newRound();G.ban=null}
-function trainReset(){G.round=1;newRound();G.ban=null}
+function trainReset(){G.round=1;newRound();G.ban=null;G.fd=null}
 function trainHUD(c){const T=G.train,C=G.combo;screen(c);c.textBaseline='alphabetic';
  if(C.n>1&&G.t-C.t<1.6){c.globalAlpha=1-ss(1.1,1.6,G.t-C.t);c.textAlign='right';c.fillStyle=RED;c.font='600 60px "Cormorant Garamond", serif';c.fillText(`${C.n} HITS`,W-100,282);c.fillStyle=INK;c.font='500 30px "Cormorant Garamond", serif';c.fillText(`${Math.round(C.dmg*10)/10} damage`,W-100,320);c.globalAlpha=1}
  c.textAlign='left';c.fillStyle=ink(.8);c.font='italic 24px "Cormorant Garamond", serif';c.fillText(`best combo ${G.tally.maxCombo||0} · ${Math.round(G.tally.dmg||0)} damage dealt · ${TOUCH.on?'pause button':PAD.on?'Start':'Esc'}: training options`,100,232);
+ const f=G.fd;if(T.frames&&f&&f.m){const x=frameData(f.m),adv=f.aEnd!=null&&f.dEnd!=null?fr60(f.dEnd-f.aEnd):null;
+  c.fillText(`${f.who}: ${f.n} · ${x.start??'–'}f startup, ${x.active??'–'}f active, ${x.rec??'–'}f recovery · ${f.res}${adv!=null?` · ${adv>0?'+':''}${adv}f`:''}`,100,270)}
  const D=T.drill&&drillOf(T.drill);if(D&&!(G.hint>0)){c.globalAlpha=.88;c.fillStyle=PAPER;c.beginPath();c.roundRect(W/2-880,H-118,1760,102,50);c.fill();c.globalAlpha=1;c.textAlign='center';c.fillStyle=INK;
   c.font='600 27px "Cormorant Garamond", serif';c.fillText(`${D.name} · ${Math.min(D.goal.n,G.tally[D.goal.stat]||0)} / ${D.goal.n}`,W/2,H-78);c.font='italic 23px "Cormorant Garamond", serif';c.fillStyle=ink(.75);c.fillText(D.hint,W/2,H-42)}}
-// hitboxes and hurtboxes (training): blue body boxes (green while invulnerable), red reach boxes while a blow is live (dashed in its windup)
-function drawBoxes(c){camT(c,1);c.lineWidth=3;for(const F of[G.P,G.B]){const x=ip(F.x,F.px),y=ip(F.y,F.py),s=F.def.s,h=246*s*(F.crouch?.62:1);
- c.globalAlpha=.85;c.strokeStyle=invul(F)?'#3d7a4f':'#2c4a7a';c.strokeRect(x-46*s,y-h,92*s,h);
- const m=F.st==='move'&&F.mv;if(m&&m.hit){const on=m.hit.some(w=>F.mvT>=w[0]&&F.mvT<=w[1]),z=y+ZY[m.zone||'mid']*s,x0=x-F.f*40,x1=x+F.f*m.reach*s;
-  c.fillStyle=RED;c.globalAlpha=on?.35:.12;c.fillRect(Math.min(x0,x1),z-34,Math.abs(x1-x0),68);if(!on){c.globalAlpha=.6;c.setLineDash([12,8]);c.strokeStyle=RED;c.strokeRect(Math.min(x0,x1),z-34,Math.abs(x1-x0),68);c.setLineDash([])}}}
+// hitboxes and hurtboxes (training), drawn from the same numbers tryHit and updProj use: a blue body box (green while invulnerable)
+// with a dashed centre line; a blow lands when its red box reaches the other fighter's centre line (its reach plus that fighter's
+// width: tryHit's [-40, reach*s + 20*s'] in front), at its height (high misses a crouch, low misses a jump). A projectile lands when
+// its red box touches the body box. Solid while live, dashed in the windup.
+function drawBoxes(c){camT(c,1);c.lineWidth=3;c.font='600 22px "Cormorant Garamond", serif';c.textAlign='center';c.textBaseline='alphabetic';
+ for(const F of[G.P,G.B]){const O=F===G.P?G.B:G.P,x=ip(F.x,F.px),y=ip(F.y,F.py),s=F.def.s,h=246*s*(F.crouch?.62:1);
+  c.globalAlpha=.85;c.strokeStyle=invul(F)?'#3d7a4f':'#2c4a7a';c.strokeRect(x-46*s,y-h,92*s,h);c.setLineDash([6,8]);line(c,[x,y-h],[x,y]);c.setLineDash([]);
+  const m=F.st==='move'&&F.mv;if(m&&m.hit){const on=m.hit.some(w=>F.mvT>=w[0]&&F.mvT<=w[1]),z=y+ZY[m.zone||'mid']*s,x0=x-F.f*40,x1=x+F.f*reachOf(F,O,m),L=Math.min(x0,x1),wd=Math.abs(x1-x0);
+   c.fillStyle=RED;c.globalAlpha=on?.35:.12;c.fillRect(L,z-34,wd,68);if(!on){c.globalAlpha=.6;c.setLineDash([12,8]);c.strokeStyle=RED;c.strokeRect(L,z-34,wd,68);c.setLineDash([])}
+   c.globalAlpha=.9;c.fillText(`${m.zone||'mid'}${m.grab?' · throw':m.unblock?' · unblockable':''}`,L+wd/2,z-44)}}
+ c.strokeStyle=RED;c.globalAlpha=.8;for(const p of G.proj){if(p.type==='ghost')continue;const w=20+(p.wide||0);if(p.ground)c.strokeRect(p.x-w,(p.gy||0)-40,2*w,40);else c.strokeRect(p.x-w,p.y-4,2*w,8)}
  c.globalAlpha=1}
 function openTrain(){const T=G.train,box=$('tBody'),done=TRAIN.drills.filter(d=>SV.rewardsClaimed['drill:'+d.id]).length;box.innerHTML='';
  $('tSub').textContent=`Free practice changes nothing in your journey. Drills done: ${done} of ${TRAIN.drills.length} (each pays ${TRAIN.reward_mon} mon the first time).`;$('tMsg').textContent=T.drill?`Drill: ${drillOf(T.drill).hint}`:'';
@@ -2059,7 +2120,8 @@ function openTrain(){const T=G.train,box=$('tBody'),done=TRAIN.drills.filter(d=>
  if(T.behav==='attack')row('Pattern',[[null,'every move'],...movesOf(G.B.def).map(n=>[n,moveName(n)])],T.move,v=>{T.move=v});
  row('Tempo',[[2,'slow'],[1.4,'steady'],[.9,'fast']],T.gap,v=>{T.gap=v});
  row('Weapon',SV.gear.owned.filter(id=>GEAR.weapons[id]).map(id=>[id,WPN(id).name]),T.weapon||SV.gear.equipped.weapon,v=>{T.weapon=v;trainSetup();newRound();G.ban=null;G.paused=true});
- row('Your health',[[true,'infinite'],[false,'normal']],T.inf,v=>{T.inf=v});row('Ink',[[false,'normal'],[true,'infinite (practise powers)']],T.ink,v=>{T.ink=v});row('Hitboxes',[[false,'hidden'],[true,'shown']],T.boxes,v=>{T.boxes=v});
+ row('Your health',[[true,'infinite'],[false,'normal']],T.inf,v=>{T.inf=v});row('Ink',[[false,'normal'],[true,'infinite (practise powers)']],T.ink,v=>{T.ink=v});row('Hitboxes',[[false,'hidden'],[true,'shown']],T.boxes,v=>{T.boxes=v});row('Frame data',[[false,'hidden'],[true,'shown']],!!T.frames,v=>{T.frames=v});
+ const met=partners();row('Codex',[['hero','your moves'],...codexIds().map(id=>[id,met.includes(id)?partnerDef(id).name:'? ? ?'])],T.codex||null,v=>{T.codex=T.codex===v?null:v});if(T.codex)codexInto(box,T.codex,met);
  show('train');$('tResume').focus()}
 // victory: rewards are computed and SAVED first, then the (skippable) absorption ceremony, then the result panel
 function matchEnd(win){G.state='over';G.buf=null;G.jb=-9;G.res={win,r:null,ch:[],saved:true};
@@ -2083,7 +2145,7 @@ function tallyEnd(s,win){if(G.train||G.node.kind==='custom')return;const t=G.tal
 /* --- challenges (1.7): three daily challenges (chosen per local date, progress counted from that day's stats) and
    achievements; each pays once, the moment it is met (claims daily:<day>:<id> and ach:<id>) --- */
 let TODAY=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
-const dailyOk=(s,d)=>!d.need||(d.need==='power'?Object.keys(s.powers).length>0:!!(s.modes&&s.modes[d.need]));
+const dailyOk=(s,d)=>!d.need||(d.need==='power'?Object.keys(s.powers).length>0:locOpen(s,d.need));
 let DAILY_ON=true,GATES=true; // GATES: fights check their prerequisites on entry (tests that set up a fight directly switch it off) // tests switch dailies off unless they test them (the pool depends on the date)
 function rollDaily(s){if(!DAILY_ON){s.daily.ids=[];return}const day=TODAY();if(s.daily.ids.length&&day<=s.daily.day)return; /* the same day, or the clock went back */const r=rng(parseInt(fnv(day),36)),pool=CHAL.daily.pool.filter(d=>dailyOk(s,d)),ids=[];
  while(ids.length<Math.min(CHAL.daily.count,pool.length)){const d=pool[r()*pool.length|0];if(!ids.includes(d.id))ids.push(d.id)}
@@ -2092,7 +2154,7 @@ function rollDaily(s){if(!DAILY_ON){s.daily.ids=[];return}const day=TODAY();if(s
 const dailyOf=id=>CHAL.daily.pool.find(d=>d.id===id),dailyProg=(s,d)=>Math.max(0,(s.stats[d.stat]||0)-(s.daily.base[d.stat]||0));
 function achProg(s,a){if(a.stat)return[Math.min(a.n,s.stats[a.stat]||0),a.n];const[k,v,w]=a.check.split(':'),n=+v;
  return k==='beaten'?[Math.min(n,s.progress.beaten),n]:k==='trials'?[Math.min(n,s.progress.trialsDone.length),n]:k==='level'?[Math.min(n,s.profile.level),n]:k==='weapons'?[Math.min(n,s.gear.owned.filter(id=>GEAR.weapons[id]).length),n]
-  :k==='tier5'?[+Object.values(s.gear.tiers).some(t=>t>=5),1]:k==='drills'?[TRAIN.drills.filter(d=>s.rewardsClaimed['drill:'+d.id]).length,TRAIN.drills.length]:k==='sun'?[+!!(s.modes&&s.modes.sun),1]
+  :k==='tier5'?[+Object.values(s.gear.tiers).some(t=>t>=5),1]:k==='drills'?[TRAIN.drills.filter(d=>s.rewardsClaimed['drill:'+d.id]).length,TRAIN.drills.length]:k==='sun'?[+!!s.modes.ack,1]
   :k==='secret'?[+!!(s.world&&s.world.secret),1]:k==='claim'?[+!!s.rewardsClaimed[v+':'+w],1]:[0,1]}
 function award(s){rollDaily(s);const got=[];if(discover(s))got.push({text:WORLD.secret.text,mon:0,crystals:0});
  for(const id of s.daily.ids){const d=dailyOf(id),claim=`daily:${s.daily.day}:${id}`;if(s.rewardsClaimed[claim]||dailyProg(s,d)<d.n)continue;
@@ -2127,7 +2189,7 @@ function beginFight(kind,ref){const id=SV.gear.equipped.item,want=id&&(SV.gear.i
 function teaHeal(F){G.tea=false;const c=commit(d=>{if(!((d.gear.items.healing_tea||0)>0))return false;if(!--d.gear.items.healing_tea)delete d.gear.items.healing_tea});if(!c.ok)return;
  F.hp=Math.min(F.maxHp,F.hp+GEAR.items.healing_tea.effect.heal*F.mod.heal);fxAdd({k:'ring',x:F.x,y:0});snd('gong',.3)}
 function absorbDone(){if(G.state!=='absorb')return;G.state='over';const id=G.res.r.power;SV.story.pending=SV.story.pending.filter(n=>!(n.kind==='power'&&n.id===id));writeSave(SV);showResult()}
-function showResult(){const{win,r}=G.res,lv=G.lv,last=lv===BOSSES.length-1,kind=G.node.kind;if(win&&kind==='boss'&&lv===0&&!SV.modes.sun&&!G.sunSeen){G.sunSeen=1;return startSun('result')}
+function showResult(){const{win,r}=G.res,lv=G.lv,last=lv===BOSSES.length-1,kind=G.node.kind;if(win&&kind==='boss'&&lv===0&&!SV.modes.ack&&!G.sunSeen){G.sunSeen=1;return startSun('result')}
  if(kind==='mission')return showMissionResult(win,r);if(kind==='custom')return showCustomResult(win);if(kind!=='boss')return showLadderResult(win,r);
  $('rRewards').textContent=r?rewardText([r])+(r.slot>=0?` — ready in power slot ${r.slot+1} (${TOUCH.on?'the '+POWERS[r.power].jp+' button':['U','O'][r.slot]+' key'})`:''):'No rewards for a defeat — and nothing is lost.';purse();
  document.getElementById('rKanji').textContent=win?(last?'終':'勝'):'敗';document.getElementById('rTitle').textContent=win?(last?'The Five Shadows are no more':'Victory'):'Defeat';
@@ -2246,10 +2308,21 @@ function startCustom(m,test){const L=compileMap(m);prep();noMission();G.lv=0;G.n
 function showCustomResult(win){const m=G.map;$('rRewards').textContent='Custom maps pay no rewards: this was for play and practice.';purse();$('rKanji').textContent=win?'勝':'敗';$('rTitle').textContent=win?'Map cleared':'Defeat';
  $('rText').textContent=win?`${m.name}: every foe has fallen.`:`${m.name} holds. Try again, or change the map.`;const bt=$('rBtns');bt.innerHTML='';const mkb=(txt,fn,big)=>{const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=txt;e.onclick=fn;bt.appendChild(e)};
  mkb('Play again',()=>startCustom(m,G.node.test),1);if(G.node.test)mkb('Back to the editor',()=>openEditor(m));mkb('The workshop',()=>{MODE='menu';openWorkshop()});mkb('World map',toMenu);show('result');amb(.08,0,0);bt.firstChild.focus()}
-/* --- the mysterious sun (1.7): the first time Gekkō falls, a sun that is not the sun rises over the field, with a sound like no
-   other. Touch it to choose Hell Mode or White Mode; neither opens by itself, and the choice is saved at once. The sun then
-   hangs over the Burning Field on the world map until both paths are open (saves from before 1.7 find it there). --- */
-const sunWaits=s=>!!s.rewardsClaimed['boss:gekko']&&!(s.modes.hell&&s.modes.white);
+/* --- the mysterious sun (v2, stage 4). Gekkō's first fall makes both paths, Hell Mode and White Mode, eligible at once (derived from
+   the boss:gekko claim, never stored); the sun is a cinematic that shows the way. The save keeps, apart: modes.ack (the cinematic was
+   completed or skipped), modes.visited.{hell,white} and modes.last (the path last entered); sun / hell / white are written as a mirror
+   for older builds. One table, SUNT, decides every event, and Back or the app going to the background never chooses anything:
+     state   event       result
+     sun     complete    (the risen sun touched, Enter, A) ack saved, then the choice
+     sun     skip        (the Skip button) ack saved, then the choice
+     sun     back        (Back, Esc, B) leave to the result or the map; nothing saved, so the sun waits on the map
+     sun     suspend     stay (the scene waits)
+     chosen  hell/white  enter that path (saved as visited and last); the other stays open
+     chosen  later/back  leave to the result or the map
+     chosen  suspend     stay --- */
+function modeEligible(s){return!!s.rewardsClaimed['boss:gekko']} // declarations: writeSave runs before this block loads
+const sunWaits=s=>modeEligible(s)&&!s.modes.ack;
+function mirrorModes(s){const m=s.modes,e=modeEligible(s);m.sun=m.ack?1:0;m.hell=m.white=e} // the 1.7 fields, for an older build reading this save
 function drawSun(c,x,y,r,t,a=1){c.save();c.translate(x,y);c.globalAlpha=a*.5;c.drawImage(MIST,-r*5,-r*5,r*10,r*10);c.rotate(t*.06);c.fillStyle='rgba(240,214,150,.28)';
  for(let k=0;k<16;k++){c.rotate(Math.PI/8);c.globalAlpha=a*(.45+.35*Math.sin(t*1.7+k));tri(c,[-r*.18,0],[r*.18,0],[0,-r*(3.2+(k%2)*1.4)])}
  c.globalAlpha=a;const s=1+.05*Math.sin(t*4);c.fillStyle='#f6e7b8';circ(c,0,0,r*s);c.strokeStyle=RED;c.lineWidth=Math.max(2,r*.06);c.beginPath();c.arc(0,0,r*s*1.06,0,6.2832);c.stroke();
@@ -2258,27 +2331,29 @@ let SUN={draw(c,t){if(sunWaits(SV)){const[x,y]=WORLD.sun;drawSun(c,x,y,58,t)}}};
 function sunScene(c){const u=E.out(clamp(G.st/1.4)),y=lerp(-260,H*.26,u);screen(c);c.globalAlpha=.4*u;c.fillStyle=INK;c.fillRect(0,0,W,H);c.globalAlpha=1;drawSun(c,W/2,y,118,G.rt,u);
  const a=ss(1.4,2.2,G.st);if(a>0){c.globalAlpha=a*.45;c.fillStyle=INK;c.fillRect(0,H*.62-56,W,128);c.globalAlpha=a;c.textAlign='center';c.textBaseline='middle';c.fillStyle='#f6e7b8';c.font='italic 54px "Cormorant Garamond", serif';c.fillText('The light has awakened. Choose what lies beyond.',W/2,H*.62);
   if(G.st>2.4){c.globalAlpha=.55+.25*Math.sin(G.rt*3);c.font='500 26px "Cormorant Garamond", serif';c.fillText(TOUCH.on?'touch the sun':PAD.on?'press A on the sun':'click the sun, or press Enter',W/2,H*.62+56)}c.globalAlpha=1}}
-function startSun(after){G.sunAfter=after;G.state='sun';G.st=0;G.ban=null;G.paused=false;show(null);$('sunBtn').classList.add('off');MODE='game';try{AU.route=AU.mu;S.sun(AU.ctx.currentTime+.05,.9)}catch(e){}AU.route=null}
-// from the map: the scene in the Burning Field (the first time), or straight to the choice for the path still closed
-function startSunScene(){if(!sunWaits(SV))return toMenu();if(SV.modes.sun){G.sunAfter='map';return openSunChoice()}prep();noMission();G.lv=0;G.node={kind:'sun'};G.train=null;G.trial=null;G.arena=0;
+function startSun(after){G.sunAfter=after;G.state='sun';G.st=0;G.ban=null;G.paused=false;show(null);$('sunBtn').classList.add('off');$('sunSkip').classList.remove('off');MODE='game';try{AU.route=AU.mu;S.sun(AU.ctx.currentTime+.05,.9)}catch(e){}AU.route=null}
+// from the map: the scene in the Burning Field, while it has not been seen
+function startSunScene(){if(!sunWaits(SV))return toMenu();prep();noMission();G.lv=0;G.node={kind:'sun'};G.train=null;G.trial=null;G.arena=0;
  fighters(FOES.dummy);go();G.B.alpha=0;startSun('map')}
-function openSunChoice(){$('sunBtn').classList.add('off');if(MODE==='game')G.state='chosen';const box=$('suCards'),bt=$('suBtns');box.innerHTML='';bt.innerHTML='';
- $('suText').textContent=SV.modes.sun?'The other path still waits beyond the light.':'Two roads open beyond it. Neither opens unless you choose; the other will still wait on the world map.';
+const SUNT={sun:{complete:'choice',skip:'choice',back:'leave',suspend:'stay'},chosen:{hell:'enter',white:'enter',later:'leave',back:'leave',suspend:'stay'}};
+function sunEvent(ev){const to=MODE==='game'&&SUNT[G.state]&&SUNT[G.state][ev];if(!to||ev==='complete'&&G.st<=2.4)return null; // the sun can be touched once it has risen
+ if(to==='choice'){ackSun();openSunChoice()}else if(to==='leave')sunDone();else if(to==='enter'){endSun();openLoc(ev)}return to}
+// acknowledged once, completed or skipped: saved with the event claim; The Light Awakens is announced at home
+function ackSun(){if(SV.modes.ack)return;commit(d=>{d.modes.ack=1;if(!d.rewardsClaimed['event:sun'])d.rewardsClaimed['event:sun']=Date.now();const g=award(d);if(g.length)d.story.pending.push({kind:'ach',text:gotText(g)})})}
+function openSunChoice(){$('sunBtn').classList.add('off');$('sunSkip').classList.add('off');G.state='chosen';const box=$('suCards'),bt=$('suBtns');box.innerHTML='';bt.innerHTML='';
+ $('suText').textContent='Both roads are open to you now. Choose where to go; the other stays open on the main menu and the world map.';
  for(const[mode,kj,nm,txt]of[['hell','鬼','Hell Mode','A dark, brutal path: demons that counter and chain, burning hazards, halved healing, wounds that carry. Greater rewards.'],['white','白','White Mode','A luminous path of precision: guardians whose ward only a perfect parry, a punish or an Issen breaks; falling light; your reflection.']]){
-  const open=SV.modes[mode],e=document.createElement('button');e.className='mcard '+mode;e.innerHTML=`<span class="kj">${kj}</span><span class="nm">${nm}</span><span class="ti">${txt}</span><span class="stt">${open?'Open · enter':'Choose this path'}</span>`;
-  e.onclick=()=>open?(endSun(),openLoc(mode)):chooseMode(mode);box.appendChild(e)}
- const l=document.createElement('button');l.className='lnk';l.textContent='Not yet: the sun will wait on the world map';l.onclick=()=>sunDone();bt.appendChild(l);show('sunp');box.firstChild.focus()}
-function chooseMode(mode){const s=SV;s.modes.sun=1;s.modes[mode]=true;if(!s.rewardsClaimed['event:sun'])s.rewardsClaimed['event:sun']=Date.now();const g=award(s);writeSave(s);const L=MODES[mode];
- notice(L.jp,`${L.name} is open`,`${L.desc}${g.length?' '+gotText(g)+'.':''}`,[[`Enter ${mode==='hell'?'the Infernal Realm':'the Celestial Sanctuary'}`,()=>{endSun();openLoc(mode)},1],['Later',()=>sunDone()]],()=>sunDone())}
-const endSun=()=>{$('sunBtn').classList.add('off');if(MODE==='game')G.state='over'};
+  const v=SV.modes.visited[mode],e=document.createElement('button');e.className='mcard '+mode;e.innerHTML=`<span class="kj">${kj}</span><span class="nm">${nm}</span><span class="ti">${txt}</span><span class="stt">${v?'Return':'Enter'}</span>`;
+  e.onclick=()=>sunEvent(mode);box.appendChild(e)}
+ const l=document.createElement('button');l.className='lnk';l.textContent='Later: both stay open on the main menu';l.onclick=()=>sunEvent('later');bt.appendChild(l);show('sunp');box.firstChild.focus()}
+const endSun=()=>{$('sunBtn').classList.add('off');$('sunSkip').classList.add('off');if(MODE==='game')G.state='over'};
 function sunDone(){const a=G.sunAfter;endSun();if(a==='result'&&G.res)showResult();else toMenu()}
-// a locked mode explains how it opens, and takes you to the sun when it waits
-function modeLocked(mode){const L=MODES[mode],w=sunWaits(SV);notice(L.jp,`${L.name} is sealed`,w?'The mysterious sun waits above the Burning Field. Touch it and choose this path.':'Defeat Gekkō, the first shadow. A mysterious sun will rise over the field: touch it, and choose.',
- w?[['Go to the sun',()=>startSunScene(),1],['Back',toHome]]:[['Back',toHome,1]],toHome)}
+// a mode before Gekkō falls explains how it opens
+function modeLocked(mode){const L=MODES[mode];notice(L.jp,`${L.name} is sealed`,'Defeat Gekkō, the first shadow. Both paths open when he falls, and a mysterious sun rises over the field to show the way.',[['Back',toHome,1]],toHome)}
 /* --- missions (1.7): Ashen Village, Hell Mode and White Mode share one system. A location's missions open in order; each is a
    duel (rounds), a gauntlet (waves, health carried over) or a survival (outlast the clock). First clears pay once (claim
    <loc>:<i>), repeats pay a quarter of the XP, a loss changes nothing. --- */
-const locOpen=(s,loc)=>loc==='ashen'?!!s.world.secret:!!(s.modes&&s.modes[loc]);
+const locOpen=(s,loc)=>loc==='ashen'?!!s.world.secret:modeEligible(s);
 function locNodes(s,loc){let prev=true;return MODES[loc].missions.map((m,i)=>{const cleared=!!s.rewardsClaimed['m:'+m.id],open=locOpen(s,loc)&&(prev||cleared);prev=cleared;return{m,i,cleared,open}})}
 function grantMission(s,loc,i,winId){const rc=replayed(s,winId);if(rc)return rc;const g=s.progress,p=s.profile;
  const M=MODES[loc].missions[i],claim='m:'+M.id,first=!s.rewardsClaimed[claim];
@@ -2287,7 +2362,7 @@ function grantMission(s,loc,i,winId){const rc=replayed(s,winId);if(rc)return rc;
  r.crystals=payCr(s,claim,crOf(claim));pay(s,r);
  if(winId!=null)receipt(s.att,winId,r);return r}
 let REGL=null; // the location a region-style panel shows (null: a ladder region)
-function openLoc(loc){const L=MODES[loc];MODE='menu';REGL=loc;if(!locOpen(SV,loc))return toMenu();if(SV.world.loc!==loc){SV.world.loc=loc;writeSave(SV)}
+function openLoc(loc){const L=MODES[loc];MODE='menu';REGL=loc;if(!locOpen(SV,loc))return toMenu();const pth=loc==='hell'||loc==='white';if(SV.world.loc!==loc||pth&&SV.modes.last!==loc){SV.world.loc=loc;if(pth){SV.modes.visited[loc]=true;SV.modes.last=loc}writeSave(SV)}
  if(!SV.story.seen.includes(loc)){SV.story.seen.push(loc);writeSave(SV);return notice(L.jp,L.name,L.story.join(' '),[['Continue',()=>openLoc(loc),1]])}
  $('gKanji').textContent=L.jp;$('gTitle').textContent=L.name;$('gText').textContent=L.desc;const box=$('gNodes');box.innerHTML='';
  for(const n of locNodes(SV,loc)){const M=n.m,el=document.createElement('button'),lab=M.kind==='gauntlet'?`Gauntlet · ${M.waves.length} foes`:M.kind==='survive'?`Survive ${M.time} s`:M.boss?'Champion':M.rounds>1?'Duel · best of three':'Duel · one round';
@@ -2316,10 +2391,10 @@ function discover(s){const S=WORLD.secret,R=LAD.regions.find(R=>R.id===S.region)
    journey; a hidden road; the hero stands where you last went. Choosing a marker previews its rewards. --- */
 const WM={x:0,tx:null,drag:null,sel:null,sig:'',img:null,px:-1,first:true};
 const placeOf=id=>id==='sun'?{id:'sun',kind:'sun',at:WORLD.sun}:WORLD.places.find(p=>p.id===id);
-const placesFor=s=>[...WORLD.places.filter(p=>p.kind!=='loc'||MODES[p.id]&&(!p.secret||s.world.secret)&&(!['hell','white'].includes(p.id)||s.modes[p.id])),...(sunWaits(s)?[{id:'sun',kind:'sun',at:WORLD.sun}]:[])];
+const placesFor=s=>[...WORLD.places.filter(p=>p.kind!=='loc'||MODES[p.id]&&(!p.secret||s.world.secret)&&(!['hell','white'].includes(p.id)||locOpen(s,p.id))),...(sunWaits(s)?[{id:'sun',kind:'sun',at:WORLD.sun}]:[])];
 function remaining(list){const a={xp:0,mon:0,cr:0,items:[]};for(const x of list){a.xp+=x.xp||0;a.mon+=x.mon||0;a.cr+=x.crystals||0;if(x.item)a.items.push(x.item)}
  return a.xp||a.mon||a.cr||a.items.length?`Still to earn here: ${fmtN(a.xp)} XP${a.mon?` · ${fmtN(a.mon)} mon`:''}${a.cr?` · ${a.cr} shadow crystals`:''}${a.items.length?' · '+a.items.join(', '):''}.`:'Everything here is earned: fights again pay a quarter of their XP.'}
-function placeInfo(s,p){if(p.kind==='sun')return{name:'The mysterious sun',jp:'光',open:true,pct:null,diff:0,desc:s.modes.sun?'The other path still waits beyond the light.':'Above the Burning Field hangs a sun that is not the sun. Touch it.',rew:'It opens Hell Mode or White Mode — your choice.',act:()=>startSunScene(),go:'Touch the sun'};
+function placeInfo(s,p){if(p.kind==='sun')return{name:'The mysterious sun',jp:'光',open:true,pct:null,diff:0,desc:'Above the Burning Field hangs a sun that is not the sun. Touch it.',rew:'It shows the way to Hell Mode and White Mode (both are already open).',act:()=>startSunScene(),go:'Touch the sun'};
  if(p.kind==='dojo'){const d=TRAIN.drills.filter(x=>s.rewardsClaimed['drill:'+x.id]).length;return{name:p.name,jp:p.jp,open:true,pct:null,diff:0,desc:p.desc,rew:`Drills done: ${d} of ${TRAIN.drills.length} (each pays ${TRAIN.reward_mon} mon the first time).`,act:()=>startTraining(),go:'Train'}}
  if(p.kind==='workshop')return{name:p.name,jp:p.jp,open:true,pct:null,diff:0,desc:p.desc,rew:'Custom maps pay no XP or currency: they are for play and practice.',act:()=>openWorkshop('menu'),go:'Open the workshop'};
  if(p.kind==='region'){const lv=p.lv,b=BOSSES[lv],ar=ARENAS[b.arena],R=LAD.regions[lv],ns=ladderNodes(s,lv),d=ns.filter(n=>n.cleared).length,rw=PROG.rewards[b.id],T=LAD.trials[b.id];
@@ -2348,7 +2423,7 @@ function selPlace(id){const p=placeOf(id),I=placeInfo(SV,p),b=$('wiBtns');WM.sel
  const go=document.createElement('button');go.className='big';go.textContent=I.open?I.go:'Locked';go.disabled=!I.open;go.onclick=I.act;b.appendChild(go);
  const x=document.createElement('button');x.className='lnk';x.textContent='Close';x.onclick=()=>{WM.sel=null;$('wInfo').hidden=true;for(const e of $('wpins').children)e.classList.remove('sel')};b.appendChild(x);
  $('wInfo').hidden=false;WM.tx=clamp(p.at[0]-W/2+W*.12,0,WORLD.width-W);if(MODE==='menu')(I.open?go:x).focus()}
-const worldSig=s=>[s.progress.regionsUnlocked,s.progress.beaten,s.world.secret,s.modes.sun,s.modes.hell,s.modes.white,sunWaits(s)].join();
+const worldSig=s=>[s.progress.regionsUnlocked,s.progress.beaten,s.world.secret,s.modes.ack,modeEligible(s),sunWaits(s)].join();
 function roadOpen(s,a,b){const q=placeOf(b);return q.kind==='region'?s.progress.regionsUnlocked>q.lv:q.kind==='loc'?placesFor(s).some(p=>p.id===b):true}
 // the map's ink: mountains, a river to the sea, the roads (dotted where not yet open), a small picture for every place
 function worldLayer(s){return pre(WORLD.width,H,g=>{const r=rng(77),at=id=>placeOf(id).at;g.fillStyle=PAPER;g.fillRect(0,0,WORLD.width,H);
@@ -2384,10 +2459,11 @@ function toMenu(){$('ver').textContent='v'+VERSION;MODE='menu';VIEW='map';G.paus
 function toHome(){$('hVer').textContent='v'+VERSION;MODE='menu';VIEW='home';G.paused=false;awardQuiet();buildHome();show('home');amb(.08,0,0);nextNotice()}
 const backToView=()=>{if(VIEW==='home'){buildHome();show('home')}else{buildMenu();show('menu')}};
 // campaign completion: every duel, boss and Ink Trial of the five regions
-function campaign(s){let n=0,d=0;LAD.regions.forEach((R,i)=>{for(const x of ladderNodes(s,i)){n++;if(x.cleared)d++}});return{done:d,total:n,pct:Math.round(d/n*100)}}
+function campaign(s){let n=0,d=0,on=0,od=0;LAD.regions.forEach((R,i)=>{for(const x of ladderNodes(s,i))if(x.elite||x.kind==='trial'){on++;if(x.cleared)od++}else{n++;if(x.cleared)d++}});
+ return{done:d,total:n,pct:Math.round(d/n*100),opt:od,optTotal:on}} // required: retainers, lieutenants, Shadows; optional: elites and Ink Trials
 const fmtN=n=>n.toLocaleString('en');
 function buildHome(){const p=SV.profile,l=levelOf(p.xp),c=campaign(SV),wid=SV.gear.equipped.weapon,box=$('hMenu');
- $('hStat').innerHTML=`Level <b>${l.level}</b> · <b>${fmtN(p.mon)}</b> mon · <b>${fmtN(p.crystals)}</b> shadow crystals<br>${GEAR.weapons[wid].name}, tier ${ROM[(SV.gear.tiers[wid]||1)-1]} · ${SV.progress.beaten} of 5 shadows · campaign ${c.pct}%`;
+ $('hStat').innerHTML=`Level <b>${l.level}</b> · <b>${fmtN(p.mon)}</b> mon · <b>${fmtN(p.crystals)}</b> shadow crystals<br>${GEAR.weapons[wid].name}, tier ${ROM[(SV.gear.tiers[wid]||1)-1]} · ${SV.progress.beaten} of 5 shadows · campaign ${c.pct}% · optional ${c.opt} of ${c.optTotal}`;
  $('hXp').style.width=(l.need?l.into/l.need*100:100)+'%';box.innerHTML='';
  const item=(lab,fn,o={})=>{const b=document.createElement('button');b.className='hb'+(o.lock?' lock':'');b.innerHTML=lab+(o.badge?`<span class="bd">${o.badge}</span>`:'')+(o.note?`<small>${o.note}</small>`:'');b.onclick=fn;box.appendChild(b);return b};
  const at=SV.world.at,started=Object.keys(SV.rewardsClaimed).length>0;
@@ -2456,6 +2532,7 @@ function openChar(mode,back){if(back)CH.back=back;if(mode)CH.tab='save';const p=
    const e=card('qcard'+(own?'':' locked')+(CH.pw===id?' sel':''),`<span class="n">${own?`Tier ${ROM[t-1]} of V`:'Not absorbed'}</span><span class="kj">${pw.jp}</span><span class="nm">${pw.name}</span><span class="ti">${!own?`Defeat ${BOSSES[BOSS_IDS.indexOf(pw.boss)].name}`:t>=5?'Fully upgraded':why||`Next: ${plural(c.sp,'skill point')} · ${c.mon} mon`}</span>`,()=>{CH.pw=id;openChar()});
    if(own&&t<5&&!why)btn(e,`Upgrade to ${ROM[t]}`,ev=>{ev.stopPropagation();edit(()=>upgradePower(SV,id))()})}
   const pw=POWERS[CH.pw],own=SV.powers[CH.pw],t=own?own.tier:0;
+  btn(acts,'Reset power tiers',()=>notice('墨','Reset every power to tier I?','Every skill point comes back to spend again. The mon paid for upgrades is not returned.',[['Reset them',edit(()=>resetPowers(SV)),1],['Cancel',()=>openChar()]],()=>openChar()),!Object.values(SV.powers).some(x=>x.tier>1));
   more.textContent=`${pw.name}${pw.ready?'':' (its active power awakens in a later update; the echo works now)'} — ${t<5?`${t?'next, ':''}tier ${ROM[t]}: ${pw.tiers[t].desc}`:pw.tiers[4].desc} · Echo, ${pw.echo.name}: ${pw.echo.desc}`}
  else if(CH.tab==='loadout'){[['powers',0],['powers',1],['echoes',0],['echoes',1]].forEach(([kind,i])=>{
    const need=PROG[kind==='powers'?'power_slots':'echo_slots'].unlock_levels[i],open=l.level>=need,id=SV.loadout[kind][i],pw=id&&POWERS[id],sel=CH.slot&&CH.slot[0]===kind&&CH.slot[1]===i;
@@ -2508,7 +2585,7 @@ const kindOf=id=>id==='material'?'material':GEAR.weapons[id]?'weapon':GEAR.armou
 const itemOf=id=>id==='material'?{name:'Upgrade material',desc:'Steel, lacquer and silk cord for one weapon tier (a tier also costs mon).'}:WPN(id)||GEAR.armour[id]||GEAR.charms[id]||GEAR.items[id]||GEAR.cosmetics[id];
 const SHTAB={weapons:['weapon'],armour:['armour'],charms:['charm'],supplies:['item','material'],cosmetics:['cosmetic']};
 const KLAB={weapon:'weapon',armour:'armour',charm:'charm',item:'supply',material:'service'};
-function gateOpen(s,g){if(!g)return true;const[k,n]=g.split(':');return k==='beaten'?s.progress.beaten>+n:k==='region'?s.progress.regionsUnlocked>+n:k==='mode'?!!(s.modes&&s.modes[n]):false}
+function gateOpen(s,g){if(!g)return true;const[k,n]=g.split(':');return k==='beaten'?s.progress.beaten>+n:k==='region'?s.progress.regionsUnlocked>+n:k==='mode'?locOpen(s,n):false}
 const gateText=g=>{const[k,n]=g.split(':');return k==='beaten'?`after ${BOSSES[+n].name} falls`:k==='region'?`once you reach ${ARENAS[BOSSES[+n].arena].name.replace(/^the /,'')}`:`with ${n==='hell'?'Hell':'White'} Mode`};
 const srcText=id=>{const x=stockOf(id),it=itemOf(id);return x?'In the shop'+(x.gate&&!gateOpen(SV,x.gate)?' '+gateText(x.gate):''):'From '+(it.source||'somewhere ahead')};
 function buyBlock(s,id,qty=1){const x=stockOf(id);if(!x)return'not for sale';if(!(Number.isInteger(qty)&&qty>=1&&qty<=9))return'a quantity of 1 to 9';if(!gateOpen(s,x.gate))return'sold '+gateText(x.gate);
@@ -2562,12 +2639,12 @@ function openSettings(back,tab){if(back)setBack=back;if(tab)setTab=tab;const st=
    const w=document.createElement('span');w.textContent=codes+' ';w.appendChild(b);add(a,w)}
  if(setTab==='keys'){const r=document.createElement('button');r.className='lnk';r.textContent='Reset keys';r.onclick=()=>{st.keys={};save();openSettings()};add('',r)}
  show('settings')}
-function togglePause(){if(MODE!=='game'||G.state==='over'||G.state==='chosen')return;if(G.state==='sun'){if(G.st>2.4)openSunChoice();return}if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;clearInput();if(G.paused&&G.train)openTrain();else show(G.paused?'pause':null)}
+function togglePause(){if(MODE!=='game'||G.state==='over'||G.state==='chosen')return;if(G.state==='sun')return;if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;clearInput();if(G.paused&&G.train)openTrain();else show(G.paused?'pause':null)}
 const KMAP0={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',KeyH:'block',ShiftLeft:'block',ShiftRight:'block',Space:'roll',Escape:'pause',KeyP:'pause'};
 let KMAP=KMAP0; // the default keys plus the player's own bindings (settings.keys)
 function gameKey(e,down){if(down&&KEYCAP){KEYCAP(e);return}if(e.target&&/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName||''))return;if(down&&e.code==='Escape'&&MODE!=='game'){window.issenApp.back();return}if(down)usePad(false);if(e.code==='KeyF'&&down){document.getElementById('fs').click();return}if(e.code==='KeyM'&&down){document.getElementById('snd').click();return}
  if(MODE==='game'&&G.state==='absorb'){if(down&&!e.repeat&&G.st>.8){e.preventDefault();absorbDone()}return}
- if(MODE==='game'&&(G.state==='sun'||G.state==='chosen')){if(down&&!e.repeat&&G.state==='sun'&&G.st>2.4&&(e.code==='Enter'||e.code==='Space'||e.code==='Escape')){e.preventDefault();openSunChoice()}else if(down&&!e.repeat&&G.state==='chosen'&&e.code==='Escape')sunDone();return}
+ if(MODE==='game'&&(G.state==='sun'||G.state==='chosen')){if(down&&!e.repeat){if(e.code==='Escape'){e.preventDefault();sunEvent('back')}else if(G.state==='sun'&&(e.code==='Enter'||e.code==='Space')){e.preventDefault();sunEvent('complete')}}return}
  const a=KMAP[e.code];if(!a||MODE!=='game')return;e.preventDefault();if(a==='pause'){if(down&&!e.repeat)togglePause();return}if(G.paused)return;
  if(a==='slash'||a==='kick'||a==='ink'||a==='issen'||a==='power1'||a==='power2'||a==='roll'){if(down&&!e.repeat)G.buf={a,t:G.t};return}
  if(a==='up'&&down&&!e.repeat)G.jb=G.t;G.keys[a]=down}
@@ -2619,7 +2696,7 @@ function frame(now){const raw=(now-st.last)/1000||0,dt=Math.min(.1,raw);st.last=
 $('playBig').onclick=play;$('replayBig').onclick=replay;$('enterGame').onclick=enterGame;$('toGame').onclick=enterGame;$('skip').onclick=enterGame;
 $('hFilm').onclick=watchFilm;$('mHome').onclick=toHome;$('hChar').onclick=()=>openChar(null,'home');$('hHelp').onclick=()=>{helpBack='home';show('help')};
 $('mChar').onclick=()=>openChar(null,'menu');$('mSet').onclick=()=>openSettings('menu');$('pSet').onclick=()=>openSettings('pause');
-$('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(setBack==='home')toHome();else{buildMenu();show('menu')}};for(const b of $('sTabs').children)b.onclick=()=>{setTab=b.dataset.st;openSettings()};$('gBack').onclick=toMenu;$('mShop').onclick=()=>openShop('menu');$('sunBtn').onclick=openSunChoice;$('wkClose').onclick=()=>WK.back==='home'?toHome():toMenu();$('wL').onclick=()=>{WM.tx=clamp(WM.x-760,0,WORLD.width-W)};$('wR').onclick=()=>{WM.tx=clamp(WM.x+760,0,WORLD.width-W)};
+$('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(setBack==='home')toHome();else{buildMenu();show('menu')}};for(const b of $('sTabs').children)b.onclick=()=>{setTab=b.dataset.st;openSettings()};$('gBack').onclick=toMenu;$('mShop').onclick=()=>openShop('menu');$('sunBtn').onclick=()=>sunEvent('complete');$('sunSkip').onclick=()=>sunEvent('skip');$('wkClose').onclick=()=>WK.back==='home'?toHome():toMenu();$('wL').onclick=()=>{WM.tx=clamp(WM.x-760,0,WORLD.width-W)};$('wR').onclick=()=>{WM.tx=clamp(WM.x+760,0,WORLD.width-W)};
 {const m=$('wmap'),k=()=>W/(stage.clientWidth||W);m.addEventListener('pointerdown',e=>{WM.drag={x0:e.clientX,wx:WM.x};WM.moved=false;m.classList.add('drag')});
  addEventListener('pointermove',e=>{if(!WM.drag)return;const dx=(e.clientX-WM.drag.x0)*k();if(Math.abs(dx)>8)WM.moved=true;WM.x=clamp(WM.drag.wx-dx,0,WORLD.width-W);WM.tx=null});
  addEventListener('pointerup',()=>{if(WM.drag){WM.drag=null;m.classList.remove('drag');setTimeout(()=>{WM.moved=false},0)}});
@@ -2627,7 +2704,7 @@ $('sClose').onclick=()=>{KEYCAP=null;if(setBack==='pause')show('pause');else if(
 for(const b of $('cTabs').children)b.onclick=()=>{CH.tab=b.dataset.tab;CH.slot=null;openChar()};
 for(const b of $('shTabs').children)b.onclick=()=>openShop(null,b.dataset.sh);for(const b of $('chTabs').children)b.onclick=()=>openChal(null,b.dataset.ch);$('chClose').onclick=()=>CHS.back==='menu'?toMenu():toHome();$('shClose').onclick=()=>{if(SH.back==='result')show('result');else if(SH.back==='menu')toMenu();else toHome()};
 HOME_X.push(()=>['Training Room',()=>startTraining(),{note:`${TRAIN.drills.filter(d=>SV.rewardsClaimed['drill:'+d.id]).length} of ${TRAIN.drills.length} drills`}],()=>['Shop',()=>openShop('home'),{note:`${fmtN(SV.profile.mon)} mon · ${fmtN(SV.profile.crystals)} crystals`}],()=>['Inventory',()=>{CH.tab='gear';openChar(null,'home')}],
- ...['hell','white'].map(mode=>()=>{const on=SV.modes[mode],L=MODES[mode],ns=locNodes(SV,mode),d=ns.filter(n=>n.cleared).length;return[L.name,()=>on?openLoc(mode):modeLocked(mode),{lock:!on,note:on?`${Math.round(d/ns.length*100)}% · ${d} of ${ns.length}`:sunWaits(SV)?'the sun waits':'locked'}]}),()=>{rollDaily(SV);const n=SV.daily.ids.filter(id=>!SV.rewardsClaimed[`daily:${SV.daily.day}:${id}`]).length;return['Challenges',()=>openChal('home'),{note:n?`${n} of ${SV.daily.ids.length} today`:'today’s are done'}]});
+ ...['hell','white'].map(mode=>()=>{const on=locOpen(SV,mode),L=MODES[mode],ns=locNodes(SV,mode),d=ns.filter(n=>n.cleared).length;return[L.name,()=>on?openLoc(mode):modeLocked(mode),{lock:!on,note:on?`${Math.round(d/ns.length*100)}% · ${d} of ${ns.length}`:'opens when Gekkō falls'}]}),()=>{rollDaily(SV);const n=SV.daily.ids.filter(id=>!SV.rewardsClaimed[`daily:${SV.daily.day}:${id}`]).length;return['Challenges',()=>openChal('home'),{note:n?`${n} of ${SV.daily.ids.length} today`:'today’s are done'}]});
 $('mHelp').onclick=()=>{helpBack='menu';show('help')};$('pHelp').onclick=()=>{helpBack='pause';show('help')};$('hClose').onclick=()=>show(helpBack);
 $('pResume').onclick=togglePause;$('tResume').onclick=togglePause;$('tReset').onclick=()=>{trainReset();togglePause()};$('tHelp').onclick=()=>{helpBack='train';show('help')};$('tLeave').onclick=()=>{G.train=null;G.paused=false;toHome()};$('pRestart').onclick=()=>startFight(G.lv,undefined,G.node);$('pQuit').onclick=toMenu;
 /* --- touch controls: floating joystick + multi-touch buttons feed the same G.keys / G.buf as the keyboard --- */
@@ -2660,9 +2737,9 @@ function bgResume(){try{AU.ctx&&AU.ctx.resume()}catch(e){}}
 document.addEventListener('visibilitychange',()=>document.hidden?bgPause():bgResume());
 // Android Back (and Esc outside a fight): closes the open screen, pauses or leaves a fight; returns 0 only on the map or the film (the app may exit)
 window.issenApp={pause:bgPause,resume:bgResume,back(){const open=PANELS.find(p=>!$(p).classList.contains('off'));if(open==='menu'){toHome();return 1}
- if(open==='settings'){$('sClose').click();return 1}if(open==='shop'){$('shClose').click();return 1}if(open==='sunp'){sunDone();return 1}if(open==='workshop'){$('wkClose').click();return 1}if(open==='editor'){edBack();return 1}if(open==='chal'){$('chClose').click();return 1}if(open==='char'){$('cClose').click();return 1}if(open==='help'){show(helpBack);return 1}
+ if(open==='settings'){$('sClose').click();return 1}if(open==='shop'){$('shClose').click();return 1}if(open==='sunp'){sunEvent('back');return 1}if(open==='workshop'){$('wkClose').click();return 1}if(open==='editor'){edBack();return 1}if(open==='chal'){$('chClose').click();return 1}if(open==='char'){$('cClose').click();return 1}if(open==='help'){show(helpBack);return 1}
  if(open==='region'){toMenu();return 1}if(open==='notice'){if(NOTICE.cancel)NOTICE.cancel();return 1}
- if(MODE==='game'){if(G.state==='over')toMenu();else togglePause();return 1}return 0}};$('pp').onclick=()=>st.playing?pause():play();$('rp').onclick=replay;
+ if(MODE==='game'){if(G.state==='over')toMenu();else if(G.state==='sun')sunEvent('back');else togglePause();return 1}return 0}};$('pp').onclick=()=>st.playing?pause():play();$('rp').onclick=replay;
 $('snd').onclick=()=>{AU.on=!AU.on;vols();$('sndi').style.opacity=AU.on?1:.35};
 $('fs').onclick=()=>document.fullscreenElement?document.exitFullscreen():goFull();
 $('prog').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();seek((e.clientX-r.left)/r.width*DUR);if(!st.playing&&st.t<DUR)cover.classList.add('off')};
@@ -2673,7 +2750,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
  // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
- window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,commit,settle,beginAttempt,settleFight,STORE,LEG,NODE,replaceProfile,isChampion,clearInput,NOTICE,bgPause,startSun,startSunScene,openSunChoice,chooseMode,sunWaits,sunDone,modeLocked,cleanMap,validateMap,compileMap,maps,saveMaps,loadMaps,storeMap,openWorkshop,openEditor,edPlace,edDock,ED,WK,startCustom,blankMap,renderEditor,get ARENA(){return ARENA},onTop,landY,hzState,startMission,openLoc,locNodes,locOpen,grantMission,MODES,WORLD,WM,buildMenu,selPlace,placeInfo,placesFor,mapDone,renderWorld,discover,nextWave,award,rollDaily,dailyOf,dailyProg,achProg,CHAL,openChal,tallyEnd,setToday:f=>{TODAY=f},setDaily:v=>{DAILY_ON=v},setGates:v=>{GATES=v},startTraining,trainSetup,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,commit,settle,beginAttempt,settleFight,STORE,LEG,NODE,replaceProfile,isChampion,clearInput,NOTICE,bgPause,startSun,startSunScene,openSunChoice,sunEvent,ackSun,SUNT,modeEligible,mirrorModes,sunWaits,sunDone,modeLocked,cleanMap,validateMap,compileMap,maps,saveMaps,loadMaps,storeMap,openWorkshop,openEditor,edPlace,edDock,ED,WK,startCustom,blankMap,renderEditor,get ARENA(){return ARENA},onTop,landY,hzState,startMission,openLoc,locNodes,locOpen,grantMission,MODES,WORLD,WM,buildMenu,selPlace,placeInfo,placesFor,mapDone,renderWorld,discover,nextWave,award,rollDaily,dailyOf,dailyProg,achProg,CHAL,openChal,tallyEnd,setToday:f=>{TODAY=f},setDaily:v=>{DAILY_ON=v},setGates:v=>{GATES=v},startTraining,trainSetup,frameData,moveLine,reachOf,codexIds,resetPowers,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
  if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 applySettings();
 // keep the save: ask the browser not to evict this site's storage (an installed PWA usually gets it; spec §14.4)

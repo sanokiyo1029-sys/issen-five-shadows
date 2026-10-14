@@ -19,13 +19,15 @@ module.exports = {
     assert.ok(lvl(ladder + bosses + trials) >= 18 && lvl(ladder + bosses + trials) <= 20, `with trials: level ${lvl(ladder + bosses + trials)}`);
   },
 
-  async 'a region opens with its first retainer; the boss waits for the retainers (the elite is optional); the next region for the boss'() {
-    const { game } = await boot(), s = fresh(game), st = (lv, k) => game.ladderNodes(s, lv).map(n => n[k]);
-    assert.deepStrictEqual(JSON.parse(JSON.stringify(st(0, 'open'))), [true, false, false, false, false], 'retainer 1 only');
+  async 'a region opens with its first retainer; the boss waits for the retainers and lieutenants (the elite is optional); the next region for the boss'() {
+    const { game } = await boot(), s = fresh(game), st = (lv, k) => JSON.parse(JSON.stringify(game.ladderNodes(s, lv).map(n => n[k])));
+    assert.deepStrictEqual(st(0, 'kind'), ['step', 'step', 'step', 'step', 'step', 'boss', 'trial']); assert.deepStrictEqual(st(0, 'lt'), [false, false, true, true, false, null, null]);
+    assert.deepStrictEqual(st(0, 'open'), [true, false, false, false, false, false, false], 'retainer 1 only');
     assert.ok(!game.ladderNodes(s, 1).some(n => n.open), 'region 2 is locked');
-    game.grantStep(s, 0, 0); assert.deepStrictEqual(JSON.parse(JSON.stringify(st(0, 'open'))), [true, true, false, false, false], 'then retainer 2');
-    game.grantStep(s, 0, 1); assert.deepStrictEqual(JSON.parse(JSON.stringify(st(0, 'open'))), [true, true, true, true, false], 'then the optional elite and the boss');
-    game.grantClear(s, 0); assert.ok(game.ladderNodes(s, 1)[0].open, 'beating the boss opens the next region'); assert.ok(game.ladderNodes(s, 0)[4].open, 'and its Ink Trial');
+    game.grantStep(s, 0, 0); assert.deepStrictEqual(st(0, 'open'), [true, true, false, false, false, false, false], 'then retainer 2');
+    game.grantStep(s, 0, 1); assert.deepStrictEqual(st(0, 'open'), [true, true, true, false, false, false, false], 'then the first lieutenant');
+    game.grantStep(s, 0, 2); game.grantStep(s, 0, 3); assert.deepStrictEqual(st(0, 'open'), [true, true, true, true, true, true, false], 'then the optional elite and the boss');
+    game.grantClear(s, 0); assert.ok(game.ladderNodes(s, 1)[0].open, 'beating the boss opens the next region'); assert.ok(game.ladderNodes(s, 0).find(n => n.kind === 'trial').open, 'and its Ink Trial');
     const old = fresh(game, 3); // a save from before the ladders: beaten bosses stay open without the retainers
     assert.ok(game.ladderNodes(old, 2).find(n => n.kind === 'boss').open && !game.ladderNodes(old, 3).find(n => n.kind === 'boss').open);
   },
@@ -45,14 +47,14 @@ module.exports = {
 
   async 'an elite is best of three and pays upgrade material; retainers and elites scale their health by region'() {
     const { game } = await boot(), G = game.G; game.SV = fresh(game, 2); game.SV.progress.ladder.mountain_shrine = 3; game.enterGame();
-    game.startFight(2, 1, { kind: 'step', i: 3 }); assert.strictEqual(G.need, 2); assert.strictEqual(G.def.id, 'elite_acolyte');
+    game.startFight(2, 1, { kind: 'step', i: game.LAD.regions[2].steps.findIndex(x => x.elite) }); assert.strictEqual(G.need, 2); assert.strictEqual(G.def.id, 'elite_acolyte');
     assert.strictEqual(G.B.maxHp, Math.round(game.FOES.elite_acolyte.hp * (1 + game.LAD.hp_per_region * 2)));
     win(game, G); assert.strictEqual(G.round, 2, 'two rounds'); assert.strictEqual(game.SV.profile.materials, 1);
   },
 
   async 'Ink Trials: open after the boss; their rules apply; the first pass pays XP, a skill point and an item, and opens tier IV'() {
     const { game } = await boot(), G = game.G;
-    assert.ok(!game.ladderNodes(fresh(game, 0), 0)[4].open, 'locked before the boss');
+    assert.ok(!game.ladderNodes(fresh(game, 0), 0).find(n => n.kind === 'trial').open, 'locked before the boss');
     const checks = [[0, () => G.timer <= 30 && G.timer > 29.9, 'Swift Spear: 30 s rounds'], [1, () => G.P.block === false, 'Open Hands: no blocking'],
       [2, () => G.P.hp === G.P.maxHp * .5, 'Half Measure: half health'], [3, () => G.B.phase === true, 'Pale Night: second phase'], [4, () => G.B.rage === true, 'Unending Wrath: rage']];
     for (const [lv, ok, what] of checks) {

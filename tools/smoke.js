@@ -18,12 +18,12 @@ const FLOW = `(async () => { const steps = []; try {
   steps.push('duel result: ' + !document.getElementById('result').classList.contains('off') + ' (' + document.getElementById('rRewards').textContent.slice(0, 40) + ')');
   for (const tab of ['attrs', 'powers', 'loadout', 'gear', 'save']) { game.CH.tab = tab; game.openChar(tab === 'save' ? 'export' : null, 'menu'); frames(1); } steps.push('character tabs');
   game.openSettings('menu', 'game'); game.openSettings('menu', 'keys'); document.getElementById('sClose').click(); steps.push('settings');
+  for (let i = 0; i < 4; i++) game.grantStep(game.SV, 0, i); // the retainers and lieutenants before the Shadow
   game.startFight(0, 3); frames(150, bot); G.B.hp = 0; frames(260); G.B.hp = 0; frames(300); frames(400);
   steps.push('boss: ' + G.state + (G.state === 'absorb' ? ' (ceremony)' : ''));
   if (G.state === 'absorb') { game.absorbDone(); } frames(170); steps.push('the sun: ' + G.state + ', touchable ' + !document.getElementById('sunBtn').classList.contains('off'));
-  document.getElementById('sunBtn').click(); document.getElementById('suCards').children[0].click(); steps.push('chose: ' + JSON.stringify(game.SV.modes));
-  document.getElementById('nBtns').children[1].click(); steps.push('after the choice: result ' + !document.getElementById('result').classList.contains('off'));
-  window.issenApp.back(); steps.push('Back from the result: ' + game.mode);
+  document.getElementById('sunBtn').click(); steps.push('the sun seen: ' + game.SV.modes.ack); document.getElementById('suCards').children[0].click();
+  steps.push('chose: ' + game.SV.modes.last + ', in ' + document.getElementById('gTitle').textContent); window.issenApp.back(); steps.push('Back from the path: ' + game.mode);
   // 1.7: the main menu, shop, inventory, challenges, training, the world map, the workshop and editor, both modes
   game.toHome(); game.SV.story.pending = []; game.toHome(); steps.push('home: ' + [...document.getElementById('hMenu').children].map(b => b.innerHTML.replace(/<.*$/, '')).join('|'));
   game.SV.profile.mon += 2000; game.SV.profile.crystals += 100; for (const t of ['weapons', 'armour', 'charms', 'supplies', 'cosmetics']) game.openShop('home', t);

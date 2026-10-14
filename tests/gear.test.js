@@ -51,7 +51,7 @@ module.exports = {
     const { game } = await boot(), s = game.migrate(JSON.stringify({ beaten: 0 })).save;
     assert.deepStrictEqual(JSON.parse(JSON.stringify(s.gear)), { owned: ['katana'], equipped: { weapon: 'katana', charm: null, armour: null, item: null }, tiers: { katana: 1 }, items: {}, cos: { finish: null, trail: null, aura: null, robe: null } });
     game.grantStep(s, 0, 0); game.grantStep(s, 0, 1); assert.ok(s.gear.owned.includes('straw_charm'), 'the second duel gives a charm');
-    game.grantStep(s, 0, 2); assert.ok(s.gear.owned.includes('yari') && s.gear.tiers.yari === 1, 'the elite gives its weapon');
+    game.grantStep(s, 0, 4); assert.ok(s.gear.owned.includes('yari') && s.gear.tiers.yari === 1, 'the elite gives its weapon');
     assert.strictEqual(s.profile.materials, 1);
     assert.ok(game.equip(s, 'weapon', 'yari')); assert.strictEqual(game.equip(s, 'weapon', 'nodachi'), false, 'not owned');
     assert.ok(game.equip(s, 'charm', 'straw_charm')); assert.strictEqual(game.derive(s).hp, Math.round(100 * 1.03));

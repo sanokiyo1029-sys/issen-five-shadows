@@ -104,6 +104,28 @@
    "push": 320,
    "fr": "fn g=>[[0,g],[.12,P(g,KICK),'o5'],[.36,g]]"
   },
+  "throw": {
+   "dur": 0.62,
+   "hit": [
+    [
+     0.1,
+     0.15
+    ]
+   ],
+   "reach": 95,
+   "dmg": 8,
+   "zone": "mid",
+   "grab": 1,
+   "unblock": 1,
+   "kd": 1,
+   "push": 200,
+   "answers": [
+    "strike",
+    "jump",
+    "roll"
+   ],
+   "fr": "fn g=>[[0,g],[.1,P(PS.wind,{tl:.35})],[.24,P(PS.cutSide,{tl:-.25}),'o5'],[.62,g]]"
+  },
   "round": {
    "dur": 0.6,
    "hit": [
