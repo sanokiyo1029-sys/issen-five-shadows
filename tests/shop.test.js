@@ -82,15 +82,15 @@ module.exports = {
     game.startFight(0, 1); for (let i = 0; i < 30; i++) { game.G.rdt = 1 / 60; game.renderGame(); }
   },
 
-  async 'supplies: chosen in the inventory, working through one fight, one used when it ends; an unfinished fight uses none'() {
+  async 'supplies: chosen in the inventory, working through one fight, charged when they first work (the bell; the tea when it heals)'() {
     const { game } = await boot(), s = rich(game); game.buy(s, 'whetstone', 2); game.buy(s, 'healing_tea', 1); game.buy(s, 'focus_incense', 1);
     game.equip(s, 'item', 'whetstone'); game.startFight(0, 1); let G = game.G; near(G.P.mod.dmg, game.derive(s).mod.dmg * 1.06, 'whetstone');
-    G.P.wins = 1; G.B.hp = 0; G.state = 'fight'; run(game, 4, passive); assert.strictEqual(s.gear.items.whetstone, 1, 'one used when the fight ends');
+    G.P.wins = 1; G.B.hp = 0; G.state = 'fight'; run(game, 4, passive); assert.strictEqual(s.gear.items.whetstone, 1, 'one used, at the bell');
     game.equip(s, 'item', 'focus_incense'); game.startFight(0, 1); G = game.G; assert.ok(G.P.ink >= 33.3, 'incense: an ink bar at the bell');
     game.G.state = 'over'; game.toMenu(); game.equip(s, 'item', 'healing_tea'); game.startFight(0, 1); G = game.G; G.state = 'fight'; passive(G);
     G.P.hp = 35; G.P.x = -100; G.B.x = 100; game.startMove(G.B, 'g_thrust'); run(game, .6, passive); near(G.P.hp, 35 - 9 + 20, 'below 30%: the tea restores 20');
     const hp = G.P.hp; G.P.hp = 25; game.startMove(G.B, 'g_thrust'); run(game, .7, passive); assert.ok(G.P.hp < 25, 'only once');
-    assert.strictEqual(s.gear.items.focus_incense, 1, 'a fight left unfinished (no rewards either) uses nothing');
+    assert.strictEqual(s.gear.items.focus_incense, undefined, 'incense worked at the bell: leaving the fight does not give it back'); assert.strictEqual(s.gear.items.healing_tea, undefined, 'the tea, once it healed');
   },
 
   async 'the inventory shows weapons, armour, charms, supplies and cosmetics'() {

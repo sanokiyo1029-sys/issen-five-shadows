@@ -33,10 +33,10 @@ module.exports = {
   async 'a retainer is one round; the first clear pays once, repeats pay 25%; the checkpoint survives a restart; a loss keeps it'() {
     const st = memoryStorage(), { game } = await boot({ storage: st }), G = game.G;
     game.SV = fresh(game); game.writeSave(game.SV); game.enterGame();
-    game.startFight(0, 1, { kind: 'step', i: 0 }); assert.strictEqual(G.def.id, 'footman'); assert.strictEqual(G.need, 1);
+    game.startFight(0, 1, { kind: 'step', i: 0 }); assert.strictEqual(G.def.id, 'footman'); assert.strictEqual(G.need, 1); const aid = G.attempt;
     win(game, G); assert.strictEqual(G.state, 'over'); assert.strictEqual(G.round, 1, 'one round');
     const x = game.LAD.regions[0].steps[0]; assert.strictEqual(game.SV.profile.xp, x.xp); assert.strictEqual(game.SV.profile.mon, x.mon);
-    const again = game.grantStep(game.SV, 0, 0, G.matchId); assert.strictEqual(game.SV.profile.xp, x.xp, 'the same victory reported twice pays once'); assert.strictEqual(again.xp, x.xp);
+    const again = game.grantStep(game.SV, 0, 0, aid); assert.strictEqual(game.SV.profile.xp, x.xp, 'the same victory reported twice pays once'); assert.strictEqual(again.xp, x.xp);
     game.startFight(0, 1, { kind: 'step', i: 0 }); win(game, G); assert.strictEqual(game.SV.profile.xp, x.xp + Math.round(x.xp * .25), 'a repeat pays 25%');
     game.startFight(0, 1, { kind: 'step', i: 1 }); lose(game, G); assert.strictEqual(game.SV.progress.ladder.burning_field, 1, 'a loss keeps the checkpoint');
     const re = (await boot({ storage: st })).game; assert.strictEqual(re.SV.progress.ladder.burning_field, 1, 'and it survives a restart');

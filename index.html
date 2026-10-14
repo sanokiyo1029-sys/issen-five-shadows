@@ -256,6 +256,7 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
 <script type="application/json" id="data-progression">
 {"schema_version":2,
  "xp":{"base":100,"exponent":1.5,"level_cap":25,"repeat_share":0.25},
+ "repeat":{"mon_share":0.5,"min_mon":30,"hard_materials":1},
  "level_up":{"attr_points":2,"skill_point_levels":[5,10,15,20,25]},
  "power_slots":{"unlock_levels":[1,6]},
  "echo_slots":{"unlock_levels":[8,14]},
@@ -365,15 +366,15 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
 {"schema_version":1,"hp_per_region":0.12,
  "regions":[
   {"id":"burning_field","boss":"gekko","story":["The field still burns where the warlord fell.","Gekkō’s spearmen hold the road through the smoke; the Red Spear waits beyond them."],
-   "steps":[{"foe":"footman","xp":250,"mon":20},{"foe":"thrower","xp":300,"mon":25,"item":"straw_charm"},{"foe":"elite_spear","elite":true,"xp":500,"mon":60,"materials":1,"item":"yari"}]},
+   "steps":[{"id":"bf_footman","was":"step:burning_field:0","foe":"footman","xp":250,"mon":20},{"id":"bf_thrower","was":"step:burning_field:1","foe":"thrower","xp":300,"mon":25,"item":"straw_charm"},{"id":"bf_spear","was":"step:burning_field:2","foe":"elite_spear","elite":true,"xp":500,"mon":60,"materials":1,"item":"yari"}]},
   {"id":"bamboo_grove","boss":"kasumi","story":["Wind in the bamboo, and blades in the wind.","Kasumi’s cutthroats watch every path through the grove."],
-   "steps":[{"foe":"cutthroat","xp":300,"mon":25},{"foe":"thrower","xp":350,"mon":30,"item":"crane_charm"},{"foe":"footman","xp":350,"mon":30},{"foe":"elite_shinobi","elite":true,"xp":650,"mon":70,"materials":1,"item":"kodachi"}]},
+   "steps":[{"id":"bg_cutthroat","was":"step:bamboo_grove:0","foe":"cutthroat","xp":300,"mon":25},{"id":"bg_thrower","was":"step:bamboo_grove:1","foe":"thrower","xp":350,"mon":30,"item":"crane_charm"},{"id":"bg_footman","was":"step:bamboo_grove:2","foe":"footman","xp":350,"mon":30},{"id":"bg_shinobi","was":"step:bamboo_grove:3","foe":"elite_shinobi","elite":true,"xp":650,"mon":70,"materials":1,"item":"kodachi"}]},
   {"id":"mountain_shrine","boss":"tetsugoro","story":["The shrine bell has not rung since the monks took up iron.","Climb past the guards: the Iron Monk sits beneath the torii."],
-   "steps":[{"foe":"guard","xp":400,"mon":30},{"foe":"footman","xp":400,"mon":30,"item":"fox_charm"},{"foe":"cutthroat","xp":450,"mon":35},{"foe":"elite_acolyte","elite":true,"xp":750,"mon":80,"materials":1,"item":"kanabo"}]},
+   "steps":[{"id":"ms_guard","was":"step:mountain_shrine:0","foe":"guard","xp":400,"mon":30},{"id":"ms_footman","was":"step:mountain_shrine:1","foe":"footman","xp":400,"mon":30,"item":"fox_charm"},{"id":"ms_cutthroat","was":"step:mountain_shrine:2","foe":"cutthroat","xp":450,"mon":35},{"id":"ms_acolyte","was":"step:mountain_shrine:3","foe":"elite_acolyte","elite":true,"xp":750,"mon":80,"materials":1,"item":"kanabo"}]},
   {"id":"moonlit_lake","boss":"shirasagi","story":["The lake gives back what it drowned.","Pale shapes walk the shore; one of them was once a duelist."],
-   "steps":[{"foe":"thrower","xp":450,"mon":35},{"foe":"guard","xp":500,"mon":35,"item":"bell_charm"},{"foe":"cutthroat","xp":500,"mon":40},{"foe":"elite_ronin","elite":true,"xp":850,"mon":90,"materials":1,"item":"naginata"}]},
+   "steps":[{"id":"ml_thrower","was":"step:moonlit_lake:0","foe":"thrower","xp":450,"mon":35},{"id":"ml_guard","was":"step:moonlit_lake:1","foe":"guard","xp":500,"mon":35,"item":"bell_charm"},{"id":"ml_cutthroat","was":"step:moonlit_lake:2","foe":"cutthroat","xp":500,"mon":40},{"id":"ml_ronin","was":"step:moonlit_lake:3","foe":"elite_ronin","elite":true,"xp":850,"mon":90,"materials":1,"item":"naginata"}]},
   {"id":"oni_castle","boss":"akuma","story":["The castle of the oni, where the war began.","His guard is mixed: the armored, the quick and the distant. Bring the powers you have taken."],
-   "steps":[{"foe":"guard","xp":550,"mon":40},{"foe":"thrower","xp":550,"mon":40,"item":"carp_charm"},{"foe":"cutthroat","xp":600,"mon":45},{"foe":"elite_oni","elite":true,"xp":900,"mon":100,"materials":1,"item":"nodachi"}]}],
+   "steps":[{"id":"oc_guard","was":"step:oni_castle:0","foe":"guard","xp":550,"mon":40},{"id":"oc_thrower","was":"step:oni_castle:1","foe":"thrower","xp":550,"mon":40,"item":"carp_charm"},{"id":"oc_cutthroat","was":"step:oni_castle:2","foe":"cutthroat","xp":600,"mon":45},{"id":"oc_oni","was":"step:oni_castle:3","foe":"elite_oni","elite":true,"xp":900,"mon":100,"materials":1,"item":"nodachi"}]}],
  "trials":{
   "gekko":{"name":"Swift Spear","desc":"Rounds last 30 seconds.","timer":30,"xp":6000,"mon":300,"materials":1,"skill_points":1,"item":"moon_tassel","item_name":"the Moon Tassel"},
   "kasumi":{"name":"Open Hands","desc":"You cannot block.","no_block":true,"xp":7500,"mon":300,"materials":1,"skill_points":1,"item":"mist_veil","item_name":"the Mist Veil"},
@@ -448,9 +449,9 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   {"id":"wanderer","name":"Wanderer","text":"Find the hidden village","check":"secret","crystals":15},
   {"id":"architect","name":"Architect","text":"Save a custom map that passes validation","stat":"mapsMade","n":1,"crystals":10},
   {"id":"hell_first","name":"Through the Gate","text":"Win a duel in Hell Mode","stat":"hellWins","n":1,"crystals":10},
-  {"id":"hell_done","name":"Lord of Ash","text":"Conquer the Ninth Gate","check":"claim:hell:6","crystals":50},
+  {"id":"hell_done","name":"Lord of Ash","text":"Conquer the Ninth Gate","check":"claim:m:hell_ninth","crystals":50},
   {"id":"white_first","name":"Into the Light","text":"Win a duel in White Mode","stat":"whiteWins","n":1,"crystals":10},
-  {"id":"white_done","name":"Dawnbringer","text":"Face the Pale Sun and win","check":"claim:white:6","crystals":50}]}
+  {"id":"white_done","name":"Dawnbringer","text":"Face the Pale Sun and win","check":"claim:m:white_sun","crystals":50}]}
 </script>
 <script type="application/json" id="data-world">
 {"schema_version":1,"width":3000,
@@ -475,31 +476,31 @@ body.lefty .tb[data-a=issen]{right:auto;left:calc(84*var(--u) + env(safe-area-in
   "ashen":{"name":"Ashen Village","jp":"焼","arena":6,"diff":2,"desc":"A village burned in the war, twenty years cold. Its last swordsman still guards the ash.",
    "story":["South of the Burning Field, a road the maps forgot leads to a village of ash.","Someone still walks its burnt streets, and the smoke has never settled."],
    "missions":[
-    {"name":"The Empty Well","kind":"duel","foe":"ash_bandit","rounds":1,"hp":1.1,"xp":600,"mon":60,"desc":"A looter among the ruins."},
-    {"name":"Smoke on the Road","kind":"gauntlet","waves":["ash_bandit","cutthroat","thrower"],"hp":1.15,"xp":900,"mon":90,"crystals":5,"desc":"Three in a row; your health carries from one to the next."},
-    {"name":"The Ash Ronin","kind":"duel","foe":"ash_ronin","rounds":2,"xp":1600,"mon":200,"crystals":15,"item":"ash_charm","boss":true,"desc":"The one who lit the fire, and stayed.","after":"The Ash Ronin kneels in the ash. The smoke over the village finally thins."}]},
+    {"id":"ash_well","was":"ashen:0","name":"The Empty Well","kind":"duel","foe":"ash_bandit","rounds":1,"hp":1.1,"xp":600,"mon":60,"desc":"A looter among the ruins."},
+    {"id":"ash_road","was":"ashen:1","name":"Smoke on the Road","kind":"gauntlet","waves":["ash_bandit","cutthroat","thrower"],"hp":1.15,"xp":900,"mon":90,"crystals":5,"desc":"Three in a row; your health carries from one to the next."},
+    {"id":"ash_ronin","was":"ashen:2","name":"The Ash Ronin","kind":"duel","foe":"ash_ronin","rounds":2,"xp":1600,"mon":200,"crystals":15,"item":"ash_charm","boss":true,"desc":"The one who lit the fire, and stayed.","after":"The Ash Ronin kneels in the ash. The smoke over the village finally thins."}]},
   "hell":{"name":"Hell Mode","jp":"鬼","arena":7,"diff":5,"final":"Hell is conquered","lock":"Touch the mysterious sun and choose the dark path.",
    "desc":"The Infernal Realm: a brutal path of ash and fire. Demons strike back at what they block and chain what lands; healing is halved, wounds carry between rounds, and the vents flare. The rewards are worth it.",
    "story":["Beneath the dark sun the ground opens, and the road goes down.","Below, the fires the war lit never went out, and those who fed them are waiting."],
    "missions":[
-    {"name":"The Ash Gate","kind":"duel","foe":"h_ghoul","rounds":1,"xp":900,"mon":120,"crystals":5,"desc":"A ghoul of ash. It strikes back at what it blocks.","story":"The gate is a mouth of ash, and something inside it is still hungry."},
-    {"name":"River of Embers","kind":"duel","foe":"h_imp","rounds":1,"xp":1000,"mon":130,"crystals":5,"desc":"Fire vents flare along the river: watch for the glow.","layout":{"hazards":[{"x":-460,"w":160,"kind":"fire","period":4,"dmg":8},{"x":460,"w":160,"kind":"fire","period":4.5,"dmg":8}]}},
-    {"name":"The Bone Bridge","kind":"gauntlet","waves":["h_ghoul","h_imp","h_brute"],"arena":8,"xp":1400,"mon":180,"crystals":10,"item":"onigane_plate","desc":"Three demons in a row; your wounds carry from one to the next."},
-    {"name":"The Wraith Captain","kind":"duel","foe":"h_wraith","rounds":2,"xp":1600,"mon":200,"crystals":10,"item":"ember_heart","desc":"An elite of the drowned dead: it fades and returns beside you.","layout":{"hazards":[{"x":0,"w":180,"kind":"fire","period":5,"dmg":9}]}},
-    {"name":"Enra, the Ember Judge","kind":"duel","foe":"h_enra","rounds":2,"boss":true,"arena":8,"xp":2400,"mon":300,"crystals":20,"skill_points":1,"item":"ember_katana","desc":"The judge of the burning: fire rises where you stand.","story":"A judge in a robe of coals weighs every soul that comes down the stair. He has weighed yours.","after":"Enra’s fire gutters out. His blade, still warm, is yours."},
-    {"name":"The Burning Stair","kind":"survive","foe":"h_brute","time":45,"xp":1500,"mon":200,"crystals":10,"desc":"Endure 45 seconds on the stair: an Oni Brute, and the vents.","layout":{"hazards":[{"x":-520,"w":160,"kind":"fire","period":3.5,"dmg":9},{"x":0,"w":160,"kind":"spikes","period":4,"dmg":9},{"x":520,"w":160,"kind":"fire","period":3,"dmg":9}]}},
-    {"name":"The Ninth Gate","kind":"duel","foe":"h_akuma","rounds":2,"boss":true,"final":true,"arena":8,"xp":3500,"mon":600,"crystals":50,"skill_points":1,"item":["hellmaw_kanabo","trail_hellfire"],"desc":"The warlord, unbound by death, at the last gate.","story":"At the bottom of everything stands a gate, and before it the warlord you killed, whole again and burning.","after":"The Ninth Gate closes behind you. The warlord’s fury is ash at last.","layout":{"hazards":[{"x":-580,"w":160,"kind":"fire","period":5,"dmg":10},{"x":580,"w":160,"kind":"fire","period":5.5,"dmg":10}]}}]},
+    {"id":"hell_gate","was":"hell:0","name":"The Ash Gate","kind":"duel","foe":"h_ghoul","rounds":1,"xp":900,"mon":120,"crystals":5,"desc":"A ghoul of ash. It strikes back at what it blocks.","story":"The gate is a mouth of ash, and something inside it is still hungry."},
+    {"id":"hell_river","was":"hell:1","name":"River of Embers","kind":"duel","foe":"h_imp","rounds":1,"xp":1000,"mon":130,"crystals":5,"desc":"Fire vents flare along the river: watch for the glow.","layout":{"hazards":[{"x":-460,"w":160,"kind":"fire","period":4,"dmg":8},{"x":460,"w":160,"kind":"fire","period":4.5,"dmg":8}]}},
+    {"id":"hell_bridge","was":"hell:2","name":"The Bone Bridge","kind":"gauntlet","waves":["h_ghoul","h_imp","h_brute"],"arena":8,"xp":1400,"mon":180,"crystals":10,"item":"onigane_plate","desc":"Three demons in a row; your wounds carry from one to the next."},
+    {"id":"hell_wraith","was":"hell:3","name":"The Wraith Captain","kind":"duel","foe":"h_wraith","rounds":2,"xp":1600,"mon":200,"crystals":10,"item":"ember_heart","desc":"An elite of the drowned dead: it fades and returns beside you.","layout":{"hazards":[{"x":0,"w":180,"kind":"fire","period":5,"dmg":9}]}},
+    {"id":"hell_enra","was":"hell:4","name":"Enra, the Ember Judge","kind":"duel","foe":"h_enra","rounds":2,"boss":true,"arena":8,"xp":2400,"mon":300,"crystals":20,"skill_points":1,"item":"ember_katana","desc":"The judge of the burning: fire rises where you stand.","story":"A judge in a robe of coals weighs every soul that comes down the stair. He has weighed yours.","after":"Enra’s fire gutters out. His blade, still warm, is yours."},
+    {"id":"hell_stair","was":"hell:5","name":"The Burning Stair","kind":"survive","foe":"h_brute","time":45,"xp":1500,"mon":200,"crystals":10,"desc":"Endure 45 seconds on the stair: an Oni Brute, and the vents.","layout":{"hazards":[{"x":-520,"w":160,"kind":"fire","period":3.5,"dmg":9},{"x":0,"w":160,"kind":"spikes","period":4,"dmg":9},{"x":520,"w":160,"kind":"fire","period":3,"dmg":9}]}},
+    {"id":"hell_ninth","was":"hell:6","name":"The Ninth Gate","kind":"duel","foe":"h_akuma","rounds":2,"boss":true,"final":true,"arena":8,"xp":3500,"mon":600,"crystals":50,"skill_points":1,"item":["hellmaw_kanabo","trail_hellfire"],"desc":"The warlord, unbound by death, at the last gate.","story":"At the bottom of everything stands a gate, and before it the warlord you killed, whole again and burning.","after":"The Ninth Gate closes behind you. The warlord’s fury is ash at last.","layout":{"hazards":[{"x":-580,"w":160,"kind":"fire","period":5,"dmg":10},{"x":580,"w":160,"kind":"fire","period":5.5,"dmg":10}]}}]},
   "white":{"name":"White Mode","jp":"白","arena":9,"diff":4,"parry":true,"final":"The light is answered","lock":"Touch the mysterious sun and choose the path of light.",
    "desc":"The Celestial Sanctuary: a luminous path of precision. Its guardians wear a ward that turns plain blows aside; only a perfect parry, a punish or an Issen breaks it. Falling light, a reflection, a pale sun.",
    "story":["Above the bright sun the sky opens, and the road climbs into light.","The sanctuary’s guardians do not hate you. They simply will not let a careless blade pass."],
    "missions":[
-    {"name":"Gate of Dawn","kind":"duel","foe":"w_warden","rounds":1,"xp":900,"mon":120,"crystals":5,"desc":"Its ward turns plain blows aside (gold sparks): parry — block just as it strikes — or punish a miss.","story":"A lantern burns without oil at the gate. Its keeper raises a staff, not in anger: in question."},
-    {"name":"The Mirror Pool","kind":"duel","foe":"w_mirror","rounds":2,"xp":1100,"mon":140,"crystals":5,"desc":"Your reflection steps out of the water.","story":"The pool shows you as you are. Then it shows you as you fight."},
-    {"name":"Falling Light","kind":"survive","foe":"w_archer","time":30,"xp":1200,"mon":150,"crystals":10,"desc":"Survive 30 seconds: a ring of gold marks where the light will fall."},
-    {"name":"The Bell Tower","kind":"duel","foe":"w_bellmonk","rounds":2,"xp":1600,"mon":200,"crystals":10,"item":"celestial_haori","desc":"An elite monk whose bell shakes the stones; its ward holds firm.","story":"The bell has rung once in a hundred years. It rings now."},
-    {"name":"Hakuren, the White Lotus","kind":"duel","foe":"w_hakuren","rounds":2,"boss":true,"arena":10,"xp":2400,"mon":300,"crystals":20,"skill_points":1,"item":"dawn_blade","desc":"The sanctuary’s blade: light falls where you stand, and hurt, she blooms in waves.","story":"Hakuren has guarded the stair since before the war. She asks one thing: show her a clean stroke.","after":"Hakuren lowers her blade and bows. The Dawn Blade is offered, not taken."},
-    {"name":"Three Lanterns","kind":"gauntlet","waves":["w_warden","w_mirror","w_warden"],"xp":1500,"mon":200,"crystals":10,"desc":"Three guardians in a row; your health carries over."},
-    {"name":"The Pale Sun","kind":"duel","foe":"w_sunwarden","rounds":2,"boss":true,"final":true,"arena":10,"xp":3500,"mon":600,"crystals":50,"skill_points":1,"item":["sunlit_naginata","trail_dawn"],"desc":"The warden of the sun that rose over the Burning Field.","story":"The sun that rose over the field was never the sun. Its warden waits inside the light.","after":"The pale sun sets. Where it hung, the sky is only sky."}]}}}
+    {"id":"white_dawn","was":"white:0","name":"Gate of Dawn","kind":"duel","foe":"w_warden","rounds":1,"xp":900,"mon":120,"crystals":5,"desc":"Its ward turns plain blows aside (gold sparks): parry — block just as it strikes — or punish a miss.","story":"A lantern burns without oil at the gate. Its keeper raises a staff, not in anger: in question."},
+    {"id":"white_mirror","was":"white:1","name":"The Mirror Pool","kind":"duel","foe":"w_mirror","rounds":2,"xp":1100,"mon":140,"crystals":5,"desc":"Your reflection steps out of the water.","story":"The pool shows you as you are. Then it shows you as you fight."},
+    {"id":"white_light","was":"white:2","name":"Falling Light","kind":"survive","foe":"w_archer","time":30,"xp":1200,"mon":150,"crystals":10,"desc":"Survive 30 seconds: a ring of gold marks where the light will fall."},
+    {"id":"white_bell","was":"white:3","name":"The Bell Tower","kind":"duel","foe":"w_bellmonk","rounds":2,"xp":1600,"mon":200,"crystals":10,"item":"celestial_haori","desc":"An elite monk whose bell shakes the stones; its ward holds firm.","story":"The bell has rung once in a hundred years. It rings now."},
+    {"id":"white_hakuren","was":"white:4","name":"Hakuren, the White Lotus","kind":"duel","foe":"w_hakuren","rounds":2,"boss":true,"arena":10,"xp":2400,"mon":300,"crystals":20,"skill_points":1,"item":"dawn_blade","desc":"The sanctuary’s blade: light falls where you stand, and hurt, she blooms in waves.","story":"Hakuren has guarded the stair since before the war. She asks one thing: show her a clean stroke.","after":"Hakuren lowers her blade and bows. The Dawn Blade is offered, not taken."},
+    {"id":"white_lanterns","was":"white:5","name":"Three Lanterns","kind":"gauntlet","waves":["w_warden","w_mirror","w_warden"],"xp":1500,"mon":200,"crystals":10,"desc":"Three guardians in a row; your health carries over."},
+    {"id":"white_sun","was":"white:6","name":"The Pale Sun","kind":"duel","foe":"w_sunwarden","rounds":2,"boss":true,"final":true,"arena":10,"xp":3500,"mon":600,"crystals":50,"skill_points":1,"item":["sunlit_naginata","trail_dawn"],"desc":"The warden of the sun that rose over the Burning Field.","story":"The sun that rose over the field was never the sun. Its warden waits inside the light.","after":"The pale sun sets. Where it hung, the sky is only sky."}]}}}
 </script>
 <script type="application/json" id="data-powers">
 {"schema_version":3,
@@ -1490,7 +1491,8 @@ function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')
  if(A.sov&&A.sov.bleed)Dd.bleed={until:G.t+3,dps:A.sov.bleed};
  if(tr){if(tr.burn)Dd.bleed={until:G.t+tr.burn[1],dps:tr.burn[0]};if(tr.inkFirst&&!A.firstHit)inkUp(A,tr.inkFirst);A.firstHit=1;A.mom=(A.mom||0)+1}Dd.mom=0; // burn (never kills), the first-hit ink, momentum resets when hit
  const hp0=Dd.hp;Dd.hp=Math.max(0,Dd.hp-dmg*(1-Dd.mod.mit));Dd.lagHold=.6;Dd.hitFlash=.14;Dd.hurtT=G.t;
- if(Dd.isP&&G.tea&&Dd.hp>0&&Dd.hp<Dd.maxHp*GEAR.items.healing_tea.effect.below){G.tea=false;Dd.hp=Math.min(Dd.maxHp,Dd.hp+GEAR.items.healing_tea.effect.heal*Dd.mod.heal);fxAdd({k:'ring',x:Dd.x,y:0});snd('gong',.3)} // Healing Tea, once
+ const dealt=hp0-Dd.hp; // damage is counted before any healing
+ if(Dd.isP&&G.tea&&Dd.hp>0&&Dd.hp<Dd.maxHp*GEAR.items.healing_tea.effect.below)teaHeal(Dd); // Healing Tea, once, charged as it heals
  const foot=m.kd&&Dd.mod.footing&&!Dd.footUsed&&Dd.hp>0,kd=m.kd&&!foot;if(foot)Dd.footUsed=1; // Oni-gane Plate: the first knockdown each round only staggers
  const armored=(Dd.st==='move'&&Dd.mv.armor&&Dd.mvT<=Dd.mv.armor[1]&&!m.pierceArmor||skin||iron||ward&&!punish)&&!kd&&Dd.hp>0;if(iron&&kd)Dd.iron=null;
  if(!armored){Dd.mv=null;Dd.manual=false;Dd.alpha=1;Dd.next=null;Dd.crouch=false;Dd.block=false;
@@ -1498,7 +1500,7 @@ function tryHit(A,Dd,m,proj){if(Dd.st==='dead'||Dd.st==='down'||Dd.st==='getup')
   else{setSt(Dd,'hit');Dd.stun=m.stun||.3;Dd.vx=dir*(m.push||90);Dd.hz=m.zone||'mid';Dd.hk=m.dmg>=10;Dd.hn=(Dd.hn||0)+1}}
  fxAdd({k:'slash',x:hx,y:hy,a:m.zone==='high'?-.75:m.zone==='low'?.35:(Math.random()-.5)*.5});if(crit)fxAdd({k:'slash',x:hx,y:hy,a:.9}); /* a crit crosses the mark */fxAdd({k:'splash',x:hx,y:hy,sz:m.kd?70:46,dir:dir>0?0:Math.PI});
  G.freeze=m.kd?.09:.055;G.shake=Math.max(G.shake,m.kd?18:9);snd('drum',m.kd?.9:.55);if(m.kd)snd('boom',.3);if(Dd.isP&&SV.settings.haptics&&navigator.vibrate)navigator.vibrate(m.kd?45:18);G.punch=Math.max(G.punch||0,m.kd?.03:m.dmg>=10?.02:.008); // impact tiers
- inkUp(A,9);inkUp(Dd,5);scoreHit(A,Dd,hp0-Dd.hp,punish,crit,kd,proj);
+ inkUp(A,9);inkUp(Dd,5);scoreHit(A,Dd,dealt,punish,crit,kd,proj);
  {const fo=!A.isP&&!proj&&A.def&&A.def.ai&&A.def.ai.follow;if(fo&&fo[A.mvn]&&A.st==='move'&&!A.next)A.next=fo[A.mvn]} // Hell: the follow-up cut
  if(Dd.def.ai&&Dd.def.ai.rage&&!Dd.rage&&Dd.hp<Dd.maxHp*.5&&Dd.hp>0){Dd.rage=true;G.ban={k:'怒',sub:'The warlord’s fury awakens',t0:G.rt,dur:1.6};snd('growl',1)}
  const ph=Dd.def.phase;if(ph&&!Dd.phase&&Dd.hp<Dd.maxHp*ph.at&&Dd.hp>0){Dd.phase=true;if(ph.k){G.ban={k:ph.k,sub:ph.sub,t0:G.rt,dur:1.5,size:240};snd('gong',.5)}} // the boss's second phase
@@ -1527,7 +1529,7 @@ function updProj(dt){for(const p of G.proj){p.t+=dt;p.x+=p.vx*dt;if(p.life&&p.t>
  let k=0;for(const p of G.proj)if(!p.dead)G.proj[k++]=p;G.proj.length=k} // in place: no allocation per frame
 function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;
  if(F.sov&&G.t>=F.sov.until){F.burn=G.t+F.sov.burn;F.sov=null}if(F.iron&&G.t>=F.iron.until)F.iron=null;
- if(F.bleed){if(G.t>=F.bleed.until)F.bleed=null;else if(F.hp>1)F.hp=Math.max(1,F.hp-F.bleed.dps*dt)}if(F.hitFlash>0)F.hitFlash-=dt;if(F.lagHold>0)F.lagHold-=dt;else F.lag=Math.max(F.hp,F.lag-dt*30);
+ if(F.bleed){if(G.t>=F.bleed.until)F.bleed=null;else if(F.hp>1){const h=F.hp;F.hp=Math.max(1,F.hp-F.bleed.dps*dt);if(F===G.P)note('hurt',h-F.hp)}}if(F.hitFlash>0)F.hitFlash-=dt;if(F.lagHold>0)F.lagHold-=dt;else F.lag=Math.max(F.hp,F.lag-dt*30);
  const inp=F.in,sp=F.def.speed*(F.rage?1.25:1)*(F.sov?F.sov.spd:1)*(F.iron?.4:1);
  switch(F.st){
   case 'move':if(F.isP&&inp.atk==='slash'&&F.mv.chain&&F.moves[F.mv.chain]&&F.mvT>=F.mv.cw){F.next=F.mv.chain;G.buf=null}stepMove(F,O,dt);break;
@@ -1549,8 +1551,11 @@ function upd(F,O,dt){F.stT+=dt;if(F.inv>0)F.inv-=dt;
 function separate(a,b){if(a.air||b.air||a.manual||b.manual||a.mv&&a.mv.issen||b.mv&&b.mv.issen||a.st==='dead'||b.st==='dead')return;const min=58*(a.def.s+b.def.s)/2,d=b.x-a.x;
  if(Math.abs(d)<min){const p=(min-Math.abs(d))/2*(d>=0?1:-1);a.x=clamp(a.x-p,-ARENA,ARENA);b.x=clamp(b.x+p,-ARENA,ARENA)}}
 function ai(B,Pl,dt){if(G.train&&G.train.behav!=='fight')return trainAI(B,Pl,dt);const A=B.def.ai,d=Math.abs(Pl.x-B.x),inp={mx:0,up:false,down:false,atk:null},toward=Pl.x>B.x?1:-1,R=B.rage?.7:1,s=B.def.s;
- if(Pl.st==='move'&&!Pl.mv.issen&&B.ai.seen!==Pl.mvId){B.ai.seen=Pl.mvId;if(d<(Pl.mv.reach||300)+130&&G.rand()<A.block*(B.rage?1.2:1)+(Pl.sov?.2:0)){B.ai.blk=.42;B.ai.low=Pl.mv.zone==='low'}}
- for(const p of G.proj)if(p.o===Pl&&!p.seen&&Math.abs(p.x-B.x)<420&&Math.sign(B.x-p.x)===Math.sign(p.vx)){p.seen=1;if(G.rand()<A.block+.25){B.ai.blk=.5;B.ai.low=p.zone==='low'}}
+ // seeing is immediate, reacting is not: a decision to guard is queued and only taken after A.react (a reaction time, separate
+ // from the think timer); a guard against a cut that has already ended is dropped
+ if(Pl.st==='move'&&!Pl.mv.issen&&B.ai.seen!==Pl.mvId){B.ai.seen=Pl.mvId;if(d<(Pl.mv.reach||300)+130&&G.rand()<A.block*(B.rage?1.2:1)+(Pl.sov?.2:0))B.ai.react={at:G.t+(A.react??.15),dur:.42,low:Pl.mv.zone==='low',id:Pl.mvId}}
+ for(const p of G.proj)if(p.o===Pl&&!p.seen&&Math.abs(p.x-B.x)<420&&Math.sign(B.x-p.x)===Math.sign(p.vx)){p.seen=1;if(G.rand()<A.block+.25)B.ai.react={at:G.t+(A.react??.15),dur:.5,low:p.zone==='low',proj:1}}
+ if(B.ai.react&&G.t>=B.ai.react.at){const r=B.ai.react;B.ai.react=null;if(r.proj||Pl.st==='move'&&Pl.mvId===r.id){B.ai.blk=r.dur;B.ai.low=r.low}}
  if(B.ai.blk>0){B.ai.blk-=dt;inp.mx=-toward;inp.down=B.ai.low;return inp}
  if(A.counter&&B.ai.cnt>G.t&&isFree(B)){B.ai.cnt=0;if(G.rand()<A.counter){const c=B.def.moves.filter(n=>{const m=B.moves[n];return m.hit&&(!m.cd||(B.cd[n]||0)<=G.t)&&d>=m.ai[0]*s&&d<=m.ai[1]*s});
   if(c.length){inp.atk=c.reduce((a,b)=>B.moves[a].hit[0][0]<=B.moves[b].hit[0][0]?a:b);return inp}}} // Hell: the fastest cut in reach, right after a block
@@ -1571,14 +1576,16 @@ const STEP=1/60;
 function stepGame(dt){G.acc=Math.min(G.acc+dt,.1);while(G.acc>=STEP-1e-9){G.acc-=STEP;for(const F of[G.P,G.B]){F.px=F.x;F.py=F.y}for(const p of G.proj)p.px=p.x;updGame(STEP)}G.ia=clamp(G.acc/STEP)}
 const ip=(v,pv)=>pv==null||Math.abs(v-pv)>150?v:lerp(pv,v,G.ia);
 function readIn(){const k=G.keys;return{mx:(k.right?1:0)-(k.left?1:0),up:fresh(G.jb,.15),down:!!k.down,block:!!k.block,atk:G.buf&&fresh(G.buf.t,.28)?G.buf.a:null}}
+// a draw replays the round from where it began (the hero's health as it stood then, for Hell's carried wounds and gauntlets)
+function replayRound(){const hp=G.roundHp;newRound();if(hp!=null&&(G.hell||G.waves))G.P.hp=G.P.lag=hp;G.ban={k:'止',sub:`Round ${G.round}, again`,t0:G.rt,dur:1.6}}
 function newRound(){const carry=G.hell&&G.round>1&&G.P?G.P.hp:null;for(const[F,x,f]of[[G.P,G.L?G.L.spawns.hero:-300,1],[G.B,G.L?G.L.spawns.foe:300,-1]]){Object.assign(F,{x,y:0,gy:0,vx:0,vy:0,f,hp:F.maxHp,lag:F.maxHp,lagHold:0,st:'idle',stT:0,mv:null,next:null,stun:0,inv:0,air:false,alpha:1,rage:false,crouch:false,block:false,manual:false,cd:{},once:{},sov:null,iron:null,burn:0,bleed:null,phase:false,firstHit:0,mom:0,footUsed:0,trail:null,rollCd:0,skinT:0,roll:null,landT:-9,lf:f,tT:-9,lp:null,vk:null,ai:{t:.9,pt:0,blk:0,plan:'hold'}})}
  G.proj=[];G.fx=[];G.clone=null;G.timer=G.roundTime||60;if(carry!=null)G.P.hp=G.P.lag=Math.min(G.P.maxHp,carry+(G.P.maxHp-carry)*.5);if(G.L)for(const k of G.L.pickups)k.taken=false;if(G.item==='focus_incense')G.P.ink=Math.max(G.P.ink,GEAR.items.focus_incense.effect.ink);
- if(G.trial){if(G.trial.hero_hp)G.P.hp=G.P.lag=G.P.maxHp*G.trial.hero_hp;if(G.trial.phase)G.B.phase=true;if(G.trial.rage)G.B.rage=true} /* Ink Trial modifiers */G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
+ G.roundHp=G.P.hp; if(G.trial){if(G.trial.hero_hp)G.P.hp=G.P.lag=G.roundHp=G.P.maxHp*G.trial.hero_hp;if(G.trial.phase)G.B.phase=true;if(G.trial.rage)G.B.rage=true} /* Ink Trial modifiers */G.state='intro';G.st=0;G.slow=1;G.slowT=0;G.buf=null;G.jb=-9;
  G.ban=G.round===1?{k:G.train?'師':G.trial?'墨':G.def.jp,sub:G.train?`Training · ${G.def.name}`:(G.trial?`Ink Trial · ${G.trial.name}: ${G.trial.desc}`:`${G.def.name}, ${G.def.title}`)+(G.item?` · ${GEAR.items[G.item].name} at hand`:''),t0:G.rt,dur:2.3,size:230}:{k:['壱','弐','参'][G.round-1],sub:'Round '+G.round,t0:G.rt,dur:1.6};snd('drum',.8)}
-function endRound(){G.rw.wins++;if(G.waves&&G.rw===G.P&&G.wave<G.waves.length-1)return nextWave();if(G.rw.wins>=(G.need||2))matchEnd(G.rw===G.P);else{G.round++;newRound()}}
+function endRound(){if(!G.rw)return replayRound();G.rw.wins++;if(G.waves&&G.rw===G.P&&G.wave<G.waves.length-1)return nextWave();if(G.rw.wins>=(G.need||2))matchEnd(G.rw===G.P);else{G.round++;newRound()}}
 // a gauntlet (1.7): the next foe steps in; the hero keeps health and ink
 const WAVEK=['壱','弐','参','墨','墨'];
-function nextWave(){const P=G.P,hp=P.hp,ink_=P.ink;G.wave++;G.def=G.waves[G.wave];G.B=mkF(G.def,false);P.wins=0;G.round=1;newRound();Object.assign(P,{hp,lag:hp,ink:ink_});
+function nextWave(){const P=G.P,hp=P.hp,ink_=P.ink;G.wave++;G.def=G.waves[G.wave];G.B=mkF(G.def,false);P.wins=0;G.round=1;newRound();Object.assign(P,{hp,lag:hp,ink:ink_});G.roundHp=hp;
  G.ban={k:WAVEK[G.wave],sub:`Wave ${G.wave+1} of ${G.waves.length}: ${G.def.name}, ${G.def.title}`,t0:G.rt,dur:1.9,size:220}}
 function updGame(dt){if(G.paused||G.state==='over'||G.state==='chosen')return;G.shake*=Math.pow(.004,dt);if(G.hint>0&&G.state==='fight')G.hint-=dt;
  if(G.freeze>0){G.freeze-=dt;return}
@@ -1590,9 +1597,12 @@ function updGame(dt){if(G.paused||G.state==='over'||G.state==='chosen')return;G.
  if(G.state==='intro'&&G.st>(G.round===1?2.5:1.7)){G.state='fight';G.st=0;G.ban={k:'始',sub:'Begin',t0:G.rt,dur:.9,size:260};snd('drum',1);snd('slash',.6)}
  else if(live&&G.train)trainTick(sdt);
  else if(live){G.timer-=sdt;const pk=pl.hp<=0,bk=bo.hp<=0,to=G.timer<=0;
-  if(pk||bk||to){const pw=bk||!pk&&to&&(G.survive||pl.hp/pl.maxHp>=bo.hp/bo.maxHp),L=pw?bo:pl;G.rw=pw?pl:bo;G.state='ko';G.st=0;if(L.hp<=0){fxAdd({k:'smoke',x:L.x,y:0,pale:L.def.kind.type==='ghost'?1:0});fxAdd({k:'splash',x:L.x,y:-120*L.def.s,sz:90,dir:-1.57,persist:1});L.mv=null;L.manual=false;L.alpha=1;if(L.st!=='down')setSt(L,'dead');else L.st='dead'}
+  if(pk||bk||to){const ratio=pl.hp/pl.maxHp-bo.hp/bo.maxHp,draw=pk&&bk||!pk&&!bk&&to&&!G.survive&&Math.abs(ratio)<1e-9; // survival wins on the clock
+   if(draw){G.rw=null;G.state='ko';G.st=0;for(const L of[pl,bo])if(L.hp<=0){L.mv=null;L.manual=false;L.alpha=1;if(L.st!=='down')setSt(L,'dead');else L.st='dead'}
+    G.slow=.3;G.slowT=.9;G.ban={k:'止',sub:'Draw — the round is fought again',t0:G.rt,dur:2.2};snd('drum',.7);return music(dt)}
+   const pw=bk||!pk&&to&&(G.survive||ratio>0),L=pw?bo:pl;G.rw=pw?pl:bo;G.state='ko';G.st=0;if(L.hp<=0){fxAdd({k:'smoke',x:L.x,y:0,pale:L.def.kind.type==='ghost'?1:0});fxAdd({k:'splash',x:L.x,y:-120*L.def.s,sz:90,dir:-1.57,persist:1});L.mv=null;L.manual=false;L.alpha=1;if(L.st!=='down')setSt(L,'dead');else L.st='dead'}
    G.slow=.3;G.slowT=.9;const timeUp=to&&!pk&&!bk;G.ban={k:timeUp?'時':pw?'勝':'敗',sub:timeUp?(pw?'Time — you lead':'Time — you trail'):pw?'Victory':'Defeat',t0:G.rt,dur:2.2,seal:pw};snd('boom',.8);snd(pw?'gong':'drum',.6)}}
- else if(G.state==='ko'){if(G.st>1.1&&isFree(G.rw))setSt(G.rw,'win');if(G.st>2.9)endRound()}
+ else if(G.state==='ko'){if(G.st>1.1&&G.rw&&isFree(G.rw))setSt(G.rw,'win');if(G.st>2.9)endRound()}
  else if(G.state==='sun'){if(G.st>2.4&&$('sunBtn').classList.contains('off')){$('sunBtn').classList.remove('off');$('sunBtn').focus()}}
  else if(G.state==='absorb'){bo.alpha=1-ss(.6,2.8,G.st);if(!G.rv&&G.st>2.9){const p=POWERS[G.res.r.power];G.rv=1;G.ban={k:p.jp,sub:p.name,t0:G.rt,dur:2.4,size:300,seal:true};fxAdd({k:'ring',x:pl.x,y:0});snd('gong',.8);snd('drum',.9)}if(G.st>=ABSORB)absorbDone()}
  music(dt)}
@@ -1773,7 +1783,8 @@ const ACTIONS=['left','right','up','down','slash','kick','block','roll','ink','i
 function cleanSettings(o){const pick=(v,ok,d)=>ok.includes(v)?v:d,num=(v,lo,hi,d)=>typeof v==='number'&&Number.isFinite(v)?clamp(v,lo,hi):d;
  return{volume:num(o.volume,0,1,1),music:num(o.music,0,1,.8),sfx:num(o.sfx,0,1,1),sens:num(o.sens,.6,1.6,1),lang:pick(o.lang,['en'],'en'),shake:pick(o.shake,['full','reduced','off'],'full'),flash:pick(o.flash,['full','reduced'],'full'),haptics:o.haptics!==false,quality:pick(o.quality,['high','low'],'high'),
   assist:o.assist===true,scale:num(o.scale,.8,1.4,1),lefty:o.lefty===true,keys:Object.fromEntries(Object.entries(obj(o.keys)).filter(([c,a])=>/^[A-Za-z0-9]{2,20}$/.test(c)&&ACTIONS.includes(a)))}}
-const newSave=()=>({v:2,rev:0,savedAt:0,profile:{level:1,xp:0,attrPts:0,skillPts:0,attrs:{assault:0,survival:0,shadowcraft:0},mon:0,materials:0,crystals:0},world:{at:-1,loc:'',secret:0},modes:{sun:0,hell:false,white:false},stats:{},daily:{day:'',ids:[],base:{}},
+const newEpoch=()=>(Date.now().toString(36)+Math.floor(Math.random()*1e8).toString(36)).slice(0,20); // a profile's identity: New Game, import and restore make a new one
+const newSave=()=>({v:2,rev:0,savedAt:0,att:{seq:0,open:null,done:[],floor:0,receipts:{}},profile:{level:1,xp:0,attrPts:0,skillPts:0,attrs:{assault:0,survival:0,shadowcraft:0},mon:0,materials:0,crystals:0,epoch:newEpoch()},world:{at:-1,loc:'',secret:0},modes:{sun:0,hell:false,white:false},stats:{},daily:{day:'',ids:[],base:{}},
  progress:{beaten:0,defeated:[],ladder:{},regionsUnlocked:1,trialsDone:[],lastWin:null},powers:{},loadout:{powers:[null,null],echoes:[null,null]},
  gear:{owned:['katana'],equipped:{weapon:'katana',charm:null,armour:null,item:null},tiers:{katana:1},items:{},cos:{finish:null,trail:null,aura:null,robe:null}},settings:Object.assign({},SET_D,{keys:{}}),rewardsClaimed:{},story:{pending:[],seen:[]},legacy:null});
 // every field is re-validated and clamped on load, so bad data never reaches the game (in v1, {"beaten":"abc"} locked every boss)
@@ -1781,7 +1792,7 @@ const int=(v,lo,hi,d=lo)=>(typeof v==='number'||typeof v==='string'&&v.trim()!==
 const obj=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{},strs=(v,only)=>Array.isArray(v)?[...new Set(v.filter(x=>typeof x==='string'&&(!only||only.includes(x))))]:[];
 function cleanSave(r){r=obj(r);const s=newSave(),p=obj(r.profile),a=obj(p.attrs),g=obj(r.progress),lo=obj(r.loadout),lw=obj(g.lastWin),lg=obj(r.legacy),sto=obj(r.story);
  s.rev=int(r.rev,0,1e12);s.savedAt=int(r.savedAt,0,1e15);
- Object.assign(s.profile,{xp:int(p.xp,0,1e9),attrPts:int(p.attrPts,0,999),skillPts:int(p.skillPts,0,999),mon:int(p.mon,0,1e9),materials:int(p.materials,0,1e9),crystals:int(p.crystals,0,1e9),
+ Object.assign(s.profile,{xp:int(p.xp,0,1e9),attrPts:int(p.attrPts,0,999),skillPts:int(p.skillPts,0,999),mon:int(p.mon,0,1e9),materials:int(p.materials,0,1e9),crystals:int(p.crystals,0,1e9),epoch:typeof p.epoch==='string'&&/^[a-z0-9]{4,24}$/.test(p.epoch)?p.epoch:newEpoch(),
   attrs:{assault:int(a.assault,0,PROG.attributes.rank_cap),survival:int(a.survival,0,PROG.attributes.rank_cap),shadowcraft:int(a.shadowcraft,0,PROG.attributes.rank_cap)}});
  s.profile.level=levelOf(s.profile.xp).level; // the level always follows the XP
  Object.assign(s.progress,{beaten:int(g.beaten,0,BOSSES.length),defeated:strs(g.defeated,BOSS_IDS),ladder:Object.fromEntries(LAD.regions.map(R=>[R.id,int(obj(g.ladder)[R.id],0,R.steps.length)])),trialsDone:strs(g.trialsDone,BOSS_IDS),
@@ -1798,16 +1809,42 @@ function cleanSave(r){r=obj(r);const s=newSave(),p=obj(r.profile),a=obj(p.attrs)
    items:Object.fromEntries(Object.keys(GEAR.items).map(id=>[id,int(obj(gr.items)[id],0,GEAR.items[id].max,0)]).filter(e=>e[1]>0)),
    cos:Object.fromEntries(COSK.map(k=>[k,own.includes(cos[k])&&GEAR.cosmetics[cos[k]]&&GEAR.cosmetics[cos[k]].kind===k?cos[k]:null]))}}s.settings=cleanSettings(obj(r.settings));
  for(const[k,v]of Object.entries(obj(r.rewardsClaimed)))if(v)s.rewardsClaimed[k]=typeof v==='number'?v:1;
- s.story=Object.assign({},sto,{seen:strs(sto.seen,[...LAD.regions.map(R=>R.id),...Object.keys(MODES),...Object.entries(MODES).flatMap(([l,L])=>L.missions.map((m,i)=>`${l}:${i}`))]),pending:(Array.isArray(sto.pending)?sto.pending:[]).filter(n=>obj(n).kind==='power'?!!POWERS[n.id]:['migrated','corrupt','ach'].includes(obj(n).kind)&&typeof n.text==='string').slice(0,8)});
+ for(const k of Object.keys(s.rewardsClaimed)){const base=k.startsWith('cr:')?k.slice(3):k,to=LEG[base];if(to){const v=s.rewardsClaimed[k];delete s.rewardsClaimed[k];s.rewardsClaimed[(k===base?'':'cr:')+to]=v}} // stable mission ids (legacy index claims mapped)
+ for(const id of BOSS_IDS){if(s.rewardsClaimed['boss:'+id]&&!s.progress.defeated.includes(id))delete s.rewardsClaimed['boss:'+id];if(s.rewardsClaimed['trial:'+id]&&!s.progress.trialsDone.includes(id))delete s.rewardsClaimed['trial:'+id]} // a claim must agree with the progress it pays for
+ {const A=obj(r.att),done=(Array.isArray(A.done)?A.done:[]).filter(n=>Number.isInteger(n)&&n>0),open=obj(A.open);s.att={seq:int(A.seq,0,1e12),open:null,done:done.slice(-ATT_KEEP),floor:int(A.floor,0,1e12),receipts:{}};
+  if(Number.isInteger(open.id))retire(s.att,open.id);s.att.seq=Math.max(s.att.seq,...s.att.done,s.att.floor)} // an attempt still open at load was abandoned
+ s.story=Object.assign({},sto,{seen:strs((Array.isArray(sto.seen)?sto.seen:[]).map(k=>LEG[k]||k),[...LAD.regions.map(R=>R.id),...Object.keys(MODES),...Object.values(MODES).flatMap(L=>L.missions.map(M=>'m:'+M.id))]),pending:(Array.isArray(sto.pending)?sto.pending:[]).filter(n=>obj(n).kind==='power'?!!POWERS[n.id]:['migrated','corrupt','ach'].includes(obj(n).kind)&&typeof n.text==='string').slice(0,8)});
  s.legacy=typeof lg.raw==='string'?{raw:lg.raw.slice(0,200),migratedAt:int(lg.migratedAt,0,1e15)}:null;
  {const md=obj(r.modes);s.modes={sun:md.sun?1:0,hell:md.hell===true,white:md.white===true};if(!s.modes.sun)s.modes.hell=s.modes.white=false}
  {const w=obj(r.world);s.world={at:int(w.at,-1,BOSSES.length-1,-1),loc:typeof w.loc==='string'&&MODES[w.loc]?w.loc:'',secret:w.secret?1:0}}{const d=obj(r.daily),pool=CHAL.daily.pool.map(x=>x.id);s.daily={day:typeof d.day==='string'&&/^\d{4}-\d\d-\d\d$/.test(d.day)?d.day:'',ids:strs(d.ids,pool).slice(0,CHAL.daily.count),base:Object.fromEntries(Object.entries(obj(d.base)).filter(([k])=>/^[a-zA-Z]{1,24}$/.test(k)).map(([k,v])=>[k,int(v,0,1e9)]))}}s.stats=Object.fromEntries(Object.entries(obj(r.stats)).filter(([k])=>/^[a-zA-Z]{1,24}$/.test(k)).map(([k,v])=>[k,int(v,0,1e9)]));
  points(s);backfillCr(s);return s}
+/* --- durable progress (v2 brief §6). Every change that matters goes through commit(): it is made, the whole save is written,
+   and only a successful write keeps it; a failed write puts back the last saved state and the player is told (with a
+   retry). A rewarding fight is an attempt: begun and saved before it starts, bound to this profile's epoch, settled once. --- */
+const STORE={lock:false}; // lock: the save on this device is from a newer version, so this one never overwrites it
+const restoreSV=snap=>{const b=JSON.parse(snap);for(const k of Object.keys(SV))delete SV[k];Object.assign(SV,b)};
+function commit(fn){const snap=JSON.stringify(SV);let r;try{r=fn(SV)}catch(e){restoreSV(snap);throw e}
+ if(r===false){restoreSV(snap);return{ok:false,why:'refused'}}if(!writeSave(SV)){restoreSV(snap);return{ok:false,why:'storage'}}return{ok:true,r}}
+function storageError(retry,back){notice('止','Your progress could not be saved',STORE.lock?'The save on this device comes from a newer version of Issen, so this version will not overwrite it. Update the game to go on with that journey.':
+ 'The game could not write your save (storage may be full or blocked). Nothing was changed: your last saved progress is intact.',retry&&!STORE.lock?[['Try again',retry,1],['Back',back]]:[['Back',back,1]],back)}
+const ATT_KEEP=64,RCPT_KEEP=24;
+const retire=(A,id)=>{if(!A.done.includes(id))A.done.push(id);while(A.done.length>ATT_KEEP)A.floor=Math.max(A.floor,A.done.shift())};
+const receipt=(A,id,r)=>{A.receipts[id]=r;const ks=Object.keys(A.receipts);while(ks.length>RCPT_KEEP)delete A.receipts[ks.shift()]};
+// an attempt begins (and is saved) before a rewarding fight: an earlier unfinished one is abandoned; a supply that works from
+// the bell (whetstone, incense) is charged here, tea is only reserved (it is charged when it heals)
+function beginAttempt(kind,ref,supply){let id=null;const c=commit(d=>{const A=d.att;if(A.open)retire(A,A.open.id);id=++A.seq;A.open={id,kind,ref,epoch:d.profile.epoch,at:Date.now(),supply:null};
+  if(supply&&supply!=='healing_tea'&&(d.gear.items[supply]||0)>0){if(!--d.gear.items[supply])delete d.gear.items[supply];A.open.supply=supply}});return c.ok?{id,supply:SV.att.open.supply}:null}
+// settling pays once: only the open attempt of this profile; the same attempt again returns its receipt, a stale one nothing
+function settle(d,id,epoch,fn){const A=d.att;if(A.receipts[id])return{replay:A.receipts[id]};if(epoch!==d.profile.epoch)return{refused:'another journey'};
+ if(!A.open||A.open.id!==id||id<=A.floor||A.done.includes(id))return{refused:'stale'};const v=fn();retire(A,id);A.open=null;receipt(A,id,v);return{v}}
 // shadow crystals are paid per claim, once: the "cr:<claim>" flag makes every payout idempotent, and lets 1.7 pay what a
 // save from before crystals already earned (backfillCr runs on every load)
+// stable mission ids (v2 brief §6): a ladder step or mission is claimed as "m:<id>"; LEG maps the 1.7 index claims onto them
+const LEG={};for(const R of LAD.regions)for(const st of R.steps)LEG[st.was]='m:'+st.id;for(const L of Object.values(MODES))for(const M of L.missions)LEG[M.was]='m:'+M.id;
+const NODE={};for(const R of LAD.regions)for(const st of R.steps)NODE[st.id]={st,R};for(const[loc,L]of Object.entries(MODES))for(const M of L.missions)NODE[M.id]={M,loc};
 const payCr=(s,claim,n)=>{if(!n||!s.rewardsClaimed[claim]||s.rewardsClaimed['cr:'+claim])return 0;s.rewardsClaimed['cr:'+claim]=1;s.profile.crystals=Math.min(1e9,s.profile.crystals+n);return n};
 function crOf(claim){const[k,a,b]=claim.split(':'),C=ECON.crystals;if(k==='boss')return C.boss[a]||0;if(k==='trial')return C.trial;
- if(k==='step'){const R=LAD.regions.find(R=>R.id===a),st=R&&R.steps[b];return st&&st.elite?C.elite:0}if(MODES[k]){const M=MODES[k].missions[+a];return M&&M.crystals||0}return 0}
+ if(k==='m'){const n=NODE[a];return!n?0:n.st?(n.st.elite?C.elite:0):n.M.crystals||0}return 0}
 function backfillCr(s){for(const k of Object.keys(s.rewardsClaimed))if(!k.startsWith('cr:'))payCr(s,k,crOf(k))}
 // attribute and skill points are derived, never trusted: earned (levels, first-clear claims, milestone levels) minus spent (ranks, tiers)
 const tierCost=t=>PROG.power_tiers[t-2]; /* the price of reaching tier t (2-5) */
@@ -1815,7 +1852,7 @@ const maxTier=(s,id)=>!POWERS[id].ready?1:s.progress.trialsDone.includes(POWERS[
 function points(s){const p=s.profile,A=p.attrs,earned=(p.level-1)*PROG.level_up.attr_points;if(A.assault+A.survival+A.shadowcraft>earned)A.assault=A.survival=A.shadowcraft=0;
  p.attrPts=earned-A.assault-A.survival-A.shadowcraft;
  let sp=PROG.level_up.skill_point_levels.filter(L=>p.level>=L).length,used=0;for(const id of BOSS_IDS){if(s.rewardsClaimed['boss:'+id])sp+=PROG.rewards[id].skill_points;if(s.rewardsClaimed['trial:'+id])sp+=LAD.trials[id].skill_points}
- for(const[loc,L]of Object.entries(MODES))L.missions.forEach((M,i)=>{if(M.skill_points&&s.rewardsClaimed[`${loc}:${i}`])sp+=M.skill_points})
+ for(const L of Object.values(MODES))for(const M of L.missions)if(M.skill_points&&s.rewardsClaimed['m:'+M.id])sp+=M.skill_points
  for(const id in s.powers)for(let t=2;t<=s.powers[id].tier;t++)used+=tierCost(t).sp;
  if(used>sp){for(const id in s.powers)s.powers[id].tier=1;used=0}p.skillPts=sp-used}
 // character-screen actions. A fight's hero is built from the save when the fight starts, so nothing here reaches a fight in progress.
@@ -1834,14 +1871,17 @@ const fnv=t=>{let h=0x811c9dc5;for(let i=0;i<t.length;i++)h=Math.imul(h^t.charCo
 const seal=d=>JSON.stringify({sum:fnv(JSON.stringify(d)),doc:d});
 function unseal(t){try{const w=JSON.parse(t);if(w&&w.doc&&w.doc.v===2&&w.sum===fnv(JSON.stringify(w.doc)))return w.doc}catch(e){}return null}
 // full-document writes alternate between two slots, so a write cut short always leaves the previous save intact
-function writeSave(s){s.rev++;s.savedAt=Date.now();const ok=store.set(SLOTS[s.rev%2],seal(s));
+function writeSave(s){if(STORE.lock)return false;s.rev++;s.savedAt=Date.now();const ok=store.set(SLOTS[s.rev%2],seal(s));
  store.set(SKEY,JSON.stringify({beaten:s.progress.beaten})); // keep the v1 key current: rolling back to v1.x still finds its progress
  return ok}
-function loadSave(){const texts=SLOTS.map(k=>store.get(k)),best=texts.map(t=>t&&unseal(t)).filter(Boolean).sort((a,b)=>b.rev-a.rev)[0];
- if(best)return{save:cleanSave(best),write:false};
- const bad=texts.filter(Boolean),r=migrate(store.get(SKEY));
- if(bad.length){let q=[];try{q=JSON.parse(store.get(QKEY)||'[]')}catch(e){}if(!Array.isArray(q))q=[]; // keep the unreadable text aside (last 3), never just drop it
-  store.set(QKEY,JSON.stringify(q.concat(bad.map(raw=>({at:Date.now(),raw}))).slice(-3)));
+function loadSave(){const texts=SLOTS.map(k=>store.get(k)),docs=texts.map(t=>{if(!t)return null;try{const w=JSON.parse(t);if(w&&w.doc&&w.sum===fnv(JSON.stringify(w.doc)))return w.doc}catch(e){}return'bad'});
+ const fut=docs.find(d=>d&&d!=='bad'&&!(d.v<=2));if(fut){STORE.lock=true;const s=newSave(); // a save from a newer version: read nothing, overwrite nothing
+  s.story.pending.push({kind:'corrupt',text:'This device holds a save from a newer version of Issen. This version cannot read it, so it has changed nothing and will not overwrite it. Update the game to go on with that journey.'});return{save:s,write:false}}
+ const good=docs.filter(d=>d&&d!=='bad').sort((a,b)=>b.rev-a.rev),bad=texts.filter((t,i)=>docs[i]==='bad');
+ const keep=()=>{let q=[];try{q=JSON.parse(store.get(QKEY)||'[]')}catch(e){}if(!Array.isArray(q))q=[];store.set(QKEY,JSON.stringify(q.concat(bad.map(raw=>({at:Date.now(),raw}))).slice(-3)))}; // the unreadable text is kept aside (last 3), never just dropped
+ if(good.length){const s=cleanSave(good[0]);if(bad.length){keep();s.story.pending.unshift({kind:'corrupt',text:`One copy of your save could not be read and was kept aside; the other copy was loaded (saved ${good[0].savedAt?new Date(good[0].savedAt).toLocaleString('en'):'earlier'}). If it is older than you expected, you can import a save code.`})}return{save:s,write:bad.length>0}}
+ const r=migrate(store.get(SKEY));
+ if(bad.length){keep();
   r.save.story.pending.unshift({kind:'corrupt',text:`Your saved game was damaged and could not be read; a copy was kept aside. Your progress was rebuilt from the backup record: ${r.save.progress.beaten} of 5 shadows defeated. If you exported a save code, you can import it now.`})}
  return Object.assign(r,{write:true})}
 // v1 saved only {beaten:N}: replay those victories through the same claims as live play (never twice), so XP, level and powers follow
@@ -1852,30 +1892,34 @@ function migrate(raw){const s=newSave();if(raw==null)return{save:s,granted:[]};l
  return{save:s,granted}}
 // one boss victory. The first clear (claim "boss:<id>") pays in full, once; later wins pay repeat_share of the XP only.
 // winId identifies the match: the same victory reported twice replays its stored result and grants nothing again.
-function grantClear(s,i,winId){const g=s.progress,p=s.profile;if(winId&&g.lastWin&&g.lastWin.id===winId)return g.lastWin.result;
- const id=BOSS_IDS[i],rw=PROG.rewards[id],claim='boss:'+id,first=!s.rewardsClaimed[claim],L0=p.level,sp0=p.skillPts;
+// victories pay (v2 brief §5): a first clear in full, once (its claim); a repeat a share of the XP plus renewable mon, and a hard
+// fight (an elite, a shadow, a trial, a mode champion) one upgrade material. A loss or an abandoned fight pays nothing.
+// winId (an attempt or a test's id) makes a grant idempotent: the same id again returns the same receipt.
+const REP=PROG.repeat,repMon=m=>Math.max(REP.min_mon,Math.round((m||0)*REP.mon_share));
+function pay(s,r){const p=s.profile,L0=p.level,sp0=p.skillPts;p.xp=Math.min(1e9,p.xp+r.xp);p.mon=Math.min(1e9,p.mon+(r.mon||0));p.materials=Math.min(1e9,p.materials+(r.materials||0));
+ p.level=levelOf(p.xp).level;points(s);r.sp=p.skillPts-sp0;r.levelFrom=L0;r.levelTo=p.level;return r}
+const replayed=(s,winId)=>{const v=winId!=null&&s.att.receipts[winId];return v&&('ch' in v?v.r:v)}; // a settled fight's receipt holds {r,ch}
+function grantClear(s,i,winId){const rc=replayed(s,winId);if(rc)return rc;const g=s.progress,p=s.profile;
+ const id=BOSS_IDS[i],rw=PROG.rewards[id],claim='boss:'+id,first=!s.rewardsClaimed[claim];
  g.beaten=Math.max(g.beaten,i+1);if(!g.defeated.includes(id))g.defeated.push(id);g.regionsUnlocked=Math.max(g.regionsUnlocked,Math.min(BOSSES.length,i+2));
- const r={boss:id,first,xp:first?rw.xp:Math.round(rw.xp*PROG.xp.repeat_share),sp:0,mon:0,power:null,slot:-1};
- if(first){s.rewardsClaimed[claim]=Date.now();r.mon=rw.mon;p.mon+=r.mon;if(!s.powers[rw.power]){s.powers[rw.power]={unlocked:true,tier:1};r.power=rw.power}}r.crystals=payCr(s,claim,crOf(claim));
- p.xp=Math.min(1e9,p.xp+r.xp);p.level=levelOf(p.xp).level;points(s);r.sp=p.skillPts-sp0;r.levelFrom=L0;r.levelTo=p.level; /* skill points: the boss claim + milestone levels */
+ const r={boss:id,first,xp:first?rw.xp:Math.round(rw.xp*PROG.xp.repeat_share),sp:0,mon:first?rw.mon:repMon(rw.mon),materials:first?0:REP.hard_materials,power:null,slot:-1};
+ if(first){s.rewardsClaimed[claim]=Date.now();if(!s.powers[rw.power]){s.powers[rw.power]={unlocked:true,tier:1};r.power=rw.power}}r.crystals=payCr(s,claim,crOf(claim));pay(s,r);
  if(r.power&&POWERS[r.power].ready){const k=s.loadout.powers.findIndex((x,j)=>!x&&p.level>=PROG.power_slots.unlock_levels[j]);if(k>=0){s.loadout.powers[k]=r.power;r.slot=k}}
- if(winId)g.lastWin={id:winId,result:r};return r}
+ if(winId!=null)receipt(s.att,winId,r);return r}
 // a ladder duel won: each step's first clear pays XP, mon and materials once (claim step:<region>:<i>) and moves the checkpoint;
 // repeats pay repeat_share of the XP. A lost duel changes nothing: it is simply retried.
-function grantStep(s,lv,i,winId){const g=s.progress,p=s.profile;if(winId&&g.lastWin&&g.lastWin.id===winId)return g.lastWin.result;
- const R=LAD.regions[lv],st=R.steps[i],claim=`step:${R.id}:${i}`,first=!s.rewardsClaimed[claim],L0=p.level,sp0=p.skillPts;
- const r={kind:'step',first,xp:first?st.xp:Math.round(st.xp*PROG.xp.repeat_share),mon:first?st.mon||0:0,materials:first?st.materials||0:0,sp:0,power:null,slot:-1};
+function grantStep(s,lv,i,winId){const rc=replayed(s,winId);if(rc)return rc;const g=s.progress,p=s.profile;
+ const R=LAD.regions[lv],st=R.steps[i],claim='m:'+st.id,first=!s.rewardsClaimed[claim];
+ const r={kind:'step',first,xp:first?st.xp:Math.round(st.xp*PROG.xp.repeat_share),mon:first?st.mon||0:repMon(st.mon),materials:first?st.materials||0:st.elite?REP.hard_materials:0,sp:0,power:null,slot:-1};
  if(first){s.rewardsClaimed[claim]=Date.now();if(st.item&&!s.gear.owned.includes(st.item)){s.gear.owned.push(st.item);if(GEAR.weapons[st.item])s.gear.tiers[st.item]=1;r.item=st.item;r.itemName=(GEAR.weapons[st.item]||GEAR.charms[st.item]).name}}r.crystals=payCr(s,claim,crOf(claim));
- g.ladder[R.id]=Math.max(g.ladder[R.id]||0,i+1);
- p.xp=Math.min(1e9,p.xp+r.xp);p.mon+=r.mon;p.materials+=r.materials;p.level=levelOf(p.xp).level;points(s);r.sp=p.skillPts-sp0;r.levelFrom=L0;r.levelTo=p.level;
- if(winId)g.lastWin={id:winId,result:r};return r}
+ g.ladder[R.id]=R.steps.filter(x=>s.rewardsClaimed['m:'+x.id]).length;pay(s,r); /* the 1.6 checkpoint, kept for older builds */
+ if(winId!=null)receipt(s.att,winId,r);return r}
 // an Ink Trial passed: once (claim trial:<boss>) it pays XP, mon, a skill point and an item, and opens tier IV of that boss's power
-function grantTrial(s,lv,winId){const g=s.progress,p=s.profile;if(winId&&g.lastWin&&g.lastWin.id===winId)return g.lastWin.result;
- const id=BOSS_IDS[lv],T=LAD.trials[id],claim='trial:'+id,first=!s.rewardsClaimed[claim],L0=p.level,sp0=p.skillPts;
- const r={kind:'trial',first,xp:first?T.xp:Math.round(T.xp*PROG.xp.repeat_share),mon:first?T.mon:0,materials:first?T.materials||0:0,sp:0,item:first?T.item:null,itemName:first?T.item_name:null,power:null,slot:-1};
- if(first){s.rewardsClaimed[claim]=Date.now();if(!g.trialsDone.includes(id))g.trialsDone.push(id);if(!s.gear.owned.includes(T.item))s.gear.owned.push(T.item)}r.crystals=payCr(s,claim,crOf(claim));
- p.xp=Math.min(1e9,p.xp+r.xp);p.mon+=r.mon;p.materials+=r.materials;p.level=levelOf(p.xp).level;points(s);r.sp=p.skillPts-sp0;r.levelFrom=L0;r.levelTo=p.level;
- if(winId)g.lastWin={id:winId,result:r};return r}
+function grantTrial(s,lv,winId){const rc=replayed(s,winId);if(rc)return rc;const g=s.progress,p=s.profile;
+ const id=BOSS_IDS[lv],T=LAD.trials[id],claim='trial:'+id,first=!s.rewardsClaimed[claim];
+ const r={kind:'trial',first,xp:first?T.xp:Math.round(T.xp*PROG.xp.repeat_share),mon:first?T.mon:repMon(T.mon),materials:first?T.materials||0:REP.hard_materials,sp:0,item:first?T.item:null,itemName:first?T.item_name:null,power:null,slot:-1};
+ if(first){s.rewardsClaimed[claim]=Date.now();if(!g.trialsDone.includes(id))g.trialsDone.push(id);if(!s.gear.owned.includes(T.item))s.gear.owned.push(T.item)}r.crystals=payCr(s,claim,crOf(claim));pay(s,r);
+ if(winId!=null)receipt(s.att,winId,r);return r}
 // gear actions (menus only): equip what is owned; upgrade a weapon one tier for mon and upgrade materials
 function wear(s,kind,id){const c=id&&GEAR.cosmetics[id];if(!COSK.includes(kind)||id&&(!c||c.kind!==kind||!s.gear.owned.includes(id)))return false;s.gear.cos[kind]=id||null;return true}
 function equip(s,slot,id){const own=s.gear.owned.includes(id);if(slot==='weapon'){if(!own||!GEAR.weapons[id])return false;s.gear.equipped.weapon=id;return true}
@@ -1891,7 +1935,7 @@ function rewardText(list){if(!list.length)return'';const sum=k=>list.reduce((a,r
  const pw=list.filter(r=>r.power).map(r=>`${POWERS[r.power].jp} ${POWERS[r.power].name}${POWERS[r.power].ready?'':' (awakens in a later update)'}`);if(pw.length)a.push('absorbed '+pw.join(', '));
  return a.join(' · ')}
 const exportCode=()=>'ISSEN2-'+btoa(String.fromCharCode(...new TextEncoder().encode(seal(SV))));
-function importCode(code){try{const d=unseal(new TextDecoder().decode(Uint8Array.from(atob(String(code).trim().replace(/^ISSEN2-/,'')),c=>c.charCodeAt(0))));return d?cleanSave(d):null}catch(e){return null}}
+function importCode(code){if(String(code).length>200000)return null;try{ /* bounded before decoding */const d=unseal(new TextDecoder().decode(Uint8Array.from(atob(String(code).trim().replace(/^ISSEN2-/,'')),c=>c.charCodeAt(0))));return d?cleanSave(d):null}catch(e){return null}}
 // attributes: bonus = cap·(1 − e^(−k·rank)), rank ≤ rank_cap; echoes scale with Shadowcraft's power bonus (docs/balance.md)
 // tier patches: {add|mul|set: {field or "nested.field": value}} applied to the fighter's own copy of the move
 const patch=(m,e)=>{for(const op of['add','mul','set'])for(const[k,v]of Object.entries(e[op]||{})){const ks=k.split('.'),o=ks.length>1?(m[ks[0]]=Object.assign({},m[ks[0]])):m,f=ks[ks.length-1];o[f]=op==='add'?(o[f]||0)+v:op==='mul'?o[f]*v:v}};
@@ -1938,8 +1982,8 @@ function buildMenu(){const box=document.getElementById('levels');box.innerHTML='
  el.onclick=()=>openRegion(i);box.appendChild(el)})}
 // a region's ladder: retainers in order (each a one-round duel), an optional elite, the boss (open once the retainers are
 // cleared, or already beaten), then its Ink Trial (once the boss is beaten). A win saves the checkpoint; a loss retries.
-function ladderNodes(s,lv){const R=LAD.regions[lv],open=s.progress.regionsUnlocked>lv,beaten=s.progress.beaten>lv,done=s.progress.ladder[R.id]||0;
- const ns=R.steps.map((st,i)=>({kind:'step',i,foe:FOES[st.foe],elite:!!st.elite,cleared:!!s.rewardsClaimed[`step:${R.id}:${i}`],open:open&&i<=done}));
+function ladderNodes(s,lv){const R=LAD.regions[lv],open=s.progress.regionsUnlocked>lv,beaten=s.progress.beaten>lv;
+ let req=true;const ns=R.steps.map((st,i)=>{const cleared=!!s.rewardsClaimed['m:'+st.id],n={kind:'step',i,id:st.id,foe:FOES[st.foe],elite:!!st.elite,cleared,open:open&&req};if(!st.elite&&!cleared)req=false;return n}); /* a step opens once every required step before it is won */
  ns.push({kind:'boss',foe:BOSSES[lv],cleared:beaten,open:open&&(beaten||ns.every(n=>n.elite||n.cleared))});
  ns.push({kind:'trial',foe:BOSSES[lv],trial:LAD.trials[BOSS_IDS[lv]],cleared:s.progress.trialsDone.includes(BOSS_IDS[lv]),open:beaten});return ns}
 let REG=0;
@@ -1955,25 +1999,28 @@ function openRegion(lv){REG=lv;REGL=null;const R=LAD.regions[lv],b=BOSSES[lv],ar
 // a fight in region lv: node = {kind:'boss'} (default), {kind:'step', i} (a ladder duel) or {kind:'trial'} (the boss's Ink Trial)
 function startFight(lv,seed,node={kind:'boss'}){prep(seed);G.lv=lv;G.node=node;G.train=null;G.parry=false;noMission();
  const st=node.kind==='step'&&LAD.regions[lv].steps[node.i];G.trial=node.kind==='trial'?LAD.trials[BOSS_IDS[lv]]:null;G.arena=BOSSES[lv].arena;G.need=st&&!st.elite?1:2;G.roundTime=G.trial&&G.trial.timer||60;
- fighters(st?Object.assign({},FOES[st.foe],{hp:Math.round(FOES[st.foe].hp*(1+LAD.hp_per_region*lv))}):BOSSES[lv]);takeSupply(true);G.matchId=`${node.kind}:${lv}:${node.i??''}:`+Date.now();
+ if(GATES&&!ladderNodes(SV,lv).find(n=>n.kind===node.kind&&(n.kind!=='step'||n.i===node.i)).open)return openRegion(lv); /* prerequisites are checked again on entry */
+ fighters(st?Object.assign({},FOES[st.foe],{hp:Math.round(FOES[st.foe].hp*(1+LAD.hp_per_region*lv))}):BOSSES[lv]);if(!beginFight(node.kind,node.kind==='step'?st.id:BOSS_IDS[lv]))return storageError(()=>startFight(lv,seed,node),toMenu);
  G.hint=lv===0&&node.kind==='step'&&!node.i?14:7;go()}
 const noMission=()=>{G.hell=G.white=G.survive=false;G.waves=null;G.wave=0;G.map=null;G.L=null;ARENA=900};
-function prep(seed){if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.seed=(seed??SEED_Q??Math.random()*4294967296)>>>0;G.rand=rng(G.seed);G.acc=0;G.ia=1}
-function fighters(def,hero){G.sunSeen=0;G.def=def;G.P=mkF(hero||heroDef(),true);G.B=mkF(def,false);G.res=null;G.rv=0;G.tally={};G.combo={n:0,dmg:0,t:-9};G.item=null;G.tea=false;
+function prep(seed){clearInput();if(TOUCH.on)goFull();try{auInit();AU.ctx.resume()}catch(e){}G.seed=(seed??SEED_Q??Math.random()*4294967296)>>>0;G.rand=rng(G.seed);G.acc=0;G.ia=1}
+function fighters(def,hero){G.sunSeen=0;G.attempt=null;G.def=def;G.P=mkF(hero||heroDef(),true);G.B=mkF(def,false);G.res=null;G.rv=0;G.tally={};G.combo={n:0,dmg:0,t:-9};G.item=null;G.tea=false;
  G.P.def.powers.forEach((id,i)=>{const el=tEls['p'+(i+1)];el.classList.toggle('off',!id);if(id)el.innerHTML=`<b>${POWERS[id].jp}</b><i>${POWERS[id].short}</i>`});G.round=1;G.t=0;G.mvId=0;G.keys={};G.paused=false;G.cam={x:0,y:-240,z:1.2}}
 function go(){MODE='game';show(null);const ar=ARENAS[G.arena];amb(ar.wind,ar.rain,ar.rumb||0);newRound()}
 /* --- the Training Room (1.7): the Forgotten Dojo. A dummy or any foe already met, idle, blocking, attacking (every move or one
    pattern, at a chosen tempo) or fighting back; any owned weapon; infinite health and ink; hitboxes; drills that teach each
    skill. No clock, no KO, no rewards (a drill pays a little mon the first time only) and nothing in the save changes. --- */
 const drillOf=id=>TRAIN.drills.find(d=>d.id===id);
-const partners=()=>{const s=SV,ids=['dummy'];LAD.regions.forEach((R,lv)=>R.steps.forEach((st,i)=>{if(s.rewardsClaimed[`step:${R.id}:${i}`]&&!ids.includes(st.foe))ids.push(st.foe)}));for(const id of s.progress.defeated)ids.push(id);return ids};
+// every foe defeated anywhere (campaign, Ashen, Hell, White): sparring partners and custom-map foes (the registry is the save's claims)
+const partners=()=>{const s=SV,ids=['dummy'],add=id=>{if(id&&!ids.includes(id))ids.push(id)};for(const R of LAD.regions)for(const st of R.steps)if(s.rewardsClaimed['m:'+st.id])add(st.foe);
+ for(const id of s.progress.defeated)add(id);for(const L of Object.values(MODES))for(const M of L.missions)if(s.rewardsClaimed['m:'+M.id])for(const f of M.waves||[M.foe])add(f);return ids};
 const partnerDef=id=>FOES[id]||BOSSES.find(b=>b.id===id)||FOES.dummy;
 const movesOf=d=>d.moves.concat(d.phase?[d.phase.move]:[]).filter(n=>MV[n]&&MV[n].ai);
 const moveName=n=>{const m=MV[n];return`${n.replace(/^[a-z]_/,'').replace(/[0-9_]+/g,' ').trim()} · ${m.proj?'thrown, '+m.proj.zone:m.zone||'mid'}${m.kd||m.proj&&m.proj.kd?', knockdown':''}`};
 function startTraining(o){G.train=Object.assign({partner:'dummy',behav:'idle',move:null,gap:1.4,inf:true,ink:false,boxes:false,weapon:null,drill:null},G.train||{},o||{},{drill:null});prep();G.hint=7;trainSetup();go()}
 function trainSetup(){const T=G.train;if(!partners().includes(T.partner))T.partner='dummy';if(T.weapon&&!SV.gear.owned.includes(T.weapon))T.weapon=null;
  const s=T.weapon?Object.assign({},SV,{gear:Object.assign({},SV.gear,{equipped:Object.assign({},SV.gear.equipped,{weapon:T.weapon})})}):SV;
- noMission();G.lv=0;G.node={kind:'train'};G.trial=null;G.arena=DOJO_A;G.need=99;G.roundTime=99;G.parry=true;fighters(partnerDef(T.partner),heroDef(s));G.matchId='train:'+Date.now()}
+ noMission();G.lv=0;G.node={kind:'train'};G.trial=null;G.arena=DOJO_A;G.need=99;G.roundTime=99;G.parry=true;fighters(partnerDef(T.partner),heroDef(s))}
 function trainAI(B,Pl,dt){const T=G.train,inp={mx:0,up:false,down:false,atk:null},d=Math.abs(Pl.x-B.x),toward=Pl.x>B.x?1:-1;
  if(T.behav==='block'){inp.block=true;inp.down=Pl.st==='move'&&Pl.mv.zone==='low'||Pl.crouch;return inp}
  if(T.behav!=='attack')return inp;
@@ -1986,8 +2033,8 @@ function trainTick(dt){const T=G.train,pl=G.P,bo=G.B;G.timer=99;
  if(pl.hp<=0){pl.hp=pl.lag=pl.maxHp;G.ban={k:'止',sub:'You fell — health restored',t0:G.rt,dur:1.4,size:170}}
  if(bo.hp<=0){bo.hp=bo.lag=bo.maxHp;note('downs')}
  if(T.ink)pl.ink=100;const D=T.drill&&drillOf(T.drill);if(D&&(G.tally[D.goal.stat]||0)>=D.goal.n)drillDone(D)}
-function drillDone(D){const claim='drill:'+D.id,first=!SV.rewardsClaimed[claim];G.train.drill=null;
- if(first){SV.rewardsClaimed[claim]=Date.now();SV.profile.mon+=TRAIN.reward_mon;SV.stats.drills=(SV.stats.drills||0)+1;writeSave(SV)}
+function drillDone(D){const claim='drill:'+D.id;G.train.drill=null;
+ const first=!SV.rewardsClaimed[claim]&&commit(d=>{d.rewardsClaimed[claim]=Date.now();d.profile.mon+=TRAIN.reward_mon;d.stats.drills=(d.stats.drills||0)+1}).ok;
  G.ban={k:'勝',sub:`Drill complete: ${D.name}${first?` · +${TRAIN.reward_mon} mon, the first time only`:''}`,t0:G.rt,dur:2.4,size:200,seal:true};snd('gong',.6)}
 function startDrill(id){const D=drillOf(id),T=G.train;if(!D)return;Object.assign(T,{drill:id,behav:D.behav,move:null,gap:D.gap||1.4,partner:'dummy',inf:true,ink:false});trainSetup();newRound();G.ban=null}
 function trainReset(){G.round=1;newRound();G.ban=null}
@@ -2015,23 +2062,30 @@ function openTrain(){const T=G.train,box=$('tBody'),done=TRAIN.drills.filter(d=>
  row('Your health',[[true,'infinite'],[false,'normal']],T.inf,v=>{T.inf=v});row('Ink',[[false,'normal'],[true,'infinite (practise powers)']],T.ink,v=>{T.ink=v});row('Hitboxes',[[false,'hidden'],[true,'shown']],T.boxes,v=>{T.boxes=v});
  show('train');$('tResume').focus()}
 // victory: rewards are computed and SAVED first, then the (skippable) absorption ceremony, then the result panel
-function matchEnd(win){G.state='over';G.res={win,r:null,ch:[]};useSupply();tallyEnd(win);
- if(win&&G.node.kind==='mission')G.res.r=grantMission(SV,G.node.loc,G.node.i,G.matchId);
- else if(win&&G.node.kind==='custom')G.res.r=null;
- else if(win&&G.node.kind!=='boss')G.res.r=G.node.kind==='trial'?grantTrial(SV,G.lv,G.matchId):grantStep(SV,G.lv,G.node.i,G.matchId);
- else if(win){const r=G.res.r=grantClear(SV,G.lv,G.matchId);if(r.power)SV.story.pending.push({kind:'power',id:r.power})}
- G.res.ch=award(SV);writeSave(SV);
- if(win&&G.node.kind==='boss'&&G.res.r.power){G.state='absorb';G.st=0;G.rv=0;G.ban=null;return}
- showResult()}
+function matchEnd(win){G.state='over';G.buf=null;G.jb=-9;G.res={win,r:null,ch:[],saved:true};
+ if(G.attempt!=null&&!settleFight())return;afterSettle()}
+// the fight's one settlement: the day is rolled first (a fight after midnight counts for the new day), then tallies, rewards and
+// challenges are written together; the result screen shows only what was saved; a failed write offers a retry
+function settleFight(){const res=G.res,win=res.win,n=G.node;let out=null;
+ const c=commit(d=>{rollDaily(d);out=settle(d,G.attempt,G.epoch,()=>{tallyEnd(d,win);let r=null;
+   if(win)r=n.kind==='mission'?grantMission(d,n.loc,n.i):n.kind==='trial'?grantTrial(d,G.lv):n.kind==='step'?grantStep(d,G.lv,n.i):n.kind==='tour'?grantTour(d,n.id,G.tourWon):grantClear(d,G.lv);
+   if(r&&r.power)d.story.pending.push({kind:'power',id:r.power});return{r,ch:award(d)}});if(out.refused)return false});
+ if(!c.ok&&c.why==='storage'){res.saved=false;storageError(()=>{if(settleFight())afterSettle()},()=>{G.attempt=null;afterSettle()});return false}
+ const v=out&&(out.v||out.replay);res.r=v?v.r:null;res.ch=v?v.ch:[];G.attempt=null;return true}
+function afterSettle(){const r=G.res.r;if(G.res.win&&G.node.kind==='boss'&&r&&r.power&&G.res.saved){G.state='absorb';G.st=0;G.rv=0;G.ban=null;return}showResult()}
 // a finished fight's tallies become lifetime stats (campaign and mode fights; never training or custom maps)
-function tallyEnd(win){if(G.train||G.node.kind==='custom')return;const t=G.tally||{},S=SV.stats,add=(k,n)=>{if(n>0)S[k]=Math.min(1e9,(S[k]||0)+n)};
- for(const k of['punishes','issen','blocks','chains','powerHits','rollsThrough','knockdowns','evades','parries'])add(k,t[k]||0);
- if(!win)return add('losses',1);add('wins',1);if(!t.hurt)add('perfect',1);if(G.node.kind!=='step'||G.need>1)add('bigWins',1);if(G.hell)add('hellWins',1);if(G.white)add('whiteWins',1)}
+// typed events: each stat counts only what its challenges name — parries only in White, champions only for elites, shadows,
+// trials and mode champions; a flawless win means no damage taken over the whole attempt (counted before any healing)
+const isChampion=()=>{const n=G.node;return n.kind==='boss'||n.kind==='trial'||n.kind==='step'&&!!LAD.regions[G.lv].steps[n.i].elite||n.kind==='mission'&&!!MODES[n.loc].missions[n.i].boss};
+function tallyEnd(s,win){if(G.train||G.node.kind==='custom')return;const t=G.tally||{},S=s.stats,add=(k,n)=>{if(n>0)S[k]=Math.min(1e9,(S[k]||0)+n)};
+ for(const k of['punishes','issen','blocks','chains','powerHits','rollsThrough','knockdowns','evades'])add(k,t[k]||0);if(G.white)add('parries',t.parries||0);
+ if(!win)return add('losses',1);add('wins',1);if(!(t.hurt>0))add('perfect',1);if(isChampion())add('bigWins',1);if(G.hell)add('hellWins',1);if(G.white)add('whiteWins',1)}
 /* --- challenges (1.7): three daily challenges (chosen per local date, progress counted from that day's stats) and
    achievements; each pays once, the moment it is met (claims daily:<day>:<id> and ach:<id>) --- */
 let TODAY=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const dailyOk=(s,d)=>!d.need||(d.need==='power'?Object.keys(s.powers).length>0:!!(s.modes&&s.modes[d.need]));
-function rollDaily(s){const day=TODAY();if(s.daily.day===day&&s.daily.ids.length)return;const r=rng(parseInt(fnv(day),36)),pool=CHAL.daily.pool.filter(d=>dailyOk(s,d)),ids=[];
+let DAILY_ON=true,GATES=true; // GATES: fights check their prerequisites on entry (tests that set up a fight directly switch it off) // tests switch dailies off unless they test them (the pool depends on the date)
+function rollDaily(s){if(!DAILY_ON){s.daily.ids=[];return}const day=TODAY();if(s.daily.ids.length&&day<=s.daily.day)return; /* the same day, or the clock went back */const r=rng(parseInt(fnv(day),36)),pool=CHAL.daily.pool.filter(d=>dailyOk(s,d)),ids=[];
  while(ids.length<Math.min(CHAL.daily.count,pool.length)){const d=pool[r()*pool.length|0];if(!ids.includes(d.id))ids.push(d.id)}
  s.daily={day,ids,base:Object.fromEntries(ids.map(id=>{const st=CHAL.daily.pool.find(d=>d.id===id).stat;return[st,s.stats[st]||0]}))};
  for(const k of Object.keys(s.rewardsClaimed))if(/^(cr:)?daily:/.test(k)&&!k.includes(':'+day+':'))delete s.rewardsClaimed[k]} // yesterday's claims are spent
@@ -2047,7 +2101,7 @@ function award(s){rollDaily(s);const got=[];if(discover(s))got.push({text:WORLD.
  return got}
 const gotText=g=>g.map(x=>{const p=[x.mon&&`+${x.mon} mon`,x.crystals&&`+${x.crystals} shadow crystals`].filter(Boolean).join(', ');return p?`${x.text} (${p})`:x.text}).join(' · ');
 // anything met outside a fight (a purchase, an upgrade, a drill, a level) is announced on the next visit to the menus
-function awardQuiet(){const g=award(SV);if(g.length){SV.story.pending.push({kind:'ach',text:gotText(g)});writeSave(SV)}}
+function awardQuiet(){commit(d=>{const g=award(d);if(!g.length)return false;d.story.pending.push({kind:'ach',text:gotText(g)})})}
 const CHS={tab:'daily',back:'home'};
 function openChal(back,tab){if(back)CHS.back=back;if(tab)CHS.tab=tab;awardQuiet();const s=SV,box=$('chBody');box.innerHTML='';
  $('chPurse').textContent=`Purse: ${fmtN(s.profile.mon)} mon · ${fmtN(s.profile.crystals)} shadow crystals`;
@@ -2065,9 +2119,13 @@ function openChal(back,tab){if(back)CHS.back=back;if(tab)CHS.tab=tab;awardQuiet(
  show('chal');$('chClose').focus()}
 const purse=()=>{$('rPurse').textContent=(G.res&&G.res.ch&&G.res.ch.length?gotText(G.res.ch)+' · ':'')+`Purse: ${fmtN(SV.profile.mon)} mon · ${fmtN(SV.profile.crystals)} shadow crystals · level ${SV.profile.level}`};
 // supplies (1.7): the chosen one comes into a rewarding fight if any is left, works through it, and one is used when it ends
-function takeSupply(rewarding){const id=SV.gear.equipped.item;G.item=rewarding&&id&&(SV.gear.items[id]||0)>0?id:null;G.tea=G.item==='healing_tea'&&!G.hell;
- if(G.item==='whetstone')G.P.mod=Object.assign({},G.P.mod,{dmg:G.P.mod.dmg*(1+GEAR.items.whetstone.effect.dmg)})}
-function useSupply(){if(!G.item)return;SV.gear.items[G.item]=Math.max(0,(SV.gear.items[G.item]||0)-1);if(!SV.gear.items[G.item])delete SV.gear.items[G.item];G.item=null;writeSave(SV)}
+// a rewarding fight begins as a saved attempt; the chosen supply is reserved: the whetstone and incense work from the bell and are
+// charged with the attempt, the tea only when it heals. Quitting or restarting never refunds what was used, nor charges twice.
+function beginFight(kind,ref){const id=SV.gear.equipped.item,want=id&&(SV.gear.items[id]||0)>0&&!(id==='healing_tea'&&G.hell)?id:null,a=beginAttempt(kind,ref,want);
+ if(!a)return false;G.attempt=a.id;G.epoch=SV.profile.epoch;G.item=a.supply||(want==='healing_tea'?want:null);G.tea=G.item==='healing_tea';
+ if(G.item==='whetstone')G.P.mod=Object.assign({},G.P.mod,{dmg:G.P.mod.dmg*(1+GEAR.items.whetstone.effect.dmg)});return true}
+function teaHeal(F){G.tea=false;const c=commit(d=>{if(!((d.gear.items.healing_tea||0)>0))return false;if(!--d.gear.items.healing_tea)delete d.gear.items.healing_tea});if(!c.ok)return;
+ F.hp=Math.min(F.maxHp,F.hp+GEAR.items.healing_tea.effect.heal*F.mod.heal);fxAdd({k:'ring',x:F.x,y:0});snd('gong',.3)}
 function absorbDone(){if(G.state!=='absorb')return;G.state='over';const id=G.res.r.power;SV.story.pending=SV.story.pending.filter(n=>!(n.kind==='power'&&n.id===id));writeSave(SV);showResult()}
 function showResult(){const{win,r}=G.res,lv=G.lv,last=lv===BOSSES.length-1,kind=G.node.kind;if(win&&kind==='boss'&&lv===0&&!SV.modes.sun&&!G.sunSeen){G.sunSeen=1;return startSun('result')}
  if(kind==='mission')return showMissionResult(win,r);if(kind==='custom')return showCustomResult(win);if(kind!=='boss')return showLadderResult(win,r);
@@ -2130,7 +2188,7 @@ function openWorkshop(back){if(back)WK.back=back;const list=maps(),box=$('wkBody
   btn('Play',()=>startCustom(m),errs.length);btn('Edit',()=>openEditor(JSON.parse(JSON.stringify(m))));btn('Duplicate',()=>{if(list.length>=MAXMAPS){WK.msg='The workshop is full.';return openWorkshop()}const c=cleanMap(Object.assign({},m,{id:'',name:(m.name+' copy').slice(0,24),published:false}));list.push(c);WK.sel=c.id;saveMaps(list);openWorkshop()});
   btn(m.published?'Unpublish':'Publish to the map',()=>{if(!m.published&&errs.length){WK.msg='Only a valid map can be published.';return openWorkshop()}m.published=!m.published;saveMaps(list);openWorkshop()});
   btn('Share as code',()=>{const c=$('wkCode');c.value='ISSENMAP1-'+btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(m))));c.classList.remove('off');c.readOnly=true;c.select()});
-  btn('Delete',()=>notice('墨','Delete this map?',`“${m.name}” will be gone for good.`,[['Delete it',()=>{MAPS=list.filter(x=>x.id!==m.id);saveMaps(MAPS);WK.sel=null;openWorkshop()},1],['Cancel',()=>openWorkshop()]]))}
+  btn('Delete',()=>notice('墨','Delete this map?',`“${m.name}” will be gone for good.`,[['Delete it',()=>{MAPS=list.filter(x=>x.id!==m.id);saveMaps(MAPS);WK.sel=null;openWorkshop()},1],['Cancel',()=>openWorkshop()]],()=>openWorkshop()))}
  else $('wkMore').textContent=list.length?'Choose a map to play, edit, duplicate, publish, share or delete it.':'No maps yet: make one, test it, then publish it to the world map.';
  btn('Load a code',()=>{const c=$('wkCode');c.readOnly=false;c.value='';c.classList.remove('off');c.focus();WK.msg='Paste a map code, then choose Load it.';$('wkMsg').textContent=WK.msg;WK.msg='';
   btn('Load it',()=>{let d=null;try{d=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(c.value.trim().replace(/^ISSENMAP1-/,'')),x=>x.charCodeAt(0))))}catch(e){}
@@ -2184,7 +2242,7 @@ function edBack(){MODE='menu';MAPS=null;openWorkshop()}
 // a custom map in play: its layout, its foes in waves (health and damage × difficulty), no rewards
 function startCustom(m,test){const L=compileMap(m);prep();noMission();G.lv=0;G.node={kind:'custom',test:!!test};G.train=null;G.trial=null;G.parry=false;G.map=m;G.L=L;ARENA=m.width;
  G.arena=m.theme;G.music=m.music;G.need=1;G.roundTime=m.time;const mk=id=>{const d=partnerDef(id);return Object.assign({},d,{hp:Math.round(d.hp*m.difficulty),mod:Object.assign({},NEUTRAL,{dmg:m.difficulty})})};
- G.waves=m.waves.length>1?m.waves.map(mk):null;G.wave=0;fighters(G.waves?G.waves[0]:mk(m.waves[0]));G.matchId='custom:'+Date.now();G.hint=0;go()}
+ G.waves=m.waves.length>1?m.waves.map(mk):null;G.wave=0;fighters(G.waves?G.waves[0]:mk(m.waves[0]));G.hint=0;go()}
 function showCustomResult(win){const m=G.map;$('rRewards').textContent='Custom maps pay no rewards: this was for play and practice.';purse();$('rKanji').textContent=win?'勝':'敗';$('rTitle').textContent=win?'Map cleared':'Defeat';
  $('rText').textContent=win?`${m.name}: every foe has fallen.`:`${m.name} holds. Try again, or change the map.`;const bt=$('rBtns');bt.innerHTML='';const mkb=(txt,fn,big)=>{const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=txt;e.onclick=fn;bt.appendChild(e)};
  mkb('Play again',()=>startCustom(m,G.node.test),1);if(G.node.test)mkb('Back to the editor',()=>openEditor(m));mkb('The workshop',()=>{MODE='menu';openWorkshop()});mkb('World map',toMenu);show('result');amb(.08,0,0);bt.firstChild.focus()}
@@ -2211,23 +2269,23 @@ function openSunChoice(){$('sunBtn').classList.add('off');if(MODE==='game')G.sta
   e.onclick=()=>open?(endSun(),openLoc(mode)):chooseMode(mode);box.appendChild(e)}
  const l=document.createElement('button');l.className='lnk';l.textContent='Not yet: the sun will wait on the world map';l.onclick=()=>sunDone();bt.appendChild(l);show('sunp');box.firstChild.focus()}
 function chooseMode(mode){const s=SV;s.modes.sun=1;s.modes[mode]=true;if(!s.rewardsClaimed['event:sun'])s.rewardsClaimed['event:sun']=Date.now();const g=award(s);writeSave(s);const L=MODES[mode];
- notice(L.jp,`${L.name} is open`,`${L.desc}${g.length?' '+gotText(g)+'.':''}`,[[`Enter ${mode==='hell'?'the Infernal Realm':'the Celestial Sanctuary'}`,()=>{endSun();openLoc(mode)},1],['Later',()=>sunDone()]])}
+ notice(L.jp,`${L.name} is open`,`${L.desc}${g.length?' '+gotText(g)+'.':''}`,[[`Enter ${mode==='hell'?'the Infernal Realm':'the Celestial Sanctuary'}`,()=>{endSun();openLoc(mode)},1],['Later',()=>sunDone()]],()=>sunDone())}
 const endSun=()=>{$('sunBtn').classList.add('off');if(MODE==='game')G.state='over'};
 function sunDone(){const a=G.sunAfter;endSun();if(a==='result'&&G.res)showResult();else toMenu()}
 // a locked mode explains how it opens, and takes you to the sun when it waits
 function modeLocked(mode){const L=MODES[mode],w=sunWaits(SV);notice(L.jp,`${L.name} is sealed`,w?'The mysterious sun waits above the Burning Field. Touch it and choose this path.':'Defeat Gekkō, the first shadow. A mysterious sun will rise over the field: touch it, and choose.',
- w?[['Go to the sun',()=>startSunScene(),1],['Back',toHome]]:[['Back',toHome,1]])}
+ w?[['Go to the sun',()=>startSunScene(),1],['Back',toHome]]:[['Back',toHome,1]],toHome)}
 /* --- missions (1.7): Ashen Village, Hell Mode and White Mode share one system. A location's missions open in order; each is a
    duel (rounds), a gauntlet (waves, health carried over) or a survival (outlast the clock). First clears pay once (claim
    <loc>:<i>), repeats pay a quarter of the XP, a loss changes nothing. --- */
 const locOpen=(s,loc)=>loc==='ashen'?!!s.world.secret:!!(s.modes&&s.modes[loc]);
-function locNodes(s,loc){let prev=true;return MODES[loc].missions.map((m,i)=>{const cleared=!!s.rewardsClaimed[`${loc}:${i}`],open=locOpen(s,loc)&&(prev||cleared);prev=cleared;return{m,i,cleared,open}})}
-function grantMission(s,loc,i,winId){const g=s.progress,p=s.profile;if(winId&&g.lastWin&&g.lastWin.id===winId)return g.lastWin.result;
- const M=MODES[loc].missions[i],claim=`${loc}:${i}`,first=!s.rewardsClaimed[claim],L0=p.level,sp0=p.skillPts;
- const r={kind:'mission',loc,i,first,xp:first?M.xp:Math.round(M.xp*PROG.xp.repeat_share),mon:first?M.mon||0:0,materials:first?M.materials||0:0,sp:0,power:null,slot:-1};
+function locNodes(s,loc){let prev=true;return MODES[loc].missions.map((m,i)=>{const cleared=!!s.rewardsClaimed['m:'+m.id],open=locOpen(s,loc)&&(prev||cleared);prev=cleared;return{m,i,cleared,open}})}
+function grantMission(s,loc,i,winId){const rc=replayed(s,winId);if(rc)return rc;const g=s.progress,p=s.profile;
+ const M=MODES[loc].missions[i],claim='m:'+M.id,first=!s.rewardsClaimed[claim];
+ const r={kind:'mission',loc,i,first,xp:first?M.xp:Math.round(M.xp*PROG.xp.repeat_share),mon:first?M.mon||0:repMon(M.mon),materials:first?M.materials||0:M.boss?REP.hard_materials:0,sp:0,power:null,slot:-1};
  if(first){s.rewardsClaimed[claim]=Date.now();const got=[].concat(M.item||[]).filter(id=>!s.gear.owned.includes(id));for(const id of got){s.gear.owned.push(id);if(GEAR.weapons[id])s.gear.tiers[id]=1}if(got.length){r.item=got[0];r.itemName=got.map(id=>itemOf(id).name).join(', ')}}
- r.crystals=payCr(s,claim,crOf(claim));p.xp=Math.min(1e9,p.xp+r.xp);p.mon+=r.mon;p.materials+=r.materials;p.level=levelOf(p.xp).level;points(s);r.sp=p.skillPts-sp0;r.levelFrom=L0;r.levelTo=p.level;
- if(winId)g.lastWin={id:winId,result:r};return r}
+ r.crystals=payCr(s,claim,crOf(claim));pay(s,r);
+ if(winId!=null)receipt(s.att,winId,r);return r}
 let REGL=null; // the location a region-style panel shows (null: a ladder region)
 function openLoc(loc){const L=MODES[loc];MODE='menu';REGL=loc;if(!locOpen(SV,loc))return toMenu();if(SV.world.loc!==loc){SV.world.loc=loc;writeSave(SV)}
  if(!SV.story.seen.includes(loc)){SV.story.seen.push(loc);writeSave(SV);return notice(L.jp,L.name,L.story.join(' '),[['Continue',()=>openLoc(loc),1]])}
@@ -2237,13 +2295,13 @@ function openLoc(loc){const L=MODES[loc];MODE='menu';REGL=loc;if(!locOpen(SV,loc
   el.innerHTML=`<span class="n">${lab}</span><span class="kj">${M.jp||L.jp}</span><span class="nm">${M.name}</span><span class="ti">${M.desc}</span><span class="stt">${n.cleared?'Cleared · again':n.open?'Fight':'Locked'}</span>${n.cleared?'<span class="seal">討</span>':''}`;
   el.onclick=()=>startMission(loc,n.i);box.appendChild(el)}
  show('region');amb(.1,0,0);box.firstChild&&box.firstChild.focus()}
-function startMission(loc,i,seed){const L=MODES[loc],M=L.missions[i],sk=`${loc}:${i}`;
- if(M.story&&!SV.story.seen.includes(sk)){SV.story.seen.push(sk);writeSave(SV);return notice(M.jp||L.jp,M.name,M.story,[['Begin',()=>startMission(loc,i,seed),1],['Not yet',()=>openLoc(loc)]])}
+function startMission(loc,i,seed){const L=MODES[loc],M=L.missions[i],sk='m:'+M.id;if(GATES&&!locNodes(SV,loc)[i].open)return openLoc(loc); /* prerequisites are checked again on entry */
+ if(M.story&&!SV.story.seen.includes(sk)){SV.story.seen.push(sk);writeSave(SV);return notice(M.jp||L.jp,M.name,M.story,[['Begin',()=>startMission(loc,i,seed),1],['Not yet',()=>openLoc(loc)]],()=>openLoc(loc))}
  prep(seed);noMission();G.lv=0;G.node={kind:'mission',loc,i};G.train=null;G.trial=null;G.parry=!!L.parry;G.hell=loc==='hell';G.white=loc==='white';
  G.arena=M.arena??L.arena;G.need=M.rounds||1;G.roundTime=M.time||60;G.survive=M.kind==='survive';
  const mk=id=>{const d=FOES[id]||BOSSES.find(b=>b.id===id);return Object.assign({},d,{hp:Math.round(d.hp*(M.hp||1))})};
  if(M.layout){G.L=compileMap(cleanMap(Object.assign({width:900,waves:['dummy']},M.layout)));ARENA=G.L.width}
- G.waves=M.waves?M.waves.map(mk):null;G.wave=0;fighters(G.waves?G.waves[0]:mk(M.foe));takeSupply(true);if(G.hell)G.P.mod=Object.assign({},G.P.mod,{heal:G.P.mod.heal*.5});G.matchId=`${loc}:${i}:`+Date.now();G.hint=0;go();
+ G.waves=M.waves?M.waves.map(mk):null;G.wave=0;fighters(G.waves?G.waves[0]:mk(M.foe));if(!beginFight('mission',M.id))return storageError(()=>startMission(loc,i,seed),()=>openLoc(loc));if(G.hell)G.P.mod=Object.assign({},G.P.mod,{heal:G.P.mod.heal*.5});G.hint=0;go();
  if(G.waves)G.ban={k:WAVEK[0],sub:`${M.name} · wave 1 of ${G.waves.length}: ${G.def.name}`,t0:G.rt,dur:2.3,size:230}}
 function showMissionResult(win,r){const{loc,i}=G.node,L=MODES[loc],M=L.missions[i],next=locNodes(SV,loc).find(n=>n.open&&!n.cleared);
  $('rRewards').textContent=r?rewardText([r]):'No rewards for a defeat — and nothing is lost.';purse();$('rKanji').textContent=win?'勝':'敗';$('rTitle').textContent=win?(M.final&&L.final||'Victory'):'Defeat';
@@ -2252,7 +2310,7 @@ function showMissionResult(win,r){const{loc,i}=G.node,L=MODES[loc],M=L.missions[
  if(!win)mkb('Retry',()=>startMission(loc,i),1);else if(next)mkb(`Next · ${next.m.name}`,()=>startMission(loc,next.i),1);
  mkb('Character & loadout',()=>openChar(null,'result'));mkb('Back to '+L.name,()=>openLoc(loc));mkb('World map',toMenu);show('result');amb(.08,0,0);bt.firstChild.focus()}
 // the hidden road: found once two shadows are down and every duel of the Burning Field is won
-function discover(s){const S=WORLD.secret,R=LAD.regions.find(R=>R.id===S.region);if(s.world.secret||s.progress.beaten<S.beaten||!R.steps.every((st,i)=>s.rewardsClaimed[`step:${R.id}:${i}`]))return false;s.world.secret=1;return true}
+function discover(s){const S=WORLD.secret,R=LAD.regions.find(R=>R.id===S.region);if(s.world.secret||s.progress.beaten<S.beaten||!R.steps.every(st=>s.rewardsClaimed['m:'+st.id]))return false;s.world.secret=1;return true}
 /* --- the world map (1.7): an ink map one and a half screens wide that pans (drag, wheel, the arrows, or moving the focus);
    a marker for every place, locked or open, with difficulty, completion, boss and mission counts; roads open with the
    journey; a hidden road; the hero stands where you last went. Choosing a marker previews its rewards. --- */
@@ -2265,7 +2323,7 @@ function placeInfo(s,p){if(p.kind==='sun')return{name:'The mysterious sun',jp:'�
  if(p.kind==='dojo'){const d=TRAIN.drills.filter(x=>s.rewardsClaimed['drill:'+x.id]).length;return{name:p.name,jp:p.jp,open:true,pct:null,diff:0,desc:p.desc,rew:`Drills done: ${d} of ${TRAIN.drills.length} (each pays ${TRAIN.reward_mon} mon the first time).`,act:()=>startTraining(),go:'Train'}}
  if(p.kind==='workshop')return{name:p.name,jp:p.jp,open:true,pct:null,diff:0,desc:p.desc,rew:'Custom maps pay no XP or currency: they are for play and practice.',act:()=>openWorkshop('menu'),go:'Open the workshop'};
  if(p.kind==='region'){const lv=p.lv,b=BOSSES[lv],ar=ARENAS[b.arena],R=LAD.regions[lv],ns=ladderNodes(s,lv),d=ns.filter(n=>n.cleared).length,rw=PROG.rewards[b.id],T=LAD.trials[b.id];
-  const left=[...R.steps.filter((st,i)=>!s.rewardsClaimed[`step:${R.id}:${i}`]).map(st=>({xp:st.xp,mon:st.mon,crystals:st.elite?ECON.crystals.elite:0,item:st.item&&itemOf(st.item).name})),
+  const left=[...R.steps.filter(st=>!s.rewardsClaimed['m:'+st.id]).map(st=>({xp:st.xp,mon:st.mon,crystals:st.elite?ECON.crystals.elite:0,item:st.item&&itemOf(st.item).name})),
    ...(s.progress.beaten>lv?[]:[{xp:rw.xp,mon:rw.mon,crystals:ECON.crystals.boss[b.id],item:POWERS[rw.power].name}]),...(s.progress.trialsDone.includes(b.id)?[]:[{xp:T.xp,mon:T.mon,crystals:ECON.crystals.trial,item:T.item_name}])];
   return{name:ar.name.replace(/^the /,''),jp:ar.jp,sub:b.name,open:s.progress.regionsUnlocked>lv,done:d===ns.length,pct:Math.round(d/ns.length*100),diff:lv+1,desc:`${R.story[0]} ${b.name}, ${b.title}, waits at the end of the road.`,
    rew:remaining(left),act:()=>openRegion(lv),go:'Enter',lock:lv?`Defeat ${BOSSES[lv-1].name} to open this road.`:''}}
@@ -2343,8 +2401,12 @@ const HOME_X=[]; // entries the later sections add: [label, action, options]
 function continueGame(){if(SV.world.loc&&locOpen(SV,SV.world.loc))return openLoc(SV.world.loc);const at=SV.world.at;if(at>=0&&SV.progress.regionsUnlocked>at)openRegion(at);else if(!Object.keys(SV.rewardsClaimed).length)openRegion(0);else toMenu()}
 const BKEY=SKEY+'.before-new-game';
 function newGameAsk(){const p=SV.profile;notice('止','Start a new game?',`Your journey so far (level ${p.level}, ${SV.progress.beaten} of 5 shadows, ${fmtN(p.mon)} mon, ${fmtN(p.crystals)} shadow crystals) will be replaced. A copy is kept: Character › Save code › Restore can bring it back. Settings and custom maps stay.`,
- [['Start a new game',newGame,1],['Cancel',toHome]])}
-function newGame(){store.set(BKEY,seal(SV));const rev=SV.rev,set=SV.settings;SV=newSave();SV.rev=rev;SV.settings=set;writeSave(SV);openRegion(0)}
+ [['Start a new game',newGame,1],['Cancel',toHome]],toHome)}
+// New Game (v2 brief §3): only after the old journey is copied (and the copy reads back); then everything of the profile resets at
+// once (level, currencies, gear, all three campaigns, challenges, achievements) under a new epoch; settings and maps stay
+function newGame(){if(!store.set(BKEY,seal(SV))||!unseal(store.get(BKEY)||''))return storageError(newGame,toHome);replaceProfile(Object.assign(newSave(),{settings:SV.settings}),()=>openRegion(0),toHome)}
+function replaceProfile(d,then,back){const old=SV;d.rev=Math.max(d.rev||0,old.rev);d.profile.epoch=newEpoch();d.att={seq:0,open:null,done:[],floor:0,receipts:{}};SV=d;
+ if(!writeSave(SV)){SV=old;return storageError(()=>replaceProfile(d,then,back),back)}G.attempt=null;then()}
 // Quit: the Android app closes itself (IssenNative, MainActivity); an installed window may close; a browser tab cannot, so it says so
 function quitGame(){writeSave(SV);if(window.IssenNative&&IssenNative.exit){IssenNative.exit();return}try{window.close()}catch(e){}
  setTimeout(()=>{if(!window.closed&&MODE==='menu')notice('止','Your progress is saved','This page cannot close itself in a browser: close the tab or window to leave, or keep playing.',[['Back to the main menu',toHome,1]])},250)}
@@ -2353,9 +2415,13 @@ function nextNotice(){const n=SV.story.pending[0];if(!n||MODE!=='menu')return;
  const done=()=>{SV.story.pending.shift();writeSave(SV);backToView();nextNotice()};
  if(n.kind==='power'){const p=POWERS[n.id];notice(p.jp,'Absorbed: '+p.name,p.desc+(p.ready?'':' It awakens in a later update.'),[['Continue',done,1]])}
  else if(n.kind==='ach')notice('勝','Challenge complete',n.text,[['Continue',done,1]]);
- else notice('墨',n.kind==='corrupt'?'Your save was damaged':'Welcome back',n.text,[['Continue',done,1]].concat(n.kind==='corrupt'?[['Import a save code',()=>{done();openChar('import')}]]:[]))}
-function notice(k,title,text,btns){$('nKanji').textContent=k;$('nTitle').textContent=title;$('nText').textContent=text;const b=$('nBtns');b.innerHTML='';
- for(const[t,fn,big]of btns){const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=t;e.onclick=fn;b.appendChild(e)}show('notice');b.firstChild.focus()}
+ else notice('墨',n.kind==='corrupt'?'Your save was damaged':'Welcome back',n.text,[['Continue',done,1]].concat(n.kind==='corrupt'?[['Import a save code',()=>{done();openChar('import')}]]:[]),done)}
+// cancel: what Back / Esc / gamepad B do. A single-button notice is an acknowledgement, so its button is the cancel; a notice
+// with a choice must name its cancel (or Back does nothing). Back never presses the first (primary) button.
+const NOTICE={cancel:null};
+function notice(k,title,text,btns,cancel){NOTICE.cancel=cancel||(btns.length===1?btns[0][1]:null);$('nKanji').textContent=k;$('nTitle').textContent=title;$('nText').textContent=text;const b=$('nBtns');b.innerHTML='';
+ let used=false;const once=fn=>()=>{if(used)return;used=true;fn()};NOTICE.cancel=NOTICE.cancel&&once(NOTICE.cancel);
+ for(const[t,fn,big]of btns){const e=document.createElement('button');e.className=big?'big':'lnk';e.textContent=t;e.onclick=once(fn);b.appendChild(e)}show('notice');b.firstChild.focus()}
 /* --- character screen: attributes, powers and tiers, loadout, save code. Reachable from the map and the result panel only:
    a fight's hero is built from the save when the fight starts, so nothing here can change a fight in progress. --- */
 const CH={tab:'attrs',back:'menu',slot:null,pw:null},ROM=['I','II','III','IV','V'],ATTR={assault:['斬','Assault'],survival:['守','Survival'],shadowcraft:['墨','Shadowcraft']};
@@ -2379,7 +2445,7 @@ function openChar(mode,back){if(back)CH.back=back;if(mode)CH.tab='save';const p=
  const box=$('cBody'),more=$('cMore'),acts=$('cCodeBtns'),code=$('cCode');box.innerHTML='';box.className='levels';more.textContent='';acts.innerHTML='';$('cMsg').textContent='';code.classList.toggle('off',!mode);
  const card=(cls,html,fn)=>{const e=document.createElement(fn?'button':'div');e.className='card '+cls+(fn?'':' static');e.innerHTML=html;if(fn)e.onclick=fn;box.appendChild(e);return e};
  const btn=(el,t,fn,dis)=>{const e=document.createElement('button');e.className='lnk';e.textContent=t;e.disabled=!!dis;e.onclick=fn;el.appendChild(e);return e};
- const edit=fn=>()=>{if(MODE==='game'&&G.state!=='over')return;if(fn()!==false)writeSave(SV);openChar()};
+ const edit=fn=>()=>{if(MODE==='game'&&G.state!=='over')return;const c=commit(()=>fn());if(c.why==='storage')return storageError(null,()=>openChar());openChar()};
  if(CH.tab==='attrs'){const cap=PROG.attributes.rank_cap,d=derive(SV);
   for(const k in ATTR){const r=p.attrs[k],c=card('acard',`<span class="n">Rank ${r} / ${cap}</span><span class="kj">${ATTR[k][0]}</span><span class="nm">${ATTR[k][1]}</span><span class="ti">${attrLines(k,r).join('<br>')}</span>`);
    btn(c,r>=cap?'Rank cap reached':'+ 1 point',edit(()=>spendAttr(SV,k)),r>=cap||p.attrPts<1)}
@@ -2427,11 +2493,11 @@ function openChar(mode,back){if(back)CH.back=back;if(mode)CH.tab='save';const p=
   btn(acts,'Export save code',()=>openChar('export'));btn(acts,'Import save code',()=>openChar('import'));
   {const bk=unseal(store.get(BKEY)||'');if(bk)btn(acts,'Restore the game from before New Game',()=>{const d=cleanSave(bk);
    notice('墨','Restore the previous game?',`Replace this journey (level ${p.level}, ${SV.progress.beaten} of 5 shadows) with the one from before New Game (level ${d.profile.level}, ${d.progress.beaten} of 5 shadows)? This one becomes the kept copy in turn.`,
-    [['Restore it',()=>{store.set(BKEY,seal(SV));d.rev=Math.max(d.rev,SV.rev);d.settings=SV.settings;SV=d;writeSave(SV);openChar()},1],['Cancel',()=>openChar()]])})}
+    [['Restore it',()=>{if(!store.set(BKEY,seal(SV)))return storageError(null,()=>openChar());d.settings=SV.settings;replaceProfile(d,()=>openChar(),()=>openChar())},1],['Cancel',()=>openChar()]],()=>openChar())})}
   if(mode==='export')btn(acts,'Copy',()=>{code.select();try{navigator.clipboard.writeText(code.value).then(()=>$('cMsg').textContent='Copied.',()=>{})}catch(e){}});
   if(mode==='import')btn(acts,'Load this code',()=>{const d=importCode(code.value);if(!d){$('cMsg').textContent='That code could not be read. Check that it was copied in full.';return}
    notice('墨','Load this save?',`Replace your progress (level ${p.level}, ${SV.progress.beaten} of 5 shadows) with the save code (level ${d.profile.level}, ${d.progress.beaten} of 5 shadows)?`,
-    [['Load it',()=>{d.rev=Math.max(d.rev,SV.rev);SV=d;writeSave(SV);openChar()},1],['Cancel',()=>openChar('import')]])})}
+    [['Load it',()=>{if(!store.set(BKEY,seal(SV)))return storageError(null,()=>openChar());d.settings=SV.settings;replaceProfile(d,()=>openChar(),()=>openChar())},1],['Cancel',()=>openChar('import')]],()=>openChar('import'))})}
  show('char');if(mode)code.focus()}
 /* --- the shop (1.7): mon buys weapons, armour, charms, supplies and upgrade material; shadow crystals buy finishes, trails,
    auras, robe dyes and one weapon variant. A purchase checks everything first, then takes the price and gives the item
@@ -2448,10 +2514,10 @@ const srcText=id=>{const x=stockOf(id),it=itemOf(id);return x?'In the shop'+(x.g
 function buyBlock(s,id,qty=1){const x=stockOf(id);if(!x)return'not for sale';if(!(Number.isInteger(qty)&&qty>=1&&qty<=9))return'a quantity of 1 to 9';if(!gateOpen(s,x.gate))return'sold '+gateText(x.gate);
  const k=kindOf(id),[cur,p]=priceOf(x);if(k==='item'){if((s.gear.items[id]||0)+qty>GEAR.items[id].max)return`you can carry ${GEAR.items[id].max}`}else if(k!=='material'&&s.gear.owned.includes(id))return'owned';
  const have=s.profile[cur],need=p*qty;return have<need?`needs ${fmtN(need-have)} more ${CUR[cur]}`:''}
-function buy(s,id,qty=1){const why=buyBlock(s,id,qty);if(why)return{ok:false,why};const[cur,p]=priceOf(stockOf(id)),k=kindOf(id),undo=JSON.stringify({p:s.profile,g:s.gear,st:s.stats});
- s.profile[cur]-=p*qty;if(k==='item')s.gear.items[id]=(s.gear.items[id]||0)+qty;else if(k==='material')s.profile.materials+=qty;else{s.gear.owned.push(id);if(k==='weapon')s.gear.tiers[id]=1}
- s.stats.purchases=(s.stats.purchases||0)+1;
- if(s===SV&&!writeSave(s)){const u=JSON.parse(undo);s.profile=u.p;s.gear=u.g;s.stats=u.st;return{ok:false,why:'your save could not be written, so nothing was bought or paid'}}
+// a purchase: price from the stock data, every check made again inside the commit, the price and the item together, saved or undone
+function buy(s,id,qty=1){const why=buyBlock(s,id,qty);if(why)return{ok:false,why};const[cur,p]=priceOf(stockOf(id)),k=kindOf(id);
+ const apply=d=>{if(buyBlock(d,id,qty))return false;d.profile[cur]-=p*qty;if(k==='item')d.gear.items[id]=(d.gear.items[id]||0)+qty;else if(k==='material')d.profile.materials+=qty;else{d.gear.owned.push(id);if(k==='weapon')d.gear.tiers[id]=1}d.stats.purchases=(d.stats.purchases||0)+1};
+ if(s!==SV){apply(s);return{ok:true}}const c=commit(apply);if(!c.ok)return{ok:false,why:c.why==='storage'?'your save could not be written, so nothing was bought or paid':'it is no longer possible'}
  return{ok:true}}
 const equipAny=(s,id)=>{const k=kindOf(id);return k==='cosmetic'?wear(s,GEAR.cosmetics[id].kind,id):equip(s,k==='item'?'item':k,id)};
 const isOn=(s,id)=>{const k=kindOf(id),e=s.gear.equipped;return k==='cosmetic'?s.gear.cos[GEAR.cosmetics[id].kind]===id:k==='material'?true:e[k==='item'?'item':k]===id};
@@ -2471,7 +2537,7 @@ function openShop(back,tab){if(back)SH.back=back;if(tab&&tab!==SH.tab){SH.tab=ta
   $('shMore').textContent=`${it.name}: ${it.desc||statText(it.stats)}${it.traits?' ('+traitText(it.traits)+')':''}${cmp}`;
   const b=document.createElement('button');b.className='lnk';b.disabled=!!why;b.textContent=why==='owned'?'Owned':why?`Cannot buy: ${why}`:`Buy for ${fmtN(pr)} ${CUR[cur]}`;
   b.onclick=()=>notice('五','Confirm the purchase',`Buy ${it.name} for ${fmtN(pr)} ${CUR[cur]}? Your purse goes from ${fmtN(SV.profile[cur])} to ${fmtN(SV.profile[cur]-pr)} ${CUR[cur]}.`,
-   [['Buy it',()=>{const r=buy(SV,id);const g=r.ok?award(SV):[];if(g.length)writeSave(SV);SH.msg=r.ok?`Bought: ${it.name}.${g.length?' '+gotText(g)+'.':''}`:`Not bought — ${r.why}.`;openShop()},1],['Cancel',()=>openShop()]]);acts.appendChild(b);
+   [['Buy it',()=>{const r=buy(SV,id);const g=r.ok?award(SV):[];if(g.length)writeSave(SV);SH.msg=r.ok?`Bought: ${it.name}.${g.length?' '+gotText(g)+'.':''}`:`Not bought — ${r.why}.`;openShop()},1],['Cancel',()=>openShop()]],()=>openShop());acts.appendChild(b);
   if(k!=='material'&&(k==='item'?(SV.gear.items[id]||0)>0:SV.gear.owned.includes(id))&&!isOn(SV,id)){const q=document.createElement('button');q.className='lnk';q.textContent=k==='item'?'Carry it into fights':'Equip it';
    q.onclick=()=>{equipAny(SV,id);writeSave(SV);SH.msg=`${it.name}: ${k==='item'?'carried':'equipped'}.`;openShop()};acts.appendChild(q)}}
  else $('shMore').textContent=SH.tab==='cosmetics'?'Shadow crystals come from first victories over shadows, elites and trials, from achievements and the hardest challenges. Nothing here changes a fight, except the Moonlit Katana (a sidegrade).':'Choose an item to see it compared with what you carry. Prices are taken only when a purchase goes through.';
@@ -2496,7 +2562,7 @@ function openSettings(back,tab){if(back)setBack=back;if(tab)setTab=tab;const st=
    const w=document.createElement('span');w.textContent=codes+' ';w.appendChild(b);add(a,w)}
  if(setTab==='keys'){const r=document.createElement('button');r.className='lnk';r.textContent='Reset keys';r.onclick=()=>{st.keys={};save();openSettings()};add('',r)}
  show('settings')}
-function togglePause(){if(MODE!=='game'||G.state==='over'||G.state==='chosen')return;if(G.state==='sun'){if(G.st>2.4)openSunChoice();return}if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;G.keys={};if(G.paused&&G.train)openTrain();else show(G.paused?'pause':null)}
+function togglePause(){if(MODE!=='game'||G.state==='over'||G.state==='chosen')return;if(G.state==='sun'){if(G.st>2.4)openSunChoice();return}if(G.state==='absorb'){if(G.st>.8)absorbDone();return}G.paused=!G.paused;clearInput();if(G.paused&&G.train)openTrain();else show(G.paused?'pause':null)}
 const KMAP0={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',KeyJ:'slash',KeyZ:'slash',KeyK:'kick',KeyX:'kick',KeyL:'ink',KeyC:'ink',KeyI:'issen',KeyV:'issen',KeyU:'power1',KeyO:'power2',KeyH:'block',ShiftLeft:'block',ShiftRight:'block',Space:'roll',Escape:'pause',KeyP:'pause'};
 let KMAP=KMAP0; // the default keys plus the player's own bindings (settings.keys)
 function gameKey(e,down){if(down&&KEYCAP){KEYCAP(e);return}if(e.target&&/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName||''))return;if(down&&e.code==='Escape'&&MODE!=='game'){window.issenApp.back();return}if(down)usePad(false);if(e.code==='KeyF'&&down){document.getElementById('fs').click();return}if(e.code==='KeyM'&&down){document.getElementById('snd').click();return}
@@ -2505,7 +2571,7 @@ function gameKey(e,down){if(down&&KEYCAP){KEYCAP(e);return}if(e.target&&/^(INPUT
  const a=KMAP[e.code];if(!a||MODE!=='game')return;e.preventDefault();if(a==='pause'){if(down&&!e.repeat)togglePause();return}if(G.paused)return;
  if(a==='slash'||a==='kick'||a==='ink'||a==='issen'||a==='power1'||a==='power2'||a==='roll'){if(down&&!e.repeat)G.buf={a,t:G.t};return}
  if(a==='up'&&down&&!e.repeat)G.jb=G.t;G.keys[a]=down}
-addEventListener('blur',()=>{G.keys={}});
+addEventListener('blur',()=>clearInput());const STICK={};
 /* --- gamepad (Gamepad API, standard mapping), polled once per frame; hot-plug works because getGamepads() is re-read each frame.
    It writes G.keys only when its own state changes, so the keyboard and touch keep working beside it. --- */
 const PADB={0:'jump',1:'roll',2:'slash',3:'kick',4:'block',5:'ink',6:'power1',7:'issen',11:'power2',9:'pause',8:'pause'},PAD={on:false,prev:{},held:{},nav:0};
@@ -2572,6 +2638,7 @@ addEventListener('pointerdown',e=>{if(e.pointerType==='touch'){usePad(false);if(
  const move=e=>{const R=stk.offsetWidth*.36;let dx=e.clientX-sx,dy=e.clientY-sy;const d=Math.hypot(dx,dy);if(d>R){dx*=R/d;dy*=R/d}knob.style.transform=`translate(${dx}px,${dy}px)`;
   const nx=dx/R,ny=dy/R,k=G.keys,q=1/SV.settings.sens;k.left=nx<-.35*q;k.right=nx>.35*q;k.down=ny>Math.min(.85,.5*q);const u=ny<-Math.min(.9,.55*q);if(u&&!up)G.jb=G.t;up=u};
  const end=e=>{if(e.pointerId!==id)return;id=null;up=false;stk.classList.remove('on');stk.style.left=stk.style.top='';knob.style.transform='';G.keys.left=G.keys.right=G.keys.down=false};
+ STICK.reset=()=>end({pointerId:id}); // a pause or focus loss releases the stick (the finger's pointer is no longer owned)
  zone.addEventListener('pointerdown',e=>{e.preventDefault();id=e.pointerId;capture(zone,id);const r=zone.getBoundingClientRect();sx=e.clientX;sy=e.clientY;stk.style.left=(sx-r.left)+'px';stk.style.top=(sy-r.top)+'px';stk.classList.add('on');move(e)});
  zone.addEventListener('pointermove',e=>{if(e.pointerId===id)move(e)});zone.addEventListener('pointerup',end);zone.addEventListener('pointercancel',end);
  for(const b of document.querySelectorAll('.tb')){const a=b.dataset.a,rel=()=>{b.classList.remove('down');if(a==='block')G.keys.block=false};
@@ -2585,13 +2652,16 @@ function goFull(){const el=document.documentElement,o=window.screen.orientation;
 stage.addEventListener('pointerdown',poke);
 stage.addEventListener('pointerdown',e=>{if(MODE!=='edit'||e.target.closest('.dock,.etop'))return;const r=stage.getBoundingClientRect(),lx=(e.clientX-r.left)/r.width*W,ly=(e.clientY-r.top)/r.height*H;edCam();edPlace(CAM.x+(lx-W/2)/CAM.z,CAM.y+(ly-H/2)/CAM.z)}); // the editor: place where tappedstage.addEventListener('pointerdown',()=>{if(MODE==='game'&&G.state==='absorb'&&G.st>.8)absorbDone()});
 // leaving the tab/app pauses the fight and silences audio; the Android shell calls these too (Back = pause toggle)
-function bgPause(){if(MODE==='game'&&!G.paused&&G.state!=='over')togglePause();else if(MODE==='film'&&st.playing)pause();try{AU.ctx&&AU.ctx.suspend()}catch(e){}}
+// the app going to the background (or losing focus): a fight pauses (Continue resumes it); a ceremony, the sun or any menu just
+// waits where it is; held keys, sticks and buffered presses are dropped. Coming back only resumes audio.
+function bgPause(){clearInput();if(MODE==='game'){if(!G.paused&&['intro','fight','ko'].includes(G.state)){G.paused=true;if(G.train)openTrain();else show('pause')}}else if(MODE==='film'&&st.playing)pause();try{AU.ctx&&AU.ctx.suspend()}catch(e){}}
+function clearInput(){G.keys={};G.buf=null;G.jb=-9;for(const k in PAD.held)PAD.held[k]=false;if(STICK.reset)STICK.reset()}
 function bgResume(){try{AU.ctx&&AU.ctx.resume()}catch(e){}}
 document.addEventListener('visibilitychange',()=>document.hidden?bgPause():bgResume());
 // Android Back (and Esc outside a fight): closes the open screen, pauses or leaves a fight; returns 0 only on the map or the film (the app may exit)
 window.issenApp={pause:bgPause,resume:bgResume,back(){const open=PANELS.find(p=>!$(p).classList.contains('off'));if(open==='menu'){toHome();return 1}
  if(open==='settings'){$('sClose').click();return 1}if(open==='shop'){$('shClose').click();return 1}if(open==='sunp'){sunDone();return 1}if(open==='workshop'){$('wkClose').click();return 1}if(open==='editor'){edBack();return 1}if(open==='chal'){$('chClose').click();return 1}if(open==='char'){$('cClose').click();return 1}if(open==='help'){show(helpBack);return 1}
- if(open==='region'){toMenu();return 1}if(open==='notice'){const b=$('nBtns').firstChild;if(b)b.click();return 1}
+ if(open==='region'){toMenu();return 1}if(open==='notice'){if(NOTICE.cancel)NOTICE.cancel();return 1}
  if(MODE==='game'){if(G.state==='over')toMenu();else togglePause();return 1}return 0}};$('pp').onclick=()=>st.playing?pause():play();$('rp').onclick=replay;
 $('snd').onclick=()=>{AU.on=!AU.on;vols();$('sndi').style.opacity=AU.on?1:.35};
 $('fs').onclick=()=>document.fullscreenElement?document.exitFullscreen():goFull();
@@ -2603,7 +2673,7 @@ addEventListener('keydown',e=>{if(MODE!=='film')return gameKey(e,true);if(e.code
 const DEBUG=window.ISSEN_DEBUG===true||/[?&]debug\b/.test(location.search),SEED_Q=DEBUG&&/[?&]seed=\d+/.test(location.search)?+location.search.match(/[?&]seed=(\d+)/)[1]:null;
 if(DEBUG){window.film={seek,render,play,pause,get t(){return st.t},DUR,au:AU,tick:audioTick};
  // drawing internals for the debug Pose Lab, which index.html loads from tools/ (not shipped in the APK)
- window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,startSun,startSunScene,openSunChoice,chooseMode,sunWaits,sunDone,modeLocked,cleanMap,validateMap,compileMap,maps,saveMaps,loadMaps,storeMap,openWorkshop,openEditor,edPlace,edDock,ED,WK,startCustom,blankMap,renderEditor,get ARENA(){return ARENA},onTop,landY,hzState,startMission,openLoc,locNodes,locOpen,grantMission,MODES,WORLD,WM,buildMenu,selPlace,placeInfo,placesFor,mapDone,renderWorld,discover,nextWave,award,rollDaily,dailyOf,dailyProg,achProg,CHAL,openChal,tallyEnd,setToday:f=>{TODAY=f},startTraining,trainSetup,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,useSupply,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
+ window.game={lab:{get CAM(){return CAM},P,kf,ZY,W,H,PAPER,INK,RED,ink,line,circ,fig,joints,bladePt,setCam,camT,screen,X,show,QS:()=>QS,get MIST(){return MIST},MODE:()=>MODE,setMode:m=>{MODE=m}},G,MV,BOSSES,ARENAS,HERO_D,HERO_MV,POWERS,PROG,get SV(){return SV},set SV(v){SV=v},loadSave,writeSave,cleanSave,migrate,grantClear,grantStep,grantTrial,ladderNodes,openRegion,FOES,LAD,levelOf,validateData,derive,forge,GEAR,equip,upgradeWeapon,weaponBlock,attrBonus,spendAttr,resetAttrs,upgradePower,tierBlock,setSlot,points,NEUTRAL,mkF,newRound,exportCode,importCode,heroDef,absorbDone,openChar,CH,VERSION,PANELS,weaponDelta,statDelta,openSettings,applySettings,cleanSettings,get KMAP(){return KMAP},get KEYCAP(){return KEYCAP},startFight,togglePause,commit,settle,beginAttempt,settleFight,STORE,LEG,NODE,replaceProfile,isChampion,clearInput,NOTICE,bgPause,startSun,startSunScene,openSunChoice,chooseMode,sunWaits,sunDone,modeLocked,cleanMap,validateMap,compileMap,maps,saveMaps,loadMaps,storeMap,openWorkshop,openEditor,edPlace,edDock,ED,WK,startCustom,blankMap,renderEditor,get ARENA(){return ARENA},onTop,landY,hzState,startMission,openLoc,locNodes,locOpen,grantMission,MODES,WORLD,WM,buildMenu,selPlace,placeInfo,placesFor,mapDone,renderWorld,discover,nextWave,award,rollDaily,dailyOf,dailyProg,achProg,CHAL,openChal,tallyEnd,setToday:f=>{TODAY=f},setDaily:v=>{DAILY_ON=v},setGates:v=>{GATES=v},startTraining,trainSetup,startDrill,trainReset,openTrain,partners,partnerDef,drillOf,TRAIN,DOJO_A,trainTick,toMenu,toHome,openShop,buy,buyBlock,SH,WPN,wear,equipAny,kindOf,stockOf,traitText,statText,statDelta,buildHome,continueGame,newGame,newGameAsk,quitGame,campaign,payCr,crOf,ECON,get VIEW(){return VIEW},enterGame,updGame,stepGame,gameKey,pollPad,PAD,MOVE,rollInv,invul,S,renderGame,syncTouch,startMove,poseOf,joints,bladePt,rng,STEP,get mode(){return MODE}};
  if(document.head&&!window.ISSEN_DEBUG){const s=document.createElement('script');s.src='tools/poselab.js';document.head.appendChild(s)}}
 applySettings();
 // keep the save: ask the browser not to evict this site's storage (an installed PWA usually gets it; spec §14.4)

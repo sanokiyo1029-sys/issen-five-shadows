@@ -9,16 +9,16 @@ const passive = G => { G.B.ai.t = 1e9; G.B.ai.pt = 0; G.B.ai.blk = 0; G.B.ai.see
 
 module.exports = {
   async 'the day decides the three challenges; a new day brings new ones and spends the old claims'() {
-    const { game } = await boot(), s = game.SV; game.setToday(() => '2026-10-12'); game.rollDaily(s); const a = s.daily.ids.slice();
+    const { game } = await boot({ dailies: true }), s = game.SV; game.setToday(() => '2026-10-12'); game.rollDaily(s); const a = s.daily.ids.slice();
     assert.strictEqual(a.length, 3); assert.strictEqual(new Set(a).size, 3);
-    const { game: g2 } = await boot(); g2.setToday(() => '2026-10-12'); g2.rollDaily(g2.SV); assert.deepStrictEqual([...g2.SV.daily.ids], [...a], 'the same set for that date');
+    const { game: g2 } = await boot({ dailies: true }); g2.setToday(() => '2026-10-12'); g2.rollDaily(g2.SV); assert.deepStrictEqual([...g2.SV.daily.ids], [...a], 'the same set for that date');
     assert.ok(a.every(id => !game.dailyOf(id).need), 'nothing needing a power or a mode the player lacks');
     s.rewardsClaimed['daily:2026-10-12:' + a[0]] = 1; game.setToday(() => '2026-10-13'); game.rollDaily(s);
     assert.strictEqual(s.daily.day, '2026-10-13'); assert.ok(!Object.keys(s.rewardsClaimed).some(k => k.includes('2026-10-12')), 'yesterday is spent');
   },
 
   async 'a daily counts from the day it began and pays once; achievements pay once'() {
-    const { game } = await boot(), s = game.SV; game.setToday(() => '2026-10-12'); s.stats.wins = 7; game.rollDaily(s);
+    const { game } = await boot({ dailies: true }), s = game.SV; game.setToday(() => '2026-10-12'); s.stats.wins = 7; game.rollDaily(s);
     const id = 'wins3'; s.daily.ids[0] = id; s.daily.base.wins = 7; const m0 = s.profile.mon, c0 = s.profile.crystals;
     s.stats.wins = 9; const g9 = game.award(s); assert.strictEqual(g9.filter(x => /Win 3/.test(x.text)).length, 0, '2 of 3: not yet'); assert.ok(g9.some(x => /First Blood/.test(x.text)), 'the first-win achievement');
     s.stats.wins = 10; const got = game.award(s); assert.ok(got.some(x => /Daily challenge — Win 3 duels/.test(x.text))); assert.strictEqual(s.profile.mon, m0 + 60);
@@ -36,7 +36,7 @@ module.exports = {
   },
 
   async 'the challenges screen: today, the Ink Trials (playable), achievements; announced achievements from outside fights'() {
-    const { game, el } = await boot(); game.setToday(() => '2026-10-12'); game.enterGame();
+    const { game, el } = await boot({ dailies: true }); game.setToday(() => '2026-10-12'); game.enterGame();
     el('hMenu').children.find(b => b.innerHTML.startsWith('Challenges')).click(); assert.strictEqual(open(el, game), 'chal'); assert.strictEqual(el('chBody').children.length, 3);
     game.openChal(null, 'ach'); assert.strictEqual(el('chBody').children.length, game.CHAL.achievements.length);
     game.openChal(null, 'trials'); assert.ok(el('chBody').children[0].className.includes('locked'), 'a trial waits for its shadow');

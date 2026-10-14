@@ -20,9 +20,9 @@ module.exports = {
     assert.strictEqual(S.profile.level, 1); assert.strictEqual(S.profile.xp, 0); eq(S.loadout.powers, [null, null]);
     const d = game.heroDef(); // M4: the hero is derived from the profile; at level 1 every number is HERO_D's and every modifier neutral
     assert.strictEqual(d.hp, game.HERO_D.hp); assert.strictEqual(d.speed, game.HERO_D.speed); eq(d.mod, game.NEUTRAL); eq(d.ov, {}); eq(d.powers, [null, null]); eq(d.echoes, [null, null]);
+    assert.strictEqual(slotDocs(storage).length, 1, 'v2 save written on first boot');
     game.startFight(0);
     eq(Object.keys(game.G.P.moves), [], 'level-1 hero has no move overrides');
-    assert.strictEqual(slotDocs(storage).length, 1, 'v2 save written on first boot');
     assert.strictEqual(storage.getItem(SKEY), '{"beaten":0}', 'legacy key mirrored');
   },
 
@@ -78,7 +78,7 @@ module.exports = {
     const newest = SLOTS.find(k => JSON.parse(storage.getItem(k)).doc.rev === docs[0].rev);
     storage.setItem(newest, storage.getItem(newest).slice(0, 40)); // a write cut short
     const S = (await boot({ storage })).game.SV;
-    assert.strictEqual(S.rev, docs[1].rev); assert.strictEqual(S.profile.mon, docs[1].profile.mon);
+    assert.strictEqual(S.rev, docs[1].rev + 1, 'the good copy, written back over the damaged slot'); assert.strictEqual(S.profile.mon, docs[1].profile.mon);
   },
 
   async 'every slot damaged: text quarantined (last 3), progress rebuilt from the legacy mirror, player told'() {

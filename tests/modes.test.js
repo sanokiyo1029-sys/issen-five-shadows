@@ -10,7 +10,7 @@ const passive = G => { G.B.ai.t = 1e9; G.B.ai.pt = 0; G.B.ai.blk = 0; G.B.ai.see
 const near = (a, b, m, e = 1e-6) => assert.ok(Math.abs(a - b) < e, `${m}: ${a} vs ${b}`);
 // win against Gekkō and play on until the fight's end (the sun, or the result)
 function beatGekko(game) { game.startFight(0, 1); const G = game.G; G.state = 'fight'; G.P.wins = 1; G.B.hp = 0; for (let i = 0; i < 900 && G.state !== 'sun' && G.state !== 'over'; i++) { G.rdt = 1 / 60; G.rt += 1 / 60; game.updGame(1 / 60); if (G.state === 'absorb' && G.st > 1) game.absorbDone(); } return G; }
-function modes(game, o) { const s = game.SV; game.grantClear(s, 0, 'g'); Object.assign(s.modes, { sun: 1 }, o); for (const k of ['hell', 'white']) s.story.seen.push(k, ...[0, 1, 2, 3, 4, 5, 6].map(i => `${k}:${i}`)); s.story.pending = []; return s; }
+function modes(game, o) { const s = game.SV; game.grantClear(s, 0, 'g'); Object.assign(s.modes, { sun: 1 }, o); for (const k of ['hell', 'white']) s.story.seen.push(k, ...game.MODES[k].missions.map(M => 'm:' + M.id)); s.story.pending = []; return s; }
 
 module.exports = {
   async 'the first fall of Gekkō raises the sun; touching it offers both paths and opens neither by itself'() {

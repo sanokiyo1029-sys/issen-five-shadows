@@ -39,19 +39,19 @@ module.exports = {
     const { game, el } = await boot(), s = opened(game); s.story.seen.push('ashen'); game.enterGame();
     assert.strictEqual(JSON.stringify(game.locNodes(s, 'ashen').map(n => n.open)), '[true,false,false]');
     const xp0 = s.profile.xp, m0 = s.profile.mon; game.startMission('ashen', 0, 1); win(game, game.G);
-    assert.ok(s.rewardsClaimed['ashen:0']); assert.strictEqual(s.profile.xp, xp0 + 600); assert.strictEqual(s.profile.mon, m0 + 60); assert.strictEqual(open(el, game), 'result');
+    assert.ok(s.rewardsClaimed['m:' + game.MODES.ashen.missions[0].id]); assert.strictEqual(s.profile.xp, xp0 + 600); assert.strictEqual(s.profile.mon, m0 + 60); assert.strictEqual(open(el, game), 'result');
     assert.strictEqual(JSON.stringify(game.locNodes(s, 'ashen').map(n => n.open)), '[true,true,false]');
-    game.startMission('ashen', 0, 2); win(game, game.G); assert.strictEqual(s.profile.xp, xp0 + 600 + 150, 'a repeat pays a quarter'); assert.strictEqual(s.profile.mon, m0 + 60);
+    game.startMission('ashen', 0, 2); win(game, game.G); assert.strictEqual(s.profile.xp, xp0 + 600 + 150, 'a repeat pays a quarter'); assert.strictEqual(s.profile.mon, m0 + 60 + 30, 'and renewable mon: half, at least 30');
     const before = JSON.stringify(s.profile); game.startMission('ashen', 1, 3); const G = game.G; G.state = 'fight'; G.P.hp = 0; run(game, 4, passive);
     assert.strictEqual(G.state, 'over'); assert.strictEqual(JSON.stringify(s.profile), before, 'a loss pays nothing and takes nothing');
   },
 
   async 'a gauntlet: the next foe steps in, the hero keeps health and ink; the champion pays its crystals and item once'() {
-    const { game } = await boot(), s = opened(game); s.rewardsClaimed['ashen:0'] = 1; game.enterGame(); game.startMission('ashen', 1, 1); const G = game.G;
+    const { game } = await boot(), s = opened(game); s.rewardsClaimed['m:' + game.MODES.ashen.missions[0].id] = 1; game.enterGame(); game.startMission('ashen', 1, 1); const G = game.G;
     assert.deepStrictEqual([...G.waves.map(d => d.id)], ['ash_bandit', 'cutthroat', 'thrower']);
     G.state = 'fight'; G.P.hp = 61; G.P.ink = 40; G.B.hp = 0; run(game, 4, passive); assert.strictEqual(G.wave, 1); assert.strictEqual(G.def.id, 'cutthroat');
     assert.strictEqual(G.P.hp, 61, 'health carries over'); assert.ok(G.P.ink >= 40); assert.strictEqual(G.B.hp, G.B.maxHp, 'a fresh foe');
-    G.state = 'fight'; G.B.hp = 0; run(game, 4, passive); G.state = 'fight'; G.B.hp = 0; run(game, 4, passive); assert.strictEqual(G.state, 'over'); assert.ok(s.rewardsClaimed['ashen:1']);
+    G.state = 'fight'; G.B.hp = 0; run(game, 4, passive); G.state = 'fight'; G.B.hp = 0; run(game, 4, passive); assert.strictEqual(G.state, 'over'); assert.ok(s.rewardsClaimed['m:' + game.MODES.ashen.missions[1].id]);
     const c0 = s.profile.crystals; game.startMission('ashen', 2, 1); G.state = 'fight'; G.P.wins = 1; G.B.hp = 0; run(game, 4, passive);
     assert.ok(s.gear.owned.includes('ash_charm')); assert.ok(s.profile.crystals >= c0 + 15);
   },

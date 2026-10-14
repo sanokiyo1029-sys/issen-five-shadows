@@ -47,6 +47,7 @@ module.exports = {
 
   async 'a save from before crystals is paid what it earned, exactly once'() {
     const { game } = await boot(), S = game.cleanSave({}); for (const k of ['boss:gekko', 'boss:kasumi', 'step:burning_field:2', 'trial:gekko']) S.rewardsClaimed[k] = 1;
+    S.progress.defeated = ['gekko', 'kasumi']; S.progress.beaten = 2; S.progress.trialsDone = ['gekko']; // claims agree with the progress they paid for
     const old = JSON.parse(JSON.stringify(S)); old.profile.crystals = 0; for (const k of Object.keys(old.rewardsClaimed)) if (k.startsWith('cr:')) delete old.rewardsClaimed[k];
     const C = game.ECON.crystals, want = C.boss.gekko + C.boss.kasumi + C.elite + C.trial, a = game.cleanSave(old);
     assert.strictEqual(a.profile.crystals, want); assert.strictEqual(game.cleanSave(JSON.parse(JSON.stringify(a))).profile.crystals, want, 'reloading pays nothing more');
